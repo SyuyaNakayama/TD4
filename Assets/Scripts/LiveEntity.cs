@@ -23,7 +23,14 @@ public class LiveEntity : MonoBehaviour
 
     void OnCollisionStay(Collision col)
     {
-        
+        Vector3 localClosestPoint = transform.InverseTransformPoint(
+            col.collider.ClosestPoint(transform.position));
+        transform.Rotate(-Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y) / Mathf.Deg2Rad, 0, 0, Space.Self);
+
+        localClosestPoint = transform.InverseTransformPoint(
+            col.collider.ClosestPoint(transform.position));
+        transform.Rotate(0, 0, Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y) / Mathf.Deg2Rad, Space.Self);
+
     }
 
     protected virtual void LiveEntityUpdate()
