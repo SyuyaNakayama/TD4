@@ -6,7 +6,7 @@ using System;
 public class Player : LiveEntity
 {
     static float moveSpd = 1.5f;
-    static float jumpSpd = 10;
+    static float jumpSpd = 10.0f;
 
     bool jumpTrigger;
 
