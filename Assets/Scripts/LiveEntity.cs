@@ -13,32 +13,32 @@ public class LiveEntity : MonoBehaviour
 
     protected Vector3 movement;
     protected AxisSwitch dragAxis;
-    protected 
+    Vector3 prevPos;
+    Quaternion prevRot;
 
-    void Start()
+    void Awake()
     {
-        
+        prevPos = transform.position;
+        prevRot = transform.rotation;
     }
 
     //物理演算が更新されるタイミングで毎フレーム呼ばれる
-    //注意！　Update()とは呼ばれる周期が異なるため周期ずれによる不具合に気を付けて下さい
+    //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
     void FixedUpdate()
     {
-        //ここで各派生クラスの固有更新処理を呼ぶ
-        LiveEntityUpdate();
-
-        //ここで
-        GetComponent<Rigidbody>().velocity = transform.rotation * movement;
+        //前フレームからの移動量をmovementに変換
+        movement = Quaternion.Inverse(prevRot) * ((transform.position - prevPos) / Time.deltaTime);
+        prevPos = transform.position;
+        prevRot = transform.rotation;
 
         //重力及び空気抵抗
-
         if (dragAxis.x && dragAxis.y && dragAxis.z)
         {
             movement *= 0.8f;
         }
         else
         {
-            if(dragAxis.x)
+            if (dragAxis.x)
             {
                 movement.x *= 0.8f;
             }
@@ -52,6 +52,12 @@ public class LiveEntity : MonoBehaviour
             }
         }
         movement += new Vector3(0, -0.5f, 0);
+
+        //ここで各派生クラスの固有更新処理を呼ぶ
+        LiveEntityUpdate();
+
+        //movementをvelocityに変換
+        GetComponent<Rigidbody>().velocity = transform.rotation * movement;
     }
 
     //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
