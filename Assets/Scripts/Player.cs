@@ -17,21 +17,9 @@ public class Player : LiveEntity
         dragAxis.y = false;
         dragAxis.z = true;
 
-        // 4/22 ナカヤマ
-        // 移動速度を計算（気に食わないなら消して構わない）
-        //movement.x +=
-        //    // 右
-        //    (Convert.ToSingle(Input.GetKey(KeyCode.RightArrow)) -
-        //    // 左
-        //    Convert.ToSingle(Input.GetKey(KeyCode.LeftArrow))) * moveSpd;
-        //movement.z +=
-        //    // 上
-        //    (Convert.ToSingle(Input.GetKey(KeyCode.UpArrow)) -
-        //    // 下
-        //    Convert.ToSingle(Input.GetKey(KeyCode.DownArrow))) * moveSpd;
-
         // 4/24 テラオ
         // 上のやつを最適化
+        // 4/24 ナカヤマ　サンクス
         movement += new Vector3(
            // 右
            Convert.ToSingle(Input.GetKey(KeyCode.RightArrow)) -
