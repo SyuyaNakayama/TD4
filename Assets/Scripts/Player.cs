@@ -12,6 +12,11 @@ public class Player : LiveEntity
 
     protected override void LiveEntityUpdate()
     {
+        //y軸には空気抵抗がかからないように設定
+        dragAxis.x = true;
+        dragAxis.y = false;
+        dragAxis.z = true;
+
         // 4/22 ナカヤマ
         // 移動速度を計算（気に食わないなら消して構わない）
         //movement.x +=
