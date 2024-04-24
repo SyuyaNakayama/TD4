@@ -20,5 +20,10 @@ public class test_scene_change : MonoBehaviour
         {
             gm.ChangeScene(sceneName);
         }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            gm.ChangeScene("SampleScene");
+        }
     }
 }
