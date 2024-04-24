@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class LiveEntity : MonoBehaviour
 {
+    public struct AxisSwitch
+    {
+        public bool x;
+        public bool y;
+        public bool z;
+    }
+
     protected Vector3 movement;
+    protected AxisSwitch dragAxis;
+    protected 
 
     void Start()
     {
@@ -22,7 +31,26 @@ public class LiveEntity : MonoBehaviour
         GetComponent<Rigidbody>().velocity = transform.rotation * movement;
 
         //èdóÕãyÇ—ãÛãCíÔçR
-        movement *= 0.8f;
+
+        if (dragAxis.x && dragAxis.y && dragAxis.z)
+        {
+            movement *= 0.8f;
+        }
+        else
+        {
+            if(dragAxis.x)
+            {
+                movement.x *= 0.8f;
+            }
+            if (dragAxis.y)
+            {
+                movement.y *= 0.8f;
+            }
+            if (dragAxis.z)
+            {
+                movement.z *= 0.8f;
+            }
+        }
         movement += new Vector3(0, -0.5f, 0);
     }
 

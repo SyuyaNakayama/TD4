@@ -5,46 +5,46 @@ using System;
 
 public class Player : LiveEntity
 {
-    public float moveSpd = 1;
-    public float jumpSpd = 10;
+    static float moveSpd = 1.5f;
+    static float jumpSpd = 10;
+
+    bool jumpTrigger;
 
     protected override void LiveEntityUpdate()
     {
         // 4/22 ナカヤマ
         // 移動速度を計算（気に食わないなら消して構わない）
-        movement.x +=
-            // 右
-            (Convert.ToSingle(Input.GetKey(KeyCode.RightArrow)) -
-            // 左
-            Convert.ToSingle(Input.GetKey(KeyCode.LeftArrow))) * moveSpd;
-        movement.z +=
-            // 上
-            (Convert.ToSingle(Input.GetKey(KeyCode.UpArrow)) -
-            // 下
-            Convert.ToSingle(Input.GetKey(KeyCode.DownArrow))) * moveSpd;
+        //movement.x +=
+        //    // 右
+        //    (Convert.ToSingle(Input.GetKey(KeyCode.RightArrow)) -
+        //    // 左
+        //    Convert.ToSingle(Input.GetKey(KeyCode.LeftArrow))) * moveSpd;
+        //movement.z +=
+        //    // 上
+        //    (Convert.ToSingle(Input.GetKey(KeyCode.UpArrow)) -
+        //    // 下
+        //    Convert.ToSingle(Input.GetKey(KeyCode.DownArrow))) * moveSpd;
 
-        //矢印ーキーで上下左右に加速
-        //if (Input.GetKey(KeyCode.UpArrow))
-        //{
-        //    movement += new Vector3(0, 0, moveSpd);
-        //}
-        //if (Input.GetKey(KeyCode.DownArrow))
-        //{
-        //    movement += new Vector3(0, 0, -moveSpd);
-        //}
-        //if (Input.GetKey(KeyCode.RightArrow))
-        //{
-        //    movement += new Vector3(moveSpd, 0, 0);
-        //}
-        //if (Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    movement += new Vector3(-moveSpd, 0, 0);
-        //}
+        // 4/24 テラオ
+        // 上のやつを最適化
+        movement += new Vector3(
+           // 右
+           Convert.ToSingle(Input.GetKey(KeyCode.RightArrow)) -
+           // 左
+           Convert.ToSingle(Input.GetKey(KeyCode.LeftArrow)),
+           0,
+           // 上
+           Convert.ToSingle(Input.GetKey(KeyCode.UpArrow)) -
+           // 下
+           Convert.ToSingle(Input.GetKey(KeyCode.DownArrow))
+           ) * moveSpd;
 
         //スペースキーでジャンプ
-        if (Input.GetKey(KeyCode.Space))
+        bool jumpInput = Input.GetKey(KeyCode.Space);
+        if (jumpInput && !jumpTrigger)
         {
             movement = new Vector3(movement.x, jumpSpd, movement.z);
         }
+        jumpTrigger = jumpInput;
     }
 }
