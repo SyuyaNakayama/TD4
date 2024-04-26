@@ -12,7 +12,8 @@ public class LiveEntity : MonoBehaviour
         public bool z;
     }
 
-    public float drag = 0.8f;
+    protected float drag = 0.8f;
+    protected float gravityScale = 0.5f;
     protected Vector3 movement;
     protected AxisSwitch dragAxis;
     Vector3 prevPos;
@@ -60,7 +61,7 @@ public class LiveEntity : MonoBehaviour
                 movement.z *= drag;
             }
         }
-        movement += new Vector3(0, -0.5f, 0);
+        movement += new Vector3(0, -gravityScale, 0);
 
         //ここで各派生クラスの固有更新処理を呼ぶ
         LiveEntityUpdate();
