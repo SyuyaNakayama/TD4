@@ -26,10 +26,17 @@ public class LiveEntity : MonoBehaviour
     //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
     void FixedUpdate()
     {
+        //バウンド防止のため変更前のmovementを保存
+        Vector3 prevMovement = movement;
         //前フレームからの移動量をmovementに変換
         movement = Quaternion.Inverse(prevRot) * ((transform.position - prevPos) / Time.deltaTime);
         prevPos = transform.position;
         prevRot = transform.rotation;
+        //バウンド防止処理
+        if(Mathf.Sign(prevMovement.y) != Mathf.Sign(movement.y))
+        {
+            movement.y = 0;
+        }
 
         //重力及び空気抵抗
         if (dragAxis.x && dragAxis.y && dragAxis.z)
@@ -81,6 +88,5 @@ public class LiveEntity : MonoBehaviour
     //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
     protected virtual void LiveEntityUpdate()
     {
-
     }
 }
