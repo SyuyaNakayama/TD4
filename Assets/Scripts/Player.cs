@@ -7,13 +7,11 @@ public class Player : LiveEntity
 {
     static float moveSpd = 1.5f;
     static float jumpSpd = 10.0f;
-    bool isJump = false; // ジャンプ中か
-    bool isJumpMoment = false; // ジャンプした瞬間か
+    bool isLanding = false; //着地しているか
     bool jumpTrigger;
 
     protected override void LiveEntityUpdate()
     {
-        isJumpMoment = false;
         //y軸には空気抵抗がかからないように設定
         dragAxis.x = true;
         dragAxis.y = false;
@@ -34,16 +32,19 @@ public class Player : LiveEntity
 
         //スペースキーでジャンプ
         bool jumpInput = Input.GetKey(KeyCode.Space);
-        if (jumpInput && !jumpTrigger&& !isJump)
+        //ジャンプボタンの押し始め、かつ着地しているなら
+        if (jumpInput && !jumpTrigger && isLanding)
         {
             movement = new Vector3(movement.x, jumpSpd, movement.z);
-            isJump = isJumpMoment = true;
         }
         jumpTrigger = jumpInput;
+
+        //地面との接触判定を行う前に一旦着地していない状態にする
+        isLanding = false;
     }
     protected override void LiveEntityCollision()
     {
         // 着地判定
-        if (!isJumpMoment) { isJump = false; }
+        isLanding = true;
     }
 }
