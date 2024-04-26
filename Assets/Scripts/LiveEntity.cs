@@ -71,6 +71,7 @@ public class LiveEntity : MonoBehaviour
     }
 
     //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
+    //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
     void OnCollisionStay(Collision col)
     {
         //足を向けるべき位置を算出し、
