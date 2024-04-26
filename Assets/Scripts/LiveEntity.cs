@@ -94,4 +94,9 @@ public class LiveEntity : MonoBehaviour
     protected virtual void LiveEntityUpdate()
     {
     }
+
+    //各派生クラスの固有接触処理（派生クラス内でオーバーライドして使う）
+    protected virtual void LiveEntityCollision()
+    {
+    }
 }
