@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//デバッグ用：選択項目が分かるようにするためだけの仮スクリプト
 public class test_select_color : MonoBehaviour
 {
+    //色を変更するオブジェクトとそれにアタッチされてるスクリプト
     public GameObject testObj;
     private test_select tSel;
-
+    //ステージ番号
     private int stageNum = 0;
 
     void Start()
@@ -16,6 +17,7 @@ public class test_select_color : MonoBehaviour
 
     void Update()
     {
+        //選択項目によって色が変わるようにマテリアルの色を変更
         stageNum = tSel.GetSelectNum();
         switch (stageNum)
         {

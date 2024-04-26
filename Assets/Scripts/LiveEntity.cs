@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class LiveEntity : MonoBehaviour
         public bool z;
     }
 
+    public float drag = 0.8f;
     protected Vector3 movement;
     protected AxisSwitch dragAxis;
     Vector3 prevPos;
@@ -41,21 +43,21 @@ public class LiveEntity : MonoBehaviour
         //重力及び空気抵抗
         if (dragAxis.x && dragAxis.y && dragAxis.z)
         {
-            movement *= 0.8f;
+            movement *= drag;
         }
         else
         {
             if (dragAxis.x)
             {
-                movement.x *= 0.8f;
+                movement.x *= drag;
             }
             if (dragAxis.y)
             {
-                movement.y *= 0.8f;
+                movement.y *= drag;
             }
             if (dragAxis.z)
             {
-                movement.z *= 0.8f;
+                movement.z *= drag;
             }
         }
         movement += new Vector3(0, -0.5f, 0);
@@ -83,6 +85,9 @@ public class LiveEntity : MonoBehaviour
         //z軸を中心にその位置を向くように回転させる
         transform.Rotate(0, 0, 
             Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y) / Mathf.Deg2Rad, Space.Self);
+
+        //ここで各派生クラスの固有コライダー処理を呼ぶ
+        LiveEntityCollision();
     }
 
     //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
