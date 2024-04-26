@@ -1,6 +1,3 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LiveEntity : MonoBehaviour
@@ -12,12 +9,23 @@ public class LiveEntity : MonoBehaviour
         public bool z;
     }
 
+    [SerializeField]
+    string teamID;
+    public string GetTeamID()
+    {
+        return teamID;
+    }
     protected float drag = 0.8f;
     protected float gravityScale = 0.5f;
     protected Vector3 movement;
     protected AxisSwitch dragAxis;
     Vector3 prevPos;
     Quaternion prevRot;
+    bool isLanding = false; //着地しているか
+    public bool GetIsLanding()
+    {
+        return isLanding;
+    }
 
     void Awake()
     {
@@ -68,27 +76,36 @@ public class LiveEntity : MonoBehaviour
 
         //movementをvelocityに変換
         GetComponent<Rigidbody>().velocity = transform.rotation * movement;
+
+        //地面との接触判定を行う前に一旦着地していない状態にする
+        isLanding = false;
     }
 
     //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
     //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
     void OnCollisionStay(Collision col)
     {
-        //足を向けるべき位置を算出し、
-        Vector3 localClosestPoint = transform.InverseTransformPoint(
-            col.collider.ClosestPoint(transform.position));
-        //x軸を中心にその位置を向くように回転させる
-        transform.Rotate(
-            -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y) / Mathf.Deg2Rad, 0, 0, Space.Self);
+        if (col.gameObject.GetComponent<LiveEntity>() == null)
+        {
+            //足を向けるべき位置を算出し、
+            Vector3 localClosestPoint = transform.InverseTransformPoint(
+                col.collider.ClosestPoint(transform.position));
+            //x軸を中心にその位置を向くように回転させる
+            transform.Rotate(
+                -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y) / Mathf.Deg2Rad, 0, 0, Space.Self);
 
-        //再度足を向けるべき位置を算出し、
-        localClosestPoint = transform.InverseTransformPoint(
-            col.collider.ClosestPoint(transform.position));
-        //z軸を中心にその位置を向くように回転させる
-        transform.Rotate(0, 0, 
-            Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y) / Mathf.Deg2Rad, Space.Self);
+            //再度足を向けるべき位置を算出し、
+            localClosestPoint = transform.InverseTransformPoint(
+                col.collider.ClosestPoint(transform.position));
+            //z軸を中心にその位置を向くように回転させる
+            transform.Rotate(0, 0,
+                Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y) / Mathf.Deg2Rad, Space.Self);
 
-        //ここで各派生クラスの固有コライダー処理を呼ぶ
+            // 着地判定
+            isLanding = true;
+        }
+
+        //ここで各派生クラスの固有接触処理を呼ぶ
         LiveEntityCollision();
     }
 

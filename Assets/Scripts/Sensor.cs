@@ -36,6 +36,5 @@ public class Sensor : MonoBehaviour
             Array.Resize(ref tempTargets, tempTargets.Length + 1);
             tempTargets[tempTargets.Length - 1] = tempLiveEntity;
         }
-
     }
 }

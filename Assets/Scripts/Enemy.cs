@@ -1,19 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Enemy : LiveEntity
 {
     [SerializeField]
     Sensor sensor;
-    protected override void LiveEntityUpdate()
-    {
-        //ここで各派生クラスの固有更新処理を呼ぶ
-        EnemyUpdate();
-    }
 
-    //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
-    protected virtual void EnemyUpdate()
+    //見つけたLiveEntityの中から標的を選別
+    LiveEntity[] GetTargets()
     {
+        LiveEntity[] ret = { };
+        LiveEntity[] detectedLiveEntities = sensor.GetTargets();
+
+        //teamIDが違うものだけ選別
+        for (int i = 0; i < detectedLiveEntities.Length; i++)
+        {
+            if (detectedLiveEntities[i].GetTeamID() != GetTeamID())
+            {
+                //配列に代入
+                Array.Resize(ref ret, ret.Length + 1);
+                ret[ret.Length - 1] = detectedLiveEntities[i];
+            }
+        }
+
+        return ret;
     }
 }
