@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 public class Player : LiveEntity
 {
-    static float moveSpd = 1.5f;
-    static float jumpSpd = 10.0f;
-    bool isLanding = false; //着地しているか
+    static float moveSpeed = 1.5f;
+    static float jumpPower = 10.0f;
+
     bool jumpTrigger;
 
     protected override void LiveEntityUpdate()
@@ -28,23 +26,15 @@ public class Player : LiveEntity
            Convert.ToSingle(Input.GetKey(KeyCode.UpArrow)) -
            // 下
            Convert.ToSingle(Input.GetKey(KeyCode.DownArrow))
-           ) * moveSpd;
+           ) * moveSpeed;
 
         //スペースキーでジャンプ
         bool jumpInput = Input.GetKey(KeyCode.Space);
         //ジャンプボタンの押し始め、かつ着地しているなら
-        if (jumpInput && !jumpTrigger && isLanding)
+        if (jumpInput && !jumpTrigger && GetIsLanding())
         {
-            movement = new Vector3(movement.x, jumpSpd, movement.z);
+            movement = new Vector3(movement.x, jumpPower, movement.z);
         }
         jumpTrigger = jumpInput;
-
-        //地面との接触判定を行う前に一旦着地していない状態にする
-        isLanding = false;
-    }
-    protected override void LiveEntityCollision()
-    {
-        // 着地判定
-        isLanding = true;
     }
 }
