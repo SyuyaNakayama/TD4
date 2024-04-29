@@ -17,9 +17,14 @@ public class Cub_E : Enemy
 
         if (IsAttacking())
         {
-            if (GetAttackProgress() > 0.5f)
+            if (GetAttackProgress() < 0.5f)
             {
-
+                Vector3 target = targetCursor
+                    + transform.TransformPoint(new Vector3(0, 4, 0))
+                    - transform.position;
+                //•W“I‚Ìã‚ÉˆÚ“®
+                movement = transform.InverseTransformPoint(target)
+                    / Mathf.Deg2Rad * 0.1f;
             }
         }
         else
@@ -28,7 +33,7 @@ public class Cub_E : Enemy
             if (GetNearestTarget() != null)
             {
                 targetCursor = GetNearestTarget().transform.position;
-                SetAttackMotion("upperAim", 60);
+                SetAttackMotion("upperAim", 120);
             }
         }
     }

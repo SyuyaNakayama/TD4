@@ -26,7 +26,7 @@ public class LiveEntity : MonoBehaviour
     {
         return isLanding;
     }
-    string attackMotionID;
+    string attackMotionID = "";
     int attackMotionFrame;
     float attackProgress;
     public float GetAttackProgress()
@@ -87,7 +87,14 @@ public class LiveEntity : MonoBehaviour
         //地面との接触判定を行う前に一旦着地していない状態にする
         isLanding = false;
 
-
+        //攻撃モーションの進行度を増加
+        attackProgress += 1 / Mathf.Max((float)attackMotionFrame, 1);
+        //進行度が１を超えたら攻撃モーションを止める
+        if (attackProgress > 1)
+        {
+            attackMotionID = "";
+        }
+        attackProgress = Mathf.Clamp(attackProgress, 0, 1);
     }
 
     //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
@@ -133,11 +140,12 @@ public class LiveEntity : MonoBehaviour
     {
         attackMotionID = setAttackMotionID;
         attackMotionFrame = Mathf.Max(setAttackMotionFrame, 1);
-        attackProgress = 1;
+        attackProgress = 0;
     }
 
     //攻撃モーション中か
     public bool IsAttacking()
     {
-        return attackProgress > 0;
+        return attackProgress < 1 && attackMotionID != "";
     }
+}
