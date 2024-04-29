@@ -21,6 +21,8 @@ public class LiveEntity : MonoBehaviour
     protected AxisSwitch dragAxis;
     Vector3 prevPos;
     Quaternion prevRot;
+    Collider currentGround;
+    bool allowGroundSet;
     bool isLanding = false; //着地しているか
     public bool GetIsLanding()
     {
@@ -44,6 +46,23 @@ public class LiveEntity : MonoBehaviour
     //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
     void FixedUpdate()
     {
+        if (currentGround != null)
+        {
+            //足を向けるべき位置を算出し、
+            Vector3 localClosestPoint = transform.InverseTransformPoint(
+                currentGround.ClosestPoint(transform.position));
+            //x軸を中心にその位置を向くように回転させる
+            transform.Rotate(
+                -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y) / Mathf.Deg2Rad, 0, 0, Space.Self);
+
+            //再度足を向けるべき位置を算出し、
+            localClosestPoint = transform.InverseTransformPoint(
+                currentGround.ClosestPoint(transform.position));
+            //z軸を中心にその位置を向くように回転させる
+            transform.Rotate(0, 0,
+                Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y) / Mathf.Deg2Rad, Space.Self);
+        }
+
         //バウンド防止のため変更前のmovementを保存
         Vector3 prevMovement = movement;
         //前フレームからの移動量をmovementに変換
@@ -78,6 +97,9 @@ public class LiveEntity : MonoBehaviour
         }
         movement += new Vector3(0, -gravityScale, 0);
 
+        //allowGroundSetをリセット
+        allowGroundSet = true;
+
         //ここで各派生クラスの固有更新処理を呼ぶ
         LiveEntityUpdate();
 
@@ -101,22 +123,10 @@ public class LiveEntity : MonoBehaviour
     //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
     void OnCollisionStay(Collision col)
     {
-        if (col.gameObject.GetComponent<LiveEntity>() == null)
+        if (col.gameObject.GetComponent<LiveEntity>() == null && allowGroundSet)
         {
-            //足を向けるべき位置を算出し、
-            Vector3 localClosestPoint = transform.InverseTransformPoint(
-                col.collider.ClosestPoint(transform.position));
-            //x軸を中心にその位置を向くように回転させる
-            transform.Rotate(
-                -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y) / Mathf.Deg2Rad, 0, 0, Space.Self);
-
-            //再度足を向けるべき位置を算出し、
-            localClosestPoint = transform.InverseTransformPoint(
-                col.collider.ClosestPoint(transform.position));
-            //z軸を中心にその位置を向くように回転させる
-            transform.Rotate(0, 0,
-                Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y) / Mathf.Deg2Rad, Space.Self);
-
+            //足を向けるべき地形として登録
+            currentGround = col.collider;
             // 着地判定
             isLanding = true;
         }
@@ -147,5 +157,11 @@ public class LiveEntity : MonoBehaviour
     public bool IsAttacking()
     {
         return attackProgress < 1 && attackMotionID != "";
+    }
+
+    //これを呼んでいる間は地形に触れてもそっちに足を向けなくなる
+    protected void DisAllowGroundSet()
+    {
+        allowGroundSet = false;
     }
 }

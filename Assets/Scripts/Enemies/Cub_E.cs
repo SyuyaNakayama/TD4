@@ -19,12 +19,14 @@ public class Cub_E : Enemy
         {
             if (GetAttackProgress() < 0.5f)
             {
-                Vector3 target = targetCursor
-                    + transform.TransformPoint(new Vector3(0, 4, 0))
-                    - transform.position;
                 //標的の上に移動
+                Vector3 target = targetCursor
+                    + transform.TransformPoint(new Vector3(0, 3, 0))
+                    - transform.position;
                 movement = transform.InverseTransformPoint(target)
                     / Mathf.Deg2Rad * 0.1f;
+                //この間は地形に触れてもそっちに足を向けない
+                DisAllowGroundSet();
             }
         }
         else
