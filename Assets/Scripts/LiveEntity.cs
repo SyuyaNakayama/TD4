@@ -44,7 +44,7 @@ public class LiveEntity : MonoBehaviour
         prevPos = transform.position;
         prevRot = transform.rotation;
         //ƒoƒEƒ“ƒh–h~ˆ—
-        if(Mathf.Sign(prevMovement.y) != Mathf.Sign(movement.y))
+        if (Mathf.Sign(prevMovement.y) != Mathf.Sign(movement.y))
         {
             movement.y = 0;
         }
