@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEditor;
 
 public class Player : LiveEntity
 {
@@ -16,20 +17,16 @@ public class Player : LiveEntity
         dragAxis.z = true;
 
         // 移動
+        // コントローラーとキーボード両方に対応
         movement += new Vector3(
-           // 右
-           Convert.ToSingle(Input.GetKey(KeyCode.RightArrow)) -
-           // 左
-           Convert.ToSingle(Input.GetKey(KeyCode.LeftArrow)),
-           0,
-           // 上
-           Convert.ToSingle(Input.GetKey(KeyCode.UpArrow)) -
-           // 下
-           Convert.ToSingle(Input.GetKey(KeyCode.DownArrow))
-           ) * moveSpeed;
+        Input.GetAxis("Horizontal"),
+        0,
+        Input.GetAxis("Vertical")).normalized
+        * moveSpeed;
 
         //スペースキーでジャンプ
-        bool jumpInput = Input.GetKey(KeyCode.Space);
+        // コントローラーならAボタン
+        bool jumpInput = Input.GetKey(KeyCode.Space) || Input.GetKey("joystick button 0");
         //ジャンプボタンの押し始め、かつ着地しているなら
         if (jumpInput && !jumpTrigger && GetIsLanding())
         {
