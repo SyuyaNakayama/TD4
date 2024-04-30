@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class test_select : MonoBehaviour
 {
@@ -9,10 +10,9 @@ public class test_select : MonoBehaviour
     private GameManager gm;
     //デフォルトシーン名
     private string sceneName = "test_stage0";
-    //ステージ番号、最少数と最大数
-    private int stageNum = 0;
-    private const int minStageNum = 0;
-    private const int maxStageNum = 2;
+    //ステージ番号と最大数
+    public int stageNum = 0;
+    private const int maxStageNum = 3;
 
     private void Start()
     {
@@ -24,23 +24,15 @@ public class test_select : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             stageNum--;
-            if(stageNum < minStageNum)
-            {
-                stageNum = maxStageNum;
-            }
-            ChangeTargetStage();
-            Debug.Log("test_stage" +  stageNum);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             stageNum++;
-            if (stageNum > maxStageNum)
-            {
-                stageNum = minStageNum;
-            }
-            ChangeTargetStage();
-            Debug.Log("test_stage" + stageNum);
         }
+        // 0~2の範囲でループさせる
+        stageNum = (int)Mathf.Repeat(stageNum, maxStageNum);
+        ChangeTargetStage();
+        Debug.Log("test_stage" + stageNum);
         //スペースキーで決定
         if (Input.GetKeyDown(KeyCode.Space))
         {
