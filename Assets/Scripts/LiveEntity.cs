@@ -30,8 +30,8 @@ public class LiveEntity : MonoBehaviour
     {
         return isLanding;
     }
-    protected int maxHP;
-    int hpAmount;
+    int maxHP;
+    int hpAmount = 1;
     bool isDead = false;
     string attackMotionID = "";
     int attackMotionFrame;
