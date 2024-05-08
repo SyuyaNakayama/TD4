@@ -11,7 +11,7 @@ public class Player : LiveEntity
 
     private void Start()
     {
-        hp = 50;
+        maxHP = 50;
     }
 
     protected override void LiveEntityUpdate()

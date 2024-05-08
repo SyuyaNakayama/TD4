@@ -26,12 +26,13 @@ public class LiveEntity : MonoBehaviour
     Collider currentGround;
     bool allowGroundSet;
     bool isLanding = false; //着地しているか
-    protected int hp;
-    bool isDead = false;
     public bool GetIsLanding()
     {
         return isLanding;
     }
+    protected int maxHP;
+    int hpAmount;
+    bool isDead = false;
     string attackMotionID = "";
     int attackMotionFrame;
     float attackProgress;
@@ -172,11 +173,11 @@ public class LiveEntity : MonoBehaviour
     // ダメージを受ける
     public void Damage(int damage)
     {
-        hp -= damage;
-        if (hp <= 0)
+        maxHP -= damage;
+        if (maxHP <= 0)
         {
             // お前はもう死んでいる
-            hp = 0;
+            maxHP = 0;
             isDead = true;
         }
     }

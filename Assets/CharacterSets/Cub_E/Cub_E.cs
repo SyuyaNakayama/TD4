@@ -2,42 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ƒLƒ…ƒ‹ƒt
+//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½t
 public class Cub_E : Enemy
 {
     Vector3 targetCursor;
 
     private void Start()
     {
-        hp = 10;
+        maxHP = 10;
     }
 
     protected override void LiveEntityUpdate()
     {
-        //y²‚É‚Í‹ó‹C’ïR‚ª‚©‚©‚ç‚È‚¢‚æ‚¤‚Éİ’è
+        //yï¿½ï¿½ï¿½É‚Í‹ï¿½Cï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½Éİ’ï¿½
         dragAxis.x = true;
         dragAxis.y = false;
         dragAxis.z = true;
-        //d—Í‚ğ‹­‚ß‚Éİ’è
+        //ï¿½dï¿½Í‚ï¿½ï¿½ï¿½ï¿½ß‚Éİ’ï¿½
         gravityScale = 1;
 
         if (IsAttacking())
         {
             if (GetAttackProgress() < 0.5f)
             {
-                //•W“I‚Ìã‚ÉˆÚ“®
+                //ï¿½Wï¿½Iï¿½Ìï¿½ÉˆÚ“ï¿½
                 Vector3 target = targetCursor
                     + transform.TransformPoint(new Vector3(0, 3, 0))
                     - transform.position;
                 movement = transform.InverseTransformPoint(target)
                     / Mathf.Deg2Rad * 0.1f;
-                //‚±‚ÌŠÔ‚Í’nŒ`‚ÉG‚ê‚Ä‚à‚»‚Á‚¿‚É‘«‚ğŒü‚¯‚È‚¢
+                //ï¿½ï¿½ï¿½ÌŠÔ‚Í’nï¿½`ï¿½ÉGï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
                 DisAllowGroundSet();
             }
         }
         else
         {
-            //UŒ‚“®ì’†‚Å‚È‚¢‚ÉŠl•¨‚ğŒ©‚Â‚¯‚½‚çUŒ‚“®ì‚Ö
+            //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ì’†ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½ÉŠlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (GetNearestTarget() != null)
             {
                 targetCursor = GetNearestTarget().transform.position;
