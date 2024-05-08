@@ -26,7 +26,8 @@ public class Player : LiveEntity
 
         //スペースキーでジャンプ
         // コントローラーならAボタン
-        bool jumpInput = Input.GetKey(KeyCode.Space) || Input.GetKey("joystick button 0");
+        bool jumpInput = Input.GetKey(KeyCode.Space)
+            || Input.GetKey("joystick button 0");
         //ジャンプボタンの押し始め、かつ着地しているなら
         if (jumpInput && !jumpTrigger && GetIsLanding())
         {
