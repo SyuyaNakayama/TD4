@@ -6,6 +6,12 @@ using UnityEngine;
 public class Cub_E : Enemy
 {
     Vector3 targetCursor;
+
+    private void Start()
+    {
+        hp = 10;
+    }
+
     protected override void LiveEntityUpdate()
     {
         //y²‚É‚Í‹ó‹C’ïR‚ª‚©‚©‚ç‚È‚¢‚æ‚¤‚Éİ’è
