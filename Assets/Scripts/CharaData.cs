@@ -5,6 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CreateCharaData")]
 public class CharaData : ScriptableObject
 {
+    public const int totalStatusValue = 3000;
+    public const float minLifeRatio = 0.2f;
+    public const float maxLifeRatio = 0.8f;
+
     [System.Serializable]
     public struct Cursor
     {
@@ -66,6 +70,27 @@ public class CharaData : ScriptableObject
         public ShotKey[] shotKeys;
         public Vector2[] shieldKeys;
         public SEKey[] seKeys;
+    }
+
+    [SerializeField]
+    string charaName;
+    public string GetCharaName()
+    {
+        return charaName;
+    }
+
+    [SerializeField]
+    [Range(minLifeRatio, maxLifeRatio)]
+    float lifeRatio = 0.5f;
+    public float GetLife()
+    {
+        return Mathf.Clamp(lifeRatio, minLifeRatio, maxLifeRatio)
+        * totalStatusValue;
+    }
+    public float GetAttackPower()
+    {
+        return (1 - Mathf.Clamp(lifeRatio, minLifeRatio, maxLifeRatio))
+        * totalStatusValue;
     }
 
     [SerializeField]

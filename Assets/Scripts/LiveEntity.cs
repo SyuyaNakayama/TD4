@@ -10,6 +10,8 @@ public class LiveEntity : MonoBehaviour
     }
 
     [SerializeField]
+    CharaData data;
+    [SerializeField]
     string teamID;
     public string GetTeamID()
     {
