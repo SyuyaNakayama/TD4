@@ -2,42 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//キュルフ
+//?ｿｽL?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽt
 public class Cub_E : Enemy
 {
     Vector3 targetCursor;
 
-    private void Start()
-    {
-        hp = 10;
-    }
-
     protected override void LiveEntityUpdate()
     {
-        //y軸には空気抵抗がかからないように設定
+        //y?ｿｽ?ｿｽ?ｿｽﾉは具ｿｽC?ｿｽ?ｿｽR?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾈゑｿｽ?ｿｽ謔､?ｿｽﾉ設抵ｿｽ
         dragAxis.x = true;
         dragAxis.y = false;
         dragAxis.z = true;
-        //重力を強めに設定
+        //?ｿｽd?ｿｽﾍゑｿｽ?ｿｽ?ｿｽ?ｿｽﾟに設抵ｿｽ
         gravityScale = 1;
 
         if (IsAttacking())
         {
             if (GetAttackProgress() < 0.5f)
             {
-                //標的の上に移動
+                //?ｿｽW?ｿｽI?ｿｽﾌ擾ｿｽﾉ移難ｿｽ
                 Vector3 target = targetCursor
                     + transform.TransformPoint(new Vector3(0, 3, 0))
                     - transform.position;
                 movement = transform.InverseTransformPoint(target)
                     / Mathf.Deg2Rad * 0.1f;
-                //この間は地形に触れてもそっちに足を向けない
+                //?ｿｽ?ｿｽ?ｿｽﾌ間は地?ｿｽ`?ｿｽﾉ触?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ托ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾈゑｿｽ
                 DisAllowGroundSet();
             }
         }
         else
         {
-            //攻撃動作中でない時に獲物を見つけたら攻撃動作へ
+            //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?中?ｿｽﾅなゑｿｽ?ｿｽ?ｿｽ?ｿｽﾉ獲?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾂゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             if (GetNearestTarget() != null)
             {
                 targetCursor = GetNearestTarget().transform.position;

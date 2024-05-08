@@ -9,11 +9,6 @@ public class Player : LiveEntity
 
     bool jumpTrigger;
 
-    private void Start()
-    {
-        hp = 50;
-    }
-
     protected override void LiveEntityUpdate()
     {
         //y²‚É‚Í‹ó‹C’ïR‚ª‚©‚©‚ç‚È‚¢‚æ‚¤‚Éİ’è
