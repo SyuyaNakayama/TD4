@@ -10,6 +10,14 @@ public class CharaData : ScriptableObject
     public const float maxLifeRatio = 0.8f;
 
     [System.Serializable]
+    public enum EasingType
+    {
+        easeIn,
+        easeOut,
+        easeInOut
+    }
+
+    [System.Serializable]
     public struct Cursor
     {
         public string name;
@@ -56,6 +64,14 @@ public class CharaData : ScriptableObject
         public string dataName;
     }
     [System.Serializable]
+    public struct MoveKey
+    {
+        public Vector2 keyFrame;
+        public Vector3 moveVec;
+        public EasingType easingType;
+        public float easePow;
+    }
+    [System.Serializable]
     public struct SEKey
     {
         public float keyFrame;
@@ -68,6 +84,7 @@ public class CharaData : ScriptableObject
         public int totalFrame;
         public MeleeAttackKey[] meleeAttackKeys;
         public ShotKey[] shotKeys;
+        public MoveKey[] moveKeys;
         public Vector2[] shieldKeys;
         public SEKey[] seKeys;
     }

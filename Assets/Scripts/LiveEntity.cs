@@ -30,9 +30,8 @@ public class LiveEntity : MonoBehaviour
     {
         return isLanding;
     }
-    int maxHP;
-    int hpAmount = 1;
-    bool isDead = false;
+    int maxHP;//最大体力
+    int hpAmount = 1;//残り体力の割合
     string attackMotionID = "";
     int attackMotionFrame;
     float attackProgress;
@@ -173,12 +172,18 @@ public class LiveEntity : MonoBehaviour
     // ダメージを受ける
     public void Damage(int damage)
     {
-        maxHP -= damage;
-        if (maxHP <= 0)
-        {
-            // お前はもう死んでいる
-            maxHP = 0;
-            isDead = true;
-        }
+        hpAmount -= damage / maxHP;
+    }
+
+    //生きているか
+    public bool IsLive()
+    {
+        return hpAmount > 0;
+    }
+
+    //設定されたモーションデータを読み出して実行（実行中は常に呼ぶ）
+    void PlayAttackMotion(AttackMotionData motionData)
+    {
+
     }
 }
