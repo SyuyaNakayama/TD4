@@ -32,7 +32,6 @@ public class CharaData : ScriptableObject
         public float power;
         public float scale;
         public bool vectorBlow;
-        public bool grab;
         public float blowForce;
         public int hitback;
     }
@@ -85,6 +84,7 @@ public class CharaData : ScriptableObject
         public MeleeAttackKey[] meleeAttackKeys;
         public ShotKey[] shotKeys;
         public MoveKey[] moveKeys;
+        public MoveKey[] leaderMoveKeys;
         public Vector2[] shieldKeys;
         public SEKey[] seKeys;
     }
@@ -108,6 +108,52 @@ public class CharaData : ScriptableObject
     {
         return (1 - Mathf.Clamp(lifeRatio, minLifeRatio, maxLifeRatio))
         * totalStatusValue;
+    }
+
+    [SerializeField]
+    Cursor[] cursors = { };
+    public Cursor[] GetCursors()
+    {
+        return cursors;
+    }
+    public int SearchCursorIndex(string name)
+    {
+        for (int i = 0; i < cursors.Length; i++)
+        {
+            if (name == cursors[i].name)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    [SerializeField]
+    MeleeAttackData[] meleeAttackDatas = { };
+    public MeleeAttackData SearchMeleeAttackData(string name)
+    {
+        for (int i = 0; i < meleeAttackDatas.Length; i++)
+        {
+            if (name == meleeAttackDatas[i].name)
+            {
+                return meleeAttackDatas[i];
+            }
+        }
+        return new MeleeAttackData();
+    }
+
+    [SerializeField]
+    ShotData[] shotDatas = { };
+    public ShotData SearchShotData(string name)
+    {
+        for (int i = 0; i < shotDatas.Length; i++)
+        {
+            if (name == shotDatas[i].name)
+            {
+                return shotDatas[i];
+            }
+        }
+        return new ShotData();
     }
 
     [SerializeField]

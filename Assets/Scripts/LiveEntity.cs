@@ -32,13 +32,17 @@ public class LiveEntity : MonoBehaviour
     }
     int maxHP;//最大体力
     int hpAmount = 1;//残り体力の割合
-    string attackMotionID = "";
-    int attackMotionFrame;
+    bool shield;//これがtrueの間は技による無敵時間
+    CharaData.AttackMotionData attackMotionData;
+    int attackTimeFrame;
     float attackProgress;
     public float GetAttackProgress()
     {
         return attackProgress;
     }
+    float prevAttackProgress;
+    protected CharaData.Cursor[] cursors = { };
+
 
     void Awake()
     {
@@ -103,6 +107,12 @@ public class LiveEntity : MonoBehaviour
 
         //allowGroundSetをリセット
         allowGroundSet = true;
+        //shieldをリセット
+        shield = false;
+        //prevAttackProgressを更新
+        prevAttackProgress = GetAttackProgress();
+        //cursorsを初期状態に
+        cursors = data.GetCursors();
 
         //ここで各派生クラスの固有更新処理を呼ぶ
         LiveEntityUpdate();
@@ -114,12 +124,7 @@ public class LiveEntity : MonoBehaviour
         isLanding = false;
 
         //攻撃モーションの進行度を増加
-        attackProgress += 1 / Mathf.Max((float)attackMotionFrame, 1);
-        //進行度が１を超えたら攻撃モーションを止める
-        if (attackProgress > 1)
-        {
-            attackMotionID = "";
-        }
+        attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
         attackProgress = Mathf.Clamp(attackProgress, 0, 1);
     }
 
@@ -150,17 +155,37 @@ public class LiveEntity : MonoBehaviour
     }
 
     //攻撃モーションに移行
-    protected void SetAttackMotion(string setAttackMotionID, int setAttackMotionFrame)
+    protected void SetAttackMotion(string name, int setAttackMotionFrame)
     {
-        attackMotionID = setAttackMotionID;
-        attackMotionFrame = Mathf.Max(setAttackMotionFrame, 1);
+        attackMotionData = data.SearchAttackMotion(name);
+        attackTimeFrame = Mathf.Max(setAttackMotionFrame, 1);
         attackProgress = 0;
     }
 
     //攻撃モーション中か
-    public bool IsAttacking()
+    protected bool IsAttacking()
     {
-        return attackProgress < 1 && attackMotionID != "";
+        return attackTimeFrame > 0 || prevAttackProgress < 1;
+    }
+    //攻撃モーション中かつ指定の攻撃アクションを行なっているか
+    protected bool IsAttacking(string name)
+    {
+        return IsAttacking() && attackMotionData.name == name;
+    }
+    //attackProgressが指定のキーポイントを通過したか
+    protected bool IsHitKeyPoint(float keyPoint)
+    {
+        return KX_netUtil.IsIntoRange(
+            keyPoint, prevAttackProgress, GetAttackProgress(),
+            false, true);
+    }
+    //attackProgressが指定の範囲内、もしくはその範囲を1フレーム内で通過したか
+    protected bool IsHitKeyPoint(Vector2 keyPoint)
+    {
+        return KX_netUtil.IsCrossingRange(
+            prevAttackProgress, GetAttackProgress(),
+            keyPoint.x, keyPoint.y,
+            false, false);
     }
 
     //これを呼んでいる間は地形に触れてもそっちに足を向けなくなる
@@ -182,7 +207,82 @@ public class LiveEntity : MonoBehaviour
     }
 
     //設定されたモーションデータを読み出して実行（実行中は常に呼ぶ）
-    void PlayAttackMotion(AttackMotionData motionData)
+    void ExecuteAttackMotion()
+    {
+        if (IsAttacking())
+        {
+            if (attackMotionData.meleeAttackKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.
+                        meleeAttackKeys.Length; i++)
+                {
+                    CharaData.MeleeAttackKey current =
+                        attackMotionData.meleeAttackKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        CharaData.MeleeAttackData meleeAttackData =
+                            data.SearchMeleeAttackData(current.dataName);
+                        MeleeAttack(meleeAttackData,
+                            cursors[data.SearchCursorIndex(meleeAttackData.cursorName)]);
+                    }
+                }
+            }
+
+            if (attackMotionData.shotKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.
+                    shotKeys.Length; i++)
+                {
+                    CharaData.ShotKey current =
+                        attackMotionData.shotKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        CharaData.ShotData shotData =
+                            data.SearchShotData(current.dataName);
+                        Shot(shotData,
+                            cursors[data.SearchCursorIndex(shotData.cursorName)]);
+                    }
+                }
+            }
+
+            if (attackMotionData.shieldKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.
+                        shieldKeys.Length; i++)
+                {
+                    Vector2 current =
+                        attackMotionData.shieldKeys[i];
+                    if (IsHitKeyPoint(current))
+                    {
+                        shield = true;
+                    }
+                }
+            }
+
+            if (attackMotionData.seKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.
+                    seKeys.Length; i++)
+                {
+                    CharaData.SEKey current =
+                        attackMotionData.seKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        GetComponent<AudioSource>().clip = current.se;
+                        GetComponent<AudioSource>().Play();
+                    }
+                }
+            }
+        }
+    }
+
+    //近接および範囲攻撃
+    void MeleeAttack(CharaData.MeleeAttackData attackData, CharaData.Cursor cursor)
+    {
+
+    }
+    //遠距離攻撃
+    void Shot(CharaData.ShotData shotData, CharaData.Cursor cursor)
     {
 
     }

@@ -14,6 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charaName: "\u30A2\u30A4"
   lifeRatio: 0.8
+  cursors:
+  - name: jump
+    pos: {x: 0, y: 0, z: 0.5}
+    direction: {x: 0, y: 0, z: -0.5}
+  meleeAttackDatas:
+  - name: jumpBurst
+    cursorName: jump
+    power: 0.5
+    scale: 1
+    vectorBlow: 0
+    blowForce: 1
+    hitback: 5
+  shotDatas: []
   attackMotions:
   - name: "\u30B8\u30E3\u30F3\u30D7"
     totalFrame: 0
@@ -21,6 +34,7 @@ MonoBehaviour:
     - keyFrame: {x: 0, y: 0}
       dataName: 
     shotKeys: []
+    moveKeys: []
     shieldKeys: []
     seKeys:
     - keyFrame: 0

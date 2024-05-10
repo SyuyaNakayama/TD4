@@ -14,13 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charaName: "\u30AD\u30E5\u30EB\u30D5"
   lifeRatio: 0.5
+  cursors: []
+  meleeAttackDatas: []
+  shotDatas: []
   attackMotions:
   - name: "\u304B\u307F\u3064\u304D\u30B8\u30E3\u30F3\u30D7"
-    totalFrame: 0
+    totalFrame: 30
     meleeAttackKeys:
     - keyFrame: {x: 0, y: 1}
       dataName: 
     shotKeys: []
+    moveKeys:
+    - keyFrame: {x: 0, y: 0.5}
+      moveVec: {x: 0.5, y: 1, z: 0}
+      easingType: 1
+      easePow: 2
+    - keyFrame: {x: 0.5, y: 1}
+      moveVec: {x: 0, y: -1, z: 0}
+      easingType: 2
+      easePow: 2
     shieldKeys: []
     seKeys:
     - keyFrame: 0

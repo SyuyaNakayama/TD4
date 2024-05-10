@@ -13,14 +13,22 @@ MonoBehaviour:
   m_Name: Clex
   m_EditorClassIdentifier: 
   charaName: "\u30AF\u30E9\u30DF\u30FC"
-  lifeRatio: 0.8
+  lifeRatio: 0.2
+  cursors: []
+  meleeAttackDatas: []
+  shotDatas: []
   attackMotions:
   - name: "\u5F8C\u9000\u5C04\u6483"
-    totalFrame: 0
+    totalFrame: 30
     meleeAttackKeys: []
     shotKeys:
     - keyFrame: 0
       dataName: 
+    moveKeys:
+    - keyFrame: {x: 0, y: 1}
+      moveVec: {x: 0, y: 0, z: -1}
+      easingType: 1
+      easePow: 0
     shieldKeys:
     - {x: 0, y: 1}
     seKeys:
