@@ -5,6 +5,17 @@ public class Enemy : LiveEntity
 {
     [SerializeField]
     Sensor sensor;
+    protected Vector3 targetCursor;
+
+    protected override void LiveEntityUpdate()
+    {
+        //UŒ‚“®ì’†‚Å‚È‚¢‚ÉŠl•¨‚ğŒ©‚Â‚¯‚½‚çUŒ‚“®ì‚Ö
+        if (!IsAttacking() && GetNearestTarget() != null)
+        {
+            targetCursor = GetNearestTarget().transform.position;
+            SetAttackMotion(GetData().GetDefaultAttackMotionName());
+        }
+    }
 
     //Œ©‚Â‚¯‚½LiveEntity‚Ì’†‚©‚ç•W“I‚ğ‘I•Ê
     public LiveEntity[] GetTargets()

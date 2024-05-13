@@ -13,29 +13,8 @@ MonoBehaviour:
   m_Name: Cub_E
   m_EditorClassIdentifier: 
   charaName: "\u30AD\u30E5\u30EB\u30D5"
+  themeColor: {r: 0, g: 0, b: 0, a: 0}
   lifeRatio: 0.5
-  cursors: []
-  meleeAttackDatas: []
-  shotDatas: []
+  defaultAttackMotionName: upperFang
   attackMotions:
-  - name: "\u304B\u307F\u3064\u304D\u30B8\u30E3\u30F3\u30D7"
-    totalFrame: 30
-    meleeAttackKeys:
-    - keyFrame: {x: 0, y: 1}
-      dataName: 
-    shotKeys: []
-    moveKeys:
-    - keyFrame: {x: 0, y: 0.5}
-      moveVec: {x: 0.5, y: 1, z: 0}
-      easingType: 1
-      easePow: 2
-    - keyFrame: {x: 0.5, y: 1}
-      moveVec: {x: 0, y: -1, z: 0}
-      easingType: 2
-      easePow: 2
-    shieldKeys: []
-    seKeys:
-    - keyFrame: 0
-      se: {fileID: 0}
-    - keyFrame: 0.5
-      se: {fileID: 0}
+  - {fileID: 11400000, guid: 621b40969e765421a968ea12e041a873, type: 2}

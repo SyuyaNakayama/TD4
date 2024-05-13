@@ -5,8 +5,6 @@ using UnityEngine;
 //キュルフ
 public class Cub_E : Enemy
 {
-    Vector3 targetCursor;
-
     protected override void LiveEntityUpdate()
     {
         //y軸には空気抵抗がかからないように設定
@@ -26,9 +24,8 @@ public class Cub_E : Enemy
                     - transform.position;
                 movement = transform.InverseTransformPoint(target)
                     / Mathf.Deg2Rad * 0.1f;
-                //この間は地形に触れてもそっちに足を向けない
-                DisAllowGroundSet();
             }
+            Debug.Log(GetAttackProgress());
         }
         else
         {
@@ -36,7 +33,7 @@ public class Cub_E : Enemy
             if (GetNearestTarget() != null)
             {
                 targetCursor = GetNearestTarget().transform.position;
-                SetAttackMotion("upperAim", 120);
+                SetAttackMotion(GetData().GetDefaultAttackMotionName());
             }
         }
     }

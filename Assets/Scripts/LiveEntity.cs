@@ -11,6 +11,10 @@ public class LiveEntity : MonoBehaviour
 
     [SerializeField]
     CharaData data;
+    public CharaData GetData()
+    {
+        return data;
+    }
     [SerializeField]
     string teamID;
     public string GetTeamID()
@@ -33,7 +37,7 @@ public class LiveEntity : MonoBehaviour
     int maxHP;//最大体力
     int hpAmount = 1;//残り体力の割合
     bool shield;//これがtrueの間は技による無敵時間
-    CharaData.AttackMotionData attackMotionData;
+    AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
     public float GetAttackProgress()
@@ -41,7 +45,7 @@ public class LiveEntity : MonoBehaviour
         return attackProgress;
     }
     float prevAttackProgress;
-    protected CharaData.Cursor[] cursors = { };
+    AttackMotionData.Cursor[] cursors = { };
 
 
     void Awake()
@@ -109,10 +113,6 @@ public class LiveEntity : MonoBehaviour
         allowGroundSet = true;
         //shieldをリセット
         shield = false;
-        //prevAttackProgressを更新
-        prevAttackProgress = GetAttackProgress();
-        //cursorsを初期状態に
-        cursors = data.GetCursors();
 
         //ここで各派生クラスの固有更新処理を呼ぶ
         LiveEntityUpdate();
@@ -123,6 +123,8 @@ public class LiveEntity : MonoBehaviour
         //地面との接触判定を行う前に一旦着地していない状態にする
         isLanding = false;
 
+        //prevAttackProgressを更新
+        prevAttackProgress = GetAttackProgress();
         //攻撃モーションの進行度を増加
         attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
         attackProgress = Mathf.Clamp(attackProgress, 0, 1);
@@ -155,10 +157,10 @@ public class LiveEntity : MonoBehaviour
     }
 
     //攻撃モーションに移行
-    protected void SetAttackMotion(string name, int setAttackMotionFrame)
+    protected void SetAttackMotion(string name)
     {
         attackMotionData = data.SearchAttackMotion(name);
-        attackTimeFrame = Mathf.Max(setAttackMotionFrame, 1);
+        attackTimeFrame = Mathf.Max(attackMotionData.GetData().totalFrame, 1);
         attackProgress = 0;
     }
 
@@ -170,7 +172,7 @@ public class LiveEntity : MonoBehaviour
     //攻撃モーション中かつ指定の攻撃アクションを行なっているか
     protected bool IsAttacking(string name)
     {
-        return IsAttacking() && attackMotionData.name == name;
+        return IsAttacking() && attackMotionData.GetData().name == name;
     }
     //attackProgressが指定のキーポイントを通過したか
     protected bool IsHitKeyPoint(float keyPoint)
@@ -197,7 +199,10 @@ public class LiveEntity : MonoBehaviour
     // ダメージを受ける
     public void Damage(int damage)
     {
-        hpAmount -= damage / maxHP;
+        if (!shield)
+        {
+            hpAmount -= damage / maxHP;
+        }
     }
 
     //生きているか
@@ -211,47 +216,47 @@ public class LiveEntity : MonoBehaviour
     {
         if (IsAttacking())
         {
-            if (attackMotionData.meleeAttackKeys != null)
+            if (attackMotionData.GetData().meleeAttackKeys != null)
             {
-                for (int i = 0; i < attackMotionData.
+                for (int i = 0; i < attackMotionData.GetData().
                         meleeAttackKeys.Length; i++)
                 {
-                    CharaData.MeleeAttackKey current =
-                        attackMotionData.meleeAttackKeys[i];
+                    AttackMotionData.AttackKey current =
+                        attackMotionData.GetData().meleeAttackKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        CharaData.MeleeAttackData meleeAttackData =
-                            data.SearchMeleeAttackData(current.dataName);
+                        AttackMotionData.MeleeAttackData meleeAttackData =
+                            attackMotionData.SearchMeleeAttackData(current.dataName);
                         MeleeAttack(meleeAttackData,
-                            cursors[data.SearchCursorIndex(meleeAttackData.cursorName)]);
+                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);
                     }
                 }
             }
 
-            if (attackMotionData.shotKeys != null)
+            if (attackMotionData.GetData().shotKeys != null)
             {
-                for (int i = 0; i < attackMotionData.
+                for (int i = 0; i < attackMotionData.GetData().
                     shotKeys.Length; i++)
                 {
-                    CharaData.ShotKey current =
-                        attackMotionData.shotKeys[i];
+                    AttackMotionData.AttackKey current =
+                        attackMotionData.GetData().shotKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        CharaData.ShotData shotData =
-                            data.SearchShotData(current.dataName);
+                        AttackMotionData.ShotData shotData =
+                            attackMotionData.SearchShotData(current.dataName);
                         Shot(shotData,
-                            cursors[data.SearchCursorIndex(shotData.cursorName)]);
+                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);
                     }
                 }
             }
 
-            if (attackMotionData.shieldKeys != null)
+            if (attackMotionData.GetData().shieldKeys != null)
             {
-                for (int i = 0; i < attackMotionData.
+                for (int i = 0; i < attackMotionData.GetData().
                         shieldKeys.Length; i++)
                 {
                     Vector2 current =
-                        attackMotionData.shieldKeys[i];
+                        attackMotionData.GetData().shieldKeys[i];
                     if (IsHitKeyPoint(current))
                     {
                         shield = true;
@@ -259,13 +264,27 @@ public class LiveEntity : MonoBehaviour
                 }
             }
 
-            if (attackMotionData.seKeys != null)
+            if (attackMotionData.GetData().shieldKeys != null)
             {
-                for (int i = 0; i < attackMotionData.
+                for (int i = 0; i < attackMotionData.GetData().
+                        shieldKeys.Length; i++)
+                {
+                    Vector2 current =
+                        attackMotionData.GetData().shieldKeys[i];
+                    if (IsHitKeyPoint(current))
+                    {
+                        DisAllowGroundSet();
+                    }
+                }
+            }
+
+            if (attackMotionData.GetData().seKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.GetData().
                     seKeys.Length; i++)
                 {
-                    CharaData.SEKey current =
-                        attackMotionData.seKeys[i];
+                    AttackMotionData.SEKey current =
+                        attackMotionData.GetData().seKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
                         GetComponent<AudioSource>().clip = current.se;
@@ -277,12 +296,14 @@ public class LiveEntity : MonoBehaviour
     }
 
     //近接および範囲攻撃
-    void MeleeAttack(CharaData.MeleeAttackData attackData, CharaData.Cursor cursor)
+    void MeleeAttack(AttackMotionData.MeleeAttackData attackData,
+        AttackMotionData.Cursor cursor)
     {
 
     }
     //遠距離攻撃
-    void Shot(CharaData.ShotData shotData, CharaData.Cursor cursor)
+    void Shot(AttackMotionData.ShotData shotData,
+        AttackMotionData.Cursor cursor)
     {
 
     }
