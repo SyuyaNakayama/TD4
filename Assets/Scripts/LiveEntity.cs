@@ -253,6 +253,27 @@ public class LiveEntity : MonoBehaviour
                 }
             }
 
+            if (attackMotionData.GetData().moveKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.GetData().
+                        moveKeys.Length; i++)
+                {
+                    AttackMotionData.MoveKey current =
+                        attackMotionData.GetData().moveKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        float key0 = Mathf.Clamp(prevAttackProgress,
+                            current.keyFrame.x, current.keyFrame.y);
+                        float key1 = Mathf.Clamp(GetAttackProgress(),
+                            current.keyFrame.x, current.keyFrame.y);
+                        movement = current.moveVec * (key1 - key0)
+                            / (current.keyFrame.y - current.keyFrame.x)
+                            / Time.deltaTime;
+                        Debug.Log(movement);
+                    }
+                }
+            }
+
             if (attackMotionData.GetData().shieldKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
