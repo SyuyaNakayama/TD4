@@ -167,7 +167,7 @@ public class LiveEntity : MonoBehaviour
     //攻撃モーション中か
     protected bool IsAttacking()
     {
-        return attackTimeFrame > 0 || prevAttackProgress < 1;
+        return attackTimeFrame < 1 || prevAttackProgress < 1;
     }
     //攻撃モーション中かつ指定の攻撃アクションを行なっているか
     protected bool IsAttacking(string name)

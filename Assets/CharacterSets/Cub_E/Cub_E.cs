@@ -25,7 +25,6 @@ public class Cub_E : Enemy
                 movement = transform.InverseTransformPoint(target)
                     / Mathf.Deg2Rad * 0.1f;
             }
-            Debug.Log(GetAttackProgress());
         }
         else
         {
