@@ -114,6 +114,8 @@ public class LiveEntity : MonoBehaviour
         //shieldをリセット
         shield = false;
 
+        //スクリプタブルオブジェクトから攻撃モーションの内容を読み出す
+        ExecuteAttackMotion();
         //ここで各派生クラスの固有更新処理を呼ぶ
         LiveEntityUpdate();
 
@@ -167,7 +169,8 @@ public class LiveEntity : MonoBehaviour
     //攻撃モーション中か
     protected bool IsAttacking()
     {
-        return attackTimeFrame < 1 || prevAttackProgress < 1;
+        return attackMotionData != null
+            && (attackTimeFrame < 1 || prevAttackProgress < 1);
     }
     //攻撃モーション中かつ指定の攻撃アクションを行なっているか
     protected bool IsAttacking(string name)
@@ -227,8 +230,8 @@ public class LiveEntity : MonoBehaviour
                     {
                         AttackMotionData.MeleeAttackData meleeAttackData =
                             attackMotionData.SearchMeleeAttackData(current.dataName);
-                        MeleeAttack(meleeAttackData,
-                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);
+                        /*MeleeAttack(meleeAttackData,
+                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);*/
                     }
                 }
             }
@@ -244,8 +247,8 @@ public class LiveEntity : MonoBehaviour
                     {
                         AttackMotionData.ShotData shotData =
                             attackMotionData.SearchShotData(current.dataName);
-                        Shot(shotData,
-                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);
+                        /*Shot(shotData,
+                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);*/
                     }
                 }
             }
