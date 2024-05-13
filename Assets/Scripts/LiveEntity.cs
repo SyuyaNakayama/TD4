@@ -269,7 +269,6 @@ public class LiveEntity : MonoBehaviour
                         movement = current.moveVec * (key1 - key0)
                             / (current.keyFrame.y - current.keyFrame.x)
                             / Time.deltaTime;
-                        Debug.Log(movement);
                     }
                 }
             }
