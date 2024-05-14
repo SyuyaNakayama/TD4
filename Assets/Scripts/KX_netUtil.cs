@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class KX_netUtil : object
 {
+    [System.Serializable]
+    public enum EaseType
+    {
+        easeIn,
+        easeOut,
+        easeInOut
+    }
+    [System.Serializable]
+    public struct AxisSwitch
+    {
+        public bool x;
+        public bool y;
+        public bool z;
+    }
+
     //HPゲージなどの背景色を算出
     public static Color GaugeBlankColor(Color gaugeColor, bool forceHighContrastWhenWhite = false, bool forceHighContrastWhenBlack = false)
     {
@@ -213,7 +228,7 @@ public class KX_netUtil : object
         }
     }
     //変形可能な余弦波（使う機会は少ないかも）
-    public float StreachedCos(float num, float mul, float seg1Pow = 1, float seg2Pow = 1)
+    public static float StreachedCos(float num, float mul, float seg1Pow = 1, float seg2Pow = 1)
     {
         num = Mathf.Repeat(num, Mathf.PI * 2);
         num *= (0.5f + mul / 2);
@@ -231,6 +246,34 @@ public class KX_netUtil : object
         else
         {
             ret = SignedPow(ret, seg2Pow);
+        }
+
+        return ret;
+    }
+    //イージング
+    public static float Ease(float progress, EaseType easeType, float powNum)
+    {
+        float ret = 0;
+        float currentProgress = Mathf.Clamp(progress, 0, 1);
+
+        switch (easeType)
+        {
+            case EaseType.easeIn:
+                ret = Mathf.Pow(currentProgress, powNum);
+                break;
+            case EaseType.easeOut:
+                ret = 1 - Mathf.Pow(1 - currentProgress, powNum);
+                break;
+            case EaseType.easeInOut:
+                if (ret < 0.5f)
+                {
+                    ret = Mathf.Pow(currentProgress * 2, powNum) / 2;
+                }
+                else
+                {
+                    ret = -1 / Mathf.Pow(1 - currentProgress, powNum) - 1;
+                }
+                break;
         }
 
         return ret;

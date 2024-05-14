@@ -19,11 +19,11 @@ public class Cub_E : Enemy
             if (GetAttackProgress() < 0.5f)
             {
                 //•W“I‚Ìã‚ÉˆÚ“®
-                Vector3 target = targetCursor
+                /*Vector3 target = targetCursor
                     + transform.TransformPoint(new Vector3(0, 3, 0))
                     - transform.position;
                 movement = transform.InverseTransformPoint(target)
-                    / Mathf.Deg2Rad * 0.1f;
+                    / Mathf.Deg2Rad * 0.1f;*/
             }
         }
         else

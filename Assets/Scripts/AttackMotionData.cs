@@ -6,14 +6,6 @@ using UnityEngine;
 public class AttackMotionData : ScriptableObject
 {
     [System.Serializable]
-    public enum EasingType
-    {
-        easeIn,
-        easeOut,
-        easeInOut
-    }
-
-    [System.Serializable]
     public struct Cursor
     {
         public string name;
@@ -56,7 +48,7 @@ public class AttackMotionData : ScriptableObject
     {
         public Vector2 keyFrame;
         public Vector3 moveVec;
-        public EasingType easingType;
+        public KX_netUtil.EaseType easeType;
         public float easePow;
     }
     [System.Serializable]
@@ -73,7 +65,6 @@ public class AttackMotionData : ScriptableObject
         public AttackKey[] meleeAttackKeys;
         public AttackKey[] shotKeys;
         public MoveKey[] moveKeys;
-        public MoveKey[] leaderMoveKeys;
         public Vector2[] shieldKeys;
         public Vector2[] disAllowGroundSetKeys;
         public SEKey[] seKeys;

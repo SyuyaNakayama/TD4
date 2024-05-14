@@ -2,13 +2,6 @@ using UnityEngine;
 
 public class LiveEntity : MonoBehaviour
 {
-    public struct AxisSwitch
-    {
-        public bool x;
-        public bool y;
-        public bool z;
-    }
-
     [SerializeField]
     CharaData data;
     public CharaData GetData()
@@ -24,7 +17,7 @@ public class LiveEntity : MonoBehaviour
     protected float drag = 0.8f;
     protected float gravityScale = 0.5f;
     protected Vector3 movement;
-    protected AxisSwitch dragAxis;
+    protected KX_netUtil.AxisSwitch dragAxis;
     Vector3 prevPos;
     Quaternion prevRot;
     Collider currentGround;
@@ -262,12 +255,15 @@ public class LiveEntity : MonoBehaviour
                         attackMotionData.GetData().moveKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        float key0 = Mathf.Clamp(prevAttackProgress,
-                            current.keyFrame.x, current.keyFrame.y);
-                        float key1 = Mathf.Clamp(GetAttackProgress(),
-                            current.keyFrame.x, current.keyFrame.y);
+                        float key0 = KX_netUtil.Ease(KX_netUtil.RangeMap(prevAttackProgress,
+                            current.keyFrame.x, current.keyFrame.y, 0, 1),
+                            current.easeType, current.easePow);
+
+                        float key1 = KX_netUtil.Ease(KX_netUtil.RangeMap(GetAttackProgress(),
+                            current.keyFrame.x, current.keyFrame.y, 0, 1),
+                            current.easeType, current.easePow);
+
                         movement = current.moveVec * (key1 - key0)
-                            / (current.keyFrame.y - current.keyFrame.x)
                             / Time.deltaTime;
                     }
                 }
