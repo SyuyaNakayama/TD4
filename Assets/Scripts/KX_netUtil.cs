@@ -265,13 +265,13 @@ public class KX_netUtil : object
                 ret = 1 - Mathf.Pow(1 - currentProgress, powNum);
                 break;
             case EaseType.easeInOut:
-                if (ret < 0.5f)
+                if (currentProgress < 0.5f)
                 {
                     ret = Mathf.Pow(currentProgress * 2, powNum) / 2;
                 }
                 else
                 {
-                    ret = -1 / Mathf.Pow(1 - currentProgress, powNum) - 1;
+                    ret = 1 - Mathf.Pow((1 - currentProgress) * 2, powNum) / 2;
                 }
                 break;
         }
