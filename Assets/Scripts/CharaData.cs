@@ -38,6 +38,20 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
+    float gravityScale = 0.5f;
+    public float GetGravityScale()
+    {
+        return gravityScale;
+    }
+
+    [SerializeField]
+    KX_netUtil.AxisSwitch dragAxis;
+    public KX_netUtil.AxisSwitch GetDragAxis()
+    {
+        return dragAxis;
+    }
+
+    [SerializeField]
     string defaultAttackMotionName;
     public string GetDefaultAttackMotionName()
     {

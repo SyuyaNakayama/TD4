@@ -15,9 +15,7 @@ public class LiveEntity : MonoBehaviour
         return teamID;
     }
     protected float drag = 0.8f;
-    protected float gravityScale = 0.5f;
     protected Vector3 movement;
-    protected KX_netUtil.AxisSwitch dragAxis;
     Vector3 prevPos;
     Quaternion prevRot;
     Collider currentGround;
@@ -80,6 +78,7 @@ public class LiveEntity : MonoBehaviour
             movement.y = 0;
         }
 
+        KX_netUtil.AxisSwitch dragAxis = data.GetDragAxis();
         //重力及び空気抵抗
         if (dragAxis.x && dragAxis.y && dragAxis.z)
         {
@@ -100,7 +99,7 @@ public class LiveEntity : MonoBehaviour
                 movement.z *= drag;
             }
         }
-        movement += new Vector3(0, -gravityScale, 0);
+        movement += new Vector3(0, -data.GetGravityScale(), 0);
 
         //allowGroundSetをリセット
         allowGroundSet = true;

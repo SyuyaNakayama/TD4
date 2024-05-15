@@ -13,33 +13,36 @@ MonoBehaviour:
   m_Name: upperFang_E
   m_EditorClassIdentifier: 
   cursors:
-  - name: upper
-    pos: {x: 0, y: 0, z: 0}
-    direction: {x: 0, y: 0, z: 0}
   - name: drop
     pos: {x: 0, y: 0, z: 0}
-    direction: {x: 0, y: 1, z: 0}
-  meleeAttackDatas: []
+    direction: {x: 0, y: -1, z: 0}
+  meleeAttackDatas:
+  - name: default
+    power: 3
+    scale: 1.2
+    vectorBlow: 1
+    blowForce: 6
+    hitback: 30
   shotDatas: []
   data:
     name: "\u304B\u307F\u3064\u304D\u30B8\u30E3\u30F3\u30D7"
     totalFrame: 60
     meleeAttackKeys:
     - keyFrame: {x: 0.5, y: 1}
-      dataName: 
-      cursorName: 
+      dataName: default
+      cursorName: drop
     shotKeys: []
-    moveKeys: []
-    leaderMoveKeys:
+    moveKeys:
     - keyFrame: {x: 0, y: 0.5}
-      moveVec: {x: 0, y: 5, z: 2}
-      easingType: 0
-      easePow: 2
-    - keyFrame: {x: 0.5, y: 1}
-      moveVec: {x: 0, y: -10, z: 0}
-      easingType: 2
-      easePow: 2
-    shieldKeys: []
+      moveVec: {x: 0, y: 4, z: 3}
+      easeType: 1
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.8}
+      moveVec: {x: 0, y: -7, z: 0}
+      easeType: 2
+      easePow: 4
+    shieldKeys:
+    - {x: 0, y: 1}
     disAllowGroundSetKeys:
     - {x: 0, y: 0.5}
     seKeys:

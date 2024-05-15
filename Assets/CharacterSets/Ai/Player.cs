@@ -6,16 +6,13 @@ public class Player : LiveEntity
 {
     static float moveSpeed = 1.5f;
     static float jumpPower = 10.0f;
+    static int maxTeamNum = 5;
 
     bool jumpTrigger;
 
+
     protected override void LiveEntityUpdate()
     {
-        //y軸には空気抵抗がかからないように設定
-        dragAxis.x = true;
-        dragAxis.y = false;
-        dragAxis.z = true;
-
         // 移動
         // コントローラーとキーボード両方に対応
         movement += new Vector3(
@@ -28,8 +25,8 @@ public class Player : LiveEntity
         // コントローラーならAボタン
         bool jumpInput = Input.GetKey(KeyCode.Space)
             || Input.GetKey("joystick button 0");
-        //ジャンプボタンの押し始め、かつ着地しているなら
-        if (jumpInput && !jumpTrigger && GetIsLanding())
+        //ジャンプボタンの押し始めなら
+        if (jumpInput && !jumpTrigger)
         {
             movement = new Vector3(movement.x, jumpPower, movement.z);
         }

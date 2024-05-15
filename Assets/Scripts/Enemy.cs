@@ -12,7 +12,13 @@ public class Enemy : LiveEntity
         //UŒ‚“®ì’†‚Å‚È‚¢‚ÉŠl•¨‚ğŒ©‚Â‚¯‚½‚çUŒ‚“®ì‚Ö
         if (!IsAttacking() && GetNearestTarget() != null)
         {
-            targetCursor = GetNearestTarget().transform.position;
+            //‘_‚¤
+            targetCursor = transform.InverseTransformPoint(
+                GetNearestTarget().transform.position);
+            transform.Rotate(0,
+                Mathf.Atan2(targetCursor.x, targetCursor.z) / Mathf.Deg2Rad,
+                0, Space.Self);
+            //UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ğÄ¶
             SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
     }
