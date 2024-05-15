@@ -153,7 +153,13 @@ public class LiveEntity : MonoBehaviour
     //攻撃モーションに移行
     protected void SetAttackMotion(string name)
     {
-        attackMotionData = data.SearchAttackMotion(name);
+        SetAttackMotion(data.SearchAttackMotion(name));
+    }
+
+    //攻撃モーションに移行
+    protected void SetAttackMotion(AttackMotionData attackMotion)
+    {
+        attackMotionData = attackMotion;
         attackTimeFrame = Mathf.Max(attackMotionData.GetData().totalFrame, 1);
         attackProgress = 0;
     }
