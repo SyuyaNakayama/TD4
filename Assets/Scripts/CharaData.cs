@@ -59,6 +59,13 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
+    string weaponedAttackMotionName;
+    public string GetWeaponedAttackMotionName()
+    {
+        return weaponedAttackMotionName;
+    }
+
+    [SerializeField]
     AttackMotionData[] attackMotions = { };
     public AttackMotionData[] GetAttackMotions()
     {

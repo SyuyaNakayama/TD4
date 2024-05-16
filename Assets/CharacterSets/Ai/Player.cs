@@ -9,7 +9,10 @@ public class Player : LiveEntity
     static int maxTeamNum = 5;
 
     bool jumpTrigger;
-
+    bool attackTrigger;
+    int currentCharaIndex;
+    [SerializeField]
+    CharaData characters;
 
     protected override void LiveEntityUpdate()
     {
@@ -31,5 +34,21 @@ public class Player : LiveEntity
             movement = new Vector3(movement.x, jumpPower, movement.z);
         }
         jumpTrigger = jumpInput;
+
+        //下一段のキーを押して攻撃
+        // コントローラーならBボタン
+        bool attackInput = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
+            || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
+            || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
+            || Input.GetKey(KeyCode.M)
+            || Input.GetKey("joystick button 1");
+        //攻撃ボタンの押し始めなら
+        if (attackInput && !attackTrigger)
+        {
+            //攻撃モーションを再生
+            SetAttackMotion(characters.SearchAttackMotion(
+                characters.GetWeaponedAttackMotionName()));
+        }
+        attackTrigger = attackInput;
     }
 }
