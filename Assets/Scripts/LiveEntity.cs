@@ -3,6 +3,8 @@ using UnityEngine;
 public class LiveEntity : MonoBehaviour
 {
     [SerializeField]
+    GameObject visual;
+    [SerializeField]
     CharaData data;
     public CharaData GetData()
     {
@@ -16,6 +18,7 @@ public class LiveEntity : MonoBehaviour
     }
     protected float drag = 0.8f;
     protected Vector3 movement;
+    protected float direction;
     Vector3 prevPos;
     Quaternion prevRot;
     Collider currentGround;
@@ -268,8 +271,8 @@ public class LiveEntity : MonoBehaviour
                             current.keyFrame.x, current.keyFrame.y, 0, 1),
                             current.easeType, current.easePow);
 
-                        movement = current.moveVec * (key1 - key0)
-                            / Time.deltaTime;
+                        movement = Quaternion.Euler(new Vector3(0, direction, 0))
+                            * current.moveVec * (key1 - key0) / Time.deltaTime;
                     }
                 }
             }

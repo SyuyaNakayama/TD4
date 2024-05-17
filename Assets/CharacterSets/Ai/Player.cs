@@ -18,11 +18,17 @@ public class Player : LiveEntity
     {
         // 移動
         // コントローラーとキーボード両方に対応
-        movement += new Vector3(
-        Input.GetAxis("Horizontal"),
-        0,
-        Input.GetAxis("Vertical")).normalized
-        * moveSpeed;
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            movement += new Vector3(
+                Input.GetAxis("Horizontal"),
+                0,
+                Input.GetAxis("Vertical")).normalized
+                * moveSpeed;
+            direction = Mathf.Atan2(
+                Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))
+                 / Mathf.Deg2Rad;
+        }
 
         //スペースキーでジャンプ
         // コントローラーならAボタン
