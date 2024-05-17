@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class LiveEntity : MonoBehaviour
 {
+    const float cameraTiltDiffuse = 0.3f;
+    const float cameraDistance = 10;
+
     [SerializeField]
     GameObject visual;
+    [SerializeField]
+    Camera view;
     [SerializeField]
     CharaData data;
     public CharaData GetData()
@@ -21,6 +26,7 @@ public class LiveEntity : MonoBehaviour
     protected float direction;
     Vector3 prevPos;
     Quaternion prevRot;
+    Quaternion cameraTiltRot;
     Collider currentGround;
     bool allowGroundSet;
     bool isLanding = false; //着地しているか
@@ -73,13 +79,34 @@ public class LiveEntity : MonoBehaviour
         Vector3 prevMovement = movement;
         //前フレームからの移動量をmovementに変換
         movement = Quaternion.Inverse(prevRot) * ((transform.position - prevPos) / Time.deltaTime);
-        prevPos = transform.position;
-        prevRot = transform.rotation;
+
         //バウンド防止処理
         if (Mathf.Sign(prevMovement.y) != Mathf.Sign(movement.y))
         {
             movement.y = 0;
         }
+
+        if (view != null)
+        {
+            //前フレームからの回転の差に応じてカメラの傾き角を決める
+            cameraTiltRot =
+                cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
+            //カメラの傾き角を減衰させる
+            cameraTiltRot = Quaternion.Slerp(
+                cameraTiltRot, Quaternion.identity, cameraTiltDiffuse);
+            //まずキャラを見下ろす角度にカメラを向ける
+            view.transform.localEulerAngles = new Vector3(90, 0, 0);
+            //カメラの傾き角に応じてカメラを傾ける
+            view.transform.rotation =
+                cameraTiltRot * view.transform.rotation;
+            //カメラの位置をカメラから見て後ろ側にする
+            view.transform.localPosition =
+                view.transform.localRotation * new Vector3(0, 0, -1)
+                * cameraDistance;
+        }
+
+        prevPos = transform.position;
+        prevRot = transform.rotation;
 
         KX_netUtil.AxisSwitch dragAxis = data.GetDragAxis();
         //重力及び空気抵抗
