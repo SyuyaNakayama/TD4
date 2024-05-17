@@ -57,6 +57,9 @@ public class Player : LiveEntity
         }
         attackTrigger = attackInput;
 
+        //©‹@‚ğ‰ñ“]
+        transform.Rotate(
+            0, Input.GetAxis("Cam_Horizontal"), 0, Space.Self);
         //ƒJƒƒ‰‚ğŒX‚¯‚é
         cameraAngle += Input.GetAxis("Cam_Vertical");
     }
