@@ -4,6 +4,7 @@ public class LiveEntity : MonoBehaviour
 {
     const float cameraTiltDiffuse = 0.3f;
     const float cameraDistance = 10;
+    const float directionTiltIntensity = 0.5f;
 
     [SerializeField]
     GameObject visual;
@@ -111,7 +112,12 @@ public class LiveEntity : MonoBehaviour
         //ƒLƒƒƒ‰‚ÌŒ©‚½–Ú‚ðŒü‚¢‚Ä‚¢‚é•ûŒü‚ÖŒü‚¯‚é
         if (visual != null)
         {
-            visual.transform.localEulerAngles = new Vector3(0, direction, 0);
+            float visualDirection = visual.transform.localEulerAngles.y;
+            visual.transform.localEulerAngles = new Vector3(0,
+                visualDirection
+                + KX_netUtil.AngleDiff(visualDirection, direction)
+                * directionTiltIntensity,
+                0);
         }
 
         KX_netUtil.AxisSwitch dragAxis = data.GetDragAxis();
