@@ -5,6 +5,8 @@ public class LiveEntity : MonoBehaviour
     const float cameraTiltDiffuse = 0.3f;
     const float cameraDistance = 10;
     const float directionTiltIntensity = 0.5f;
+    const float minCameraAngle = 0;
+    const float maxCameraAngle = 90;
 
     [SerializeField]
     GameObject visual;
@@ -28,6 +30,7 @@ public class LiveEntity : MonoBehaviour
     Vector3 prevPos;
     Quaternion prevRot;
     Quaternion cameraTiltRot;
+    protected float cameraAngle = maxCameraAngle;
     Collider currentGround;
     bool allowGroundSet;
     bool isLanding = false; //着地しているか
@@ -96,7 +99,8 @@ public class LiveEntity : MonoBehaviour
             cameraTiltRot = Quaternion.Slerp(
                 cameraTiltRot, Quaternion.identity, cameraTiltDiffuse);
             //まずキャラを見下ろす角度にカメラを向ける
-            view.transform.localEulerAngles = new Vector3(90, 0, 0);
+            cameraAngle = Mathf.Clamp(cameraAngle, minCameraAngle, maxCameraAngle);
+            view.transform.localEulerAngles = new Vector3(cameraAngle, 0, 0);
             //カメラの傾き角に応じてカメラを傾ける
             view.transform.rotation =
                 cameraTiltRot * view.transform.rotation;

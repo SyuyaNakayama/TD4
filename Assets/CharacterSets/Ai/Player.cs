@@ -56,5 +56,8 @@ public class Player : LiveEntity
                 characters.GetWeaponedAttackMotionName()));
         }
         attackTrigger = attackInput;
+
+        //ƒJƒƒ‰‚ğŒX‚¯‚é
+        cameraAngle += Input.GetAxis("Cam_Vertical");
     }
 }
