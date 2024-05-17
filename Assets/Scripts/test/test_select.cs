@@ -9,7 +9,7 @@ public class test_select : MonoBehaviour
     public GameObject gmObj;
     private GameManager gm;
     //デフォルトシーン名
-    private string sceneName = "test_stage0";
+    private string sceneName = "stage_0";
     //ステージ番号と最大数
     public int stageNum = 0;
     private const int maxStageNum = 3;
@@ -32,7 +32,7 @@ public class test_select : MonoBehaviour
         // 0~2の範囲でループさせる
         stageNum = (int)Mathf.Repeat(stageNum, maxStageNum);
         ChangeTargetStage();
-        Debug.Log("test_stage" + stageNum);
+        Debug.Log("stage_" + stageNum);
         //スペースキーで決定
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -42,7 +42,7 @@ public class test_select : MonoBehaviour
     //移動先のシーン名の変更
     private void ChangeTargetStage()
     {
-        sceneName = "test_stage" + stageNum;
+        sceneName = "stage_" + stageNum;
     }
     //選択中のステージ番号の取得
     public int GetSelectNum()
