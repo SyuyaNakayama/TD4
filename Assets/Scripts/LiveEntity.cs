@@ -108,6 +108,12 @@ public class LiveEntity : MonoBehaviour
         prevPos = transform.position;
         prevRot = transform.rotation;
 
+        //ƒLƒƒƒ‰‚ÌŒ©‚½–Ú‚ğŒü‚¢‚Ä‚¢‚é•ûŒü‚ÖŒü‚¯‚é
+        if (visual != null)
+        {
+            visual.transform.localEulerAngles = new Vector3(0, direction, 0);
+        }
+
         KX_netUtil.AxisSwitch dragAxis = data.GetDragAxis();
         //d—Í‹y‚Ñ‹ó‹C’ïR
         if (dragAxis.x && dragAxis.y && dragAxis.z)
