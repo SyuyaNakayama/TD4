@@ -69,7 +69,8 @@ public class LiveEntity : UnLandableObject
     void FixedUpdate()
     {
         //足を地面に向ける
-        if (currentGround != null)
+        if (currentGround != null
+            && currentGround.ClosestPoint(transform.position) != transform.position)
         {
             //足を向けるべき位置を算出し、
             Vector3 localClosestPoint = transform.InverseTransformPoint(
