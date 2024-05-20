@@ -7,10 +7,10 @@ public class Player : LiveEntity
     static float moveSpeed = 1.5f;
     static float jumpPower = 10.0f;
     static int maxTeamNum = 5;
-
     bool jumpTrigger;
     bool attackTrigger;
     int currentCharaIndex;
+
     [SerializeField]
     CharaData characters;
 
@@ -63,4 +63,5 @@ public class Player : LiveEntity
         //ƒJƒƒ‰‚ğŒX‚¯‚é
         cameraAngle += Input.GetAxis("Cam_Vertical");
     }
+    
 }
