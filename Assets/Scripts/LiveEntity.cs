@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class LiveEntity : MonoBehaviour
+[DisallowMultipleComponent]
+public class LiveEntity : UnLandableObject
 {
     const float cameraTiltDiffuse = 0.3f;
     const float cameraDistance = 10;
@@ -174,7 +175,7 @@ public class LiveEntity : MonoBehaviour
     //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
     void OnCollisionStay(Collision col)
     {
-        if (col.gameObject.GetComponent<LiveEntity>() == null && allowGroundSet)
+        if (col.gameObject.GetComponent<UnLandableObject>() == null && allowGroundSet)
         {
             //足を向けるべき地形として登録
             currentGround = col.collider;

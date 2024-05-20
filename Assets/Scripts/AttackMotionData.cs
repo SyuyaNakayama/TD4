@@ -13,6 +13,14 @@ public class AttackMotionData : ScriptableObject
         public Vector3 direction;
     }
     [System.Serializable]
+    public struct AttackData
+    {
+        public float power;
+        public bool vectorBlow;
+        public float blowForce;
+        public int hitback;
+    }
+    [System.Serializable]
     public struct MeleeAttackData
     {
         public string name;

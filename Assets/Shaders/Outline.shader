@@ -513,7 +513,7 @@ Shader "Unlit/Outline"
             {
                 v2f o;
 
-                o.vertex = MakeOutlineVertex(v.vertex, v.normal, _OutlineWidth);
+                o.vertex = UnityObjectToClipPos(v.vertex); //頂点をMVP行列変換
 
 				return o;
             }
