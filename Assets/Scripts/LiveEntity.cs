@@ -10,6 +10,8 @@ public class LiveEntity : UnLandableObject
     const float maxCameraAngle = 90;
 
     [SerializeField]
+    ResourcePalette resourcePalette;
+    [SerializeField]
     GameObject visual;
     [SerializeField]
     Camera view;
@@ -42,6 +44,7 @@ public class LiveEntity : UnLandableObject
     int maxHP;//Å‘å‘Ì—Í
     int hpAmount = 1;//c‚è‘Ì—Í‚ÌŠ„‡
     bool shield;//‚±‚ê‚ªtrue‚ÌŠÔ‚Í‹Z‚É‚æ‚é–³“GŠÔ
+    float shieldBattery;
     AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
@@ -51,7 +54,8 @@ public class LiveEntity : UnLandableObject
     }
     float prevAttackProgress;
     AttackMotionData.Cursor[] cursors = { };
-
+    AttackMotionData.MeleeAttackData[] meleeAttackDatas = { };
+    AttackArea[] attackAreas = { };
 
     void Awake()
     {
