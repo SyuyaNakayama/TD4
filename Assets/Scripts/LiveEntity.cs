@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent]
 public class LiveEntity : UnLandableObject
@@ -67,6 +68,7 @@ public class LiveEntity : UnLandableObject
     //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
     void FixedUpdate()
     {
+        //足を地面に向ける
         if (currentGround != null)
         {
             //足を向けるべき位置を算出し、
@@ -129,8 +131,8 @@ public class LiveEntity : UnLandableObject
                 0);
         }
 
+        //空気抵抗
         KX_netUtil.AxisSwitch dragAxis = data.GetDragAxis();
-        //重力及び空気抵抗
         if (dragAxis.x && dragAxis.y && dragAxis.z)
         {
             movement *= drag;
@@ -150,6 +152,7 @@ public class LiveEntity : UnLandableObject
                 movement.z *= drag;
             }
         }
+        //重力
         movement += new Vector3(0, -data.GetGravityScale(), 0);
 
         //allowGroundSetをリセット
@@ -158,21 +161,21 @@ public class LiveEntity : UnLandableObject
         shield = false;
 
         //スクリプタブルオブジェクトから攻撃モーションの内容を読み出す
-        ExecuteAttackMotion();
+        UpdateAttackMotion();
         //ここで各派生クラスの固有更新処理を呼ぶ
         LiveEntityUpdate();
-
-        //movementをvelocityに変換
-        GetComponent<Rigidbody>().velocity = transform.rotation * movement;
-
-        //地面との接触判定を行う前に一旦着地していない状態にする
-        isLanding = false;
 
         //prevAttackProgressを更新
         prevAttackProgress = GetAttackProgress();
         //攻撃モーションの進行度を増加
         attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
         attackProgress = Mathf.Clamp(attackProgress, 0, 1);
+
+        //movementをvelocityに変換
+        GetComponent<Rigidbody>().velocity = transform.rotation * movement;
+
+        //地面との接触判定を行う前に一旦着地していない状態にする
+        isLanding = false;
     }
 
     //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
@@ -264,10 +267,22 @@ public class LiveEntity : UnLandableObject
     }
 
     //設定されたモーションデータを読み出して実行（実行中は常に呼ぶ）
-    void ExecuteAttackMotion()
+    void UpdateAttackMotion()
     {
+        //近接攻撃のデータをリセット
+        Array.Resize(ref meleeAttackDatas, 0);
+        //3Dカーソルをリセット
+        Array.Resize(ref cursors, 0);
+
         if (IsAttacking())
         {
+            //3Dカーソルを取得
+            if (attackMotionData.GetCursors() != null)
+            {
+                cursors = attackMotionData.GetCursors();
+            }
+
+            //近接攻撃
             if (attackMotionData.GetData().meleeAttackKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -279,12 +294,12 @@ public class LiveEntity : UnLandableObject
                     {
                         AttackMotionData.MeleeAttackData meleeAttackData =
                             attackMotionData.SearchMeleeAttackData(current.dataName);
-                        /*MeleeAttack(meleeAttackData,
-                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);*/
+                        MeleeAttack(meleeAttackData);
                     }
                 }
             }
 
+            //遠距離攻撃
             if (attackMotionData.GetData().shotKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -296,12 +311,13 @@ public class LiveEntity : UnLandableObject
                     {
                         AttackMotionData.ShotData shotData =
                             attackMotionData.SearchShotData(current.dataName);
-                        /*Shot(shotData,
-                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);*/
+                        Shot(shotData,
+                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);
                     }
                 }
             }
 
+            //移動
             if (attackMotionData.GetData().moveKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -325,6 +341,7 @@ public class LiveEntity : UnLandableObject
                 }
             }
 
+            //無敵時間
             if (attackMotionData.GetData().shieldKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -339,13 +356,14 @@ public class LiveEntity : UnLandableObject
                 }
             }
 
-            if (attackMotionData.GetData().shieldKeys != null)
+            //着陸不可時間
+            if (attackMotionData.GetData().disAllowGroundSetKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
-                        shieldKeys.Length; i++)
+                        disAllowGroundSetKeys.Length; i++)
                 {
                     Vector2 current =
-                        attackMotionData.GetData().shieldKeys[i];
+                        attackMotionData.GetData().disAllowGroundSetKeys[i];
                     if (IsHitKeyPoint(current))
                     {
                         DisAllowGroundSet();
@@ -353,6 +371,7 @@ public class LiveEntity : UnLandableObject
                 }
             }
 
+            //効果音
             if (attackMotionData.GetData().seKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -368,13 +387,52 @@ public class LiveEntity : UnLandableObject
                 }
             }
         }
+
+        //攻撃判定を出す
+        //まずは近接攻撃のデータと同じ数だけ領域を用意
+        Array.Resize(ref attackAreas, meleeAttackDatas.Length);
+        //領域内の攻撃判定に近接攻撃のデータを代入
+        for (int i = 0; i < attackAreas.Length; i++)
+        {
+            //無ければ生成
+            if (attackAreas[i] == null)
+            {
+                attackAreas[i] =
+                    Instantiate(resourcePalette.GetAttackArea().gameObject,
+                    transform.position, transform.rotation, transform)
+                    .GetComponent<AttackArea>();
+            }
+            attackAreas[i].transform.parent = gameObject.transform;
+        }
+        //不要な攻撃判定を消す
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            AttackArea current =
+                transform.GetChild(i).GetComponent<AttackArea>();
+            if (current != null)
+            {
+                bool needDestroy = true;
+                for (int j = 0; j < attackAreas.Length; j++)
+                {
+                    if (current == attackAreas[j])
+                    {
+                        needDestroy = false;
+                        break;
+                    }
+                }
+                if (needDestroy)
+                {
+                    Destroy(transform.GetChild(i).gameObject);
+                }
+            }
+        }
     }
 
     //近接および範囲攻撃
-    void MeleeAttack(AttackMotionData.MeleeAttackData attackData,
-        AttackMotionData.Cursor cursor)
+    void MeleeAttack(AttackMotionData.MeleeAttackData attackData)
     {
-
+        Array.Resize(ref meleeAttackDatas, meleeAttackDatas.Length + 1);
+        meleeAttackDatas[meleeAttackDatas.Length - 1] = attackData;
     }
     //遠距離攻撃
     void Shot(AttackMotionData.ShotData shotData,

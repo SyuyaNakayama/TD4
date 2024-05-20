@@ -24,22 +24,17 @@ public class AttackMotionData : ScriptableObject
     public struct MeleeAttackData
     {
         public string name;
-        public float power;
+        public AttackData attackData;
         public float scale;
-        public bool vectorBlow;
-        public float blowForce;
-        public int hitback;
     }
     [System.Serializable]
     public struct ShotData
     {
         public string name;
-        public float power;
+        public AttackData attackData;
         public float scale;
         public float speed;
         public int lifetime;
-        public float blowForce;
-        public int hitback;
         public bool yBillBoard;
         public bool flatBillBoard;
         public Sprite sprite;

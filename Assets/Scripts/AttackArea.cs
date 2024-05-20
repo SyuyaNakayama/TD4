@@ -12,9 +12,4 @@ public class AttackArea : MonoBehaviour
     }
     [SerializeField]
     AttackMotionData.AttackData data;
-
-    void FixedUpdate()
-    {
-
-    }
 }
