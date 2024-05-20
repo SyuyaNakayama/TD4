@@ -395,6 +395,8 @@ public class LiveEntity : UnLandableObject
         //領域内の攻撃判定に近接攻撃のデータを代入
         for (int i = 0; i < attackAreas.Length; i++)
         {
+            AttackMotionData.MeleeAttackData currentData = meleeAttackDatas[i];
+
             //無ければ生成
             if (attackAreas[i] == null)
             {
@@ -403,7 +405,16 @@ public class LiveEntity : UnLandableObject
                     transform.position, transform.rotation, transform)
                     .GetComponent<AttackArea>();
             }
-            attackAreas[i].transform.parent = gameObject.transform;
+
+            AttackArea current = attackAreas[i];
+            current.transform.parent = gameObject.transform;
+            float areaScale = currentData.scale;
+            current.transform.localScale =
+                new Vector3(areaScale, areaScale, areaScale);
+            /*current.transform.localPosition =
+                Quaternion.Euler(new Vector3(0, direction, 0))
+                * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)];*/
+
         }
         //不要な攻撃判定を消す
         for (int i = 0; i < transform.childCount; i++)
