@@ -21,6 +21,12 @@ public class AttackArea : MonoBehaviour
     void FixedUpdate()
     {
         dataLock = true;
+
+    }
+
+    //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
+    protected virtual void AttackAreaUpdate()
+    {
     }
 
     public void SetAttacker(LiveEntity setAttacker)
