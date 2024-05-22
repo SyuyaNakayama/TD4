@@ -5,6 +5,10 @@ using UnityEngine;
 public class Medal : MonoBehaviour
 {
     public GameManager gameManager;
+    //‰½–‡–Ú‚©
+    public int MedalNum;
+    //Žæ“¾‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+    private bool isGet = false;
 
     // Start is called before the first frame update
     void Start()
