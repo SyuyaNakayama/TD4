@@ -21,6 +21,16 @@ public class AttackMotionData : ScriptableObject
         public int hitback;
     }
     [System.Serializable]
+    public struct ProjectileData
+    {
+        public float speed;
+        public int lifetime;
+        public bool yBillBoard;
+        public bool flatBillBoard;
+        public Sprite sprite;
+    }
+
+    [System.Serializable]
     public struct MeleeAttackData
     {
         public string name;
@@ -33,11 +43,7 @@ public class AttackMotionData : ScriptableObject
         public string name;
         public AttackData attackData;
         public float scale;
-        public float speed;
-        public int lifetime;
-        public bool yBillBoard;
-        public bool flatBillBoard;
-        public Sprite sprite;
+        public ProjectileData projectileData;
     }
     [System.Serializable]
     public struct AttackKey
