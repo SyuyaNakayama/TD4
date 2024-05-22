@@ -21,7 +21,7 @@ public class AttackArea : MonoBehaviour
     void FixedUpdate()
     {
         dataLock = true;
-
+        AttackAreaUpdate();
     }
 
     //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
