@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b544b4772696443a85c9f0a063c1a99, type: 3}
+  m_Name: backShot
+  m_EditorClassIdentifier: 
+  cursors:
+  - name: shot
+    pos: {x: 0, y: 0, z: 0.5}
+    direction: {x: 0, y: 0, z: 1}
+  meleeAttackDatas: []
+  shotDatas:
+  - name: shot
+    attackData:
+      power: 0
+      vectorBlow: 0
+      blowForce: 0
+      hitback: 0
+    scale: 0
+    speed: 0
+    lifetime: 0
+    yBillBoard: 0
+    flatBillBoard: 0
+    sprite: {fileID: 0}
+  data:
+    name: "\u5F8C\u9000\u5C04\u6483"
+    totalFrame: 10
+    meleeAttackKeys: []
+    shotKeys:
+    - keyFrame: {x: 0, y: 0}
+      dataName: shot
+      cursorName: shot
+    moveKeys:
+    - keyFrame: {x: 0, y: 1}
+      moveVec: {x: 0, y: 0, z: -4}
+      easeType: 1
+      easePow: 5
+    shieldKeys:
+    - {x: 0, y: 1}
+    disAllowGroundSetKeys: []
+    seKeys:
+    - keyFrame: 0
+      se: {fileID: 0}

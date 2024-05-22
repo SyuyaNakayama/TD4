@@ -12,7 +12,7 @@ public class Player : LiveEntity
     bool attackTrigger;
     int currentCharaIndex;
     [SerializeField]
-    CharaData characters;
+    CharaData[] characters;
 
     protected override void LiveEntityUpdate()
     {
@@ -52,10 +52,14 @@ public class Player : LiveEntity
         if (attackInput && !attackTrigger)
         {
             //UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ğÄ¶
-            SetAttackMotion(characters.SearchAttackMotion(
-                characters.GetWeaponedAttackMotionName()));
+            SetAttackMotion(characters[currentCharaIndex].SearchAttackMotion(
+                characters[currentCharaIndex].GetWeaponedAttackMotionName()));
+            currentCharaIndex++;
         }
         attackTrigger = attackInput;
+
+        currentCharaIndex = Mathf.RoundToInt(Mathf.Repeat(currentCharaIndex,
+            characters.Length));
 
         //©‹@‚ğ‰ñ“]
         transform.Rotate(

@@ -13,24 +13,14 @@ MonoBehaviour:
   m_Name: Clex
   m_EditorClassIdentifier: 
   charaName: "\u30AF\u30E9\u30DF\u30FC"
+  themeColor: {r: 0, g: 0, b: 0, a: 0}
   lifeRatio: 0.2
-  cursors: []
-  meleeAttackDatas: []
-  shotDatas: []
+  gravityScale: 0.5
+  dragAxis:
+    x: 0
+    y: 0
+    z: 0
+  defaultAttackMotionName: backShot_E
+  weaponedAttackMotionName: backShot
   attackMotions:
-  - name: "\u5F8C\u9000\u5C04\u6483"
-    totalFrame: 30
-    meleeAttackKeys: []
-    shotKeys:
-    - keyFrame: 0
-      dataName: 
-    moveKeys:
-    - keyFrame: {x: 0, y: 1}
-      moveVec: {x: 0, y: 0, z: -1}
-      easingType: 1
-      easePow: 0
-    shieldKeys:
-    - {x: 0, y: 1}
-    seKeys:
-    - keyFrame: 0
-      se: {fileID: 0}
+  - {fileID: 11400000, guid: 9a8bb4e532c484c45890ca779f59a058, type: 2}

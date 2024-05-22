@@ -4,6 +4,17 @@ using System;
 [DisallowMultipleComponent]
 public class LiveEntity : UnLandableObject
 {
+    struct MeleeAttackAndCursorName
+    {
+        public string cursorName;
+        public AttackMotionData.MeleeAttackData data;
+    }
+    struct ShotAndCursorName
+    {
+        public string cursorName;
+        public AttackMotionData.ShotData data;
+    }
+
     const float cameraTiltDiffuse = 0.3f;
     const float cameraDistance = 10;
     const float directionTiltIntensity = 0.5f;
@@ -55,8 +66,14 @@ public class LiveEntity : UnLandableObject
     }
     float prevAttackProgress;
     AttackMotionData.Cursor[] cursors = { };
-    AttackMotionData.MeleeAttackData[] meleeAttackDatas = { };
+    MeleeAttackAndCursorName[] meleeAttackDatas = { };
+    ShotAndCursorName[] shotDatas = { };
     AttackArea[] attackAreas = { };
+    bool updating = false;
+    public bool GetUpdating()
+    {
+        return updating;
+    }
 
     void Awake()
     {
@@ -68,6 +85,7 @@ public class LiveEntity : UnLandableObject
     //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
     void FixedUpdate()
     {
+        updating = true;
         //足を地面に向ける
         if (currentGround != null
             && currentGround.ClosestPoint(transform.position) != transform.position)
@@ -177,6 +195,8 @@ public class LiveEntity : UnLandableObject
 
         //地面との接触判定を行う前に一旦着地していない状態にする
         isLanding = false;
+
+        updating = false;
     }
 
     //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
@@ -253,7 +273,7 @@ public class LiveEntity : UnLandableObject
     }
 
     // ダメージを受ける
-    public void Damage(int damage)
+    void Damage(int damage)
     {
         if (!shield)
         {
@@ -295,7 +315,7 @@ public class LiveEntity : UnLandableObject
                     {
                         AttackMotionData.MeleeAttackData meleeAttackData =
                             attackMotionData.SearchMeleeAttackData(current.dataName);
-                        MeleeAttack(meleeAttackData);
+                        MeleeAttack(meleeAttackData, current.cursorName);
                     }
                 }
             }
@@ -312,8 +332,7 @@ public class LiveEntity : UnLandableObject
                     {
                         AttackMotionData.ShotData shotData =
                             attackMotionData.SearchShotData(current.dataName);
-                        Shot(shotData,
-                            cursors[attackMotionData.SearchCursorIndex(current.cursorName)]);
+                        Shot(shotData, current.cursorName);
                     }
                 }
             }
@@ -395,7 +414,7 @@ public class LiveEntity : UnLandableObject
         //領域内の攻撃判定に近接攻撃のデータを代入
         for (int i = 0; i < attackAreas.Length; i++)
         {
-            AttackMotionData.MeleeAttackData currentData = meleeAttackDatas[i];
+            MeleeAttackAndCursorName currentData = meleeAttackDatas[i];
 
             //無ければ生成
             if (attackAreas[i] == null)
@@ -408,13 +427,14 @@ public class LiveEntity : UnLandableObject
 
             AttackArea current = attackAreas[i];
             current.transform.parent = gameObject.transform;
-            float areaScale = currentData.scale;
+            float areaScale = currentData.data.scale;
             current.transform.localScale =
                 new Vector3(areaScale, areaScale, areaScale);
-            /*current.transform.localPosition =
+            current.transform.localPosition =
                 Quaternion.Euler(new Vector3(0, direction, 0))
-                * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)];*/
-
+                * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
+            current.SetAttacker(this);
+            current.SetData(currentData.data.attackData);
         }
         //不要な攻撃判定を消す
         for (int i = 0; i < transform.childCount; i++)
@@ -441,15 +461,17 @@ public class LiveEntity : UnLandableObject
     }
 
     //近接および範囲攻撃
-    void MeleeAttack(AttackMotionData.MeleeAttackData attackData)
+    void MeleeAttack(AttackMotionData.MeleeAttackData attackData, string cursorName)
     {
         Array.Resize(ref meleeAttackDatas, meleeAttackDatas.Length + 1);
-        meleeAttackDatas[meleeAttackDatas.Length - 1] = attackData;
+        meleeAttackDatas[meleeAttackDatas.Length - 1].data = attackData;
+        meleeAttackDatas[meleeAttackDatas.Length - 1].cursorName = cursorName;
     }
     //遠距離攻撃
-    void Shot(AttackMotionData.ShotData shotData,
-        AttackMotionData.Cursor cursor)
+    void Shot(AttackMotionData.ShotData shotData, string cursorName)
     {
-
+        Array.Resize(ref shotDatas, shotDatas.Length + 1);
+        shotDatas[shotDatas.Length - 1].data = shotData;
+        shotDatas[shotDatas.Length - 1].cursorName = cursorName;
     }
 }
