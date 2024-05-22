@@ -9,11 +9,16 @@ public class Projectile : AttackArea
     protected override void AttackAreaUpdate()
     {
         projectileDataLock = true;
+        projectileData.lifetime--;
+        if (projectileData.lifetime < 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetData(AttackMotionData.ProjectileData setData)
     {
-        //ç”Ÿæˆã•ã‚ŒãŸç›´å¾Œã®ã¿å®Ÿè¡Œ
+        //¶¬‚³‚ê‚½’¼Œã‚Ì‚ÝŽÀs
         if (!projectileDataLock)
         {
             projectileData = setData;

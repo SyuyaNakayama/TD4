@@ -11,4 +11,10 @@ public class ResourcePalette : ScriptableObject
     {
         return attackArea;
     }
+    [SerializeField]
+    Projectile projectile;
+    public Projectile GetProjectile()
+    {
+        return projectile;
+    }
 }
