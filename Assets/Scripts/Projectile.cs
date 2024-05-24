@@ -9,16 +9,20 @@ public class Projectile : AttackArea
     Vector3 moveVec;
     protected override void AttackAreaUpdate()
     {
+        //内部変数が変更されないようにロック
         projectileDataLock = true;
 
+        //スケーリングの基準となるオブジェクトを決める
         GameObject scalingTarget = gameObject;
         if (GetAttacker() != null)
         {
             scalingTarget = GetAttacker().gameObject;
         }
+        //回転角とスケーリングを考慮した方向、スピードで飛んでいく
         transform.position += transform.rotation * moveVec
             * projectileData.speed * scalingTarget.transform.lossyScale.x;
 
+        //寿命が尽きたら消える
         projectileData.lifetime--;
         if (projectileData.lifetime < 0)
         {
