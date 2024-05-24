@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class SaveMedals : MonoBehaviour
 {
@@ -13,29 +14,29 @@ public class SaveMedals : MonoBehaviour
     //ステージごとのメダル
     private const int maxMedalInStage = 10;
     //メダルの取得状況
-    private bool[,,] getMedal = new bool[11, 6, 11];
+    private int[,,] getMedal = new int[11, 6, 11];
     //ワールドごとのメダル取得状況
-    private int[] getMedalWorld = new int[11];
+    private static uint[] getMedalWorld = new uint[11];
     //ループ用のステージ番号とシーン内のステージ番号
     private int roopWorldNum = 0;
     private int roopStageNum = 0;
     public int thisWorldNum = 0;
     public int thisStageNum = 0;
 
+    //　移動先メダル数表示UI
+    public Text textComponent;
+
+    //static uint medalCount; // メダルの獲得枚数
+
     //書き込みのモード
     private bool isAppend = false;
-    //データ格納パス ※拡張子は存在しないものでもOK
-    //メダルの取得状況データ
-    private string getPath = Application.persistentDataPath + "/medalGetData.mds";
-    //メダルの累計獲得状況データ
-    private string countPath = Application.persistentDataPath + "/medalCountData.mds";
     void Start()
     {
         //初期化
         InitializeData();
         //データの有無のチェック
-        CheckGetData(getPath);
-        CheckCountData(countPath);
+        CheckGetData();
+        CheckCountData();
     }
     //データ初期化
     private void InitializeData()
@@ -47,7 +48,7 @@ public class SaveMedals : MonoBehaviour
             {
                 for (int k = 0; k < maxMedalInStage; k++)
                 {
-                    getMedal[i, j, k] = false;
+                    getMedal[i, j, k] = 0;
                 }
             }
             //ワールド内累計取得状況
@@ -55,13 +56,16 @@ public class SaveMedals : MonoBehaviour
         }
     }
     //データの有無確認、ない場合は新規作成する
-    private void CheckGetData(string getPath)
+    private void CheckGetData()
     {
+        //データ格納パス ※拡張子は存在しないものでもOK
+        //メダルの取得状況データ
+        string getPath = Application.persistentDataPath + "/medalGetData.mds";
         if (System.IO.Directory.Exists(Application.persistentDataPath))
         {
             if (!System.IO.File.Exists(getPath))
             {
-                using (var fs = new StreamWriter(getPath, isAppend, System.Text.Encoding.GetEncoding("UTRF-8")))
+                using (var fs = new StreamWriter(getPath, isAppend, System.Text.Encoding.GetEncoding("UTF-8")))
                 {
                     for (int i = 0; i < maxWorld; i++)
                     {
@@ -70,11 +74,8 @@ public class SaveMedals : MonoBehaviour
                             for (int k = 0; k < maxMedalInStage; k++)
                             {
                                 fs.Write(getMedal[i, j, k]);
-                                if (k >= maxMedalInStage)
-                                {
-                                    fs.Write("\n");
-                                }
                             }
+                            fs.Write("\n");
                         }
                     }
                 }
@@ -89,15 +90,18 @@ public class SaveMedals : MonoBehaviour
                         string data = fs.ReadLine();
                         for (int i = 0; i < maxMedalInStage; i++)
                         {
-                            getMedal[roopWorldNum, roopStageNum, i] = bool.Parse(data[i].ToString());
-                        }
-                        if (roopWorldNum < maxWorld)
-                        {
-                            roopWorldNum++;
+                            getMedal[roopWorldNum, roopStageNum, i] = int.Parse(data[i].ToString());
                         }
                         if (roopStageNum < maxStage)
                         {
                             roopStageNum++;
+                        }else
+                        {
+                            roopStageNum = 0;
+                            if (roopWorldNum < maxWorld)
+                            {
+                                roopWorldNum++;
+                            }
                         }
                     }
                 }
@@ -107,13 +111,15 @@ public class SaveMedals : MonoBehaviour
         roopWorldNum = 0;
         roopStageNum = 0;
     }
-    private void CheckCountData(string countPath)
+    private void CheckCountData()
     {
+        //メダルの累計獲得状況データ
+        string countPath = Application.persistentDataPath + "/medalCountData.mds";
         if (System.IO.Directory.Exists(Application.persistentDataPath))
         {
             if (!System.IO.File.Exists(countPath))
             {
-                using (var fs = new StreamWriter(countPath, isAppend, System.Text.Encoding.GetEncoding("UTRF-8")))
+                using (var fs = new StreamWriter(countPath, isAppend, System.Text.Encoding.GetEncoding("UTF-8")))
                 {
                     for (int i = 0; i < maxWorld; i++)
                     {
@@ -130,8 +136,8 @@ public class SaveMedals : MonoBehaviour
                     {
                         string data = fs.ReadLine();
                         //十の位と一の位でそれぞれ足す
-                        getMedalWorld[roopWorldNum] = int.Parse(data[0].ToString()) * 10;
-                        getMedalWorld[roopWorldNum] += int.Parse(data[1].ToString());
+                        getMedalWorld[roopWorldNum] = uint.Parse(data[0].ToString()) * 10;
+                        getMedalWorld[roopWorldNum] += uint.Parse(data[1].ToString());
                         if (roopWorldNum < maxWorld)
                         {
                             roopWorldNum++;
@@ -142,10 +148,15 @@ public class SaveMedals : MonoBehaviour
         }
         //他でも使用するためリセット
         roopWorldNum = 0;
+        //UI更新
+        textComponent.text = "Medals : " + getMedalWorld[thisWorldNum];
     }
     //データ保存
     public void Save()
     {
+        //データ格納パス ※拡張子は存在しないものでもOK
+        string getPath = Application.persistentDataPath + "/medalGetData.mds";
+        string countPath = Application.persistentDataPath + "/medalCountData.mds";
         //取得データ
         using (var fs = new StreamWriter(getPath, isAppend, System.Text.Encoding.GetEncoding("UTF-8")))
         {
@@ -156,11 +167,8 @@ public class SaveMedals : MonoBehaviour
                     for (int k = 0; k < maxMedalInStage; k++)
                     {
                         fs.Write(getMedal[i, j, k]);
-                        if (k >= maxMedalInStage)
-                        {
-                            fs.Write("\n");
-                        }
                     }
+                    fs.Write("\n");
                 }
             }
         }
@@ -184,6 +192,9 @@ public class SaveMedals : MonoBehaviour
     //データ削除
     public void DeleteData()
     {
+        //データ格納パス ※拡張子は存在しないものでもOK
+        string getPath = Application.persistentDataPath + "/medalGetData.mds";
+        string countPath = Application.persistentDataPath + "/medalCountData.mds";
         using (var fs = new StreamWriter(getPath, isAppend, System.Text.Encoding.GetEncoding("UTF-8")))
         {
             for (int i = 0; i < maxWorld; i++)
@@ -210,14 +221,14 @@ public class SaveMedals : MonoBehaviour
         }
     }
     //メダル取得判定
-    public void GetMedal(int medalNum)
+    public void AcquisitionMedal(int medalNum)
     {
-        getMedal[thisWorldNum, thisStageNum, medalNum] = true;
+        getMedal[thisWorldNum, thisStageNum, medalNum] = 1;
     }
     //データ取得
     public bool GetMedalData(int medalNum)
     {
-        if (getMedal[thisWorldNum, thisStageNum, medalNum] == false)
+        if (getMedal[thisWorldNum, thisStageNum, medalNum] == 0)
         {
             return false;
         }
@@ -225,5 +236,11 @@ public class SaveMedals : MonoBehaviour
         {
             return true;
         }
+    }
+    // メダルの獲得
+    public void AddMedalCount()
+    {
+        getMedalWorld[thisWorldNum]++;
+        textComponent.text = "Medals : " + getMedalWorld[thisWorldNum];
     }
 }

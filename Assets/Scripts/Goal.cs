@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
-    //シーンチェンジ呼び出し元のゲームマネージャーのオブジェクトとスクリプト
-    public GameObject gmObj;
-    private GameManager gm;
+    //シーンチェンジ呼び出し元のゲームマネージャーのスクリプト
+    private GameManager gameManager;
+    private SaveMedals saveMedals;
     //ゴール
     private GameObject goal;
     //シーンチェンジまでの猶予時間
@@ -16,7 +16,9 @@ public class Goal : MonoBehaviour
 
     void Start()
     {
-        gm = gmObj.GetComponent<GameManager>();
+        GameObject managerObject = GameObject.Find("GameManager");
+        gameManager = managerObject.GetComponent<GameManager>();
+        saveMedals = managerObject.GetComponent <SaveMedals>();
         goal = this.gameObject;
     }
     void Update()
@@ -26,7 +28,7 @@ public class Goal : MonoBehaviour
             goalTimer--;
             if(goalTimer < 0)
             {
-                gm.ChangeScene("stage_select");
+                gameManager.ChangeScene("stage_select");
             }
         }
     }
@@ -38,6 +40,8 @@ public class Goal : MonoBehaviour
         {
             //取得フラグオン
             isGet = true;
+            //獲得データを送信
+            saveMedals.Save();
             //SetActiveで非表示にすると動かなくなるので仮で、いい方法あったら教えてくれ
             goal.transform.position = new Vector3(10000, 10000, 10000);
         }
