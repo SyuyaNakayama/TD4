@@ -5,22 +5,25 @@ using UnityEngine;
 public class Medal : MonoBehaviour
 {
     public GameManager gameManager;
+    private SaveMedals saveMedals;
     //‰½–‡–Ú‚©
-    public int MedalNum;
-    //æ“¾‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
-    private bool isGet = false;
+    public int medalNum;
 
     // Start is called before the first frame update
     void Start()
     {
         GameObject managerObject = GameObject.Find("GameManager");
         gameManager = managerObject.GetComponent<GameManager>();
+        saveMedals = managerObject.GetComponent<SaveMedals>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (saveMedals.GetMedalData(medalNum))
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -29,7 +32,8 @@ public class Medal : MonoBehaviour
         if (collision.gameObject.tag != "Player") { return; }
 
         // ƒƒ_ƒ‹‚ğŠl“¾‚µ‚½
-        gameManager.AddMedalCount();
+        saveMedals.AddMedalCount();
+        saveMedals.AcquisitionMedal(medalNum);
         Destroy(gameObject);
     }
 }
