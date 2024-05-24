@@ -4,6 +4,8 @@ using UnityEditor;
 
 public class Player : LiveEntity
 {
+    const float cameraControlSpeed = 3;
+
     static float moveSpeed = 1.5f;
     static float jumpPower = 10.0f;
     static int maxTeamNum = 5;
@@ -49,7 +51,7 @@ public class Player : LiveEntity
             || Input.GetKey(KeyCode.M)
             || Input.GetKey("joystick button 1");
         //攻撃ボタンの押し始めなら
-        if (attackInput && !attackTrigger)
+        if (attackInput && !attackTrigger && !IsAttacking())
         {
             //攻撃モーションを再生
             SetAttackMotion(characters[currentCharaIndex].SearchAttackMotion(
@@ -63,8 +65,8 @@ public class Player : LiveEntity
 
         //自機を回転
         transform.Rotate(
-            0, Input.GetAxis("Cam_Horizontal"), 0, Space.Self);
+            0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
         //カメラを傾ける
-        cameraAngle += Input.GetAxis("Cam_Vertical");
+        cameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
     }
 }

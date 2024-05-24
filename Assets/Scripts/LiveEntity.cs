@@ -290,8 +290,9 @@ public class LiveEntity : UnLandableObject
     //設定されたモーションデータを読み出して実行（実行中は常に呼ぶ）
     void UpdateAttackMotion()
     {
-        //近接攻撃のデータをリセット
+        //近接、遠距離攻撃のデータをリセット
         Array.Resize(ref meleeAttackDatas, 0);
+        Array.Resize(ref shotDatas, 0);
         //3Dカーソルをリセット
         Array.Resize(ref cursors, 0);
 
@@ -457,6 +458,35 @@ public class LiveEntity : UnLandableObject
                     Destroy(transform.GetChild(i).gameObject);
                 }
             }
+        }
+
+        //弾を出す
+        for (int i = 0; i < shotDatas.Length; i++)
+        {
+            ShotAndCursorName currentData = shotDatas[i];
+
+            //生成
+            Projectile current =
+                    Instantiate(resourcePalette.GetProjectile().gameObject,
+                    transform.position, transform.rotation, transform)
+                    .GetComponent<Projectile>();
+
+            current.transform.parent = gameObject.transform;
+
+            float projectileScale = currentData.data.scale;
+            current.transform.localScale =
+                new Vector3(projectileScale, projectileScale, projectileScale);
+            current.transform.localPosition =
+                Quaternion.Euler(new Vector3(0, direction, 0))
+                * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
+            current.transform.localRotation =
+                Quaternion.Euler(new Vector3(0, direction, 0));
+            current.SetAttacker(this);
+            current.SetData(currentData.data.attackData);
+            current.SetProjectileData(currentData.data.projectileData,
+                cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
+
+            current.transform.parent = null;
         }
     }
 
