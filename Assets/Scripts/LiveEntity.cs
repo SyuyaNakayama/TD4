@@ -39,14 +39,19 @@ public class LiveEntity : UnLandableObject
     {
         return teamID;
     }
+    [SerializeField]
+    Collider currentGround;
     protected float drag = 0.8f;
-    protected Vector3 movement;
+    Vector3 movement;
+    public Vector3 GetMovement()
+    {
+        return movement;
+    }
     protected float direction;
     Vector3 prevPos;
     Quaternion prevRot;
     Quaternion cameraTiltRot;
     protected float cameraAngle = maxCameraAngle;
-    Collider currentGround;
     bool allowGroundSet;
     bool isLanding = false; //’…’n‚µ‚Ä‚¢‚é‚©
     public bool GetIsLanding()
@@ -57,6 +62,7 @@ public class LiveEntity : UnLandableObject
     int hpAmount = 1;//c‚è‘Ì—Í‚ÌŠ„‡
     bool shield;//‚±‚ê‚ªtrue‚ÌŠÔ‚Í‹Z‚É‚æ‚é–³“GŠÔ
     float shieldBattery;
+    int hitBack;
     AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
@@ -503,5 +509,13 @@ public class LiveEntity : UnLandableObject
         Array.Resize(ref shotDatas, shotDatas.Length + 1);
         shotDatas[shotDatas.Length - 1].data = shotData;
         shotDatas[shotDatas.Length - 1].cursorName = cursorName;
+    }
+    //“®‚¯‚éó‘Ô‚È‚çˆÚ“®
+    public void Move(Vector3 setMovement)
+    {
+        if (hitBack <= 0)
+        {
+            movement = setMovement;
+        }
     }
 }

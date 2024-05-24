@@ -22,11 +22,11 @@ public class Player : LiveEntity
         // コントローラーとキーボード両方に対応
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
-            movement += new Vector3(
+            Move(GetMovement() + new Vector3(
                 Input.GetAxis("Horizontal"),
                 0,
                 Input.GetAxis("Vertical")).normalized
-                * moveSpeed;
+                * moveSpeed);
             direction = Mathf.Atan2(
                 Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))
                  / Mathf.Deg2Rad;
@@ -39,7 +39,7 @@ public class Player : LiveEntity
         //ジャンプボタンの押し始めなら
         if (jumpInput && !jumpTrigger)
         {
-            movement = new Vector3(movement.x, jumpPower, movement.z);
+            Move(new Vector3(GetMovement().x, jumpPower, GetMovement().z));
         }
         jumpTrigger = jumpInput;
 
