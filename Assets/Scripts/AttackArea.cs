@@ -21,17 +21,17 @@ public class AttackArea : MonoBehaviour
     void FixedUpdate()
     {
         dataLock = true;
-
+        AttackAreaUpdate();
     }
 
-    //å„æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã®å›ºæœ‰æ›´æ–°å‡¦ç†ï¼ˆæ´¾ç”Ÿã‚¯ãƒ©ã‚¹å†…ã§ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ä½¿ã†ï¼‰
+    //Še”h¶ƒNƒ‰ƒX‚ÌŒÅ—LXVˆ—i”h¶ƒNƒ‰ƒX“à‚ÅƒI[ƒo[ƒ‰ƒCƒh‚µ‚Äg‚¤j
     protected virtual void AttackAreaUpdate()
     {
     }
 
     public void SetAttacker(LiveEntity setAttacker)
     {
-        //ç”Ÿæˆã•ã‚ŒãŸç›´å¾Œã®ã¿å®Ÿè¡Œ
+        //¶¬‚³‚ê‚½’¼Œã‚Ì‚İÀs
         if (attacker == null && !dataLock)
         {
             attacker = setAttacker;
@@ -39,7 +39,7 @@ public class AttackArea : MonoBehaviour
     }
     public void SetData(AttackMotionData.AttackData setData)
     {
-        //Attackerã®FixedUpdate()å†…ã§å‘¼ã°ã‚ŒãŸå ´åˆã®ã¿å®Ÿè¡Œ
+        //Attacker‚ÌFixedUpdate()“à‚ÅŒÄ‚Î‚ê‚½ê‡‚Ì‚İÀs
         if (attacker != null && attacker.GetUpdating())
         {
             data = setData;
