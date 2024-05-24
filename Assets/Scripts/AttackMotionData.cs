@@ -19,6 +19,7 @@ public class AttackMotionData : ScriptableObject
         public bool vectorBlow;
         public float blowForce;
         public int hitback;
+        public int ghostTime;
     }
     [System.Serializable]
     public struct ProjectileData
