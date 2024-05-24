@@ -20,6 +20,7 @@ public class LiveEntity : UnLandableObject
     const float directionTiltIntensity = 0.5f;
     const float minCameraAngle = 0;
     const float maxCameraAngle = 90;
+    const float GhostTimeMul = 60;
 
     [SerializeField]
     ResourcePalette resourcePalette;
@@ -59,10 +60,11 @@ public class LiveEntity : UnLandableObject
         return isLanding;
     }
     int maxHP;//最大体力
-    int hpAmount = 1;//残り体力の割合
+    float hpAmount = 1;//残り体力の割合
     bool shield;//これがtrueの間は技による無敵時間
     float shieldBattery;
-    int hitBack;
+    int hitBackTimeFrame;
+    int ghostTimeFrame;//ヒット後無敵時間
     AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
@@ -145,9 +147,18 @@ public class LiveEntity : UnLandableObject
         prevPos = transform.position;
         prevRot = transform.rotation;
 
-        //キャラの見た目を向いている方向へ向ける
         if (visual != null)
         {
+            //ヒット後無敵時間中なら点滅
+            if (ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
+            {
+                visual.transform.localScale = Vector3.zero;
+            }
+            else
+            {
+                visual.transform.localScale = new Vector3(1, 1, 1);
+            }
+            //キャラの見た目を向いている方向へ向ける
             float visualDirection = visual.transform.localEulerAngles.y;
             visual.transform.localEulerAngles = new Vector3(0,
                 visualDirection
@@ -196,6 +207,9 @@ public class LiveEntity : UnLandableObject
         attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
         attackProgress = Mathf.Clamp(attackProgress, 0, 1);
 
+        ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);
+        hitBackTimeFrame = Mathf.Max(0, hitBackTimeFrame - 1);
+
         //movementをvelocityに変換
         GetComponent<Rigidbody>().velocity = transform.rotation * movement;
 
@@ -219,6 +233,14 @@ public class LiveEntity : UnLandableObject
 
         //ここで各派生クラスの固有接触処理を呼ぶ
         LiveEntityCollision();
+    }
+
+    void OnTriggerStay(Collider col)
+    {
+        if (col.gameObject.GetComponent<AttackArea>() != null)
+        {
+            AttackHit(col.gameObject.GetComponent<AttackArea>());
+        }
     }
 
     //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
@@ -278,13 +300,40 @@ public class LiveEntity : UnLandableObject
         allowGroundSet = false;
     }
 
-    // ダメージを受ける
-    void Damage(int damage)
+    //攻撃を受けた際にこれを呼ぶ
+    void AttackHit(AttackArea attackArea)
     {
-        if (!shield)
+        //攻撃を受け付ける状態なら
+        if (!shield && ghostTimeFrame <= 0)
         {
-            hpAmount -= damage / maxHP;
+            //ギミックならデータ上の数値をそのまま使う
+            float damageValue = attackArea.GetData().power;
+            int ghostTime = attackArea.GetData().ghostTime;
+            //キャラの攻撃ならダメージ値と無敵時間を算出
+            if (attackArea.GetAttacker() != null)
+            {
+                float attackerPower =
+                    attackArea.GetAttacker().GetData().GetAttackPower();
+                damageValue *= attackerPower;
+                ghostTime = Mathf.RoundToInt(
+                    damageValue / attackerPower * GhostTimeMul);
+            }
+            Damage(damageValue, ghostTime);
+            //HitBack(Vector3 hitBackVec, attackArea.GetData().hitback);
         }
+    }
+    //体力を減らし、無敵時間を付与
+    void Damage(float damage, int setGhostTimeFrame)
+    {
+        hpAmount -= Mathf.Max(0, damage / maxHP);
+        ghostTimeFrame = setGhostTimeFrame;
+    }
+    //吹っ飛ばされる
+    void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
+    {
+        movement = Quaternion.Inverse(transform.rotation)
+            * hitBackVec;
+        hitBackTimeFrame = setHitBackTimeFrame;
     }
 
     //生きているか
@@ -513,7 +562,7 @@ public class LiveEntity : UnLandableObject
     //動ける状態なら移動
     public void Move(Vector3 setMovement)
     {
-        if (hitBack <= 0)
+        if (hitBackTimeFrame <= 0)
         {
             movement = setMovement;
         }
