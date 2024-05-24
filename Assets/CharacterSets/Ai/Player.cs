@@ -13,6 +13,8 @@ public class Player : LiveEntity
     bool attackTrigger;
     int currentCharaIndex;
 
+    bool isDead = false;
+
     [SerializeField]
     CharaData[] characters;
 
@@ -68,5 +70,11 @@ public class Player : LiveEntity
             0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
         //カメラを傾ける
         cameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
+
+        //デバッグ用
+        if(Input.GetKey(KeyCode.K) && Input.GetKey(KeyCode.L))
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
