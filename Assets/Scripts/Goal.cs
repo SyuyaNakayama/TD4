@@ -16,10 +16,10 @@ public class Goal : MonoBehaviour
 
     void Start()
     {
-        GameObject managerObject = GameObject.Find("GameManager");
+        /*GameObject managerObject = GameObject.Find("GameManager");
         gameManager = managerObject.GetComponent<GameManager>();
         saveMedals = managerObject.GetComponent<SaveMedals>();
-        goal = this.gameObject;
+        goal = this.gameObject;*/
     }
     void Update()
     {
