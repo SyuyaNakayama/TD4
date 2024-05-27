@@ -12,16 +12,18 @@ public class Player : LiveEntity
     bool jumpTrigger;
     bool attackTrigger;
     int currentCharaIndex;
-
-    bool isDead = false;
-
     [SerializeField]
     CharaData[] characters;
+    bool goaled;
+    public bool GetGoaled()
+    {
+        return goaled;
+    }
 
     protected override void LiveEntityUpdate()
     {
-        //死んでなければ操作可能
-        if (!isDead)
+        //生きていれば操作可能
+        if (IsLive())
         {
             // 移動
             // コントローラーとキーボード両方に対応
@@ -73,22 +75,20 @@ public class Player : LiveEntity
                 0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
             //カメラを傾ける
             cameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
-
-            //デバッグ用
-            if (Input.GetKey(KeyCode.K) && Input.GetKey(KeyCode.L))
-            {
-                Death();
-            }
         }
     }
 
-    //死亡判定と死亡判定の取得
-    public void Death()
+    protected virtual void LiveEntityOnHit(Collider col)
     {
-        isDead = true;
+        if (col.GetComponent<Goal>() != null)
+        {
+            Clear();
+        }
     }
-    public bool GetDead()
+
+    //ゴールに入った時の処理
+    void Clear()
     {
-        return isDead;
+        goaled = true;
     }
 }

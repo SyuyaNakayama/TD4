@@ -232,7 +232,7 @@ public class LiveEntity : UnLandableObject
         }
 
         //ここで各派生クラスの固有接触処理を呼ぶ
-        LiveEntityCollision();
+        LiveEntityOnHit(col.collider);
     }
 
     void OnTriggerStay(Collider col)
@@ -241,6 +241,9 @@ public class LiveEntity : UnLandableObject
         {
             AttackHit(col.gameObject.GetComponent<AttackArea>());
         }
+
+        //ここで各派生クラスの固有接触処理を呼ぶ
+        LiveEntityOnHit(col);
     }
 
     //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
@@ -248,9 +251,10 @@ public class LiveEntity : UnLandableObject
     {
     }
 
-    //各派生クラスの固有接触処理（派生クラス内でオーバーライドして使う）
-    protected virtual void LiveEntityCollision()
+    //各派生クラスの固有衝突処理（派生クラス内でオーバーライドして使う）
+    protected virtual void LiveEntityOnHit(Collider col)
     {
+
     }
 
     //攻撃モーションに移行
