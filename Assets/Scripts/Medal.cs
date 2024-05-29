@@ -15,6 +15,7 @@ public class Medal : MonoBehaviour
         GameObject managerObject = GameObject.Find("GameManager");
         gameManager = managerObject.GetComponent<GameManager>();
         saveMedals = managerObject.GetComponent<SaveMedals>();
+        
     }
 
     // Update is called once per frame
@@ -24,6 +25,7 @@ public class Medal : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        transform.Rotate(new Vector3(90, 0, 0) * Time.deltaTime);
     }
 
     public void OnCollisionEnter(Collision collision)
