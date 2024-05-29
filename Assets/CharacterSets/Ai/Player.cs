@@ -9,6 +9,8 @@ public class Player : LiveEntity
     static float moveSpeed = 1.5f;
     static float jumpPower = 10.0f;
     static int maxTeamNum = 5;
+    static float goaledCameraAngle = 0;
+    static float goaledDirection = 0;
     bool jumpTrigger;
     bool attackTrigger;
     int currentCharaIndex;
