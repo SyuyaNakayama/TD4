@@ -93,4 +93,9 @@ public class Player : LiveEntity
     {
         goaled = true;
     }
+    //UŒ‚ó‘Ô‚Ìæ“¾
+    public bool GetAttackTrigger()
+    {
+        return attackTrigger;
+    }
 }
