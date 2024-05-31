@@ -126,6 +126,9 @@ public class LiveEntity : UnLandableObject
 
         if (view != null)
         {
+            //カメラの仰角値を規定範囲に収める
+            cameraAngle = Mathf.Clamp(cameraAngle, minCameraAngle, maxCameraAngle);
+
             //前フレームからの回転の差に応じてカメラの傾き角を決める
             cameraTiltRot =
                 cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
@@ -133,7 +136,6 @@ public class LiveEntity : UnLandableObject
             cameraTiltRot = Quaternion.Slerp(
                 cameraTiltRot, Quaternion.identity, cameraTiltDiffuse);
             //まずキャラを見下ろす角度にカメラを向ける
-            cameraAngle = Mathf.Clamp(cameraAngle, minCameraAngle, maxCameraAngle);
             view.transform.localEulerAngles = new Vector3(cameraAngle, 0, 0);
             //カメラの傾き角に応じてカメラを傾ける
             view.transform.rotation =
