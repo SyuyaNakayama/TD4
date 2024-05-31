@@ -334,6 +334,8 @@ public class LiveEntity : UnLandableObject
     {
         hpAmount -= Mathf.Max(0, damage / maxHP);
         ghostTimeFrame = setGhostTimeFrame;
+        //ƒ_ƒ[ƒW‰¹‚ğ–Â‚ç‚·
+        PlayAsSE(resourcePalette.GetDamageSE());
     }
     //‚Á”ò‚Î‚³‚ê‚é
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
@@ -573,5 +575,10 @@ public class LiveEntity : UnLandableObject
         {
             movement = setMovement;
         }
+    }
+    //‚±‚ÌLiveEntity‚©‚çŒø‰Ê‰¹‚ğ–Â‚ç‚·
+    public void PlayAsSE(AudioClip clip)
+    {
+        GetComponent<AudioSource>().PlayOneShot(clip);
     }
 }

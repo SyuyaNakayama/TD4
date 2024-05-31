@@ -78,6 +78,10 @@ public class Player : LiveEntity
             //ƒJƒƒ‰‚ğŒX‚¯‚é
             cameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
         }
+        else
+        {
+            cameraAngle = goaledCameraAngle;
+        }
     }
 
     protected virtual void LiveEntityOnHit(Collider col)
