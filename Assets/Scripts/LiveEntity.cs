@@ -53,6 +53,7 @@ public class LiveEntity : UnLandableObject
     Quaternion prevRot;
     Quaternion cameraTiltRot;
     protected float cameraAngle = maxCameraAngle;
+    float easedCameraAngle = maxCameraAngle;
     bool allowGroundSet;
     bool isLanding = false; //’…’n‚µ‚Ä‚¢‚é‚©
     public bool GetIsLanding()
@@ -128,7 +129,7 @@ public class LiveEntity : UnLandableObject
         {
             //ƒJƒƒ‰‚Ì‹ÂŠp’l‚ğ‹K’è”ÍˆÍ‚Éû‚ß‚é
             cameraAngle = Mathf.Clamp(cameraAngle, minCameraAngle, maxCameraAngle);
-
+            easedCameraAngle = Mathf.Lerp(easedCameraAngle, cameraAngle, cameraTiltDiffuse);
             //‘OƒtƒŒ[ƒ€‚©‚ç‚Ì‰ñ“]‚Ì·‚É‰‚¶‚ÄƒJƒƒ‰‚ÌŒX‚«Šp‚ğŒˆ‚ß‚é
             cameraTiltRot =
                 cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
@@ -136,7 +137,7 @@ public class LiveEntity : UnLandableObject
             cameraTiltRot = Quaternion.Slerp(
                 cameraTiltRot, Quaternion.identity, cameraTiltDiffuse);
             //‚Ü‚¸ƒLƒƒƒ‰‚ğŒ©‰º‚ë‚·Šp“x‚ÉƒJƒƒ‰‚ğŒü‚¯‚é
-            view.transform.localEulerAngles = new Vector3(cameraAngle, 0, 0);
+            view.transform.localEulerAngles = new Vector3(easedCameraAngle, 0, 0);
             //ƒJƒƒ‰‚ÌŒX‚«Šp‚É‰‚¶‚ÄƒJƒƒ‰‚ğŒX‚¯‚é
             view.transform.rotation =
                 cameraTiltRot * view.transform.rotation;
