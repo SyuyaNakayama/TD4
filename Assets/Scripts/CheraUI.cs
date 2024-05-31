@@ -28,7 +28,7 @@ public class CheraUI : MonoBehaviour
         player = playerObject.GetComponent<Player>();
 
         //子のオブジェクトデータの取得
-        for(int i = 5; i < 10; i++)
+        for (int i = 5; i < 10; i++)
         {
             charaIcon[i - 5] = transform.GetChild(i).gameObject;
             //番号初期化
@@ -50,6 +50,13 @@ public class CheraUI : MonoBehaviour
     void Update()
     {
         CheckIsAttack();
+
+        //デバッグ用、Pキーでスキル獲得
+        if (Input.GetKeyUp(KeyCode.P))
+        {
+            AddIcon(2);
+        }
+
     }
     //スプライト画像の更新
     private void UpdateSprite()
@@ -59,9 +66,9 @@ public class CheraUI : MonoBehaviour
         {
             if (charaNumber[i] > 0)
             {
-                charaIcon[i].SetActive(true);
                 sprite = Resources.Load<Sprite>("CharaUI/sc" + charaNumber[i]);
                 charaImages[i].sprite = sprite;
+                charaIcon[i].SetActive(true);
             }
             else
             {
@@ -72,13 +79,29 @@ public class CheraUI : MonoBehaviour
     //スキル使用時のUI側での処理
     public void ChangeIcon()
     {
-        for(int i = 0;i < charaMaxNum; i++)
+        for (int i = 0; i < charaMaxNum; i++)
         {
             charaNumber[i] = charaNumber[i + 1];
         }
         //全ての更新が終わった後に表示切替
         UpdateSprite();
     }
+    //スキル入手時のUI側での処理
+    public void AddIcon(int charaNum)
+    {
+        //空きスペースがあるか検索
+        for (int i = 0; i < charaMaxNum; i++)
+        {
+            if (charaNumber[i] < 1)
+            {
+                //空きがあったら入力された敵番号を代入
+                charaNumber[i] = charaNum;
+                UpdateSprite();
+                break;  //空きを発見した時点で脱出
+            }
+        }
+    }
+
     //プレイヤーが攻撃したか監視
     private void CheckIsAttack()
     {
@@ -88,9 +111,9 @@ public class CheraUI : MonoBehaviour
             isAttackNow = true;
         }
 
-        if(!player.GetAttackTrigger() && isAttackNow)
+        if (!player.GetAttackTrigger() && isAttackNow)
         {
-            isAttackNow=false;
+            isAttackNow = false;
         }
     }
 }
