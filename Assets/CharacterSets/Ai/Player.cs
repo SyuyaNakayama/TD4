@@ -25,7 +25,7 @@ public class Player : LiveEntity
     protected override void LiveEntityUpdate()
     {
         //生きていれば操作可能
-        if (IsLive())
+        if (IsLive() && !GetGoaled())
         {
             // 移動
             // コントローラーとキーボード両方に対応
@@ -84,7 +84,7 @@ public class Player : LiveEntity
         }
     }
 
-    protected virtual void LiveEntityOnHit(Collider col)
+    protected override void LiveEntityOnHit(Collider col)
     {
         if (col.GetComponent<Goal>() != null)
         {
