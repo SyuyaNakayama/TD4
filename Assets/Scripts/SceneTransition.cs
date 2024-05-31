@@ -24,6 +24,7 @@ public class SceneTransition : MonoBehaviour
     {
         sceneChangeProgress = 1;
         sceneChangeSwitch = false;
+        transform.localScale = new Vector3(1, 1, 1) * shutterScale;
     }
     void FixedUpdate()
     {
