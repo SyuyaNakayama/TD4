@@ -1,49 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
-    //シーンチェンジ呼び出し元のゲームマネージャーのスクリプト
-    private GameManager gameManager;
-    private SaveMedals saveMedals;
-    //ゴール
-    private GameObject goal;
-    //シーンチェンジまでの猶予時間
-    private int goalTimer = 300;
-    //取得フラグ
-    private bool isGet = false;
+    /*[SerializeField]
+    BattleField guarder;
 
-    void Start()
+    void FixedUpdate()
     {
-        /*GameObject managerObject = GameObject.Find("GameManager");
-        gameManager = managerObject.GetComponent<GameManager>();
-        saveMedals = managerObject.GetComponent<SaveMedals>();
-        goal = this.gameObject;*/
-    }
-    void Update()
+        GetComponent<Renderer>().enabled = IsActivated();
+    }*/
+    void OnWillRenderObject()
     {
-        /*if (isGet)
-        {
-            goalTimer--;
-            if (goalTimer < 0)
-            {
-                gameManager.ChangeScene("stage_select");
-            }
-        }*/
+        Vector2 tiling = new Vector2(8 * Screen.width / (float)Screen.height, 8);
+        Vector2 offset = new Vector2(Mathf.Repeat(Time.time / 8, 1), Mathf.Repeat(Time.time / 8, 1));
+        GetComponent<Renderer>().materials[0].SetTextureScale("_MainTex", tiling);
+        GetComponent<Renderer>().materials[0].SetTextureOffset("_MainTex", offset);
+
+        GetComponent<Renderer>().materials[0].SetFloat("_MainAlpha", 0.5f);
     }
-    //当たり判定
-    private void OnTriggerEnter(Collider other)
+
+    /*public bool IsActivated()
     {
-        //タグがplayerなら・一度だけ動かしたいので
-        /*if(other.gameObject.tag == "Player" && !isGet)
-        {
-            //取得フラグオン
-            isGet = true;
-            //獲得データを送信
-            saveMedals.Save();
-            //SetActiveで非表示にすると動かなくなるので仮で、いい方法あったら教えてくれ
-            goal.transform.position = new Vector3(10000, 10000, 10000);
-        }*/
-    }
+        return guarder == null || guarder.GetBattled();
+    }*/
 }
