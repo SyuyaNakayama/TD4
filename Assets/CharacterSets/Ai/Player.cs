@@ -5,12 +5,13 @@ using UnityEditor;
 public class Player : LiveEntity
 {
     const float cameraControlSpeed = 3;
+    const float moveSpeed = 1.5f;
+    const float jumpPower = 10.0f;
+    const int maxTeamNum = 5;
+    const float goaledCameraAngle = 0;
+    const float goaledCameraDistance = 3;
+    const float goaledDirection = 0;
 
-    static float moveSpeed = 1.5f;
-    static float jumpPower = 10.0f;
-    static int maxTeamNum = 5;
-    static float goaledCameraAngle = 0;
-    static float goaledDirection = 0;
     bool jumpTrigger;
     bool attackTrigger;
     int currentCharaIndex;
@@ -80,7 +81,11 @@ public class Player : LiveEntity
         }
         else
         {
+            //カメラを演出用の位置に調整
             cameraAngle = goaledCameraAngle;
+            cameraDistance = goaledCameraDistance;
+            //正面を向く
+            direction = goaledDirection;
         }
     }
 

@@ -16,7 +16,7 @@ public class LiveEntity : UnLandableObject
     }
 
     const float cameraTiltDiffuse = 0.3f;
-    const float cameraDistance = 10;
+    const float defaultCameraDistance = 10;
     const float directionTiltIntensity = 0.5f;
     const float minCameraAngle = 0;
     const float maxCameraAngle = 90;
@@ -54,6 +54,8 @@ public class LiveEntity : UnLandableObject
     Quaternion cameraTiltRot;
     protected float cameraAngle = maxCameraAngle;
     float easedCameraAngle = maxCameraAngle;
+    protected float cameraDistance = defaultCameraDistance;
+    float easedCameraDistance = defaultCameraDistance;
     bool allowGroundSet;
     bool isLanding = false; //着地しているか
     public bool GetIsLanding()
@@ -104,20 +106,23 @@ public class LiveEntity : UnLandableObject
                 currentGround.ClosestPoint(transform.position));
             //x軸を中心にその位置を向くように回転させる
             transform.Rotate(
-                -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y) / Mathf.Deg2Rad, 0, 0, Space.Self);
+                -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
+                / Mathf.Deg2Rad, 0, 0, Space.Self);
 
             //再度足を向けるべき位置を算出し、
             localClosestPoint = transform.InverseTransformPoint(
                 currentGround.ClosestPoint(transform.position));
             //z軸を中心にその位置を向くように回転させる
             transform.Rotate(0, 0,
-                Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y) / Mathf.Deg2Rad, Space.Self);
+                Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
+                / Mathf.Deg2Rad, Space.Self);
         }
 
         //バウンド防止のため変更前のmovementを保存
         Vector3 prevMovement = movement;
         //前フレームからの移動量をmovementに変換
-        movement = Quaternion.Inverse(prevRot) * ((transform.position - prevPos) / Time.deltaTime);
+        movement = Quaternion.Inverse(prevRot)
+            * ((transform.position - prevPos) / Time.deltaTime);
 
         //バウンド防止処理
         if (Mathf.Sign(prevMovement.y) != Mathf.Sign(movement.y))
@@ -128,8 +133,14 @@ public class LiveEntity : UnLandableObject
         if (view != null)
         {
             //カメラの仰角値を規定範囲に収める
-            cameraAngle = Mathf.Clamp(cameraAngle, minCameraAngle, maxCameraAngle);
-            easedCameraAngle = Mathf.Lerp(easedCameraAngle, cameraAngle, cameraTiltDiffuse);
+            cameraAngle = Mathf.Clamp(
+                cameraAngle, minCameraAngle, maxCameraAngle);
+            //カメラの仰角値をイージング
+            easedCameraAngle = Mathf.Lerp(
+                easedCameraAngle, cameraAngle, cameraTiltDiffuse);
+            //カメラの距離をイージング
+            easedCameraDistance = Mathf.Lerp(
+                easedCameraDistance, cameraDistance, cameraTiltDiffuse);
             //前フレームからの回転の差に応じてカメラの傾き角を決める
             cameraTiltRot =
                 cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
@@ -144,7 +155,9 @@ public class LiveEntity : UnLandableObject
             //カメラの位置をカメラから見て後ろ側にする
             view.transform.localPosition =
                 view.transform.localRotation * new Vector3(0, 0, -1)
-                * cameraDistance;
+                * easedCameraDistance;
+            //カメラの距離をデフォルト値に
+            cameraDistance = defaultCameraDistance;
         }
 
         prevPos = transform.position;
@@ -349,6 +362,16 @@ public class LiveEntity : UnLandableObject
     public bool IsLive()
     {
         return hpAmount > 0;
+    }
+
+    //死んでいるときにこれを呼ぶと復活する
+    protected void Revive()
+    {
+        if (!IsLive())
+        {
+            hpAmount = 1;
+            hitBackTimeFrame = 0;
+        }
     }
 
     //設定されたモーションデータを読み出して実行（実行中は常に呼ぶ）
