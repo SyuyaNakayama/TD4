@@ -39,7 +39,7 @@ public class Player : LiveEntity
                     * moveSpeed);
                 direction = Mathf.Atan2(
                     Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))
-                     / Mathf.Deg2Rad;
+                    / Mathf.Deg2Rad;
             }
 
             //スペースキーでジャンプ
@@ -86,6 +86,22 @@ public class Player : LiveEntity
             cameraDistance = goaledCameraDistance;
             //正面を向く
             direction = goaledDirection;
+            //何かボタンを押したらゴール時はステージを出る、死亡時は復活
+            if (Input.GetKey(KeyCode.Space)
+                || Input.GetKey("joystick button 0")
+                || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
+                || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
+                || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
+                || Input.GetKey(KeyCode.M)
+                || Input.GetKey("joystick button 1"))
+                if (GetGoaled())
+                {
+                    Quit();
+                }
+                else
+                {
+                    Revive();
+                }
         }
     }
 
@@ -101,6 +117,18 @@ public class Player : LiveEntity
     void Clear()
     {
         goaled = true;
+    }
+    //今いるステージの派生元として設定されているシーンに戻る
+    void Quit()
+    {
+        foreach (StageManager obj in UnityEngine.Object.FindObjectsOfType<StageManager>())
+        {
+            if (obj.gameObject.activeInHierarchy)
+            {
+                SceneTransition.ChangeScene(obj.GetQuitSceneName());
+                return;
+            }
+        }
     }
     //攻撃状態の取得
     public bool GetAttackTrigger()

@@ -324,7 +324,7 @@ public class LiveEntity : UnLandableObject
     void AttackHit(AttackArea attackArea)
     {
         //攻撃を受け付ける状態なら
-        if (!shield && ghostTimeFrame <= 0)
+        if (IsLive() && !shield && ghostTimeFrame <= 0)
         {
             //ギミックならデータ上の数値をそのまま使う
             float damageValue = attackArea.GetData().power;
