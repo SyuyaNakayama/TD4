@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 1834829638889924502}
   - component: {fileID: 8117905273807429651}
   m_Layer: 5
-  m_Name: CharaFrame5th
+  m_Name: CharaFrame5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 7213782519289567959}
   - component: {fileID: 5546837261716196839}
   m_Layer: 5
-  m_Name: CharaFrame
+  m_Name: CharaFrame1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,7 +462,7 @@ GameObject:
   - component: {fileID: 7760138286772776896}
   - component: {fileID: 7705971102244992712}
   m_Layer: 5
-  m_Name: CharaFrame4th
+  m_Name: CharaFrame4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -612,7 +612,7 @@ GameObject:
   - component: {fileID: 4553139795917843605}
   - component: {fileID: 2867986708072549957}
   m_Layer: 5
-  m_Name: CharaFrame3rd
+  m_Name: CharaFrame3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -797,7 +797,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b305a3d72384f03468a83f27d4dac799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerObject: {fileID: 0}
+  currentCharaIconPos: {x: -30, y: -30}
+  currentCharaIconSize: 1.2
+  subCharaIconSize: 0.8
+  tabSize: 10
+  imgEXRate: 100
+  charaImages:
+  - {fileID: 4601103668216614350}
+  - {fileID: 4590305655277734711}
+  - {fileID: 4982045563961186939}
+  - {fileID: 202640434}
+  - {fileID: 16912698}
+  charaImageTrays:
+  - {fileID: 5546837261716196839}
+  - {fileID: 9154863575175579079}
+  - {fileID: 2867986708072549957}
+  - {fileID: 7705971102244992712}
+  - {fileID: 8117905273807429651}
+  player: {fileID: 0}
 --- !u!1 &8626383586910438123
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,7 +827,7 @@ GameObject:
   - component: {fileID: 3180183153931026703}
   - component: {fileID: 9154863575175579079}
   m_Layer: 5
-  m_Name: CharaFrame2nd
+  m_Name: CharaFrame2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

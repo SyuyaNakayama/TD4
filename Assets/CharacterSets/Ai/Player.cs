@@ -4,10 +4,10 @@ using UnityEditor;
 
 public class Player : LiveEntity
 {
+    public const int maxTeamNum = 5;
     const float cameraControlSpeed = 3;
     const float moveSpeed = 1.5f;
     const float jumpPower = 10.0f;
-    const int maxTeamNum = 5;
     const float goaledCameraAngle = 0;
     const float goaledCameraDistance = 3;
     const float goaledDirection = 0;
@@ -21,6 +21,10 @@ public class Player : LiveEntity
     }
     [SerializeField]
     CharaData[] characters;
+    public CharaData[] GetCharacters()
+    {
+        return characters;
+    }
     bool goaled;
     public bool GetGoaled()
     {
@@ -133,10 +137,5 @@ public class Player : LiveEntity
                 return;
             }
         }
-    }
-    //UŒ‚ó‘Ô‚Ìæ“¾
-    public bool GetAttackTrigger()
-    {
-        return attackTrigger;
     }
 }
