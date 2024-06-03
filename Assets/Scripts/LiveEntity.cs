@@ -21,6 +21,7 @@ public class LiveEntity : UnLandableObject
     const float minCameraAngle = 0;
     const float maxCameraAngle = 90;
     const float GhostTimeMul = 60;
+    const int reviveGhostTimeFrame = 90;
 
     [SerializeField]
     ResourcePalette resourcePalette;
@@ -371,6 +372,7 @@ public class LiveEntity : UnLandableObject
         {
             hpAmount = 1;
             hitBackTimeFrame = 0;
+            ghostTimeFrame = reviveGhostTimeFrame;
         }
     }
 
