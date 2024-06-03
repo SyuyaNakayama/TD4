@@ -15,6 +15,10 @@ public class Player : LiveEntity
     bool jumpTrigger;
     bool attackTrigger;
     int currentCharaIndex;
+    public int GetCurrentCharaIndex()
+    {
+        return currentCharaIndex;
+    }
     [SerializeField]
     CharaData[] characters;
     bool goaled;
