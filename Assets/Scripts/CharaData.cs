@@ -17,6 +17,13 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
+    Sprite[] iconGraph = { };
+    public Sprite[] GetIconGraph()
+    {
+        return iconGraph;
+    }
+
+    [SerializeField]
     Color themeColor;
     public Color GetThemeColor()
     {
