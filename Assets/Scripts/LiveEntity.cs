@@ -20,7 +20,7 @@ public class LiveEntity : UnLandableObject
     const float directionTiltIntensity = 0.5f;
     const float minCameraAngle = 0;
     const float maxCameraAngle = 90;
-    const float GhostTimeMul = 60;
+    const float ghostTimeMul = 60;
     const int reviveGhostTimeFrame = 90;
 
     [SerializeField]
@@ -29,6 +29,8 @@ public class LiveEntity : UnLandableObject
     GameObject visual;
     [SerializeField]
     Camera view;
+    [SerializeField]
+    SpriteRenderer lifeGauge;
     [SerializeField]
     CharaData data;
     public CharaData GetData()
@@ -63,7 +65,7 @@ public class LiveEntity : UnLandableObject
     {
         return isLanding;
     }
-    int maxHP;//最大体力
+    float maxHP;//最大体力
     float hpAmount = 1;//残り体力の割合
     bool shield;//これがtrueの間は技による無敵時間
     float shieldBattery;
@@ -98,6 +100,10 @@ public class LiveEntity : UnLandableObject
     void FixedUpdate()
     {
         updating = true;
+
+        //体力の値をデータから読み出す
+        maxHP = data.GetLife();
+
         //足を地面に向ける
         if (currentGround != null
             && currentGround.ClosestPoint(transform.position) != transform.position)
@@ -233,6 +239,32 @@ public class LiveEntity : UnLandableObject
         //地面との接触判定を行う前に一旦着地していない状態にする
         isLanding = false;
 
+        //体力ゲージを更新
+        Color gaugeColor = data.GetThemeColor();
+        gaugeColor.a = 1;
+        lifeGauge.material.SetColor("_GaugeColor1", gaugeColor);
+        lifeGauge.material.SetFloat("_FillAmount1", hpAmount);
+        lifeGauge.material.SetColor("_GaugeColor2",
+            KX_netUtil.DamageGaugeColor(gaugeColor));
+        lifeGauge.material.SetColor("_BackGroundColor",
+            KX_netUtil.GaugeBlankColor(gaugeColor));
+        lifeGauge.material.SetColor("_EdgeColor",
+            KX_netUtil.GaugeBlankColor(
+                lifeGauge.material.GetColor("_BackGroundColor")
+            ));
+
+        if (lifeGauge.material.GetFloat("_FillAmount1")
+                         <= lifeGauge.material.GetFloat("_FillAmount2"))
+        {
+            lifeGauge.material.SetFloat("_FillAmount2",
+                lifeGauge.material.GetFloat("_FillAmount2") - 0.005f);
+        }
+        else
+        {
+            lifeGauge.material.SetFloat("_FillAmount2",
+                lifeGauge.material.GetFloat("_FillAmount1"));
+        }
+
         updating = false;
     }
 
@@ -338,7 +370,7 @@ public class LiveEntity : UnLandableObject
                     attackArea.GetAttacker().GetData().GetAttackPower();
                 damageValue *= attackerPower;
                 ghostTime = Mathf.RoundToInt(
-                    damageValue / attackerPower * GhostTimeMul);
+                    damageValue / attackerPower * ghostTimeMul);
             }
             Damage(damageValue, ghostTime);
             //HitBack(Vector3 hitBackVec, attackArea.GetData().hitback);

@@ -8,6 +8,7 @@ public class CharaData : ScriptableObject
     public const int totalStatusValue = 3000;
     public const float minLifeRatio = 0.2f;
     public const float maxLifeRatio = 0.8f;
+    const float attackPowerRate = 0.4f;
 
     [SerializeField]
     string charaName;
@@ -41,7 +42,7 @@ public class CharaData : ScriptableObject
     public float GetAttackPower()
     {
         return (1 - Mathf.Clamp(lifeRatio, minLifeRatio, maxLifeRatio))
-        * totalStatusValue;
+        * totalStatusValue * attackPowerRate;
     }
 
     [SerializeField]
