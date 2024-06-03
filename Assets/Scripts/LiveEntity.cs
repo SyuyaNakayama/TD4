@@ -324,8 +324,9 @@ public class LiveEntity : UnLandableObject
     //攻撃を受けた際にこれを呼ぶ
     void AttackHit(AttackArea attackArea)
     {
-        //攻撃を受け付ける状態なら
-        if (IsLive() && !shield && ghostTimeFrame <= 0)
+        //攻撃を受け付ける状態、かつ味方以外からの攻撃なら
+        if (IsLive() && !shield && ghostTimeFrame <= 0
+            && attackArea.GetAttacker().GetTeamID() != teamID)
         {
             //ギミックならデータ上の数値をそのまま使う
             float damageValue = attackArea.GetData().power;
