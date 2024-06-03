@@ -81,6 +81,8 @@ public class CharaUI : MonoBehaviour
             currentTrayRect.localScale =
                 Vector3.Lerp(currentTrayRect.localScale, currentScale,
                 iconSlideIntensity);
+
+            currentTray.sprite = player.GetCharacters()[i].GetIconGraph();
         }
     }
 }

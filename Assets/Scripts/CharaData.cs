@@ -17,8 +17,8 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
-    Sprite[] iconGraph = { };
-    public Sprite[] GetIconGraph()
+    Sprite iconGraph;
+    public Sprite GetIconGraph()
     {
         return iconGraph;
     }
