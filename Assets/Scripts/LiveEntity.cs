@@ -22,6 +22,7 @@ public class LiveEntity : UnLandableObject
     const float maxCameraAngle = 90;
     const float ghostTimeMul = 60;
     const int reviveGhostTimeFrame = 90;
+    const int maxRepairCoolTimeFrame = 780;
 
     [SerializeField]
     ResourcePalette resourcePalette;
@@ -71,6 +72,7 @@ public class LiveEntity : UnLandableObject
     float shieldBattery;
     int hitBackTimeFrame;
     int ghostTimeFrame;//ヒット後無敵時間
+    int repairCoolTimeFrame;
     AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
@@ -239,6 +241,26 @@ public class LiveEntity : UnLandableObject
         //地面との接触判定を行う前に一旦着地していない状態にする
         isLanding = false;
 
+        //ゴールしたら無敵に
+        /*if (GetGoaled())
+        {
+
+        }*/
+
+        //しばらくダメージを受けていなければ回復
+        if (IsDamageTakeable())
+        {
+            repairCoolTimeFrame--;
+            if (repairCoolTimeFrame <= 0)
+            {
+                hpAmount += 0.001f;
+            }
+        }
+        repairCoolTimeFrame = Mathf.RoundToInt(
+            Mathf.Clamp(repairCoolTimeFrame, 0, maxRepairCoolTimeFrame));
+
+        hpAmount = Mathf.Clamp(hpAmount, 0, 1);
+
         //体力ゲージを更新
         Color gaugeColor = data.GetThemeColor();
         gaugeColor.a = 1;
@@ -381,6 +403,7 @@ public class LiveEntity : UnLandableObject
     {
         hpAmount -= Mathf.Max(0, damage / maxHP);
         ghostTimeFrame = setGhostTimeFrame;
+        repairCoolTimeFrame = maxRepairCoolTimeFrame;
         //ダメージ音を鳴らす
         PlayAsSE(resourcePalette.GetDamageSE());
     }
@@ -396,6 +419,16 @@ public class LiveEntity : UnLandableObject
     public bool IsLive()
     {
         return hpAmount > 0;
+    }
+    //技による無敵状態か
+    public bool IsShield()
+    {
+        return /*shieldable &&*/ shield;
+    }
+    //ダメージを受け付ける状態か
+    public bool IsDamageTakeable()
+    {
+        return !IsShield() && ghostTimeFrame <= 0;
     }
 
     //死んでいるときにこれを呼ぶと復活する
