@@ -20,9 +20,9 @@ public class Board : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return)) { textComponent.SetActive(false); }
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag != "Player") { return; }
+        if (other.gameObject.tag != "Player") { return; }
         textComponent.SetActive(true);
     }
 }
