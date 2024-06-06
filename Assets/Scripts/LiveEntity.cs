@@ -253,7 +253,7 @@ public class LiveEntity : UnLandableObject
         }*/
 
         //‚µ‚Î‚ç‚­ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚È‚¯‚ê‚Î‰ñ•œ
-        if (IsDamageTakeable())
+        if (IsLive() && IsDamageTakeable())
         {
             repairCoolTimeFrame--;
             if (repairCoolTimeFrame <= 0)

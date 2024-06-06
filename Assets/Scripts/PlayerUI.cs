@@ -20,6 +20,8 @@ public class PlayerUI : MonoBehaviour
     float imgEXRate;
 
     [SerializeField]
+    Canvas playPartCanvas;
+    [SerializeField]
     Image[] charaImages;
     [SerializeField]
     Image[] charaImageTrays;
@@ -28,12 +30,22 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     TMP_Text reviveCount;
     [SerializeField]
+    Canvas gameOverCanvas;
+    [SerializeField]
+    Canvas goalCanvas;
+    [SerializeField]
+    TMP_Text resultReviveCount;
+    [SerializeField]
     Player player;
 
     void FixedUpdate()
     {
         //動ける状態でのみ表示
-        GetComponent<Canvas>().enabled = player.IsLive() && !player.GetGoaled();
+        playPartCanvas.enabled = player.IsLive() && !player.GetGoaled();
+        //死んだ時のみ表示
+        gameOverCanvas.enabled = !player.IsLive();
+        //ゴールした時のみ表示
+        goalCanvas.enabled = player.GetGoaled();
 
         //アイコンの後ろにある黒いトレーの位置と大きさを調整
         for (int i = 0; i < Player.maxTeamNum; i++)
@@ -97,5 +109,8 @@ public class PlayerUI : MonoBehaviour
         reviveImage.gameObject.SetActive(player.GetReviveCount() > 0);
         //復活カウントに復活回数を表示
         reviveCount.text = player.GetReviveCount().ToString();
+
+        //リザルトの復活カウントにも復活回数を表示
+        resultReviveCount.text = player.GetReviveCount().ToString();
     }
 }
