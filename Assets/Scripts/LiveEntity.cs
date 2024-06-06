@@ -20,6 +20,9 @@ public class LiveEntity : UnLandableObject
     const float directionTiltIntensity = 0.5f;
     public const float minCameraAngle = 0;
     public const float maxCameraAngle = 90;
+    const float goaledCameraAngle = 0;
+    const float goaledCameraDistance = 3;
+    const float goaledDirection = 0;
     const float ghostTimeMul = 60;
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 780;
@@ -77,6 +80,11 @@ public class LiveEntity : UnLandableObject
     public int GetReviveCount()
     {
         return reviveCount;
+    }
+    bool goaled;
+    public bool GetGoaled()
+    {
+        return goaled;
     }
     AttackMotionData attackMotionData;
     int attackTimeFrame;
@@ -228,14 +236,54 @@ public class LiveEntity : UnLandableObject
 
         //スクリプタブルオブジェクトから攻撃モーションの内容を読み出す
         UpdateAttackMotion();
-        //ここで各派生クラスの固有更新処理を呼ぶ
-        LiveEntityUpdate();
 
-        //prevAttackProgressを更新
-        prevAttackProgress = GetAttackProgress();
-        //攻撃モーションの進行度を増加
-        attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
-        attackProgress = Mathf.Clamp(attackProgress, 0, 1);
+        if (IsLive() && !GetGoaled())
+        {
+            if (IsActable())
+            {
+                //ここで各派生クラスの固有更新処理を呼ぶ
+                LiveEntityUpdate();
+
+                //prevAttackProgressを更新
+                prevAttackProgress = GetAttackProgress();
+                //攻撃モーションの進行度を増加
+                attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
+                attackProgress = Mathf.Clamp(attackProgress, 0, 1);
+            }
+        }
+        else
+        {
+            //攻撃動作を解除する
+            attackMotionData = null;
+            if (IsPlayer())
+            {
+                //カメラを演出用の位置に調整
+                cameraAngle = goaledCameraAngle;
+                cameraDistance = goaledCameraDistance;
+                //正面を向く
+                direction = goaledDirection;
+                //何かボタンを押したらゴール時はステージを出る、死亡時は復活
+                if (Input.GetKey(KeyCode.Space)
+                    || Input.GetKey("joystick button 0")
+                    || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
+                    || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
+                    || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
+                    || Input.GetKey(KeyCode.M)
+                    || Input.GetKey("joystick button 1"))
+                    if (GetGoaled())
+                    {
+                        Quit();
+                    }
+                    else
+                    {
+                        Revive();
+                    }
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
 
         ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);
         hitBackTimeFrame = Mathf.Max(0, hitBackTimeFrame - 1);
@@ -247,10 +295,10 @@ public class LiveEntity : UnLandableObject
         isLanding = false;
 
         //ゴールしたら無敵に
-        /*if (GetGoaled())
+        if (GetGoaled())
         {
-
-        }*/
+            ghostTimeFrame = reviveGhostTimeFrame;
+        }
 
         //しばらくダメージを受けていなければ回復
         if (IsLive() && IsDamageTakeable())
@@ -317,6 +365,10 @@ public class LiveEntity : UnLandableObject
         {
             AttackHit(col.gameObject.GetComponent<AttackArea>());
         }
+        if (col.gameObject.GetComponent<Goal>() != null && IsPlayer())
+        {
+            Clear();
+        }
 
         //ここで各派生クラスの固有接触処理を呼ぶ
         LiveEntityOnHit(col);
@@ -327,6 +379,7 @@ public class LiveEntity : UnLandableObject
     {
     }
 
+    //TODO:開発終盤で必要か否か判断し、不要なら消す
     //各派生クラスの固有衝突処理（派生クラス内でオーバーライドして使う）
     protected virtual void LiveEntityOnHit(Collider col)
     {
@@ -435,9 +488,19 @@ public class LiveEntity : UnLandableObject
     {
         return !IsShield() && ghostTimeFrame <= 0;
     }
+    //行動できる状態か
+    public bool IsActable()
+    {
+        return hitBackTimeFrame <= 0;
+    }
+    //これはプレイヤーか
+    public bool IsPlayer()
+    {
+        return GetComponent<Player>() != null;
+    }
 
     //死んでいるときにこれを呼ぶと復活する
-    protected void Revive()
+    void Revive()
     {
         if (!IsLive())
         {
@@ -445,6 +508,23 @@ public class LiveEntity : UnLandableObject
             hitBackTimeFrame = 0;
             ghostTimeFrame = reviveGhostTimeFrame;
             reviveCount++;
+        }
+    }
+    //ゴールに入った時の処理
+    void Clear()
+    {
+        goaled = true;
+    }
+    //今いるステージの派生元として設定されているシーンに戻る
+    void Quit()
+    {
+        foreach (StageManager obj in UnityEngine.Object.FindObjectsOfType<StageManager>())
+        {
+            if (obj.gameObject.activeInHierarchy)
+            {
+                SceneTransition.ChangeScene(obj.GetQuitSceneName());
+                return;
+            }
         }
     }
 
