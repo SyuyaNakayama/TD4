@@ -255,6 +255,7 @@ public class LiveEntity : UnLandableObject
         {
             //攻撃動作を解除する
             attackMotionData = null;
+
             if (IsPlayer())
             {
                 //カメラを演出用の位置に調整

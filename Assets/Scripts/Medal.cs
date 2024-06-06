@@ -15,7 +15,7 @@ public class Medal : MonoBehaviour
         GameObject managerObject = GameObject.Find("GameManager");
         gameManager = managerObject.GetComponent<GameManager>();
         saveMedals = managerObject.GetComponent<SaveMedals>();
-        
+
     }
 
     // Update is called once per frame
@@ -28,14 +28,15 @@ public class Medal : MonoBehaviour
         transform.Rotate(new Vector3(90, 0, 0) * Time.deltaTime);
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void OnTriggerEnter(Collider col)
     {
         // 相手がプレイヤーの時のみ処理
-        if (collision.gameObject.tag != "Player") { return; }
-
-        // メダルを獲得した
-        saveMedals.AddMedalCount();
-        saveMedals.AcquisitionMedal(medalNum);
-        Destroy(gameObject);
+        if (col.gameObject.GetComponent<Player>() != null)
+        {
+            // メダルを獲得した
+            saveMedals.AddMedalCount();
+            saveMedals.AcquisitionMedal(medalNum);
+            Destroy(gameObject);
+        }
     }
 }
