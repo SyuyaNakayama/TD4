@@ -73,6 +73,11 @@ public class LiveEntity : UnLandableObject
     int hitBackTimeFrame;
     int ghostTimeFrame;//ƒqƒbƒgŒã–³“GŽžŠÔ
     int repairCoolTimeFrame;
+    int reviveCount;
+    public int GetReviveCount()
+    {
+        return reviveCount;
+    }
     AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
@@ -439,6 +444,7 @@ public class LiveEntity : UnLandableObject
             hpAmount = 1;
             hitBackTimeFrame = 0;
             ghostTimeFrame = reviveGhostTimeFrame;
+            reviveCount++;
         }
     }
 

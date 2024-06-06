@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class CharaUI : MonoBehaviour
+public class PlayerUI : MonoBehaviour
 {
     const float iconSlideIntensity = 0.3f;
 
@@ -23,10 +24,17 @@ public class CharaUI : MonoBehaviour
     [SerializeField]
     Image[] charaImageTrays;
     [SerializeField]
+    Image reviveImage;
+    [SerializeField]
+    TMP_Text reviveCount;
+    [SerializeField]
     Player player;
 
     void FixedUpdate()
     {
+        //動ける状態でのみ表示
+        GetComponent<Canvas>().enabled = player.IsLive() && !player.GetGoaled();
+
         //アイコンの後ろにある黒いトレーの位置と大きさを調整
         for (int i = 0; i < Player.maxTeamNum; i++)
         {
@@ -84,5 +92,10 @@ public class CharaUI : MonoBehaviour
 
             currentTray.sprite = player.GetCharacters()[i].GetIconGraph();
         }
+
+        //一度も死んでいなければ復活カウントを非表示
+        reviveImage.gameObject.SetActive(player.GetReviveCount() > 0);
+        //復活カウントに復活回数を表示
+        reviveCount.text = player.GetReviveCount().ToString();
     }
 }
