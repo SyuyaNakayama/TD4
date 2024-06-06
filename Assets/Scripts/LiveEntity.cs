@@ -18,8 +18,8 @@ public class LiveEntity : UnLandableObject
     const float cameraTiltDiffuse = 0.3f;
     const float defaultCameraDistance = 10;
     const float directionTiltIntensity = 0.5f;
-    const float minCameraAngle = 0;
-    const float maxCameraAngle = 90;
+    public const float minCameraAngle = 0;
+    public const float maxCameraAngle = 90;
     const float ghostTimeMul = 60;
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 780;

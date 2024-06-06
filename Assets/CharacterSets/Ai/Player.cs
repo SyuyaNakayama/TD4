@@ -30,6 +30,7 @@ public class Player : LiveEntity
     {
         return goaled;
     }
+    float playerCameraAngle = maxCameraAngle;
 
     protected override void LiveEntityUpdate()
     {
@@ -85,7 +86,11 @@ public class Player : LiveEntity
             transform.Rotate(
                 0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
             //ƒJƒƒ‰‚ğŒX‚¯‚é
-            cameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
+            playerCameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
+            //ƒJƒƒ‰‚Ì‹ÂŠp’l‚ğ‹K’è”ÍˆÍ‚Éû‚ß‚é
+            playerCameraAngle = Mathf.Clamp(
+                playerCameraAngle, minCameraAngle, maxCameraAngle);
+            cameraAngle = playerCameraAngle;
         }
         else
         {
