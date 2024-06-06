@@ -23,4 +23,10 @@ public class ResourcePalette : ScriptableObject
     {
         return damageSE;
     }
+    [SerializeField]
+    AudioClip defeatSE;
+    public AudioClip GetDefeatSE()
+    {
+        return defeatSE;
+    }
 }

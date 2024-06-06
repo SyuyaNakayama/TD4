@@ -43,7 +43,7 @@ public class PlayerUI : MonoBehaviour
         //動ける状態でのみ表示
         playPartCanvas.enabled = player.IsLive() && !player.GetGoaled();
         //死んだ時のみ表示
-        gameOverCanvas.enabled = !player.IsLive();
+        gameOverCanvas.enabled = player.IsDestructed();
         //ゴールした時のみ表示
         goalCanvas.enabled = player.GetGoaled();
 

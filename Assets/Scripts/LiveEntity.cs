@@ -26,6 +26,7 @@ public class LiveEntity : UnLandableObject
     const float ghostTimeMul = 60;
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 780;
+    const int maxCadaverLifeTimeFrame = 30;
 
     [SerializeField]
     ResourcePalette resourcePalette;
@@ -76,6 +77,7 @@ public class LiveEntity : UnLandableObject
     int hitBackTimeFrame;
     int ghostTimeFrame;//ヒット後無敵時間
     int repairCoolTimeFrame;
+    int cadaverLifeTimeFrame;
     int reviveCount;
     public int GetReviveCount()
     {
@@ -188,7 +190,8 @@ public class LiveEntity : UnLandableObject
         if (visual != null)
         {
             //ヒット後無敵時間中なら点滅
-            if (ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
+            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
+            || !IsLive())
             {
                 visual.transform.localScale = Vector3.zero;
             }
@@ -239,6 +242,8 @@ public class LiveEntity : UnLandableObject
 
         if (IsLive() && !GetGoaled())
         {
+            cadaverLifeTimeFrame = maxCadaverLifeTimeFrame;
+
             if (IsActable())
             {
                 //ここで各派生クラスの固有更新処理を呼ぶ
@@ -256,33 +261,41 @@ public class LiveEntity : UnLandableObject
             //攻撃動作を解除する
             attackMotionData = null;
 
-            if (IsPlayer())
+            //カメラを演出用の位置に調整
+            cameraAngle = goaledCameraAngle;
+            cameraDistance = goaledCameraDistance;
+            //正面を向く
+            direction = goaledDirection;
+
+            if (cadaverLifeTimeFrame > 0)
             {
-                //カメラを演出用の位置に調整
-                cameraAngle = goaledCameraAngle;
-                cameraDistance = goaledCameraDistance;
-                //正面を向く
-                direction = goaledDirection;
-                //何かボタンを押したらゴール時はステージを出る、死亡時は復活
-                if (Input.GetKey(KeyCode.Space)
-                    || Input.GetKey("joystick button 0")
-                    || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
-                    || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
-                    || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
-                    || Input.GetKey(KeyCode.M)
-                    || Input.GetKey("joystick button 1"))
-                    if (GetGoaled())
-                    {
-                        Quit();
-                    }
-                    else
-                    {
-                        Revive();
-                    }
+                cadaverLifeTimeFrame--;
             }
             else
             {
-                Destroy(gameObject);
+                if (IsPlayer())
+                {
+                    //何かボタンを押したらゴール時はステージを出る、死亡時は復活
+                    if (Input.GetKey(KeyCode.Space)
+                        || Input.GetKey("joystick button 0")
+                        || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
+                        || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
+                        || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
+                        || Input.GetKey(KeyCode.M)
+                        || Input.GetKey("joystick button 1"))
+                        if (GetGoaled())
+                        {
+                            Quit();
+                        }
+                        else
+                        {
+                            Revive();
+                        }
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
@@ -464,7 +477,14 @@ public class LiveEntity : UnLandableObject
         ghostTimeFrame = setGhostTimeFrame;
         repairCoolTimeFrame = maxRepairCoolTimeFrame;
         //ダメージ音を鳴らす
-        PlayAsSE(resourcePalette.GetDamageSE());
+        if (IsLive())
+        {
+            PlayAsSE(resourcePalette.GetDamageSE());
+        }
+        else
+        {
+            PlayAsSE(resourcePalette.GetDefeatSE());
+        }
     }
     //吹っ飛ばされる
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
@@ -498,6 +518,10 @@ public class LiveEntity : UnLandableObject
     public bool IsPlayer()
     {
         return GetComponent<Player>() != null;
+    }
+    public bool IsDestructed()
+    {
+        return !IsLive() && cadaverLifeTimeFrame <= 0;
     }
 
     //死んでいるときにこれを呼ぶと復活する
