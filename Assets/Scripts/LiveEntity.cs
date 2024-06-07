@@ -27,6 +27,7 @@ public class LiveEntity : UnLandableObject
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 780;
     const int maxCadaverLifeTimeFrame = 30;
+    const int maxDamageReactionTimeFrame = 10;
 
     [SerializeField]
     ResourcePalette resourcePalette;
@@ -77,6 +78,7 @@ public class LiveEntity : UnLandableObject
     int hitBackTimeFrame;
     int ghostTimeFrame;//ヒット後無敵時間
     int repairCoolTimeFrame;
+    int damageReactionTimeFrame;
     int cadaverLifeTimeFrame;
     int reviveCount;
     public int GetReviveCount()
@@ -199,6 +201,17 @@ public class LiveEntity : UnLandableObject
             {
                 visual.transform.localScale = new Vector3(1, 1, 1);
             }
+            //攻撃を受けた直後ならシェイク
+            if (damageReactionTimeFrame > 0)
+            {
+                visual.transform.localPosition =
+                    Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),
+                    UnityEngine.Random.Range(1f, -1f), 0)) * 0.2f; ;
+            }
+            else
+            {
+                visual.transform.localPosition = Vector3.zero;
+            }
             //キャラの見た目を向いている方向へ向ける
             float visualDirection = visual.transform.localEulerAngles.y;
             visual.transform.localEulerAngles = new Vector3(0,
@@ -301,6 +314,8 @@ public class LiveEntity : UnLandableObject
 
         ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);
         hitBackTimeFrame = Mathf.Max(0, hitBackTimeFrame - 1);
+        damageReactionTimeFrame =
+            Mathf.Max(0, damageReactionTimeFrame - 1);
 
         //movementをvelocityに変換
         GetComponent<Rigidbody>().velocity = transform.rotation * movement;
@@ -476,6 +491,7 @@ public class LiveEntity : UnLandableObject
         hpAmount -= Mathf.Max(0, damage / maxHP);
         ghostTimeFrame = setGhostTimeFrame;
         repairCoolTimeFrame = maxRepairCoolTimeFrame;
+        damageReactionTimeFrame = maxDamageReactionTimeFrame;
         //ダメージ音を鳴らす
         if (IsLive())
         {
