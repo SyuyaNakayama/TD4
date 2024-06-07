@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class CharaUI : MonoBehaviour
+public class PlayerUI : MonoBehaviour
 {
     const float iconSlideIntensity = 0.3f;
 
@@ -19,14 +20,33 @@ public class CharaUI : MonoBehaviour
     float imgEXRate;
 
     [SerializeField]
+    Canvas playPartCanvas;
+    [SerializeField]
     Image[] charaImages;
     [SerializeField]
     Image[] charaImageTrays;
+    [SerializeField]
+    Image reviveImage;
+    [SerializeField]
+    TMP_Text reviveCount;
+    [SerializeField]
+    Canvas gameOverCanvas;
+    [SerializeField]
+    Canvas goalCanvas;
+    [SerializeField]
+    TMP_Text resultReviveCount;
     [SerializeField]
     Player player;
 
     void FixedUpdate()
     {
+        //動ける状態でのみ表示
+        playPartCanvas.enabled = player.IsLive() && !player.GetGoaled();
+        //死んだ時のみ表示
+        gameOverCanvas.enabled = player.IsDestructed();
+        //ゴールした時のみ表示
+        goalCanvas.enabled = player.GetGoaled();
+
         //アイコンの後ろにある黒いトレーの位置と大きさを調整
         for (int i = 0; i < Player.maxTeamNum; i++)
         {
@@ -84,5 +104,13 @@ public class CharaUI : MonoBehaviour
 
             currentTray.sprite = player.GetCharacters()[i].GetIconGraph();
         }
+
+        //一度も死んでいなければ復活カウントを非表示
+        reviveImage.gameObject.SetActive(player.GetReviveCount() > 0);
+        //復活カウントに復活回数を表示
+        reviveCount.text = player.GetReviveCount().ToString();
+
+        //リザルトの復活カウントにも復活回数を表示
+        resultReviveCount.text = player.GetReviveCount().ToString();
     }
 }

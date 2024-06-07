@@ -54,23 +54,23 @@ public class StageManager : MonoBehaviour
         //死んだら曲を変える
         if (player != null && !player.IsLive())
         {
-            /*if (player.IsDestructed())
-            {*/
-            if ((bgmSource.clip == gameOverBgmIntro
-                && !bgmSource.isPlaying)
-                || bgmSource.clip == gameOverBgm)
+            if (player.IsDestructed())
             {
-                bgmSource.clip = gameOverBgm;
+                if ((bgmSource.clip == gameOverBgmIntro
+                    && !bgmSource.isPlaying)
+                    || bgmSource.clip == gameOverBgm)
+                {
+                    bgmSource.clip = gameOverBgm;
+                }
+                else
+                {
+                    bgmSource.clip = gameOverBgmIntro;
+                }
             }
-            else
-            {
-                bgmSource.clip = gameOverBgmIntro;
-            }
-            /*}
             else
             {
                 bgmSource.clip = null;
-            }*/
+            }
         }
         //ゴールしたら曲を変える
         else if (player != null && player.GetGoaled())
