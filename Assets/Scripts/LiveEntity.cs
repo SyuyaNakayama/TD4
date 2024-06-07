@@ -23,7 +23,7 @@ public class LiveEntity : UnLandableObject
     const float goaledCameraAngle = 0;
     const float goaledCameraDistance = 3;
     const float goaledDirection = 0;
-    const float ghostTimeMul = 60;
+    const float ghostTimeMul = 30;
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 780;
     const int maxCadaverLifeTimeFrame = 30;
