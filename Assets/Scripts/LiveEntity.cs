@@ -15,7 +15,7 @@ public class LiveEntity : UnLandableObject
         public AttackMotionData.ShotData data;
     }
 
-    const float cameraTiltDiffuse = 0.3f;
+    const float cameraTiltDiffuse = 0.2f;
     const float defaultCameraDistance = 10;
     const float directionTiltIntensity = 0.5f;
     public const float minCameraAngle = 0;
@@ -206,7 +206,8 @@ public class LiveEntity : UnLandableObject
             {
                 visual.transform.localPosition =
                     Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),
-                    UnityEngine.Random.Range(1f, -1f), 0)) * 0.2f; ;
+                    UnityEngine.Random.Range(1f, -1f),
+                    UnityEngine.Random.Range(1f, -1f))) * 0.2f; ;
             }
             else
             {
@@ -789,7 +790,7 @@ public class LiveEntity : UnLandableObject
     //ìÆÇØÇÈèÛë‘Ç»ÇÁà⁄ìÆ
     public void Move(Vector3 setMovement)
     {
-        if (hitBackTimeFrame <= 0)
+        if (IsActable())
         {
             movement = setMovement;
         }
