@@ -7,10 +7,15 @@ public class Projectile : AttackArea
     AttackMotionData.ProjectileData projectileData;
     bool projectileDataLock = false;
     Vector3 moveVec;
+    [SerializeField]
+    SpriteRenderer visual;
     protected override void AttackAreaUpdate()
     {
         //内部変数が変更されないようにロック
         projectileDataLock = true;
+
+        //設定された画像を適用
+        visual.sprite = projectileData.sprite;
 
         //スケーリングの基準となるオブジェクトを決める
         GameObject scalingTarget = gameObject;
