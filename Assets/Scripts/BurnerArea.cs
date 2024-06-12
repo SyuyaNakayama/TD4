@@ -28,18 +28,19 @@ public class BurnerArea : MonoBehaviour
         }
         attackArea.gameObject.SetActive(IsBurning());
 
+        Renderer renderer = GetComponent<Renderer>();
         //状態に応じて見た目を変える
         if(IsBurning())
         {
-            GetComponent<Renderer>().materials[0].SetTexture("_MainTex", burnTex);
+            renderer.materials[0].SetTexture("_MainTex", burnTex);
         }
         else if(touching)
         {
-            GetComponent<Renderer>().materials[0].SetTexture("_MainTex", touchingTex);
+            renderer.materials[0].SetTexture("_MainTex", touchingTex);
         }
         else
         {
-            GetComponent<Renderer>().materials[0].SetTexture("_MainTex", disabledTex);
+            renderer.materials[0].SetTexture("_MainTex", disabledTex);
         }
 
         prevTouching = touching;
@@ -55,8 +56,10 @@ public class BurnerArea : MonoBehaviour
         {
             offset = new Vector2(0, Mathf.Repeat(-Time.time * 4, 1));
         }
-        GetComponent<Renderer>().materials[0].SetTextureScale("_MainTex", tiling);
-        GetComponent<Renderer>().materials[0].SetTextureOffset("_MainTex", offset);
+
+        Renderer renderer = GetComponent<Renderer>();
+        renderer.materials[0].SetTextureScale("_MainTex", tiling);
+        renderer.materials[0].SetTextureOffset("_MainTex", offset);
     }
 
     void OnTriggerStay(Collider col)
