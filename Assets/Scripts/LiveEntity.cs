@@ -29,6 +29,15 @@ public class LiveEntity : UnLandableObject
     const int maxCadaverLifeTimeFrame = 30;
     const int maxDamageReactionTimeFrame = 10;
 
+    private GameObject gameManager;
+    private SaveMedals saveMedals;
+
+    private void Start()
+    {
+        gameManager = GameObject.Find("/GameManager");
+        saveMedals = gameManager.GetComponent<SaveMedals>();
+    }
+
     [SerializeField]
     ResourcePalette resourcePalette;
     [SerializeField]
@@ -398,6 +407,7 @@ public class LiveEntity : UnLandableObject
         if (col.gameObject.GetComponent<Goal>() != null && IsPlayer())
         {
             Clear();
+            saveMedals.Save();
         }
 
         //ここで各派生クラスの固有接触処理を呼ぶ
