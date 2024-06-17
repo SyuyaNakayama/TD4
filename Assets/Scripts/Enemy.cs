@@ -23,7 +23,7 @@ public class Enemy : LiveEntity
         }
     }
 
-    //見つけたLiveEntityの中から標的を選別
+    //見つけたLiveEntityの中から敵を選別
     public LiveEntity[] GetTargets()
     {
         LiveEntity[] ret = { };
@@ -33,6 +33,26 @@ public class Enemy : LiveEntity
         for (int i = 0; i < detectedLiveEntities.Length; i++)
         {
             if (detectedLiveEntities[i].GetTeamID() != GetTeamID())
+            {
+                //配列に代入
+                Array.Resize(ref ret, ret.Length + 1);
+                ret[ret.Length - 1] = detectedLiveEntities[i];
+            }
+        }
+
+        return ret;
+    }
+
+    //見つけたLiveEntityの中から仲間を選別
+    public LiveEntity[] GetFriends()
+    {
+        LiveEntity[] ret = { };
+        LiveEntity[] detectedLiveEntities = sensor.GetTargets();
+
+        //teamIDが同じものだけ選別
+        for (int i = 0; i < detectedLiveEntities.Length; i++)
+        {
+            if (detectedLiveEntities[i].GetTeamID() == GetTeamID())
             {
                 //配列に代入
                 Array.Resize(ref ret, ret.Length + 1);

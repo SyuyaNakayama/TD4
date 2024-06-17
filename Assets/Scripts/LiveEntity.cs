@@ -25,7 +25,8 @@ public class LiveEntity : UnLandableObject
     const float goaledDirection = 0;
     const float ghostTimeMul = 30;
     const int reviveGhostTimeFrame = 90;
-    const int maxRepairCoolTimeFrame = 780;
+    const int maxRepairCoolTimeFrame = 600;
+    const float autoRepairPower = 0.003f;
     const int maxCadaverLifeTimeFrame = 30;
     const int maxDamageReactionTimeFrame = 10;
 
@@ -336,7 +337,7 @@ public class LiveEntity : UnLandableObject
             repairCoolTimeFrame--;
             if (repairCoolTimeFrame <= 0)
             {
-                hpAmount += 0.001f;
+                hpAmount += autoRepairPower;
             }
         }
         repairCoolTimeFrame = Mathf.RoundToInt(

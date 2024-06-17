@@ -5,11 +5,18 @@ using UnityEngine;
 //ƒtƒŒƒ“
 public class Frien : Enemy
 {
+    const int maxAwakeTimeframe = 600;
+
+    int awakeTimeFrame;
+
     protected override void LiveEntityUpdate()
     {
-        if (!IsAttacking())
+        if(awakeTimeFrame > 0)
         {
-            SetAttackMotion("Bite");
+            if (!IsAttacking())
+            {
+                SetAttackMotion("Bite");
+            }
         }
     }
 }
