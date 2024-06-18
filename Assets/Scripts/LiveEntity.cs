@@ -387,6 +387,10 @@ public class LiveEntity : UnLandableObject
     //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
     void OnCollisionStay(Collision col)
     {
+        if (col.gameObject.GetComponent<AttackArea>() != null)
+        {
+            AttackHit(col.gameObject.GetComponent<AttackArea>());
+        }
         if (col.gameObject.GetComponent<UnLandableObject>() == null && allowGroundSet)
         {
             //足を向けるべき地形として登録
