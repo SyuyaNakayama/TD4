@@ -66,10 +66,4 @@ public class SparkSpike : MonoBehaviour
             }
         }
     }
-
-    void OnWillRenderObject()
-    {
-        Vector2 tiling = new Vector2(8 * Screen.width / (float)Screen.height, 8);
-        GetComponent<Renderer>().materials[0].SetTextureScale("_MainTex", tiling);
-    }
 }

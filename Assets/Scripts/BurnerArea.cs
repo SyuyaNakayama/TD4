@@ -14,6 +14,8 @@ public class BurnerArea : MonoBehaviour
     Texture burnTex;
     [SerializeField]
     AttackArea attackArea;
+    [SerializeField]
+    ScreenPasteManager spManager;
 
     int burnFrame;
     bool touching;
@@ -46,20 +48,13 @@ public class BurnerArea : MonoBehaviour
         prevTouching = touching;
         touching = false;
         burnFrame--;
-    }
 
-    void OnWillRenderObject()
-    {
-        Vector2 tiling = new Vector2(8 * Screen.width / (float)Screen.height, 8);
         Vector2 offset = new Vector2(0, 0);
         if(IsBurning())
         {
             offset = new Vector2(0, Mathf.Repeat(-Time.time * 4, 1));
         }
-
-        Renderer renderer = GetComponent<Renderer>();
-        renderer.materials[0].SetTextureScale("_MainTex", tiling);
-        renderer.materials[0].SetTextureOffset("_MainTex", offset);
+        spManager.offset = offset;
     }
 
     void OnTriggerStay(Collider col)
