@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Medal : MonoBehaviour
 {
-    public GameManager gameManager;
     private SaveMedals saveMedals;
     //‰½–‡–Ú‚©
     public int medalNum;
@@ -13,9 +12,7 @@ public class Medal : MonoBehaviour
     void Start()
     {
         GameObject managerObject = GameObject.Find("GameManager");
-        gameManager = managerObject.GetComponent<GameManager>();
         saveMedals = managerObject.GetComponent<SaveMedals>();
-
     }
 
     // Update is called once per frame
