@@ -37,10 +37,12 @@ public class SwitchBindedFloor : MonoBehaviour
         transform.localPosition =
             Vector3.Lerp(transform.localPosition,targetLocalPosition,
             transformFlipIntensity);
+
         transform.localRotation =
             Quaternion.Slerp(transform.localRotation,
             Quaternion.Euler(targetLocalEulerAngles),
             transformFlipIntensity);
+            
         transform.localScale =
             Vector3.Lerp(transform.localScale,targetLocalScale,
             transformFlipIntensity);
