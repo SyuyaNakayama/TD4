@@ -20,6 +20,9 @@ public class SparkSpike : MonoBehaviour
 
     [SerializeField]
     int oneLoopTimeFrame = 240;
+    [SerializeField]
+    bool inverse;
+
     float progress;
 
     void FixedUpdate()
@@ -27,7 +30,7 @@ public class SparkSpike : MonoBehaviour
         //oneLoopTimeFrameのフレーム数でちょうど一周するように加算
         progress = Mathf.Repeat(progress + (1f / oneLoopTimeFrame), 1);
 
-        attackArea.gameObject.SetActive(progress > 0.5f);
+        attackArea.gameObject.SetActive(IsActive());
 
         int flashProgress = Mathf.RoundToInt(Mathf.Repeat(progress * 2, 1)
             * flashAnimationFrameNum - 0.5f);
@@ -43,7 +46,7 @@ public class SparkSpike : MonoBehaviour
 
         Renderer renderer = GetComponent<Renderer>();
         //状態に応じて見た目を変える
-        if(progress > 0.5f)
+        if(IsActive())
         {
             if(flash)
             {
@@ -65,5 +68,10 @@ public class SparkSpike : MonoBehaviour
                 renderer.materials[0].SetTexture("_MainTex", disabledTex);
             }
         }
+    }
+
+    bool IsActive()
+    {
+        return progress > 0.5f == inverse;
     }
 }
