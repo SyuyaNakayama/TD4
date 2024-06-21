@@ -153,21 +153,40 @@ public class LiveEntity : UnLandableObject
         if (currentGround != null
             && currentGround.ClosestPoint(transform.position) != transform.position)
         {
-            //足を向けるべき位置を算出し、
+            //足を向けるべき位置を算出する
             Vector3 localClosestPoint = transform.InverseTransformPoint(
                 currentGround.ClosestPoint(transform.position));
-            //x軸を中心にその位置を向くように回転させる
-            transform.Rotate(
-                -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
-                / Mathf.Deg2Rad, 0, 0, Space.Self);
+            //どちらかといえば縦向きに大きく回転する必要があるなら
+            if(Mathf.Abs(localClosestPoint.z) > Mathf.Abs(localClosestPoint.x))
+            {
+                //x軸を中心にその位置を向くように回転させる
+                transform.Rotate(
+                    -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
+                    / Mathf.Deg2Rad, 0, 0, Space.Self);
 
-            //再度足を向けるべき位置を算出し、
-            localClosestPoint = transform.InverseTransformPoint(
-                currentGround.ClosestPoint(transform.position));
-            //z軸を中心にその位置を向くように回転させる
-            transform.Rotate(0, 0,
-                Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
-                / Mathf.Deg2Rad, Space.Self);
+                //再度足を向けるべき位置を算出し、
+                localClosestPoint = transform.InverseTransformPoint(
+                    currentGround.ClosestPoint(transform.position));
+                //z軸を中心にその位置を向くように回転させる
+                transform.Rotate(0, 0,
+                    Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
+                    / Mathf.Deg2Rad, Space.Self);
+            }
+            else
+            {
+                //z軸を中心にその位置を向くように回転させる
+                transform.Rotate(0, 0,
+                    Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
+                    / Mathf.Deg2Rad, Space.Self);
+
+                //再度足を向けるべき位置を算出し、
+                localClosestPoint = transform.InverseTransformPoint(
+                    currentGround.ClosestPoint(transform.position));
+                //x軸を中心にその位置を向くように回転させる
+                transform.Rotate(
+                    -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
+                    / Mathf.Deg2Rad, 0, 0, Space.Self);
+            }
         }
 
         if (view != null)
