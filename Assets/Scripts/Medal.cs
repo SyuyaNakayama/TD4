@@ -20,7 +20,7 @@ public class Medal : MonoBehaviour
     {
         if (saveMedals.GetMedalData(medalNum))
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         transform.Rotate(new Vector3(90, 0, 0) * Time.deltaTime);
     }
