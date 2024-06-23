@@ -12,13 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b544b4772696443a85c9f0a063c1a99, type: 3}
   m_Name: popJump
   m_EditorClassIdentifier: 
-  cursors: []
-  meleeAttackDatas: []
+  cursors:
+  - name: burst
+    pos: {x: 0, y: 0, z: 0.5}
+    direction: {x: 0, y: 0, z: 0}
+  meleeAttackDatas:
+  - name: burst
+    attackData:
+      power: 0.6
+      vectorBlow: 1
+      blowForce: 6
+      hitback: 10
+      ghostTime: 0
+    scale: 1.5
   shotDatas: []
   data:
     name: "\u30D0\u30FC\u30B9\u30C8\u30B8\u30E3\u30F3\u30D7"
-    totalFrame: 45
-    meleeAttackKeys: []
+    totalFrame: 10
+    meleeAttackKeys:
+    - keyFrame: {x: 0, y: 0}
+      dataName: burst
+      cursorName: burst
     shotKeys: []
     moveKeys: []
     shieldKeys:

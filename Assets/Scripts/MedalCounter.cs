@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 
-public class SaveMedals : MonoBehaviour
+public class MedalCounter : MonoBehaviour
 {
     //ワールドごとのメダル最大値
     private const int maxMedal = 20;
@@ -25,6 +25,9 @@ public class SaveMedals : MonoBehaviour
 
     //　移動先メダル数表示UI
     public Text textComponent;
+
+    [SerializeField]
+    
 
     //static uint medalCount; // メダルの獲得枚数
 

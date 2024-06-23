@@ -108,7 +108,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4830533806261551031}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -248,7 +248,6 @@ MonoBehaviour:
   resourcePalette: {fileID: 11400000, guid: e6a7368562eca47d9951b4b5df5a3f6f, type: 2}
   visual: {fileID: 3068325547874681552}
   view: {fileID: 0}
-  lifeGauge: {fileID: 6502071233622163371}
   data: {fileID: 11400000, guid: 21552e5936f2d4db984fe6703e551547, type: 2}
   teamID: 
   currentGround: {fileID: 0}
@@ -530,6 +529,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Indicator
       objectReference: {fileID: 0}
+    - target: {fileID: 7739190669819474639, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
+      propertyPath: liveEntity
+      value: 
+      objectReference: {fileID: -2081438101740439333}
     - target: {fileID: 8038210471020143471, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -548,7 +551,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8038210471020143471, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.00000004371139
       objectReference: {fileID: 0}
     - target: {fileID: 8038210471020143471, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
       propertyPath: m_LocalRotation.x
@@ -556,7 +559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8038210471020143471, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8038210471020143471, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
       propertyPath: m_LocalRotation.z
@@ -579,10 +582,5 @@ PrefabInstance:
 --- !u!4 &1908211548027780769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8038210471020143471, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
-  m_PrefabInstance: {fileID: 8500018314540834254}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &6502071233622163371 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 3444654246334620261, guid: 52af1b08e5baa43ffb777c0a925697cb, type: 3}
   m_PrefabInstance: {fileID: 8500018314540834254}
   m_PrefabAsset: {fileID: 0}

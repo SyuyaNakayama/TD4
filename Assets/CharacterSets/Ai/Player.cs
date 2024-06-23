@@ -48,6 +48,7 @@ public class Player : LiveEntity
         if (jumpInput && !jumpTrigger)
         {
             Move(new Vector3(GetMovement().x, jumpPower, GetMovement().z));
+            SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
         jumpTrigger = jumpInput;
 

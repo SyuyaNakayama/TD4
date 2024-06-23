@@ -31,12 +31,12 @@ public class LiveEntity : UnLandableObject
     const int maxDamageReactionTimeFrame = 10;
 
     private GameObject gameManager;
-    private SaveMedals saveMedals;
+    private MedalCounter saveMedals;
 
     private void Start()
     {
         gameManager = GameObject.Find("/GameManager");
-        saveMedals = gameManager.GetComponent<SaveMedals>();
+        saveMedals = gameManager.GetComponent<MedalCounter>();
     }
 
     [SerializeField]
@@ -45,8 +45,6 @@ public class LiveEntity : UnLandableObject
     GameObject visual;
     [SerializeField]
     Camera view;
-    [SerializeField]
-    SpriteRenderer lifeGauge;
     [SerializeField]
     CharaData data;
     public CharaData GetData()
@@ -99,6 +97,10 @@ public class LiveEntity : UnLandableObject
     }
     float maxHP;//Å‘å‘Ì—Í
     float hpAmount = 1;//c‚è‘Ì—Í‚ÌŠ„‡
+    public float GetHPAmount()
+    {
+        return hpAmount;
+    }
     bool shield;//‚±‚ê‚ªtrue‚ÌŠÔ‚Í‹Z‚É‚æ‚é–³“GŠÔ
     float shieldBattery;
     int hitBackTimeFrame;
@@ -402,32 +404,6 @@ public class LiveEntity : UnLandableObject
             Mathf.Clamp(repairCoolTimeFrame, 0, maxRepairCoolTimeFrame));
 
         hpAmount = Mathf.Clamp(hpAmount, 0, 1);
-
-        //‘Ì—ÍƒQ[ƒW‚ğXV
-        Color gaugeColor = data.GetThemeColor();
-        gaugeColor.a = 1;
-        lifeGauge.material.SetColor("_GaugeColor1", gaugeColor);
-        lifeGauge.material.SetFloat("_FillAmount1", hpAmount);
-        lifeGauge.material.SetColor("_GaugeColor2",
-            KX_netUtil.DamageGaugeColor(gaugeColor));
-        lifeGauge.material.SetColor("_BackGroundColor",
-            KX_netUtil.GaugeBlankColor(gaugeColor));
-        lifeGauge.material.SetColor("_EdgeColor",
-            KX_netUtil.GaugeBlankColor(
-                lifeGauge.material.GetColor("_BackGroundColor")
-            ));
-
-        if (lifeGauge.material.GetFloat("_FillAmount1")
-                         <= lifeGauge.material.GetFloat("_FillAmount2"))
-        {
-            lifeGauge.material.SetFloat("_FillAmount2",
-                lifeGauge.material.GetFloat("_FillAmount2") - 0.005f);
-        }
-        else
-        {
-            lifeGauge.material.SetFloat("_FillAmount2",
-                lifeGauge.material.GetFloat("_FillAmount1"));
-        }
 
         updating = false;
     }

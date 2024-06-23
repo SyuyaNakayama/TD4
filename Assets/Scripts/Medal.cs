@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Medal : MonoBehaviour
 {
-    private SaveMedals saveMedals;
-    //何枚目か
+    private MedalCounter saveMedals;
+    //???????
     public int medalNum;
 
     // Start is called before the first frame update
     void Start()
     {
         GameObject managerObject = GameObject.Find("GameManager");
-        saveMedals = managerObject.GetComponent<SaveMedals>();
+        saveMedals = managerObject.GetComponent<MedalCounter>();
     }
 
     // Update is called once per frame
@@ -27,10 +27,10 @@ public class Medal : MonoBehaviour
 
     public void OnTriggerEnter(Collider col)
     {
-        // 相手がプレイヤーの時のみ処理
+        // ???肪?v???C???[?????????
         if (col.gameObject.GetComponent<Player>() != null)
         {
-            // メダルを獲得した
+            // ???_?????l??????
             saveMedals.AddMedalCount();
             saveMedals.AcquisitionMedal(medalNum);
             Destroy(gameObject);
