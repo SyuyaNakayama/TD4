@@ -95,7 +95,6 @@ public class LiveEntity : UnLandableObject
     {
         return isLanding;
     }
-    float maxHP;//最大体力
     float hpAmount = 1;//残り体力の割合
     public float GetHPAmount()
     {
@@ -152,9 +151,6 @@ public class LiveEntity : UnLandableObject
     void FixedUpdate()
     {
         updating = true;
-
-        //体力の値をデータから読み出す
-        maxHP = data.GetLife();
 
         //足を地面に向ける
         if (currentGround != null
@@ -542,7 +538,7 @@ public class LiveEntity : UnLandableObject
     //体力を減らし、無敵時間を付与
     void Damage(float damage, int setGhostTimeFrame)
     {
-        hpAmount -= Mathf.Max(0, damage / maxHP);
+        hpAmount -= Mathf.Max(0, damage / data.GetLife());
         ghostTimeFrame = setGhostTimeFrame;
         repairCoolTimeFrame = maxRepairCoolTimeFrame;
         damageReactionTimeFrame = maxDamageReactionTimeFrame;
