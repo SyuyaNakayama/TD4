@@ -2,6 +2,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
+using TMPro;
 
 public class MedalCounter : MonoBehaviour
 {
@@ -24,10 +25,8 @@ public class MedalCounter : MonoBehaviour
     public int thisStageNum = 0;
 
     //　移動先メダル数表示UI
-    public Text textComponent;
-
     [SerializeField]
-    
+    TMP_Text textComponent;
 
     //static uint medalCount; // メダルの獲得枚数
 
@@ -152,7 +151,7 @@ public class MedalCounter : MonoBehaviour
         //他でも使用するためリセット
         roopWorldNum = 0;
         //UI更新
-        textComponent.text = "Medals : " + getMedalWorld[thisWorldNum];
+        textComponent.text = getMedalWorld[thisWorldNum].ToString();
     }
     //データ保存
     public void Save()
@@ -244,6 +243,6 @@ public class MedalCounter : MonoBehaviour
     public void AddMedalCount()
     {
         getMedalWorld[thisWorldNum]++;
-        textComponent.text = "Medals : " + getMedalWorld[thisWorldNum];
+        textComponent.text = getMedalWorld[thisWorldNum].ToString();
     }
 }

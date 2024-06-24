@@ -108,6 +108,11 @@ public class LiveEntity : UnLandableObject
     int repairCoolTimeFrame;
     int damageReactionTimeFrame;
     int cadaverLifeTimeFrame;
+    int killCount;
+    public int GetKillCount()
+    {
+        return killCount;
+    }
     int reviveCount;
     public int GetReviveCount()
     {
@@ -506,24 +511,31 @@ public class LiveEntity : UnLandableObject
     //攻撃を受けた際にこれを呼ぶ
     void AttackHit(AttackArea attackArea)
     {
+        LiveEntity attacker = attackArea.GetAttacker();
+
         //攻撃を受け付ける状態、かつ味方以外からの攻撃なら
         if (IsLive() && !shield && ghostTimeFrame <= 0
-            && (attackArea.GetAttacker() == null
-                || attackArea.GetAttacker().GetTeamID() != teamID))
+            && (attacker == null
+                || attacker.GetTeamID() != teamID))
         {
             //ギミックならデータ上の数値をそのまま使う
             float damageValue = attackArea.GetData().power;
             int ghostTime = attackArea.GetData().ghostTime;
             //キャラの攻撃ならダメージ値と無敵時間を算出
-            if (attackArea.GetAttacker() != null)
+            if (attacker != null)
             {
                 float attackerPower =
-                    attackArea.GetAttacker().GetData().GetAttackPower();
+                    attacker.GetData().GetAttackPower();
                 damageValue *= attackerPower;
                 ghostTime = Mathf.RoundToInt(
                     damageValue / attackerPower * ghostTimeMul);
             }
             Damage(damageValue, ghostTime);
+
+            if (!IsLive() && attacker != null)
+            {
+                attacker.killCount++;
+            }
             //HitBack(Vector3 hitBackVec, attackArea.GetData().hitback);
         }
     }

@@ -34,6 +34,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     Canvas goalCanvas;
     [SerializeField]
+    TMP_Text resultKillCount;
+    [SerializeField]
     TMP_Text resultReviveCount;
     [SerializeField]
     Player player;
@@ -110,6 +112,8 @@ public class PlayerUI : MonoBehaviour
         //復活カウントに復活回数を表示
         reviveCount.text = player.GetReviveCount().ToString();
 
+        //リザルトのキルカウントに撃破数を表示
+        resultKillCount.text = player.GetKillCount().ToString();
         //リザルトの復活カウントにも復活回数を表示
         resultReviveCount.text = player.GetReviveCount().ToString();
     }
