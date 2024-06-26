@@ -22,6 +22,13 @@ public class LiveEntity : UnLandableObject
         public int index;
         public string propertyName;
     }
+    [System.Serializable]
+    public struct SpriteSendData
+    {
+        public SpriteRenderer spriteRenderer;
+        public bool isMainSprite;
+        public string propertyName;
+    }
 
     const float cameraTiltDiffuse = 0.2f;
     const float defaultCameraDistance = 10;
@@ -54,7 +61,7 @@ public class LiveEntity : UnLandableObject
     [SerializeField]
     TextureSendData[] meshes = { };
     [SerializeField]
-    SpriteRenderer[] sprites = { };
+    SpriteSendData[] sprites = { };
     [SerializeField]
     Camera view;
     [SerializeField]
@@ -346,7 +353,16 @@ public class LiveEntity : UnLandableObject
         //スプライトをスプライトレンダラーに貼る
         for (int i = 0; i < sprites.Length; i++)
         {
-            sprites[i].sprite = data.GetDefaultSprite(i);
+            SpriteSendData current = sprites[i];
+            if (current.isMainSprite)
+            {
+                current.spriteRenderer.sprite = data.GetDefaultSprite(i);
+            }
+            else
+            {
+                current.spriteRenderer.material.
+                    SetTexture(current.propertyName, data.GetDefaultSprite(i).texture);
+            }
         }
 
         ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);
