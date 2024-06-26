@@ -6,6 +6,7 @@ Shader "Unlit/Character"
         _Cull("Cull", Float) = 2
         [Enum(Off, 0, On, 1)]
         _ZWrite("ZWrite", float) = 1
+        _ZWriteAlpha("ZWrite", float) = 0
         _MainTex ("Texture", 2D) = "black" {}
         _Face0 ("Eye", 2D) = "black" {}
         _Face1 ("Mouth", 2D) = "black" {}
@@ -57,6 +58,7 @@ Shader "Unlit/Character"
             float4 _Face1_ST;
             half4 _AddColor;
             float _MainAlpha;
+            float _ZWriteAlpha;
 
             v2f vert (appdata v)
             {
@@ -81,6 +83,7 @@ Shader "Unlit/Character"
                     + facecol.a * facecol.rgb
                     ,saturate(texcol.a + facecol.a));
 
+                clip(texcol.a - _ZWriteAlpha);
                 fixed4 col = texcol * (1 - _AddColor.w) + (_AddColor) * _AddColor.w;
                 col.a = texcol.a * _MainAlpha;
                 return col;

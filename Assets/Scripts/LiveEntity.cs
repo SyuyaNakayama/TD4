@@ -16,10 +16,11 @@ public class LiveEntity : UnLandableObject
     }
 
     [System.Serializable]
-    public struct MeshRendererAndIndex
+    public struct TextureSendData
     {
         public MeshRenderer meshRenderer;
         public int index;
+        public string propertyName;
     }
 
     const float cameraTiltDiffuse = 0.2f;
@@ -51,7 +52,7 @@ public class LiveEntity : UnLandableObject
     [SerializeField]
     GameObject visual;
     [SerializeField]
-    MeshRendererAndIndex[] meshes = { };
+    TextureSendData[] meshes = { };
     [SerializeField]
     SpriteRenderer[] sprites = { };
     [SerializeField]
@@ -338,9 +339,9 @@ public class LiveEntity : UnLandableObject
         //テクスチャをモデルに貼る
         for (int i = 0; i < meshes.Length; i++)
         {
-            MeshRendererAndIndex current = meshes[i];
+            TextureSendData current = meshes[i];
             current.meshRenderer.materials[current.index].
-                SetTexture("_MainTex", data.GetDefaultTexture(i));
+                SetTexture(current.propertyName, data.GetDefaultTexture(i));
         }
         //スプライトをスプライトレンダラーに貼る
         for (int i = 0; i < sprites.Length; i++)
