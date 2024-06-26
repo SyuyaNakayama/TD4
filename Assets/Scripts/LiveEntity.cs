@@ -15,6 +15,13 @@ public class LiveEntity : UnLandableObject
         public AttackMotionData.ShotData data;
     }
 
+    [System.Serializable]
+    public struct MeshRendererAndIndex
+    {
+        public MeshRenderer meshRenderer;
+        public int index;
+    }
+
     const float cameraTiltDiffuse = 0.2f;
     const float defaultCameraDistance = 10;
     const float directionTiltIntensity = 0.5f;
@@ -43,6 +50,10 @@ public class LiveEntity : UnLandableObject
     ResourcePalette resourcePalette;
     [SerializeField]
     GameObject visual;
+    [SerializeField]
+    MeshRendererAndIndex[] meshes = { };
+    [SerializeField]
+    SpriteRenderer[] sprites = { };
     [SerializeField]
     Camera view;
     [SerializeField]
@@ -160,7 +171,7 @@ public class LiveEntity : UnLandableObject
             Vector3 localClosestPoint = transform.InverseTransformPoint(
                 currentGround.ClosestPoint(transform.position));
             //どちらかといえば縦向きに大きく回転する必要があるなら
-            if(Mathf.Abs(localClosestPoint.z) > Mathf.Abs(localClosestPoint.x))
+            if (Mathf.Abs(localClosestPoint.z) > Mathf.Abs(localClosestPoint.x))
             {
                 //x軸を中心にその位置を向くように回転させる
                 transform.Rotate(
@@ -322,6 +333,19 @@ public class LiveEntity : UnLandableObject
                     Destroy(gameObject);
                 }
             }
+        }
+
+        //テクスチャをモデルに貼る
+        for (int i = 0; i < meshes.Length; i++)
+        {
+            MeshRendererAndIndex current = meshes[i];
+            current.meshRenderer.materials[current.index].
+                SetTexture("_MainTex", data.GetDefaultTexture(i));
+        }
+        //スプライトをスプライトレンダラーに貼る
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            sprites[i].sprite = data.GetDefaultSprite(i);
         }
 
         ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);

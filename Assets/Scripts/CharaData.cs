@@ -5,6 +5,26 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CreateCharaData")]
 public class CharaData : ScriptableObject
 {
+    [System.Serializable]
+    public struct IndexAndTexture
+    {
+        public int index;
+        public Texture texture;
+    }
+    [System.Serializable]
+    public struct IndexAndSprite
+    {
+        public int index;
+        public Sprite sprite;
+    }
+    [System.Serializable]
+    public struct FacialExpression
+    {
+        public string motionName;
+        public IndexAndTexture[] indexAndTextures;
+        public IndexAndSprite[] indexAndSprites;
+    }
+
     public const int totalStatusValue = 3000;
     public const float minLifeRatio = 0.2f;
     public const float maxLifeRatio = 0.8f;
@@ -89,5 +109,18 @@ public class CharaData : ScriptableObject
             }
         }
         return new AttackMotionData();
+    }
+
+    [SerializeField]
+    Texture[] defaultTextures = { };
+    public Texture GetDefaultTexture(int index)
+    {
+        return defaultTextures[index];
+    }
+    [SerializeField]
+    Sprite[] defaultSprites = { };
+    public Sprite GetDefaultSprite(int index)
+    {
+        return defaultSprites[index];
     }
 }

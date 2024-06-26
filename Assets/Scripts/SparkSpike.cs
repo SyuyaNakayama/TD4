@@ -5,7 +5,7 @@ using UnityEngine;
 public class SparkSpike : MonoBehaviour
 {
     const int flashAnimationFrameNum = 24;
-    static int[] flashFrames = {0,11,15,19,21,23};
+    static int[] flashFrames = { 0, 11, 15, 19, 21, 23 };
 
     [SerializeField]
     Texture disabledTex;
@@ -27,7 +27,7 @@ public class SparkSpike : MonoBehaviour
 
     void FixedUpdate()
     {
-        //oneLoopTimeFrameã®ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã§ã¡ã‚‡ã†ã©ä¸€å‘¨ã™ã‚‹ã‚ˆã†ã«åŠ ç®—
+        //oneLoopTimeFrame‚ÌƒtƒŒ[ƒ€”‚Å‚¿‚å‚¤‚Çˆêü‚·‚é‚æ‚¤‚É‰ÁZ
         progress = Mathf.Repeat(progress + (1f / oneLoopTimeFrame), 1);
 
         attackArea.gameObject.SetActive(IsActive());
@@ -35,9 +35,9 @@ public class SparkSpike : MonoBehaviour
         int flashProgress = Mathf.RoundToInt(Mathf.Repeat(progress * 2, 1)
             * flashAnimationFrameNum - 0.5f);
         bool flash = false;
-        for (int i = 0;i < flashFrames.Length;i++)
+        for (int i = 0; i < flashFrames.Length; i++)
         {
-            if(flashProgress == flashFrames[i])
+            if (flashProgress == flashFrames[i])
             {
                 flash = true;
                 break;
@@ -45,10 +45,10 @@ public class SparkSpike : MonoBehaviour
         }
 
         Renderer renderer = GetComponent<Renderer>();
-        //çŠ¶æ…‹ã«å¿œã˜ã¦è¦‹ãŸç›®ã‚’å¤‰ãˆã‚‹
-        if(IsActive())
+        //ó‘Ô‚É‰‚¶‚ÄŒ©‚½–Ú‚ğ•Ï‚¦‚é
+        if (IsActive())
         {
-            if(flash)
+            if (flash)
             {
                 renderer.materials[0].SetTexture("_MainTex", abledTex_flash);
             }
@@ -59,7 +59,7 @@ public class SparkSpike : MonoBehaviour
         }
         else
         {
-            if(flash)
+            if (flash)
             {
                 renderer.materials[0].SetTexture("_MainTex", disabledTex_flash);
             }
