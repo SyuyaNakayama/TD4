@@ -9,15 +9,15 @@ public class MedalCounter : MonoBehaviour
     //ワールドごとのメダル最大値
     private const int maxMedal = 20;
     //ワールド数
-    private const int maxWorld = 10;
+    private const int maxWorld = 20;
     //ステージ数
-    private const int maxStage = 5;
+    private const int maxStage = 8;
     //ステージごとのメダル
     private const int maxMedalInStage = 10;
     //メダルの取得状況
-    private int[,,] getMedal = new int[11, 6, 11];
+    private int[,,] getMedal = new int[21, 9, 11];
     //ワールドごとのメダル取得状況
-    private static uint[] getMedalWorld = new uint[11];
+    private static uint[] getMedalWorld = new uint[21];
     //ループ用のステージ番号とシーン内のステージ番号
     private int roopWorldNum = 0;
     private int roopStageNum = 0;
