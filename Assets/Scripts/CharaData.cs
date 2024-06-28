@@ -20,7 +20,7 @@ public class CharaData : ScriptableObject
     [System.Serializable]
     public struct FacialExpression
     {
-        public string motionName;
+        public string name;
         public IndexAndTexture[] indexAndTextures;
         public IndexAndSprite[] indexAndSprites;
     }
@@ -122,5 +122,20 @@ public class CharaData : ScriptableObject
     public Sprite GetDefaultSprite(int index)
     {
         return defaultSprites[index];
+    }
+
+    [SerializeField]
+    FacialExpression[] facialExpressions = { };
+    public FacialExpression SearchFacialExpression(string name)
+    {
+        for (int i = 0; i < facialExpressions.Length; i++)
+        {
+            if (facialExpressions[i].name == name)
+            {
+                return facialExpressions[i];
+            }
+        }
+
+        return new FacialExpression();
     }
 }
