@@ -153,6 +153,7 @@ public class LiveEntity : UnLandableObject
     MeleeAttackAndCursorName[] meleeAttackDatas = { };
     ShotAndCursorName[] shotDatas = { };
     AttackArea[] attackAreas = { };
+    protected string facialExpressionName;
     bool updating = false;
     public bool GetUpdating()
     {
@@ -280,6 +281,8 @@ public class LiveEntity : UnLandableObject
         allowGroundSet = true;
         //shieldをリセット
         shield = false;
+        //表情をリセット
+        facialExpressionName = "";
 
         //スクリプタブルオブジェクトから攻撃モーションの内容を読み出す
         UpdateAttackMotion();
