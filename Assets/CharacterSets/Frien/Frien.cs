@@ -26,6 +26,8 @@ public class Frien : Enemy
         //–Ú‚ğŠo‚Ü‚µ‚Ä‚¢‚é
         if(awake)
         {
+            //•\î‚ğ•Ï‚¦‚é
+            facialExpressionName = "awake";
             //‹ß‚­‚É“G‚ª‚¢‚½‚çÚ‹ß
             if(GetNearestTarget() != null)
             {

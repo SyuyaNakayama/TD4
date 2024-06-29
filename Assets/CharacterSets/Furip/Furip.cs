@@ -12,6 +12,8 @@ public class Furip : Enemy
         //‘Ì—Í‚ªŒ¸‚Á‚Ä‚¢‚éŽž
         if (GetHPAmount() < 1)
         {
+            //“{‚èŠç
+            facialExpressionName = "fury";
             //‹ß‚­‚É“G‚ª‚¢‚½‚çÚ‹ß
             if (GetNearestTarget() != null)
             {

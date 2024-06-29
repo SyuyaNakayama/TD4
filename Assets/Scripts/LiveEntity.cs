@@ -346,14 +346,14 @@ public class LiveEntity : UnLandableObject
             }
         }
 
-        //テクスチャをモデルに貼る
+        //デフォルトのテクスチャをモデルに貼る
         for (int i = 0; i < meshes.Length; i++)
         {
             TextureSendData current = meshes[i];
             current.meshRenderer.materials[current.index].
                 SetTexture(current.propertyName, data.GetDefaultTexture(i));
         }
-        //スプライトをスプライトレンダラーに貼る
+        //デフォルトのスプライトをスプライトレンダラーに貼る
         for (int i = 0; i < sprites.Length; i++)
         {
             SpriteSendData current = sprites[i];
@@ -365,6 +365,39 @@ public class LiveEntity : UnLandableObject
             {
                 current.spriteRenderer.material.
                     SetTexture(current.propertyName, data.GetDefaultSprite(i).texture);
+            }
+        }
+
+        //現在の状態にあった表情を取得
+        CharaData.FacialExpression facialData =
+            data.SearchFacialExpression(facialExpressionName);
+        //表情のテクスチャをモデルに貼る
+        if(facialData.indexAndTextures != null)
+        {
+            for (int i = 0; i < facialData.indexAndTextures.Length; i++)
+            {
+                CharaData.IndexAndTexture texData = facialData.indexAndTextures[i];
+                TextureSendData current = meshes[texData.index];
+                current.meshRenderer.materials[current.index].
+                    SetTexture(current.propertyName, texData.texture);
+            }
+        }
+        //表情のスプライトをスプライトレンダラーに貼る
+        if(facialData.indexAndSprites != null)
+        {
+            for (int i = 0; i < facialData.indexAndSprites.Length; i++)
+            {
+                CharaData.IndexAndSprite spriteData = facialData.indexAndSprites[i];
+                SpriteSendData current = sprites[spriteData.index];
+                if (current.isMainSprite)
+                {
+                    current.spriteRenderer.sprite = spriteData.sprite;
+                }
+                else
+                {
+                    current.spriteRenderer.material.
+                        SetTexture(current.propertyName, spriteData.sprite.texture);
+                }
             }
         }
 
@@ -576,7 +609,7 @@ public class LiveEntity : UnLandableObject
             {
                 attacker.killCount++;
             }
-            //HitBack(Vector3 hitBackVec, attackArea.GetData().hitback);
+            HitBack(attackArea.GetData().blowForce, attackArea.GetData().hitback);
         }
     }
     //体力を減らし、無敵時間を付与
@@ -599,8 +632,8 @@ public class LiveEntity : UnLandableObject
     //吹っ飛ばされる
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
     {
-        movement = Quaternion.Inverse(transform.rotation)
-            * hitBackVec;
+        /*movement = Quaternion.Inverse(transform.rotation)
+            * hitBackVec;*/
         hitBackTimeFrame = setHitBackTimeFrame;
     }
 
@@ -780,6 +813,21 @@ public class LiveEntity : UnLandableObject
                     {
                         GetComponent<AudioSource>().clip = current.se;
                         GetComponent<AudioSource>().Play();
+                    }
+                }
+            }
+
+            //表情
+            if (attackMotionData.GetData().facialExpressionKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.GetData().
+                    facialExpressionKeys.Length; i++)
+                {
+                    AttackMotionData.FacialExpressionKey current =
+                        attackMotionData.GetData().facialExpressionKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        facialExpressionName = current.facialExpressionName;
                     }
                 }
             }
