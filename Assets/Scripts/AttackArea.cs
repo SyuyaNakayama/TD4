@@ -16,6 +16,12 @@ public class AttackArea : MonoBehaviour
     {
         return data;
     }
+    [SerializeField]
+    Vector3 blowVec;
+    public Vector3 GetBlowVec()
+    {
+        return blowVec;
+    }
     bool dataLock = false;
 
     void FixedUpdate()
@@ -37,12 +43,13 @@ public class AttackArea : MonoBehaviour
             attacker = setAttacker;
         }
     }
-    public void SetData(AttackMotionData.AttackData setData)
+    public void SetData(AttackMotionData.AttackData setData, Vector3 setBlowVec)
     {
         //AttackerÇÃFixedUpdate()ì‡Ç≈åƒÇŒÇÍÇΩèÍçáÇÃÇ›é¿çs
         if (attacker != null && attacker.GetUpdating())
         {
             data = setData;
+            blowVec = setBlowVec;
         }
     }
 }

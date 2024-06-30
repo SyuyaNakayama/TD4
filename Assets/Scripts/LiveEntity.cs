@@ -247,8 +247,8 @@ public class LiveEntity : UnLandableObject
         if (visual != null)
         {
             //ƒqƒbƒgŒã–³“GŠÔ’†‚È‚ç“_–Å
-            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
-            || !IsLive())
+            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f) && IsLive()
+            || IsDestructed())
             {
                 visual.transform.localScale = Vector3.zero;
             }
@@ -302,6 +302,10 @@ public class LiveEntity : UnLandableObject
                 attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
                 attackProgress = Mathf.Clamp(attackProgress, 0, 1);
             }
+            else
+            {
+                facialExpressionName = "damage";
+            }
         }
         else
         {
@@ -316,6 +320,7 @@ public class LiveEntity : UnLandableObject
 
             if (cadaverLifeTimeFrame > 0)
             {
+                facialExpressionName = "defeat";
                 cadaverLifeTimeFrame--;
             }
             else
@@ -609,7 +614,7 @@ public class LiveEntity : UnLandableObject
             {
                 attacker.killCount++;
             }
-            HitBack(attackArea.GetData().blowForce, attackArea.GetData().hitback);
+            HitBack(attackArea.GetBlowVec(), attackArea.GetData().hitback);
         }
     }
     //‘Ì—Í‚ğŒ¸‚ç‚µA–³“GŠÔ‚ğ•t—^
@@ -632,9 +637,10 @@ public class LiveEntity : UnLandableObject
     //‚Á”ò‚Î‚³‚ê‚é
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
     {
-        /*movement = Quaternion.Inverse(transform.rotation)
-            * hitBackVec;*/
+        movement = Quaternion.Inverse(transform.rotation)
+            * hitBackVec;
         hitBackTimeFrame = setHitBackTimeFrame;
+        attackMotionData = null;
     }
 
     //¶‚«‚Ä‚¢‚é‚©
@@ -859,7 +865,8 @@ public class LiveEntity : UnLandableObject
                 Quaternion.Euler(new Vector3(0, direction, 0))
                 * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
             current.SetAttacker(this);
-            current.SetData(currentData.data.attackData);
+            current.SetData(currentData.data.attackData, 
+                cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
         }
         //•s—v‚ÈUŒ‚”»’è‚ğÁ‚·
         for (int i = 0; i < transform.childCount; i++)
@@ -906,7 +913,8 @@ public class LiveEntity : UnLandableObject
             current.transform.localRotation =
                 Quaternion.Euler(new Vector3(0, direction, 0));
             current.SetAttacker(this);
-            current.SetData(currentData.data.attackData);
+            current.SetData(currentData.data.attackData,
+                cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
             current.SetProjectileData(currentData.data.projectileData,
                 cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
 
