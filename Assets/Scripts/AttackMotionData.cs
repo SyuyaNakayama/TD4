@@ -68,10 +68,10 @@ public class AttackMotionData : ScriptableObject
         public AudioClip se;
     }
     [System.Serializable]
-    public struct FacialExpressionKey
+    public struct AnimationKey
     {
         public Vector2 keyFrame;
-        public string facialExpressionName;
+        public string animationName;
     }
     [System.Serializable]
     public struct Data
@@ -84,7 +84,7 @@ public class AttackMotionData : ScriptableObject
         public Vector2[] shieldKeys;
         public Vector2[] disAllowGroundSetKeys;
         public SEKey[] seKeys;
-        public FacialExpressionKey[] facialExpressionKeys;
+        public AnimationKey[] animationKeys;
     }
     [SerializeField]
     Cursor[] cursors = { };

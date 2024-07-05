@@ -63,6 +63,8 @@ public class LiveEntity : UnLandableObject
     [SerializeField]
     SpriteSendData[] sprites = { };
     [SerializeField]
+    Transform[] bodyParts = { };
+    [SerializeField]
     Camera view;
     [SerializeField]
     CharaData data;
@@ -153,6 +155,8 @@ public class LiveEntity : UnLandableObject
     MeleeAttackAndCursorName[] meleeAttackDatas = { };
     ShotAndCursorName[] shotDatas = { };
     AttackArea[] attackAreas = { };
+    protected string animationName;
+    protected float animationProgress;
     protected string facialExpressionName;
     bool updating = false;
     public bool GetUpdating()
@@ -244,43 +248,12 @@ public class LiveEntity : UnLandableObject
 
         prevRot = transform.rotation;
 
-        if (visual != null)
-        {
-            //ヒット後無敵時間中なら点滅
-            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f) && IsLive()
-            || IsDestructed())
-            {
-                visual.transform.localScale = Vector3.zero;
-            }
-            else
-            {
-                visual.transform.localScale = new Vector3(1, 1, 1);
-            }
-            //攻撃を受けた直後ならシェイク
-            if (damageReactionTimeFrame > 0)
-            {
-                visual.transform.localPosition =
-                    Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),
-                    UnityEngine.Random.Range(1f, -1f),
-                    UnityEngine.Random.Range(1f, -1f))) * 0.2f; ;
-            }
-            else
-            {
-                visual.transform.localPosition = Vector3.zero;
-            }
-            //キャラの見た目を向いている方向へ向ける
-            float visualDirection = visual.transform.localEulerAngles.y;
-            visual.transform.localEulerAngles = new Vector3(0,
-                visualDirection
-                + KX_netUtil.AngleDiff(visualDirection, direction)
-                * directionTiltIntensity,
-                0);
-        }
-
         //allowGroundSetをリセット
         allowGroundSet = true;
         //shieldをリセット
         shield = false;
+        //アニメーションをリセット
+        animationName = "";
         //表情をリセット
         facialExpressionName = "";
 
@@ -295,12 +268,6 @@ public class LiveEntity : UnLandableObject
             {
                 //ここで各派生クラスの固有更新処理を呼ぶ
                 LiveEntityUpdate();
-
-                //prevAttackProgressを更新
-                prevAttackProgress = GetAttackProgress();
-                //攻撃モーションの進行度を増加
-                attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
-                attackProgress = Mathf.Clamp(attackProgress, 0, 1);
             }
             else
             {
@@ -351,6 +318,74 @@ public class LiveEntity : UnLandableObject
             }
         }
 
+        //体のパーツのトランスフォームをデフォルト状態に
+        visual.transform.localScale = new Vector3(1, 1, 1);
+        visual.transform.localPosition = Vector3.zero;
+        for (int i = 0; i < bodyParts.Length; i++)
+        {
+            Transform current = bodyParts[i];
+            KX_netUtil.TransformData currentData =
+                data.GetDefaultBodyPartsTransform(i);
+            current.localPosition = currentData.position;
+            current.localEulerAngles = currentData.eulerAngles;
+            current.localScale = currentData.scale;
+        }
+
+        //現在の状態にあったアニメーションを取得
+        CharaData.Animation animationData =
+            data.SearchAnimation(animationName);
+        //トランスフォームアニメーションを適用
+        if (animationData.transformAnimationKeys != null)
+        {
+            for (int i = 0; i < animationData.transformAnimationKeys.Length; i++)
+            {
+                CharaData.TransformAnimationKey tAnimData =
+                    animationData.transformAnimationKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    tAnimData.keyFrame.x, tAnimData.keyFrame.y,
+                    false, false))
+                {
+                    Transform current = bodyParts[tAnimData.bodyPartIndex];
+                    float animationPartProgress =
+                        KX_netUtil.Ease(KX_netUtil.RangeMap(animationProgress,
+                        tAnimData.keyFrame.x, tAnimData.keyFrame.y,
+                        0, 1),
+                        tAnimData.easeType, tAnimData.easePow);
+
+                    current.localPosition = Vector3.Lerp(
+                        tAnimData.startTransform.position,
+                        tAnimData.endTransform.position,
+                        animationPartProgress);
+
+                    current.localRotation = Quaternion.Slerp(
+                        Quaternion.Euler(tAnimData.startTransform.eulerAngles),
+                        Quaternion.Euler(tAnimData.endTransform.eulerAngles),
+                        animationPartProgress);
+
+                    current.localScale = Vector3.Lerp(
+                        tAnimData.startTransform.scale,
+                        tAnimData.endTransform.scale,
+                        animationPartProgress);
+                }
+            }
+        }
+        if (animationData.facialExpressionKeys != null)
+        {
+            for (int i = 0; i < animationData.facialExpressionKeys.Length; i++)
+            {
+                CharaData.FacialExpressionKey fKeyData =
+                    animationData.facialExpressionKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    fKeyData.keyFrame.x, fKeyData.keyFrame.y,
+                    false, false))
+                {
+                    facialExpressionName = fKeyData.facialExpressionName;
+                }
+            }
+        }
+
         //デフォルトのテクスチャをモデルに貼る
         for (int i = 0; i < meshes.Length; i++)
         {
@@ -377,7 +412,7 @@ public class LiveEntity : UnLandableObject
         CharaData.FacialExpression facialData =
             data.SearchFacialExpression(facialExpressionName);
         //表情のテクスチャをモデルに貼る
-        if(facialData.indexAndTextures != null)
+        if (facialData.indexAndTextures != null)
         {
             for (int i = 0; i < facialData.indexAndTextures.Length; i++)
             {
@@ -388,7 +423,7 @@ public class LiveEntity : UnLandableObject
             }
         }
         //表情のスプライトをスプライトレンダラーに貼る
-        if(facialData.indexAndSprites != null)
+        if (facialData.indexAndSprites != null)
         {
             for (int i = 0; i < facialData.indexAndSprites.Length; i++)
             {
@@ -405,6 +440,37 @@ public class LiveEntity : UnLandableObject
                 }
             }
         }
+
+        if (visual != null)
+        {
+            //ヒット後無敵時間中なら点滅
+            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f) && IsLive()
+            || IsDestructed())
+            {
+                visual.transform.localScale = Vector3.zero;
+            }
+            //攻撃を受けた直後ならシェイク
+            if (damageReactionTimeFrame > 0)
+            {
+                visual.transform.localPosition +=
+                    Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),
+                    UnityEngine.Random.Range(1f, -1f),
+                    UnityEngine.Random.Range(1f, -1f))) * 0.2f; ;
+            }
+            //キャラの見た目を向いている方向へ向ける
+            float visualDirection = visual.transform.localEulerAngles.y;
+            visual.transform.localEulerAngles = new Vector3(0,
+                visualDirection
+                + KX_netUtil.AngleDiff(visualDirection, direction)
+                * directionTiltIntensity,
+                0);
+        }
+
+        //prevAttackProgressを更新
+        prevAttackProgress = GetAttackProgress();
+        //攻撃モーションの進行度を増加
+        attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
+        attackProgress = Mathf.Clamp(attackProgress, 0, 1);
 
         ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);
         hitBackTimeFrame = Mathf.Max(0, hitBackTimeFrame - 1);
@@ -823,17 +889,21 @@ public class LiveEntity : UnLandableObject
                 }
             }
 
-            //表情
-            if (attackMotionData.GetData().facialExpressionKeys != null)
+            //アニメーション
+            if (attackMotionData.GetData().animationKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
-                    facialExpressionKeys.Length; i++)
+                    animationKeys.Length; i++)
                 {
-                    AttackMotionData.FacialExpressionKey current =
-                        attackMotionData.GetData().facialExpressionKeys[i];
+                    AttackMotionData.AnimationKey current =
+                        attackMotionData.GetData().animationKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        facialExpressionName = current.facialExpressionName;
+                        animationName = current.animationName;
+                        animationProgress =
+                            KX_netUtil.RangeMap(GetAttackProgress(),
+                            current.keyFrame.x, current.keyFrame.y,
+                            0, 1);
                     }
                 }
             }
@@ -865,7 +935,7 @@ public class LiveEntity : UnLandableObject
                 Quaternion.Euler(new Vector3(0, direction, 0))
                 * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
             current.SetAttacker(this);
-            current.SetData(currentData.data.attackData, 
+            current.SetData(currentData.data.attackData,
                 cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
         }
         //不要な攻撃判定を消す
