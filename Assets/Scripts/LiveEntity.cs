@@ -63,6 +63,8 @@ public class LiveEntity : UnLandableObject
     [SerializeField]
     SpriteSendData[] sprites = { };
     [SerializeField]
+    Transform[] bodyParts = { };
+    [SerializeField]
     Camera view;
     [SerializeField]
     CharaData data;
@@ -153,6 +155,8 @@ public class LiveEntity : UnLandableObject
     MeleeAttackAndCursorName[] meleeAttackDatas = { };
     ShotAndCursorName[] shotDatas = { };
     AttackArea[] attackAreas = { };
+    protected string animationName;
+    protected float animationProgress;
     protected string facialExpressionName;
     bool updating = false;
     public bool GetUpdating()
@@ -281,6 +285,8 @@ public class LiveEntity : UnLandableObject
         allowGroundSet = true;
         //shieldをリセット
         shield = false;
+        //アニメーションをリセット
+        animationName = "";
         //表情をリセット
         facialExpressionName = "";
 
@@ -351,6 +357,72 @@ public class LiveEntity : UnLandableObject
             }
         }
 
+        //体のパーツのトランスフォームをデフォルト状態に
+        for (int i = 0; i < bodyParts.Length; i++)
+        {
+            Transform current = bodyParts[i];
+            KX_netUtil.TransformData currentData =
+                data.GetDefaultBodyPartsTransform(i);
+            current.localPosition = currentData.position;
+            current.localEulerAngles = currentData.eulerAngles;
+            current.localScale = currentData.scale;
+        }
+
+        //現在の状態にあった表情を取得
+        CharaData.Animation animationData =
+            data.SearchAnimation(animationName);
+        //トランスフォームアニメーションを適用
+        if (animationData.transformAnimationKeys != null)
+        {
+            for (int i = 0; i < animationData.transformAnimationKeys.Length; i++)
+            {
+                CharaData.TransformAnimationKey tAnimData =
+                    animationData.transformAnimationKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    tAnimData.keyFrame.x, tAnimData.keyFrame.y,
+                    false, false))
+                {
+                    Transform current = bodyParts[tAnimData.bodyPartIndex];
+                    float animationPartProgress =
+                        KX_netUtil.Ease(KX_netUtil.RangeMap(animationProgress,
+                        tAnimData.keyFrame.x, tAnimData.keyFrame.y,
+                        0, 1),
+                        tAnimData.easeType, tAnimData.easePow);
+
+                    current.localPosition = Vector3.Lerp(
+                        tAnimData.startTransform.position,
+                        tAnimData.endTransform.position,
+                        animationPartProgress);
+
+                    current.localRotation = Quaternion.Slerp(
+                        Quaternion.Euler(tAnimData.startTransform.eulerAngles),
+                        Quaternion.Euler(tAnimData.endTransform.eulerAngles),
+                        animationPartProgress);
+
+                    current.localScale = Vector3.Lerp(
+                        tAnimData.startTransform.scale,
+                        tAnimData.endTransform.scale,
+                        animationPartProgress);
+                }
+            }
+        }
+        if (animationData.facialExpressionKeys != null)
+        {
+            for (int i = 0; i < animationData.facialExpressionKeys.Length; i++)
+            {
+                CharaData.FacialExpressionKey fKeyData =
+                    animationData.facialExpressionKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    fKeyData.keyFrame.x, fKeyData.keyFrame.y,
+                    false, false))
+                {
+                    facialExpressionName = fKeyData.facialExpressionName;
+                }
+            }
+        }
+
         //デフォルトのテクスチャをモデルに貼る
         for (int i = 0; i < meshes.Length; i++)
         {
@@ -377,7 +449,7 @@ public class LiveEntity : UnLandableObject
         CharaData.FacialExpression facialData =
             data.SearchFacialExpression(facialExpressionName);
         //表情のテクスチャをモデルに貼る
-        if(facialData.indexAndTextures != null)
+        if (facialData.indexAndTextures != null)
         {
             for (int i = 0; i < facialData.indexAndTextures.Length; i++)
             {
@@ -388,7 +460,7 @@ public class LiveEntity : UnLandableObject
             }
         }
         //表情のスプライトをスプライトレンダラーに貼る
-        if(facialData.indexAndSprites != null)
+        if (facialData.indexAndSprites != null)
         {
             for (int i = 0; i < facialData.indexAndSprites.Length; i++)
             {
@@ -823,17 +895,21 @@ public class LiveEntity : UnLandableObject
                 }
             }
 
-            //表情
-            if (attackMotionData.GetData().facialExpressionKeys != null)
+            //アニメーション
+            if (attackMotionData.GetData().animationKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
-                    facialExpressionKeys.Length; i++)
+                    animationKeys.Length; i++)
                 {
-                    AttackMotionData.FacialExpressionKey current =
-                        attackMotionData.GetData().facialExpressionKeys[i];
+                    AttackMotionData.AnimationKey current =
+                        attackMotionData.GetData().animationKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        facialExpressionName = current.facialExpressionName;
+                        animationName = current.animationName;
+                        animationProgress =
+                            KX_netUtil.RangeMap(GetAttackProgress(),
+                            current.keyFrame.x, current.keyFrame.y,
+                            0, 1);
                     }
                 }
             }
@@ -865,7 +941,7 @@ public class LiveEntity : UnLandableObject
                 Quaternion.Euler(new Vector3(0, direction, 0))
                 * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
             current.SetAttacker(this);
-            current.SetData(currentData.data.attackData, 
+            current.SetData(currentData.data.attackData,
                 cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
         }
         //不要な攻撃判定を消す

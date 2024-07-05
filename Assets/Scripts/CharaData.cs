@@ -24,6 +24,30 @@ public class CharaData : ScriptableObject
         public IndexAndTexture[] indexAndTextures;
         public IndexAndSprite[] indexAndSprites;
     }
+    [System.Serializable]
+    public struct FacialExpressionKey
+    {
+        public Vector2 keyFrame;
+        public string facialExpressionName;
+    }
+    [System.Serializable]
+    public struct TransformAnimationKey
+    {
+        public Vector2 keyFrame;
+        public int bodyPartIndex;
+        public KX_netUtil.TransformData startTransform;
+        public KX_netUtil.TransformData endTransform;
+        public KX_netUtil.EaseType easeType;
+        public float easePow;
+    }
+    [System.Serializable]
+    public struct Animation
+    {
+        public string name;
+        public int totalFrame;
+        public TransformAnimationKey[] transformAnimationKeys;
+        public FacialExpressionKey[] facialExpressionKeys;
+    }
 
     public const int totalStatusValue = 3000;
     public const float minLifeRatio = 0.2f;
@@ -112,6 +136,13 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
+    KX_netUtil.TransformData[] defaultBodyPartsTransform = { };
+    public KX_netUtil.TransformData GetDefaultBodyPartsTransform(int index)
+    {
+        return defaultBodyPartsTransform[index];
+    }
+
+    [SerializeField]
     Texture[] defaultTextures = { };
     public Texture GetDefaultTexture(int index)
     {
@@ -122,6 +153,21 @@ public class CharaData : ScriptableObject
     public Sprite GetDefaultSprite(int index)
     {
         return defaultSprites[index];
+    }
+
+    [SerializeField]
+    Animation[] animations = { };
+    public Animation SearchAnimation(string name)
+    {
+        for (int i = 0; i < animations.Length; i++)
+        {
+            if (animations[i].name == name)
+            {
+                return animations[i];
+            }
+        }
+
+        return new Animation();
     }
 
     [SerializeField]
