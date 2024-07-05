@@ -248,39 +248,6 @@ public class LiveEntity : UnLandableObject
 
         prevRot = transform.rotation;
 
-        if (visual != null)
-        {
-            //ヒット後無敵時間中なら点滅
-            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f) && IsLive()
-            || IsDestructed())
-            {
-                visual.transform.localScale = Vector3.zero;
-            }
-            else
-            {
-                visual.transform.localScale = new Vector3(1, 1, 1);
-            }
-            //攻撃を受けた直後ならシェイク
-            if (damageReactionTimeFrame > 0)
-            {
-                visual.transform.localPosition =
-                    Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),
-                    UnityEngine.Random.Range(1f, -1f),
-                    UnityEngine.Random.Range(1f, -1f))) * 0.2f; ;
-            }
-            else
-            {
-                visual.transform.localPosition = Vector3.zero;
-            }
-            //キャラの見た目を向いている方向へ向ける
-            float visualDirection = visual.transform.localEulerAngles.y;
-            visual.transform.localEulerAngles = new Vector3(0,
-                visualDirection
-                + KX_netUtil.AngleDiff(visualDirection, direction)
-                * directionTiltIntensity,
-                0);
-        }
-
         //allowGroundSetをリセット
         allowGroundSet = true;
         //shieldをリセット
@@ -301,12 +268,6 @@ public class LiveEntity : UnLandableObject
             {
                 //ここで各派生クラスの固有更新処理を呼ぶ
                 LiveEntityUpdate();
-
-                //prevAttackProgressを更新
-                prevAttackProgress = GetAttackProgress();
-                //攻撃モーションの進行度を増加
-                attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
-                attackProgress = Mathf.Clamp(attackProgress, 0, 1);
             }
             else
             {
@@ -358,6 +319,8 @@ public class LiveEntity : UnLandableObject
         }
 
         //体のパーツのトランスフォームをデフォルト状態に
+        visual.transform.localScale = new Vector3(1, 1, 1);
+        visual.transform.localPosition = Vector3.zero;
         for (int i = 0; i < bodyParts.Length; i++)
         {
             Transform current = bodyParts[i];
@@ -368,7 +331,7 @@ public class LiveEntity : UnLandableObject
             current.localScale = currentData.scale;
         }
 
-        //現在の状態にあった表情を取得
+        //現在の状態にあったアニメーションを取得
         CharaData.Animation animationData =
             data.SearchAnimation(animationName);
         //トランスフォームアニメーションを適用
@@ -477,6 +440,37 @@ public class LiveEntity : UnLandableObject
                 }
             }
         }
+
+        if (visual != null)
+        {
+            //ヒット後無敵時間中なら点滅
+            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f) && IsLive()
+            || IsDestructed())
+            {
+                visual.transform.localScale = Vector3.zero;
+            }
+            //攻撃を受けた直後ならシェイク
+            if (damageReactionTimeFrame > 0)
+            {
+                visual.transform.localPosition +=
+                    Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),
+                    UnityEngine.Random.Range(1f, -1f),
+                    UnityEngine.Random.Range(1f, -1f))) * 0.2f; ;
+            }
+            //キャラの見た目を向いている方向へ向ける
+            float visualDirection = visual.transform.localEulerAngles.y;
+            visual.transform.localEulerAngles = new Vector3(0,
+                visualDirection
+                + KX_netUtil.AngleDiff(visualDirection, direction)
+                * directionTiltIntensity,
+                0);
+        }
+
+        //prevAttackProgressを更新
+        prevAttackProgress = GetAttackProgress();
+        //攻撃モーションの進行度を増加
+        attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
+        attackProgress = Mathf.Clamp(attackProgress, 0, 1);
 
         ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);
         hitBackTimeFrame = Mathf.Max(0, hitBackTimeFrame - 1);

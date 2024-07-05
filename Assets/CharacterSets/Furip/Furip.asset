@@ -25,12 +25,122 @@ MonoBehaviour:
   weaponedAttackMotionName: 
   attackMotions:
   - {fileID: 11400000, guid: 88eb68bd802eb4b189c0a55998878977, type: 2}
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - position: {x: 0, y: 0.5, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
   defaultTextures:
   - {fileID: 2800000, guid: 34020f82bd00743cab55db65f41af5a1, type: 3}
   - {fileID: 2800000, guid: a1d279462b37d4eaa83fec8eece1fab4, type: 3}
   - {fileID: 2800000, guid: c00ca79922f634937aaee8a47cd18ec3, type: 3}
   defaultSprites:
   - {fileID: -5128848130537956388, guid: 48e3caae7d17e49c9a1a4df7e8e9a050, type: 3}
+  animations:
+  - name: fury
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 90, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 1
+    - keyFrame: {x: 0.25, y: 0.5}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 90, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 180, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 1
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 180, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 270, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 1
+    - keyFrame: {x: 0.75, y: 1}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 270, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 1
+    - keyFrame: {x: 0, y: 0.2}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 2, z: 1}
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.2, y: 0.4}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 2, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 3
+    - keyFrame: {x: 0.4, y: 0.7}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 0.7, z: 1}
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.7, y: 0.1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 0.7, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 3
+    facialExpressionKeys:
+    - keyFrame: {x: 0, y: 1}
+      facialExpressionName: fury
   facialExpressions:
   - name: damage
     indexAndTextures:
