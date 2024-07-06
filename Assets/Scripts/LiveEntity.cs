@@ -103,6 +103,7 @@ public class LiveEntity : UnLandableObject
         private set;
     }
     protected float direction;
+    float visualDirection;
     Vector3 prevPos;
     Quaternion prevRot;
     Quaternion cameraTiltRot;
@@ -318,17 +319,29 @@ public class LiveEntity : UnLandableObject
             }
         }
 
-        //体のパーツのトランスフォームをデフォルト状態に
-        visual.transform.localScale = new Vector3(1, 1, 1);
-        visual.transform.localPosition = Vector3.zero;
+        if (visual != null)
+        {
+            //体のパーツのトランスフォームをデフォルト状態に
+            visual.transform.localScale = new Vector3(1, 1, 1);
+            visual.transform.localPosition = Vector3.zero;
+            //キャラの見た目を向いている方向へ向ける
+            visualDirection += KX_netUtil.AngleDiff(visualDirection, direction)
+                * directionTiltIntensity;
+            visual.transform.localEulerAngles = new Vector3(0,
+                visualDirection,
+                0);
+        }
         for (int i = 0; i < bodyParts.Length; i++)
         {
             Transform current = bodyParts[i];
             KX_netUtil.TransformData currentData =
                 data.GetDefaultBodyPartsTransform(i);
             current.localPosition = currentData.position;
-            current.localEulerAngles = currentData.eulerAngles;
             current.localScale = currentData.scale;
+            if (current != visual.transform)
+            {
+                current.localEulerAngles = currentData.eulerAngles;
+            }
         }
 
         //現在の状態にあったアニメーションを取得
@@ -358,10 +371,21 @@ public class LiveEntity : UnLandableObject
                         tAnimData.endTransform.position,
                         animationPartProgress);
 
-                    current.localRotation = Quaternion.Slerp(
-                        Quaternion.Euler(tAnimData.startTransform.eulerAngles),
-                        Quaternion.Euler(tAnimData.endTransform.eulerAngles),
-                        animationPartProgress);
+                    if (current == visual.transform)
+                    {
+                        current.Rotate(Quaternion.Slerp(
+                            Quaternion.Euler(tAnimData.startTransform.eulerAngles),
+                            Quaternion.Euler(tAnimData.endTransform.eulerAngles),
+                            animationPartProgress).eulerAngles,
+                            Space.Self);
+                    }
+                    else
+                    {
+                        current.localRotation = Quaternion.Slerp(
+                            Quaternion.Euler(tAnimData.startTransform.eulerAngles),
+                            Quaternion.Euler(tAnimData.endTransform.eulerAngles),
+                            animationPartProgress);
+                    }
 
                     current.localScale = Vector3.Lerp(
                         tAnimData.startTransform.scale,
@@ -457,13 +481,6 @@ public class LiveEntity : UnLandableObject
                     UnityEngine.Random.Range(1f, -1f),
                     UnityEngine.Random.Range(1f, -1f))) * 0.2f; ;
             }
-            //キャラの見た目を向いている方向へ向ける
-            float visualDirection = visual.transform.localEulerAngles.y;
-            visual.transform.localEulerAngles = new Vector3(0,
-                visualDirection
-                + KX_netUtil.AngleDiff(visualDirection, direction)
-                * directionTiltIntensity,
-                0);
         }
 
         //prevAttackProgressを更新
