@@ -17,15 +17,21 @@ MonoBehaviour:
   shotDatas: []
   data:
     name: "\u306C\u3061\u3083\u306C\u3061\u3083\u30C0\u30A4\u30D6"
-    totalFrame: 50
+    totalFrame: 40
     meleeAttackKeys: []
     shotKeys: []
     moveKeys:
     - keyFrame: {x: 0.4, y: 0.8}
       moveVec: {x: 0, y: 0, z: 1}
       easeType: 2
-      easePow: 4
+      easePow: 2
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
-    animationKeys: []
+    animationKeys:
+    - keyFrame: {x: 0, y: 0.4}
+      animationName: preAttack
+    - keyFrame: {x: 0.4, y: 0.8}
+      animationName: attack
+    - keyFrame: {x: 0.8, y: 1}
+      animationName: postAttack

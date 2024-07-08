@@ -16,7 +16,7 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: 2ae5906cb43344d6a8b86a346d2e562c, type: 3}
   themeColor: {r: 0.6784314, g: 0.7882353, b: 1, a: 1}
   lifeRatio: 0.6
-  gravityScale: 0
+  gravityScale: 1
   dragAxis:
     x: 1
     y: 1
@@ -33,7 +33,103 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 5e36de2decf584b508bc675989973426, type: 3}
   - {fileID: 2800000, guid: 3014051ef1d33427d86831478a5960bb, type: 3}
   defaultSprites: []
-  animations: []
+  animations:
+  - name: preAttack
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.5}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: -0.1, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0.7, y: 0.7, z: 0.7}
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.5, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: -0.1, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0.7, y: 0.7, z: 0.7}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 3
+    facialExpressionKeys: []
+  - name: attack
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.5}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 1
+      easePow: 2
+    - keyFrame: {x: 0.5, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 2
+    facialExpressionKeys: []
+  - name: postAttack
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.2}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1.2, y: 0.8, z: 1}
+      easeType: 1
+      easePow: 2
+    - keyFrame: {x: 0.2, y: 0.6}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1.2, y: 0.8, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0.9, y: 1.1, z: 1}
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0.6, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0.9, y: 1.1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 2
+      easePow: 2
+    facialExpressionKeys: []
   facialExpressions:
   - name: damage
     indexAndTextures:

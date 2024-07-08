@@ -7,6 +7,8 @@ public class Block : UnLandableObject
     [SerializeField]
     ParticleSystem particle;
     [SerializeField]
+    AudioSource audioSource;
+    [SerializeField]
     bool breaked = false;
     bool prevBreaked;
 
@@ -15,10 +17,11 @@ public class Block : UnLandableObject
         //‰ó‚ê‚Ä‚¢‚½‚ç•\¦‚Æ“–‚½‚è”»’è‚ğÁ‚·
         GetComponent<MeshRenderer>().enabled = !breaked;
         GetComponent<Collider>().enabled = !breaked;
-        //‰ó‚ê‚½uŠÔ‚É”j•Ğ‚ğU‚ç‚·
+        //‰ó‚ê‚½uŠÔ‚É‰¹‚ğ–Â‚ç‚µ”j•Ğ‚ğU‚ç‚·
         if (breaked && !prevBreaked)
         {
             particle.Play();
+            audioSource.Play();
         }
         prevBreaked = breaked;
     }
