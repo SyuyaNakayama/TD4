@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67ca733bd02d54568a249a233a6aa03d, type: 3}
+  m_Name: Uzaime
+  m_EditorClassIdentifier: 
+  charaName: "\u30A6\u30B6\u30A4\u30E0"
+  iconGraph: {fileID: 21300000, guid: 2ae5906cb43344d6a8b86a346d2e562c, type: 3}
+  themeColor: {r: 0.6784314, g: 0.7882353, b: 1, a: 1}
+  lifeRatio: 0.6
+  gravityScale: 0
+  dragAxis:
+    x: 1
+    y: 1
+    z: 1
+  defaultAttackMotionName: liquidSlam
+  weaponedAttackMotionName: 
+  attackMotions:
+  - {fileID: 11400000, guid: 4a247670d48374d9eaadcbf0771bc916, type: 2}
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  defaultTextures:
+  - {fileID: 2800000, guid: 5e36de2decf584b508bc675989973426, type: 3}
+  - {fileID: 2800000, guid: 3014051ef1d33427d86831478a5960bb, type: 3}
+  defaultSprites: []
+  animations: []
+  facialExpressions:
+  - name: damage
+    indexAndTextures:
+    - index: 0
+      texture: {fileID: 2800000, guid: 4e67dc40391c64ebaab4d18e77f648ff, type: 3}
+    - index: 1
+      texture: {fileID: 2800000, guid: 0da364788bca34159827416ec576cfae, type: 3}
+    indexAndSprites: []
+  - name: defeat
+    indexAndTextures:
+    - index: 0
+      texture: {fileID: 2800000, guid: 9ec27d560a8b947fd987387b9f3ef0b3, type: 3}
+    - index: 1
+      texture: {fileID: 2800000, guid: 0da364788bca34159827416ec576cfae, type: 3}
+    indexAndSprites: []
