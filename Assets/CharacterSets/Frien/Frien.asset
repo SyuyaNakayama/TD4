@@ -25,7 +25,10 @@ MonoBehaviour:
   weaponedAttackMotionName: 
   attackMotions:
   - {fileID: 11400000, guid: bf77ddf2f084d42f0ad8b2c1d9da8666, type: 2}
-  defaultBodyPartsTransform: []
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
   defaultTextures: []
   defaultSprites:
   - {fileID: 21300000, guid: d30ed377bf959416181a701ae586e060, type: 3}
@@ -63,11 +66,11 @@ MonoBehaviour:
       startTransform:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
-        scale: {x: 1.5, y: 1, z: 1}
+        scale: {x: 1, y: 1, z: 1}
       endTransform:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
-        scale: {x: 1, y: 1, z: 1}
+        scale: {x: 1.5, y: 1, z: 1}
       easeType: 1
       easePow: 3
     - keyFrame: {x: 0.75, y: 1}

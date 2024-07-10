@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 
-[DisallowMultipleComponent]
 public class LiveEntity : GeoGroObject
 {
     struct MeleeAttackAndCursorName
