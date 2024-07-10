@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 
 [DisallowMultipleComponent]
-public class LiveEntity : UnLandableObject
+public class LiveEntity : GeoGroObject
 {
     struct MeleeAttackAndCursorName
     {
@@ -48,12 +48,6 @@ public class LiveEntity : UnLandableObject
     private GameObject gameManager;
     private MedalCounter saveMedals;
 
-    private void Start()
-    {
-        gameManager = GameObject.Find("/GameManager");
-        saveMedals = gameManager.GetComponent<MedalCounter>();
-    }
-
     [SerializeField]
     ResourcePalette resourcePalette;
     [SerializeField]
@@ -78,45 +72,14 @@ public class LiveEntity : UnLandableObject
     {
         return teamID;
     }
-    [SerializeField]
-    Collider currentGround;
-    protected float drag = 0.8f;
-    Vector3 movement;
-    public Vector3 GetMovement()
-    {
-        return movement;
-    }
-    Vector3 preMovement;
-    public Vector3 localGrandMove
-    {
-        get;
-        private set;
-    }
-    public Vector3 gimmickMove
-    {
-        get;
-        private set;
-    }
-    public Vector3 gimmickMove2
-    {
-        get;
-        private set;
-    }
     protected float direction;
     float visualDirection;
-    Vector3 prevPos;
     Quaternion prevRot;
     Quaternion cameraTiltRot;
     protected float cameraAngle = maxCameraAngle;
     float easedCameraAngle = maxCameraAngle;
     protected float cameraDistance = defaultCameraDistance;
     float easedCameraDistance = defaultCameraDistance;
-    bool allowGroundSet;
-    bool isLanding = false; //着地しているか
-    public bool GetIsLanding()
-    {
-        return isLanding;
-    }
     float hpAmount = 1;//残り体力の割合
     public float GetHPAmount()
     {
@@ -159,63 +122,23 @@ public class LiveEntity : UnLandableObject
     protected string animationName;
     protected float animationProgress;
     protected string facialExpressionName;
-    bool updating = false;
+    bool updating;
     public bool GetUpdating()
     {
         return updating;
     }
 
-    void Awake()
+    protected override void GGOAwake()
     {
-        prevPos = transform.position;
         prevRot = transform.rotation;
+
+        gameManager = GameObject.Find("/GameManager");
+        saveMedals = gameManager.GetComponent<MedalCounter>();
     }
 
-    //物理演算が更新されるタイミングで毎フレーム呼ばれる
-    //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
-    void FixedUpdate()
+    protected override void GGOUpdate()
     {
         updating = true;
-
-        //足を地面に向ける
-        if (currentGround != null
-            && currentGround.ClosestPoint(transform.position) != transform.position)
-        {
-            //足を向けるべき位置を算出する
-            Vector3 localClosestPoint = transform.InverseTransformPoint(
-                currentGround.ClosestPoint(transform.position));
-            //どちらかといえば縦向きに大きく回転する必要があるなら
-            if (Mathf.Abs(localClosestPoint.z) > Mathf.Abs(localClosestPoint.x))
-            {
-                //x軸を中心にその位置を向くように回転させる
-                transform.Rotate(
-                    -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
-                    / Mathf.Deg2Rad, 0, 0, Space.Self);
-
-                //再度足を向けるべき位置を算出し、
-                localClosestPoint = transform.InverseTransformPoint(
-                    currentGround.ClosestPoint(transform.position));
-                //z軸を中心にその位置を向くように回転させる
-                transform.Rotate(0, 0,
-                    Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
-                    / Mathf.Deg2Rad, Space.Self);
-            }
-            else
-            {
-                //z軸を中心にその位置を向くように回転させる
-                transform.Rotate(0, 0,
-                    Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
-                    / Mathf.Deg2Rad, Space.Self);
-
-                //再度足を向けるべき位置を算出し、
-                localClosestPoint = transform.InverseTransformPoint(
-                    currentGround.ClosestPoint(transform.position));
-                //x軸を中心にその位置を向くように回転させる
-                transform.Rotate(
-                    -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
-                    / Mathf.Deg2Rad, 0, 0, Space.Self);
-            }
-        }
 
         if (view != null)
         {
@@ -248,6 +171,9 @@ public class LiveEntity : UnLandableObject
         }
 
         prevRot = transform.rotation;
+
+        dragAxis = data.GetDragAxis();
+        gravityScale = data.GetGravityScale();
 
         //allowGroundSetをリセット
         allowGroundSet = true;
@@ -494,63 +420,6 @@ public class LiveEntity : UnLandableObject
         damageReactionTimeFrame =
             Mathf.Max(0, damageReactionTimeFrame - 1);
 
-        //【重要】ここから「preMovement = movement;」までmovementの値を書き換えないこと
-        //movementをvelocityに変換
-        GetComponent<Rigidbody>().velocity =
-            transform.rotation * movement * transform.localScale.x;
-
-        Vector3 playerLocalPosPin = transform.InverseTransformPoint(prevPos);
-        prevPos = transform.position;
-
-        //ギミックによる移動に関する更新処理
-        GetComponent<Rigidbody>().velocity += gimmickMove;
-        playerLocalPosPin += transform.InverseTransformPoint(transform.position + gimmickMove * Time.deltaTime);
-        localGrandMove = -playerLocalPosPin;
-        gimmickMove = Vector3.zero;
-
-        GetComponent<Rigidbody>().velocity += gimmickMove2;
-        gimmickMove2 = Vector3.zero;
-
-        Vector3 movementDiff = movement - preMovement;
-        preMovement = movement;
-        //これ以降はmovementの値を書き換えて良い
-
-        //着地判定
-        Vector3 pushBackedMovement =
-            localGrandMove / Time.deltaTime + movementDiff;
-
-        if (Vector3.Magnitude(pushBackedMovement) < Vector3.Magnitude(movement))
-        {
-            movement = Vector3.Lerp(movement, pushBackedMovement, 0.5f);
-        }
-
-        //空気抵抗
-        KX_netUtil.AxisSwitch dragAxis = data.GetDragAxis();
-        if (dragAxis.x && dragAxis.y && dragAxis.z)
-        {
-            movement *= drag;
-        }
-        else
-        {
-            if (dragAxis.x)
-            {
-                movement.x *= drag;
-            }
-            if (dragAxis.y)
-            {
-                movement.y *= drag;
-            }
-            if (dragAxis.z)
-            {
-                movement.z *= drag;
-            }
-        }
-        //重力
-        movement += new Vector3(0, -data.GetGravityScale(), 0);
-
-        //地面との接触判定を行う前に一旦着地していない状態にする
-        isLanding = false;
-
         //ゴールしたら無敵に
         if (GetGoaled())
         {
@@ -574,20 +443,11 @@ public class LiveEntity : UnLandableObject
         updating = false;
     }
 
-    //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
-    //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
-    void OnCollisionStay(Collision col)
+    protected override void GGOOnCollisionStay(Collision col)
     {
         if (col.gameObject.GetComponent<AttackArea>() != null)
         {
             AttackHit(col.gameObject.GetComponent<AttackArea>());
-        }
-        if (col.gameObject.GetComponent<UnLandableObject>() == null && allowGroundSet)
-        {
-            //足を向けるべき地形として登録
-            currentGround = col.collider;
-            // 着地判定
-            isLanding = true;
         }
 
         //ここで各派生クラスの固有接触処理を呼ぶ
@@ -1030,16 +890,6 @@ public class LiveEntity : UnLandableObject
         {
             movement = setMovement;
         }
-    }
-    //リフトに乗っている時や風に煽られているの動きを実現するための関数
-    public void AddFieldMove(Vector3 force)
-    {
-        gimmickMove += force;
-    }
-    //擬似的に壁に押されたような動きを実現するための関数
-    public void AddPushBackMove(Vector3 force)
-    {
-        gimmickMove2 += force;
     }
     //このLiveEntityから効果音を鳴らす
     public void PlayAsSE(AudioClip clip)

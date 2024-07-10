@@ -66,7 +66,7 @@ Shader "Unlit/ScreenPaste"
             float4 frag(v2f i , UNITY_VPOS_TYPE vpos : VPOS) : SV_TARGET
             {
                 vpos.xy /= _ScreenParams.xy;
-                vpos.xy -= i.objpos.xy / abs(i.objpos.w) * _OffsetObjectPosition;
+                vpos.xy -= i.objpos.xy / max(i.objpos.w,0.5f) * _OffsetObjectPosition;
 
                 fixed4 col = tex2D(_MainTex, vpos.xy * _MainTex_ST.xy + _MainTex_ST.zw);
                 col.a = col.a * _MainAlpha * smoothstep(_MaxDepth, _MinDepth,i.depth);
