@@ -813,6 +813,7 @@ public class LiveEntity : GeoGroObject
             current.SetAttacker(this);
             current.SetData(currentData.data.attackData,
                 cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
+            current.Lock();
         }
         //•s—v‚ÈUŒ‚”»’è‚ğÁ‚·
         for (int i = 0; i < transform.childCount; i++)
@@ -863,6 +864,7 @@ public class LiveEntity : GeoGroObject
                 cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
             current.SetProjectileData(currentData.data.projectileData,
                 cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
+            current.Lock();
 
             current.transform.parent = null;
         }
