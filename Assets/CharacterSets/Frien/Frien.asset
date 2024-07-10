@@ -25,10 +25,69 @@ MonoBehaviour:
   weaponedAttackMotionName: 
   attackMotions:
   - {fileID: 11400000, guid: bf77ddf2f084d42f0ad8b2c1d9da8666, type: 2}
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
   defaultTextures: []
   defaultSprites:
   - {fileID: 21300000, guid: d30ed377bf959416181a701ae586e060, type: 3}
   - {fileID: 21300000, guid: 0b9ff6d0d50eb49db8534f7b987e6912, type: 3}
+  animations:
+  - name: awake
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0.7, y: 1.2, z: 1}
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.25, y: 0.5}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0.7, y: 1.2, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 3
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1.5, y: 1, z: 1}
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.75, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1.5, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 0
+      easePow: 3
+    facialExpressionKeys:
+    - keyFrame: {x: 0, y: 1}
+      facialExpressionName: awake
   facialExpressions:
   - name: awake
     indexAndTextures: []

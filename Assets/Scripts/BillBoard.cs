@@ -8,6 +8,7 @@ public class BillBoard : MonoBehaviour
     public bool xBill;
     public bool turnY;
     public bool UI;
+    public float rotAngle;
     void OnWillRenderObject()
     {
         if (UI)
@@ -37,5 +38,7 @@ public class BillBoard : MonoBehaviour
                 }
             }
         }
+
+        transform.Rotate(0, 0, rotAngle, Space.Self);
     }
 }
