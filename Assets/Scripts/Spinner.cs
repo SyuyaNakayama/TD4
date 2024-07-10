@@ -16,7 +16,7 @@ public class Spinner : GeoGroObject
     [SerializeField]
     AttackArea attackArea;
     float speed;
-    string teamID;
+    LiveEntity shooter;
     protected override void GGOUpdate()
     {
         Vector2 movementXZ = new Vector2(movement.x, movement.z);
@@ -27,6 +27,7 @@ public class Spinner : GeoGroObject
         speed *= speedDiffuseIntensity;
 
         attackArea.gameObject.SetActive(speed >= minAttackSpeed);
+        attackArea.SetAttacker(shooter);
     }
 
     protected override void GGOOnCollisionStay(Collision col)
@@ -35,23 +36,25 @@ public class Spinner : GeoGroObject
         {
             if (col.gameObject.GetComponent<LiveEntity>() != null)
             {
-                Shoot(col.transform.position, col.gameObject.GetComponent<LiveEntity>().GetTeamID());
+                Shoot(col.transform.position, col.gameObject.GetComponent<LiveEntity>(),
+                    maxSpeed);
             }
             if (col.gameObject.GetComponent<Spinner>() != null
             && col.gameObject.GetComponent<Spinner>().speed >= minAttackSpeed)
             {
-                Shoot(col.transform.position, col.gameObject.GetComponent<Spinner>().teamID);
+                Shoot(col.transform.position, col.gameObject.GetComponent<Spinner>().shooter,
+                    col.gameObject.GetComponent<Spinner>().speed);
             }
         }
     }
 
-    void Shoot(Vector3 shooterWorldPos, string setTeamID)
+    void Shoot(Vector3 shooterWorldPos, LiveEntity setShooter, float setSpeed)
     {
         movement =
             -transform.InverseTransformPoint(shooterWorldPos)
             .normalized;
-        speed = maxSpeed;
-        teamID = setTeamID;
+        speed = setSpeed;
+        shooter = setShooter;
 
         audioSource.Play();
     }

@@ -22,11 +22,12 @@ public class AttackArea : MonoBehaviour
     {
         return blowVec;
     }
+    bool isNewborn = true;
     bool dataLock = false;
 
     void FixedUpdate()
     {
-        dataLock = true;
+        isNewborn = false;
         AttackAreaUpdate();
     }
 
@@ -35,18 +36,27 @@ public class AttackArea : MonoBehaviour
     {
     }
 
-    public void SetAttacker(LiveEntity setAttacker)
+    public void Lock()
     {
         //生成された直後のみ実行
-        if (attacker == null && !dataLock)
+        if (isNewborn)
+        {
+            dataLock = true;
+        }
+    }
+
+    public void SetAttacker(LiveEntity setAttacker)
+    {
+        //ギミックの攻撃判定など、ロックされていない場合のみ実行
+        if (!dataLock)
         {
             attacker = setAttacker;
         }
     }
     public void SetData(AttackMotionData.AttackData setData, Vector3 setBlowVec)
     {
-        //AttackerのFixedUpdate()内で呼ばれた場合のみ実行
-        if (attacker != null && attacker.GetUpdating())
+        //ロックされていない又はAttackerのFixedUpdate()内で呼ばれた場合のみ実行
+        if (!dataLock || attacker != null && attacker.GetUpdating())
         {
             data = setData;
             blowVec = setBlowVec;

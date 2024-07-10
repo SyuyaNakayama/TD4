@@ -45,7 +45,7 @@ public class Field : MonoBehaviour
     }
     void pullBack(GameObject obj)
     {
-        if (obj.GetComponent<LiveEntity>() != null)
+        if (obj.GetComponent<GeoGroObject>() != null)
         {
             bool needPullBack = true;
             for (int i = 0; i < connectedField.Length; i++)
