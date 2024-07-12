@@ -6,6 +6,8 @@ using UnityEngine;
 public class Lift : MonoBehaviour
 {
     [SerializeField]
+    Switch powerSwitch;
+    [SerializeField]
     float speed = 1;
     [SerializeField]
     KX_netUtil.TransformData negativeLocalTransform;
@@ -21,9 +23,12 @@ public class Lift : MonoBehaviour
         rigidbody.interpolation = RigidbodyInterpolation.Extrapolate;
         rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-        progress += Time.deltaTime;
+        if(powerSwitch == null || powerSwitch.GetActive())
+        {
+            progress += Time.deltaTime;
+        }
         float intensity = 
-            KX_netUtil.RangeMap(Mathf.Sin(progress * speed),-1,1,0,1);
+            KX_netUtil.RangeMap(Mathf.Cos(progress * speed),1,-1,0,1);
 
         if(transform.parent != null)
         {
