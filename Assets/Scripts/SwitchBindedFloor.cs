@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class SwitchBindedFloor : MonoBehaviour
 {
     const float transformFlipIntensity = 0.4f;
@@ -24,6 +25,11 @@ public class SwitchBindedFloor : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
+        rigidbody.interpolation = RigidbodyInterpolation.Extrapolate;
+        rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
         Vector3 targetLocalPosition = negativeLocalPosition;
         Vector3 targetLocalEulerAngles = negativeLocalEulerAngles;
         Vector3 targetLocalScale = negativeLocalScale;
@@ -34,9 +40,20 @@ public class SwitchBindedFloor : MonoBehaviour
             targetLocalScale = positiveLocalScale;
         }
 
-        transform.localPosition =
-            Vector3.Lerp(transform.localPosition,targetLocalPosition,
-            transformFlipIntensity);
+        if(transform.parent != null)
+        {
+            rigidbody.MovePosition(Vector3.Lerp(
+                transform.parent.TransformPoint(transform.localPosition),
+                transform.parent.TransformPoint(targetLocalPosition),
+                transformFlipIntensity));
+        }
+        else
+        {
+            rigidbody.MovePosition(Vector3.Lerp(
+                transform.localPosition,
+                targetLocalPosition,
+                transformFlipIntensity));
+        }
 
         transform.localRotation =
             Quaternion.Slerp(transform.localRotation,
