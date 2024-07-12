@@ -14,10 +14,10 @@ public class TrackingEntity : MonoBehaviour
     //自身
     private GameObject me;
     //読み込ませる座標群
-    private Vector3[] loadPos = new Vector3[241];
-    private Quaternion[] loadRot = new Quaternion[241];
+    private Vector3[] loadPos = new Vector3[121];
+    private Quaternion[] loadRot = new Quaternion[1211];
     //データ群の最大数
-    private const int dataNum = 240;
+    private const int dataNum = 120;
     void Start()
     {
         me = this.gameObject;
