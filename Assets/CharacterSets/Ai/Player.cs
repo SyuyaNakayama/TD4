@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 
 public class Player : LiveEntity
@@ -23,9 +24,29 @@ public class Player : LiveEntity
         return characters;
     }
     float playerCameraAngle = maxCameraAngle;
+    bool allowedItemEffect;
+    Item[] touchedItems = { };
 
     protected override void LiveEntityUpdate()
     {
+        //キャラクターの配列からnullを消す
+        List<CharaData> characterList = new List<CharaData>(characters);
+        characterList.Remove(null);
+        characters = characterList.ToArray();
+
+        //接触したアイテムの配列からnullを消す
+        List<Item> touchedItemList = new List<Item>(touchedItems);
+        touchedItemList.Remove(null);
+        touchedItems = touchedItemList.ToArray();
+        //前の接触判定で触れたアイテムをここで一気に取得
+        //(不正にアイテムを取得するチートを防止するためこのような措置を取っています)
+        allowedItemEffect = true;
+        for (int i = 0; i < touchedItems.Length; i++)
+        {
+            touchedItems[i].Activation(this);
+        }
+        allowedItemEffect = false;
+
         // 移動
         // コントローラーとキーボード両方に対応
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
@@ -81,5 +102,55 @@ public class Player : LiveEntity
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, minCameraAngle, maxCameraAngle);
         cameraAngle = playerCameraAngle;
+    }
+
+    protected override void LiveEntityOnHit(Collider col)
+    {
+        Item item = col.GetComponent<Item>();
+        if (item != null)
+        {
+            //ここで接触したアイテムを配列に追加
+            //(不正にアイテムを取得するチートを防止するためこのような措置を取っています)
+            Array.Resize(ref touchedItems, touchedItems.Length + 1);
+            touchedItems[touchedItems.Length - 1] = item;
+        }
+    }
+
+    public void EquipCharacter(CharaData charaData)
+    {
+        if (allowedItemEffect)
+        {
+            //スロットに空きがあるなら
+            if (characters.Length < maxTeamNum)
+            {
+                //キャラクターの配列の途中に挿入
+                List<CharaData> list = new List<CharaData>(characters);
+                list.Insert(currentCharaIndex, charaData);
+                characters = list.ToArray();
+            }
+            else
+            {
+                //現在のキャラを上書き
+                characters[currentCharaIndex] = charaData;
+            }
+
+            allowedItemEffect = false;
+        }
+    }
+
+    public bool IsTouchedThisItem(Item item)
+    {
+        if (item == null)
+        {
+            return false;
+        }
+        for (int i = 0; i < touchedItems.Length; i++)
+        {
+            if (touchedItems[i] == item)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

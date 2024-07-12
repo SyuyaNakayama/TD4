@@ -104,7 +104,15 @@ public class PlayerUI : MonoBehaviour
                 Vector3.Lerp(currentTrayRect.localScale, currentScale,
                 iconSlideIntensity);
 
-            currentTray.sprite = player.GetCharacters()[i].GetIconGraph();
+            if (i < player.GetCharacters().Length)
+            {
+                currentTray.sprite = player.GetCharacters()[i].GetIconGraph();
+            }
+            else
+            {
+                currentTray.sprite = null;
+                currentTrayRect.localScale = Vector3.zero;
+            }
         }
 
         //一度も死んでいなければ復活カウントを非表示

@@ -26,19 +26,23 @@ public class Item : GeoGroObject
             0);
     }
 
-    void OnTriggerStay(Collider col)
+    public void Activation(Player player)
     {
-        if (invincibleFrame <= 0
-            && col.gameObject.GetComponent<Player>() != null)
+        //そのプレイヤーがこのアイテムに触れていたかを確認
+        //(不正にアイテムを取得するチートを防止するためこのような措置を取っています)
+        if (invincibleFrame <= 0 && player != null
+        && player.IsTouchedThisItem(this))
         {
+            ItemActivation(player);
             Destroy(gameObject);
+            return;
         }
     }
 
     protected virtual void ItemUpdate()
     {
     }
-    protected virtual void Activation()
+    protected virtual void ItemActivation(Player player)
     {
     }
 }
