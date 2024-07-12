@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Lift : MonoBehaviour
 {
     [SerializeField]
@@ -15,15 +16,29 @@ public class Lift : MonoBehaviour
 
     void FixedUpdate()
     {
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
+        rigidbody.interpolation = RigidbodyInterpolation.Extrapolate;
+        rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
         progress += Time.deltaTime;
         float intensity = 
             KX_netUtil.RangeMap(Mathf.Sin(progress * speed),-1,1,0,1);
 
-        transform.localPosition =
-            Vector3.Lerp(
-            negativeLocalTransform.position,
-            positiveLocalTransform.position,
-            intensity);
+        if(transform.parent != null)
+        {
+            rigidbody.MovePosition(Vector3.Lerp(
+                transform.parent.TransformPoint(negativeLocalTransform.position),
+                transform.parent.TransformPoint(positiveLocalTransform.position),
+                intensity));
+        }
+        else
+        {
+            rigidbody.MovePosition(Vector3.Lerp(
+                negativeLocalTransform.position,
+                positiveLocalTransform.position,
+                intensity));
+        }
 
         transform.localRotation =
             Quaternion.Slerp(
