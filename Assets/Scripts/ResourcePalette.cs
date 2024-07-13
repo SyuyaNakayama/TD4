@@ -18,6 +18,12 @@ public class ResourcePalette : ScriptableObject
         return projectile;
     }
     [SerializeField]
+    CharaChip charaChip;
+    public CharaChip GetCharaChip()
+    {
+        return charaChip;
+    }
+    [SerializeField]
     AudioClip damageSE;
     public AudioClip GetDamageSE()
     {

@@ -444,25 +444,26 @@ public class LiveEntity : GeoGroObject
 
     protected override void GGOOnCollisionStay(Collision col)
     {
-        if (col.gameObject.GetComponent<AttackArea>() != null)
-        {
-            AttackHit(col.gameObject.GetComponent<AttackArea>());
-        }
-
-        //ここで各派生クラスの固有接触処理を呼ぶ
-        LiveEntityOnHit(col.collider);
+        OnHit(col.collider);
     }
 
     void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.GetComponent<AttackArea>() != null)
-        {
-            AttackHit(col.gameObject.GetComponent<AttackArea>());
-        }
         if (col.gameObject.GetComponent<Goal>() != null && IsPlayer())
         {
             Clear();
             saveMedals.Save();
+        }
+
+        OnHit(col);
+    }
+
+    //OnCollisionStayとOnTriggerStayを一纏めにした関数
+    void OnHit(Collider col)
+    {
+        if (col.gameObject.GetComponent<AttackArea>() != null)
+        {
+            AttackHit(col.gameObject.GetComponent<AttackArea>());
         }
 
         //ここで各派生クラスの固有接触処理を呼ぶ
@@ -574,6 +575,16 @@ public class LiveEntity : GeoGroObject
         else
         {
             PlayAsSE(resourcePalette.GetDefeatSE());
+            if (!IsPlayer() && GetData().GetWeaponedAttackMotionName() != "")
+            {
+                //アイテムを生成
+                CharaChip current =
+                    Instantiate(resourcePalette.GetCharaChip().gameObject,
+                    transform.position, transform.rotation, transform)
+                    .GetComponent<CharaChip>();
+                current.SetData(GetData());
+                current.gameObject.transform.parent = transform.parent;
+            }
         }
     }
     //吹っ飛ばされる

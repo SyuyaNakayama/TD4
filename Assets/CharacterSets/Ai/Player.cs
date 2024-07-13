@@ -45,6 +45,7 @@ public class Player : LiveEntity
         {
             touchedItems[i].Activation(this);
         }
+        Array.Resize(ref touchedItems, 0);
         allowedItemEffect = false;
 
         // ˆÚ“®
