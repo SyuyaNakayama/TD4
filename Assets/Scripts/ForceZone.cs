@@ -6,8 +6,20 @@ public class ForceZone : MonoBehaviour
 {
     [SerializeField]
     float force;
+    public float GetForce()
+    {
+        return force;
+    }
 
+    void OnCollisionStay(Collision col)
+    {
+        OnHit(col.collider);
+    }
     void OnTriggerStay(Collider col)
+    {
+        OnHit(col);
+    }
+    void OnHit(Collider col)
     {
         GeoGroObject targetObj =
             col.gameObject.GetComponent<GeoGroObject>();
