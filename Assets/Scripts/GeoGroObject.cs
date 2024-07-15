@@ -20,12 +20,12 @@ public class GeoGroObject : UnLandableObject
         get;
         private set;
     }
-    public Vector3 gimmickMove
+    public Vector3 fieldMove
     {
         get;
         private set;
     }
-    public Vector3 gimmickMove2
+    public Vector3 pushBackMove
     {
         get;
         private set;
@@ -107,13 +107,13 @@ public class GeoGroObject : UnLandableObject
         prevPos = transform.position;
 
         //ギミックによる移動に関する更新処理
-        GetComponent<Rigidbody>().velocity += gimmickMove;
-        playerLocalPosPin += transform.InverseTransformPoint(transform.position + gimmickMove * Time.deltaTime);
+        GetComponent<Rigidbody>().velocity += fieldMove;
+        playerLocalPosPin += transform.InverseTransformPoint(transform.position + fieldMove * Time.deltaTime);
         localGrandMove = -playerLocalPosPin;
-        gimmickMove = Vector3.zero;
+        fieldMove = Vector3.zero;
 
-        GetComponent<Rigidbody>().velocity += gimmickMove2;
-        gimmickMove2 = Vector3.zero;
+        GetComponent<Rigidbody>().velocity += pushBackMove;
+        pushBackMove = Vector3.zero;
 
         Vector3 movementDiff = movement - preMovement;
         preMovement = movement;
@@ -173,12 +173,12 @@ public class GeoGroObject : UnLandableObject
     //リフトに乗っている時や風に煽られているの動きを実現するための関数
     public void AddFieldMove(Vector3 force)
     {
-        gimmickMove += force;
+        fieldMove += force;
     }
     //擬似的に壁に押されたような動きを実現するための関数
     public void AddPushBackMove(Vector3 force)
     {
-        gimmickMove2 += force;
+        pushBackMove += force;
     }
 
     protected virtual void GGOUpdate()

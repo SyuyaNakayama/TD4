@@ -9,10 +9,10 @@ public class Tekki : Enemy
 
     protected override void LiveEntityUpdate()
     {
-        Move(new Vector3(GetMovement().x,GetMovement().y,walkSpeed));
+        Move(new Vector3(GetMovement().x, GetMovement().y, walkSpeed));
         if (!IsAttacking())
         {
-            SetAttackMotion("spikeBody");
+            SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
     }
 }
