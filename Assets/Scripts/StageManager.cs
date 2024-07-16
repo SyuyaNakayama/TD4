@@ -3,11 +3,20 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+
     [SerializeField]
     string quitSceneName;
     public string GetQuitSceneName()
     {
         return quitSceneName;
+    }
+    [SerializeField]
+    bool isRushLevel;
+    [SerializeField]
+    Sprite backGround;
+    public Sprite GetBackGround()
+    {
+        return backGround;
     }
     [SerializeField]
     AudioClip bgm;
@@ -19,7 +28,7 @@ public class StageManager : MonoBehaviour
     AudioClip gameOverBgmIntro;
     [SerializeField]
     AudioClip gameOverBgm;
-    Player player = null;
+    Player player;
     public Player GetPlayer()
     {
         return player;
@@ -27,10 +36,13 @@ public class StageManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        //プレイヤーを探す
-        foreach (Player obj in UnityEngine.Object.FindObjectsOfType<Player>())
+        if (player == null)
         {
-            player = obj;
+            //プレイヤーを探す
+            foreach (Player obj in UnityEngine.Object.FindObjectsOfType<Player>())
+            {
+                player = obj;
+            }
         }
         //自身のオーディオソースを探す
         AudioSource bgmSource = GetComponent<AudioSource>();
@@ -51,42 +63,50 @@ public class StageManager : MonoBehaviour
             }
         }*/
 
-        //死んだら曲を変える
-        if (player != null && !player.IsLive())
+        if (!isRushLevel)
         {
-            if (player.IsDestructed())
+            //死んだら曲を変える
+            if (player != null && !player.IsLive())
             {
-                if ((bgmSource.clip == gameOverBgmIntro
-                    && !bgmSource.isPlaying)
-                    || bgmSource.clip == gameOverBgm)
+                if (player.IsDestructed())
                 {
-                    bgmSource.clip = gameOverBgm;
+                    if ((bgmSource.clip == gameOverBgmIntro
+                        && !bgmSource.isPlaying)
+                        || bgmSource.clip == gameOverBgm)
+                    {
+                        bgmSource.clip = gameOverBgm;
+                    }
+                    else
+                    {
+                        bgmSource.clip = gameOverBgmIntro;
+                    }
                 }
                 else
                 {
-                    bgmSource.clip = gameOverBgmIntro;
+                    bgmSource.clip = null;
                 }
             }
-            else
+            //ゴールしたら曲を変える
+            else if (player != null && player.GetGoaled())
+            {
+                bgmSource.clip = goalBgmIntro;
+            }
+            //中ボス戦、ボス戦、雑魚ラッシュができたら下のコードを解放
+            /*else if (annihilated)
             {
                 bgmSource.clip = null;
             }
+            else if (battling)
+            {
+                bgmSource.clip = battleBgm;
+            }*/
+            else
+            //何も起きていないときは通常のステージ曲をかける
+            {
+                bgmSource.clip = bgm;
+            }
         }
-        //ゴールしたら曲を変える
-        else if (player != null && player.GetGoaled())
-        {
-            bgmSource.clip = goalBgmIntro;
-        }
-        //中ボス戦、ボス戦、雑魚ラッシュができたら下のコードを解放
-        /*else if (annihilated)
-        {
-            bgmSource.clip = null;
-        }
-        else if (battling)
-        {
-            bgmSource.clip = battleBgm;
-        }*/
-        //何も起きていないときは通常のステージ曲をかける
+        //フィナーレ等の特殊ステージでは通常のステージ曲をかけ続ける
         else
         {
             bgmSource.clip = bgm;
