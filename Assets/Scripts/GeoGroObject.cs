@@ -9,6 +9,10 @@ public class GeoGroObject : UnLandableObject
     [SerializeField]
     Collider currentGround;
     Vector3 prevPos;
+    public Vector3 GetPrevPos()
+    {
+        return prevPos;
+    }
     protected Vector3 movement;
     public Vector3 GetMovement()
     {
