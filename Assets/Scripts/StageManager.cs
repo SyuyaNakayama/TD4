@@ -14,6 +14,12 @@ public class StageManager : MonoBehaviour
     bool isRushLevel;
     [SerializeField]
     Sprite backGround;
+    [SerializeField]
+    Material groundMaterial;
+    [SerializeField]
+    string texPropertyName;
+    [SerializeField]
+    Texture groundTex;
     public Sprite GetBackGround()
     {
         return backGround;
@@ -36,6 +42,9 @@ public class StageManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        //床のテクスチャを貼り替える
+        groundMaterial.SetTexture(texPropertyName, groundTex);
+
         if (player == null)
         {
             //プレイヤーを探す
