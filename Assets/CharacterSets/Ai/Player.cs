@@ -81,8 +81,9 @@ public class Player : LiveEntity
             || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
             || Input.GetKey(KeyCode.M)
             || Input.GetKey("joystick button 1");
-        //攻撃ボタンの押し始めなら
-        if (attackInput && !attackTrigger && !IsAttacking())
+        //攻撃ボタンの押し始めかつ武器を持っているなら
+        if (attackInput && !attackTrigger && !IsAttacking()
+            && characters.Length > 0)
         {
             //攻撃モーションを再生
             SetAttackMotion(characters[currentCharaIndex].SearchAttackMotion(
@@ -90,7 +91,6 @@ public class Player : LiveEntity
             currentCharaIndex++;
         }
         attackTrigger = attackInput;
-
         currentCharaIndex = Mathf.RoundToInt(Mathf.Repeat(currentCharaIndex,
             characters.Length));
 
@@ -126,7 +126,8 @@ public class Player : LiveEntity
             {
                 //キャラクターの配列の途中に挿入
                 List<CharaData> list = new List<CharaData>(characters);
-                list.Insert(currentCharaIndex, charaData);
+                list.Insert(Mathf.Clamp(currentCharaIndex, 0, characters.Length),
+                    charaData);
                 characters = list.ToArray();
             }
             else
