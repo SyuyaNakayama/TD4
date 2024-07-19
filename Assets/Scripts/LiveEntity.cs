@@ -120,6 +120,7 @@ public class LiveEntity : GeoGroObject
     AttackArea[] attackAreas = { };
     protected string animationName;
     protected float animationProgress;
+    protected float animationSpeed;
     protected string facialExpressionName;
     bool updating;
     public bool GetUpdating()
@@ -178,10 +179,13 @@ public class LiveEntity : GeoGroObject
         allowGroundSet = true;
         //shieldをリセット
         shield = false;
-        //アニメーションをリセット
-        animationName = "";
         //表情をリセット
         facialExpressionName = "";
+        //アニメーションを通常時のものにする
+        animationName = "idol";
+
+        animationProgress = Mathf.Repeat(animationProgress + animationSpeed, 1);
+        animationSpeed = 0;
 
         //スクリプタブルオブジェクトから攻撃モーションの内容を読み出す
         UpdateAttackMotion();
@@ -197,7 +201,7 @@ public class LiveEntity : GeoGroObject
             }
             else
             {
-                facialExpressionName = "damage";
+                animationName = "damage";
             }
         }
         else
@@ -213,7 +217,11 @@ public class LiveEntity : GeoGroObject
 
             if (cadaverLifeTimeFrame > 0)
             {
-                facialExpressionName = "defeat";
+                animationName = "defeat";
+                animationProgress =
+                    KX_netUtil.RangeMap(cadaverLifeTimeFrame,
+                    maxCadaverLifeTimeFrame, 0,
+                    0, 1);
                 cadaverLifeTimeFrame--;
             }
             else
@@ -317,6 +325,10 @@ public class LiveEntity : GeoGroObject
                         tAnimData.endTransform.scale,
                         animationPartProgress);
                 }
+            }
+            if (animationData.totalFrame > 0)
+            {
+                animationSpeed = 1f / animationData.totalFrame;
             }
         }
         if (animationData.facialExpressionKeys != null)
