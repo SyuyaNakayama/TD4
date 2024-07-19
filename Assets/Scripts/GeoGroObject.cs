@@ -47,6 +47,8 @@ public class GeoGroObject : UnLandableObject
     protected KX_netUtil.AxisSwitch dragAxis;
     [SerializeField]
     protected float gravityScale;
+    [SerializeField]
+    bool noGravity;
 
 
     void Awake()
@@ -153,7 +155,11 @@ public class GeoGroObject : UnLandableObject
             }
         }
         //重力
-        movement += new Vector3(0, -gravityScale, 0);
+        if (!noGravity)
+        {
+            movement += new Vector3(0, -gravityScale, 0);
+        }
+        noGravity = false;
 
         //地面との接触判定を行う前に一旦着地していない状態にする
         isLanding = false;
@@ -183,6 +189,11 @@ public class GeoGroObject : UnLandableObject
     public void AddPushBackMove(Vector3 force)
     {
         pushBackMove += force;
+    }
+    //このフレームのみ重力の影響を受けなくする
+    public void SetNoGravity()
+    {
+        noGravity = true;
     }
 
     protected virtual void GGOUpdate()
