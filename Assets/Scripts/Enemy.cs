@@ -34,7 +34,7 @@ public class Enemy : LiveEntity
         {
             if (detectedLiveEntities[i].GetTeamID() != GetTeamID())
             {
-                //”z—ñ‚É‘ã“ü
+                //”z—ñ‚É’Ç‰Á
                 Array.Resize(ref ret, ret.Length + 1);
                 ret[ret.Length - 1] = detectedLiveEntities[i];
             }

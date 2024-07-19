@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class GeoGroObject : UnLandableObject
 {
     [SerializeField]
     Collider currentGround;
+    Collider[] touchedGrounds = { };
     Vector3 prevPos;
     public Vector3 GetPrevPos()
     {
@@ -62,6 +64,59 @@ public class GeoGroObject : UnLandableObject
     //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
     void FixedUpdate()
     {
+        Collider tempGround = currentGround;
+        //触れたコライダーのうち最も近いものを一旦自身の足場とする
+        float nearestGroundDistance = 0;
+        for (int i = 0; i < touchedGrounds.Length; i++)
+        {
+            float currentGroundDistance = Vector3.Magnitude(
+                touchedGrounds[i].ClosestPoint(transform.position) - transform.position);
+            if (i == 0 || (currentGroundDistance < nearestGroundDistance
+            && touchedGrounds[i].GetComponent<UnLandableObject>() == null))
+            {
+                tempGround = touchedGrounds[i];
+                nearestGroundDistance = currentGroundDistance;
+            }
+        }
+
+        //そのコライダーが他のコライダーとクラスターになっているか検索
+        foreach (MargedGround obj in UnityEngine.Object.FindObjectsOfType<MargedGround>())
+        {
+            MargedGround.GroundCluster[] groundClusters = obj.GetGroundClusters();
+            for (int i = 0; i < groundClusters.Length; i++)
+            {
+                Collider[] currentColliders = groundClusters[i].colliders;
+                for (int j = 0; j < currentColliders.Length; j++)
+                {
+                    //クラスターが見つかったらその中で最も近いものを一旦自身の足場とする
+                    if (currentColliders[j] == tempGround)
+                    {
+                        for (int k = 0; k < currentColliders.Length; k++)
+                        {
+                            float currentGroundDistance = Vector3.Magnitude(
+                                currentColliders[k].ClosestPoint(transform.position) - transform.position);
+                            if (k == 0 || (currentGroundDistance < nearestGroundDistance
+                            && currentColliders[k].GetComponent<UnLandableObject>() == null))
+                            {
+                                tempGround = currentColliders[k];
+                                nearestGroundDistance = currentGroundDistance;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        //そのコライダーが着地できるものであれば正式に自身の足場とする
+        if (tempGround != null && tempGround.GetComponent<UnLandableObject>() == null)
+        {
+            currentGround = tempGround;
+        }
+
+        //触れたコライダーの情報をリセット
+        Array.Resize(ref touchedGrounds, 0);
+
         //足を地面に向ける
         if (currentGround != null
             && currentGround.ClosestPoint(transform.position) != transform.position)
@@ -169,10 +224,11 @@ public class GeoGroObject : UnLandableObject
     //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
     void OnCollisionStay(Collision col)
     {
-        if (col.collider.gameObject.GetComponent<UnLandableObject>() == null && allowGroundSet)
+        if (allowGroundSet)
         {
-            //足を向けるべき地形として登録
-            currentGround = col.collider;
+            //足を向けるべき地形の候補として登録
+            Array.Resize(ref touchedGrounds, touchedGrounds.Length + 1);
+            touchedGrounds[touchedGrounds.Length - 1] = col.collider;
             // 着地判定
             isLanding = true;
         }
