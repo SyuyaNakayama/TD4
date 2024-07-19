@@ -67,15 +67,16 @@ public class GeoGroObject : UnLandableObject
         Collider tempGround = currentGround;
         //触れたコライダーのうち最も近いものを一旦自身の足場とする
         float nearestGroundDistance = 0;
+        bool detected = false;
         for (int i = 0; i < touchedGrounds.Length; i++)
         {
             float currentGroundDistance = Vector3.Magnitude(
                 touchedGrounds[i].ClosestPoint(transform.position) - transform.position);
-            if (i == 0 || (currentGroundDistance < nearestGroundDistance
-            && touchedGrounds[i].GetComponent<UnLandableObject>() == null))
+            if ((!detected || currentGroundDistance < nearestGroundDistance))
             {
                 tempGround = touchedGrounds[i];
                 nearestGroundDistance = currentGroundDistance;
+                detected = true;
             }
         }
 
@@ -91,15 +92,17 @@ public class GeoGroObject : UnLandableObject
                     //クラスターが見つかったらその中で最も近いものを一旦自身の足場とする
                     if (currentColliders[j] == tempGround)
                     {
+                        detected = false;
                         for (int k = 0; k < currentColliders.Length; k++)
                         {
                             float currentGroundDistance = Vector3.Magnitude(
                                 currentColliders[k].ClosestPoint(transform.position) - transform.position);
-                            if (k == 0 || (currentGroundDistance < nearestGroundDistance
-                            && currentColliders[k].GetComponent<UnLandableObject>() == null))
+                            if ((!detected || currentGroundDistance < nearestGroundDistance)
+                                && currentColliders[k].GetComponent<UnLandableObject>() == null)
                             {
                                 tempGround = currentColliders[k];
                                 nearestGroundDistance = currentGroundDistance;
+                                detected = true;
                             }
                         }
                         break;
