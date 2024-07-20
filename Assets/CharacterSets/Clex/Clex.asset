@@ -131,6 +131,58 @@ MonoBehaviour:
       easeType: 1
       easePow: 3
     facialExpressionKeys: []
+  - name: idol
+    totalFrame: 120
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.4}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: -0.05, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 0.9, z: 1}
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0.4, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: -0.05, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 0.9, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0, y: 0.5}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 45, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 60, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0.5, y: 1}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 60, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 45, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      easeType: 2
+      easePow: 2
+    facialExpressionKeys: []
   facialExpressions:
   - name: awake
     indexAndTextures:
