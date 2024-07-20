@@ -171,8 +171,16 @@ public class LiveEntity : GeoGroObject
         }
 
         prevRot = transform.rotation;
-
         dragAxis = data.GetDragAxis();
+
+        if (hitBackTimeFrame > 0)
+        {
+            drag = 1;
+        }
+        else
+        {
+            drag = 0.8f;
+        }
         gravityScale = data.GetGravityScale();
 
         //allowGroundSetÇÉäÉZÉbÉg
@@ -606,6 +614,7 @@ public class LiveEntity : GeoGroObject
             * hitBackVec;
         hitBackTimeFrame = setHitBackTimeFrame;
         attackMotionData = null;
+        Debug.Log(movement);
     }
 
     //ê∂Ç´ÇƒÇ¢ÇÈÇ©
@@ -821,7 +830,9 @@ public class LiveEntity : GeoGroObject
             {
                 attackAreas[i] =
                     Instantiate(resourcePalette.GetAttackArea().gameObject,
-                    transform.position, transform.rotation, transform)
+                    transform.position,
+                    transform.rotation * Quaternion.Euler(0, direction, 0),
+                    transform)
                     .GetComponent<AttackArea>();
             }
 
@@ -869,7 +880,9 @@ public class LiveEntity : GeoGroObject
             //ê∂ê¨
             Projectile current =
                     Instantiate(resourcePalette.GetProjectile().gameObject,
-                    transform.position, transform.rotation, transform)
+                    transform.position,
+                    transform.rotation * Quaternion.Euler(0, direction, 0),
+                    transform)
                     .GetComponent<Projectile>();
 
             current.transform.parent = gameObject.transform;
