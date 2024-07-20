@@ -20,7 +20,7 @@ public class AttackArea : MonoBehaviour
     Vector3 blowVec;
     public Vector3 GetBlowVec()
     {
-        return transform.rotation * blowVec;
+        return blowVec;
     }
     bool isNewborn = true;
     bool dataLock = false;

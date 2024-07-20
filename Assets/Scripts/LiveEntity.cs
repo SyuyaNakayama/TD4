@@ -577,7 +577,25 @@ public class LiveEntity : GeoGroObject
             {
                 attacker.killCount++;
             }
-            HitBack(attackArea.GetBlowVec(), attackArea.GetData().hitback);
+
+            Vector3 hitBackVec = Vector3.zero;
+            if (attackArea.GetData().vectorBlow)
+            {
+                hitBackVec =
+                    (attackArea.transform.rotation
+                    * attackArea.GetBlowVec()).normalized
+                    * attackArea.GetData().blowForce;
+            }
+            else
+            {
+                hitBackVec =
+                    (transform.position
+                    - attackArea.transform.TransformPoint(
+                    attackArea.GetBlowVec())).normalized
+                    * attackArea.GetData().blowForce;
+                Debug.Log(hitBackVec);
+            }
+            HitBack(hitBackVec, attackArea.GetData().hitback);
         }
     }
     //ëÃóÕÇå∏ÇÁÇµÅAñ≥ìGéûä‘Çïtó^
@@ -614,7 +632,6 @@ public class LiveEntity : GeoGroObject
             * hitBackVec;
         hitBackTimeFrame = setHitBackTimeFrame;
         attackMotionData = null;
-        Debug.Log(movement);
     }
 
     //ê∂Ç´ÇƒÇ¢ÇÈÇ©
