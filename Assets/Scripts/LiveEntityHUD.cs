@@ -10,18 +10,20 @@ public class LiveEntityHUD : MonoBehaviour
     [SerializeField]
     SpriteRenderer lifeGauge;
     [SerializeField]
+    SpriteRenderer batteryGauge;
+    [SerializeField]
     TMP_Text name;
 
     void FixedUpdate()
     {
-        //菴灘鴨繧ｲ繝ｼ繧ｸ繧呈峩譁ｰ
-        Color gaugeColor = liveEntity.GetData().GetThemeColor();
-        gaugeColor.a = 1;
-        lifeGauge.material.SetColor("_GaugeColor1", gaugeColor);
+        //体力ゲージを更新
+        Color lifeGaugeColor = liveEntity.GetData().GetThemeColor();
+        lifeGaugeColor.a = 1;
+        lifeGauge.material.SetColor("_GaugeColor1", lifeGaugeColor);
         lifeGauge.material.SetColor("_GaugeColor2",
-            KX_netUtil.DamageGaugeColor(gaugeColor));
+            KX_netUtil.DamageGaugeColor(lifeGaugeColor));
         lifeGauge.material.SetColor("_BackGroundColor",
-            KX_netUtil.GaugeBlankColor(gaugeColor));
+            KX_netUtil.GaugeBlankColor(lifeGaugeColor));
         lifeGauge.material.SetColor("_EdgeColor",
             KX_netUtil.GaugeBlankColor(
                 lifeGauge.material.GetColor("_BackGroundColor")
@@ -40,12 +42,32 @@ public class LiveEntityHUD : MonoBehaviour
             lifeGauge.material.SetFloat("_FillAmount2",
                 lifeGauge.material.GetFloat("_FillAmount1"));
         }
-        //繧ｭ繝｣繝ｩ蜷崎｡ｨ遉ｺ繧呈峩譁ｰ
+        //電力ゲージを更新
+        Color batteryGaugeColor = new Color(0, 0.8f, 0, 1);
+        if (liveEntity.IsShield())
+        {
+            batteryGaugeColor = new Color(1, 1, 0, 1);
+        }
+        else if (!liveEntity.GetShieldable())
+        {
+            batteryGaugeColor = new Color(1, 0, 0, 1);
+        }
+        batteryGauge.material.SetColor("_GaugeColor1", batteryGaugeColor);
+        batteryGauge.material.SetColor("_BackGroundColor",
+            KX_netUtil.GaugeBlankColor(batteryGaugeColor));
+        batteryGauge.material.SetColor("_EdgeColor",
+            KX_netUtil.GaugeBlankColor(
+                batteryGauge.material.GetColor("_BackGroundColor")
+            ));
+        batteryGauge.material.SetFloat("_FillAmount1", liveEntity.GetBatteryAmount());
+        batteryGauge.material.SetFloat("_FillAmount2", 0);
+
+        //キャラ名表示を更新
         name.text = liveEntity.GetData().GetCharaName();
     }
 
     void OnWillRenderObject()
     {
-        
+
     }
 }

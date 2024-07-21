@@ -43,6 +43,7 @@ public class LiveEntity : GeoGroObject
     const float autoRepairPower = 0.003f;
     const int maxCadaverLifeTimeFrame = 30;
     const int maxDamageReactionTimeFrame = 10;
+    const int maxBattery = 300;
 
     private GameObject gameManager;
     private MedalCounter saveMedals;
@@ -85,7 +86,16 @@ public class LiveEntity : GeoGroObject
         return hpAmount;
     }
     bool shield;//これがtrueの間は技による無敵時間
-    float shieldBattery;
+    public bool GetShield()
+    {
+        return shield;
+    }
+    bool shieldable;
+    public bool GetShieldable()
+    {
+        return shieldable;
+    }
+    int battery;
     int hitBackTimeFrame;
     int ghostTimeFrame;//ヒット後無敵時間
     int repairCoolTimeFrame;
@@ -445,6 +455,26 @@ public class LiveEntity : GeoGroObject
             ghostTimeFrame = reviveGhostTimeFrame;
         }
 
+        //無敵技中はバッテリーが減る
+        //減り切った時と回復し切った時に無敵になれるか否かのフラグを切り替える
+        if (IsShield())
+        {
+            battery--;
+            if (battery <= 0)
+            {
+                shieldable = false;
+            }
+        }
+        else
+        {
+            battery++;
+            if (battery >= maxBattery)
+            {
+                shieldable = true;
+            }
+        }
+        battery = Mathf.Clamp(battery, 0, maxBattery);
+
         //しばらくダメージを受けていなければ回復
         if (IsLive() && IsDamageTakeable())
         {
@@ -593,7 +623,6 @@ public class LiveEntity : GeoGroObject
                     - attackArea.transform.TransformPoint(
                     attackArea.GetBlowVec())).normalized
                     * attackArea.GetData().blowForce;
-                Debug.Log(hitBackVec);
             }
             HitBack(hitBackVec, attackArea.GetData().hitback);
         }
@@ -642,7 +671,7 @@ public class LiveEntity : GeoGroObject
     //技による無敵状態か
     public bool IsShield()
     {
-        return /*shieldable &&*/ shield;
+        return shieldable && shield;
     }
     //ダメージを受け付ける状態か
     public bool IsDamageTakeable()
@@ -949,5 +978,10 @@ public class LiveEntity : GeoGroObject
     public void PlayAsSE(AudioClip clip)
     {
         GetComponent<AudioSource>().PlayOneShot(clip);
+    }
+
+    public float GetBatteryAmount()
+    {
+        return (float)battery / maxBattery;
     }
 }
