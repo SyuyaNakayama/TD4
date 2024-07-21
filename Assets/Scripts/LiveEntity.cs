@@ -95,7 +95,7 @@ public class LiveEntity : GeoGroObject
     {
         return shieldable;
     }
-    int battery;
+    int battery = maxBattery;
     int hitBackTimeFrame;
     int ghostTimeFrame;//ƒqƒbƒgŒã–³“GŠÔ
     int repairCoolTimeFrame;
@@ -585,7 +585,7 @@ public class LiveEntity : GeoGroObject
         LiveEntity attacker = attackArea.GetAttacker();
 
         //UŒ‚‚ğó‚¯•t‚¯‚éó‘ÔA‚©‚Â–¡•ûˆÈŠO‚©‚ç‚ÌUŒ‚‚È‚ç
-        if (IsLive() && !shield && ghostTimeFrame <= 0
+        if (IsLive() && !IsShield() && ghostTimeFrame <= 0
             && (attacker == null
                 || attacker.GetTeamID() != teamID))
         {
