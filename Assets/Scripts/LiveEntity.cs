@@ -368,6 +368,8 @@ public class LiveEntity : GeoGroObject
                 animationSpeed = 1f / animationData.totalFrame;
             }
         }
+
+        //ï\èÓÇìKóp
         if (animationData.facialExpressionKeys != null)
         {
             for (int i = 0; i < animationData.facialExpressionKeys.Length; i++)
