@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b544b4772696443a85c9f0a063c1a99, type: 3}
+  m_Name: wildUpperFang
+  m_EditorClassIdentifier: 
+  cursors:
+  - name: upper
+    pos: {x: 0, y: 0, z: 0}
+    direction: {x: 0, y: 7, z: 7}
+  - name: drop
+    pos: {x: 0, y: 0, z: 0}
+    direction: {x: 0, y: -7, z: 0}
+  meleeAttackDatas:
+  - name: default
+    attackData:
+      power: 3
+      vectorBlow: 1
+      blowForce: 6
+      hitback: 30
+      ghostTime: 0
+    scale: 1.5
+  shotDatas: []
+  data:
+    name: "\u304B\u307F\u3064\u304D\u30B8\u30E3\u30F3\u30D7\u30FB\u30EF\u30A4\u30EB\u30C9"
+    totalFrame: 20
+    meleeAttackKeys:
+    - keyFrame: {x: 0, y: 0.5}
+      dataName: default
+      cursorName: upper
+    - keyFrame: {x: 0.5, y: 1}
+      dataName: default
+      cursorName: drop
+    shotKeys: []
+    moveKeys:
+    - keyFrame: {x: 0, y: 0.5}
+      moveVec: {x: 0, y: 4, z: 3}
+      easeType: 1
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.8}
+      moveVec: {x: 0, y: -7, z: 0}
+      easeType: 2
+      easePow: 4
+    shieldKeys:
+    - {x: 0, y: 1}
+    disAllowGroundSetKeys:
+    - {x: 0, y: 0.5}
+    seKeys:
+    - keyFrame: 0
+      se: {fileID: 8300000, guid: d2195e32c419e4dd6b3b9abbc4aa7046, type: 3}
+    - keyFrame: 0.5
+      se: {fileID: 8300000, guid: a7fcc920e72554cdb9e4980078d2ffd0, type: 3}
+    animationKeys: []

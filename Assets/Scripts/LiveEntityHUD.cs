@@ -5,12 +5,18 @@ using TMPro;
 
 public class LiveEntityHUD : MonoBehaviour
 {
+    const float batteryGaugeShiftIntensity = 0.4f;
+
     [SerializeField]
     LiveEntity liveEntity;
     [SerializeField]
     SpriteRenderer lifeGauge;
     [SerializeField]
     SpriteRenderer batteryGauge;
+    [SerializeField]
+    Vector3 batteryGaugePos;
+    [SerializeField]
+    Vector3 hideBatteryGaugePos;
     [SerializeField]
     TMP_Text name;
 
@@ -42,6 +48,7 @@ public class LiveEntityHUD : MonoBehaviour
             lifeGauge.material.SetFloat("_FillAmount2",
                 lifeGauge.material.GetFloat("_FillAmount1"));
         }
+
         //電力ゲージを更新
         Color batteryGaugeColor = new Color(0, 0.8f, 0, 1);
         if (liveEntity.IsShield())
@@ -61,6 +68,15 @@ public class LiveEntityHUD : MonoBehaviour
             ));
         batteryGauge.material.SetFloat("_FillAmount1", liveEntity.GetBatteryAmount());
         batteryGauge.material.SetFloat("_FillAmount2", 0);
+        //電力ゲージを適切な位置に
+        Vector3 targetPos = batteryGaugePos;
+        if (liveEntity.GetBatteryAmount() >= 1)
+        {
+            targetPos = hideBatteryGaugePos;
+        }
+        batteryGauge.transform.localPosition = Vector3.Lerp(
+            batteryGauge.transform.localPosition, targetPos,
+            batteryGaugeShiftIntensity);
 
         //キャラ名表示を更新
         name.text = liveEntity.GetData().GetCharaName();
