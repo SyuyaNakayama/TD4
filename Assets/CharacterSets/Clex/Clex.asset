@@ -56,6 +56,11 @@ MonoBehaviour:
         position: {x: 0, y: 0.5, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 2, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 3
     - keyFrame: {x: 0.05, y: 0.2}
@@ -68,6 +73,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 3
     facialExpressionKeys:
@@ -86,6 +96,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 3
     - keyFrame: {x: 0, y: 0.5}
@@ -98,6 +113,11 @@ MonoBehaviour:
         position: {x: 0, y: 0.5, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 0
       easePow: 3
     - keyFrame: {x: 0, y: 1}
@@ -110,6 +130,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 3
     facialExpressionKeys:
@@ -128,6 +153,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 3
     facialExpressionKeys: []
@@ -144,6 +174,11 @@ MonoBehaviour:
         position: {x: 0, y: -0.05, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 0.9, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0.4, y: 1}
@@ -156,6 +191,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0, y: 0.5}
@@ -168,6 +208,11 @@ MonoBehaviour:
         position: {x: 0, y: 0.5, z: 0}
         eulerAngles: {x: 60, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0.5, y: 1}
@@ -180,11 +225,16 @@ MonoBehaviour:
         position: {x: 0, y: 0.5, z: 0}
         eulerAngles: {x: 45, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     facialExpressionKeys: []
   - name: damage
-    totalFrame: 120
+    totalFrame: 5
     transformAnimationKeys:
     - keyFrame: {x: 0, y: 0.4}
       bodyPartIndex: 0
@@ -193,9 +243,14 @@ MonoBehaviour:
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 0.7, y: 0.7, z: 0.7}
       endTransform:
-        position: {x: 0, y: 1, z: 0}
+        position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1.3, y: 1.3, z: 1.3}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0.4, y: 1}
@@ -208,11 +263,73 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 0.7, y: 0.7, z: 0.7}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: damage
+  - name: defeat
+    totalFrame: 5
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: -1080}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 1
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 2
+      easePow: 1
+    - keyFrame: {x: 0, y: 0.5}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 1
+      easePow: 2
+    - keyFrame: {x: 0.5, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 0
+      easePow: 2
+    facialExpressionKeys:
+    - keyFrame: {x: 0, y: 1}
+      facialExpressionName: defeat
   facialExpressions:
   - name: awake
     indexAndTextures:
