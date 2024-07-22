@@ -317,31 +317,50 @@ public class LiveEntity : GeoGroObject
                         0, 1),
                         tAnimData.easeType, tAnimData.easePow);
 
-                    current.localPosition = Vector3.Lerp(
-                        tAnimData.startTransform.position,
-                        tAnimData.endTransform.position,
-                        animationPartProgress);
-
-                    if (current == visual.transform)
+                    if (!tAnimData.ignoreTransform.position)
                     {
-                        current.Rotate(Quaternion.Slerp(
-                            Quaternion.Euler(tAnimData.startTransform.eulerAngles),
-                            Quaternion.Euler(tAnimData.endTransform.eulerAngles),
-                            animationPartProgress).eulerAngles,
-                            Space.Self);
-                    }
-                    else
-                    {
-                        current.localRotation = Quaternion.Slerp(
-                            Quaternion.Euler(tAnimData.startTransform.eulerAngles),
-                            Quaternion.Euler(tAnimData.endTransform.eulerAngles),
+                        current.localPosition = Vector3.Lerp(
+                            tAnimData.startTransform.position,
+                            tAnimData.endTransform.position,
                             animationPartProgress);
                     }
 
-                    current.localScale = Vector3.Lerp(
+                    if (!tAnimData.ignoreTransform.rotation)
+                    {
+                        Quaternion rotate;
+                        if (tAnimData.lerpAsEuler)
+                        {
+                            rotate = Quaternion.Euler(Vector3.Lerp(
+                                tAnimData.startTransform.eulerAngles,
+                                tAnimData.endTransform.eulerAngles,
+                                animationPartProgress))
+                        }
+                        else
+                        {
+                            rotate = Quaternion.Slerp(
+                                Quaternion.Euler(tAnimData.startTransform.eulerAngles),
+                                Quaternion.Euler(tAnimData.endTransform.eulerAngles),
+                                animationPartProgress);
+                        }
+
+                        if (current == visual.transform)
+                        {
+                            current.Rotate(rotate.eulerAngles,
+                                Space.Self);
+                        }
+                        else
+                        {
+                            current.localRotation = rotate;
+                        }
+                    }
+
+                    if (!tAnimData.ignoreTransform.scale)
+                    {
+                        current.localScale = Vector3.Lerp(
                         tAnimData.startTransform.scale,
                         tAnimData.endTransform.scale,
                         animationPartProgress);
+                    }
                 }
             }
             if (animationData.totalFrame > 0)

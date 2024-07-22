@@ -37,6 +37,8 @@ public class CharaData : ScriptableObject
         public int bodyPartIndex;
         public KX_netUtil.TransformData startTransform;
         public KX_netUtil.TransformData endTransform;
+        public KX_netUtil.TransformSwitch ignoreTransform;
+        public bool lerpAsEuler;
         public KX_netUtil.EaseType easeType;
         public float easePow;
     }

@@ -18,6 +18,13 @@ public class KX_netUtil : object
         public float pow;
     }
     [System.Serializable]
+    public struct TransformData
+    {
+        public Vector3 position;
+        public Vector3 eulerAngles;
+        public Vector3 scale;
+    }
+    [System.Serializable]
     public struct AxisSwitch
     {
         public bool x;
@@ -25,11 +32,11 @@ public class KX_netUtil : object
         public bool z;
     }
     [System.Serializable]
-    public struct TransformData
+    public struct TransformSwitch
     {
-        public Vector3 position;
-        public Vector3 eulerAngles;
-        public Vector3 scale;
+        public bool position;
+        public bool rotation;
+        public bool scale;
     }
 
     //HPゲージなどの背景色を算出
