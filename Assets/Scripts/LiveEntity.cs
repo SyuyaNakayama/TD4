@@ -333,7 +333,7 @@ public class LiveEntity : GeoGroObject
                             rotate = Quaternion.Euler(Vector3.Lerp(
                                 tAnimData.startTransform.eulerAngles,
                                 tAnimData.endTransform.eulerAngles,
-                                animationPartProgress))
+                                animationPartProgress));
                         }
                         else
                         {
