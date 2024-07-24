@@ -20,9 +20,7 @@ public class Furip : Enemy
                 //ë_Ç§
                 targetCursor = transform.InverseTransformPoint(
                 GetNearestTarget().transform.position).normalized;
-                transform.Rotate(0,
-                    Mathf.Atan2(-targetCursor.x, -targetCursor.z) / Mathf.Deg2Rad,
-                    0, Space.Self);
+                TargetAimY(GetNearestTarget().transform.position);
                 //ëOêi
                 Move(GetMovement() + new Vector3(0, targetCursor.y, targetCursor.z) * moveSpeed);
             }
