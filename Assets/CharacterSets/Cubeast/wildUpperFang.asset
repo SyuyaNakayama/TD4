@@ -19,6 +19,30 @@ MonoBehaviour:
   - name: drop
     pos: {x: 0, y: 0, z: 0}
     direction: {x: 0, y: -7, z: 0}
+  - name: impact0
+    pos: {x: 0, y: 0, z: 1}
+    direction: {x: 0, y: 0, z: 1}
+  - name: impact1
+    pos: {x: 1, y: 0, z: 1}
+    direction: {x: 1, y: 0, z: 1}
+  - name: impact2
+    pos: {x: 1, y: 0, z: 0}
+    direction: {x: 1, y: 0, z: 0}
+  - name: impact3
+    pos: {x: 1, y: 0, z: -1}
+    direction: {x: 1, y: 0, z: -1}
+  - name: impact4
+    pos: {x: 0, y: 0, z: -1}
+    direction: {x: 0, y: 0, z: -1}
+  - name: impact5
+    pos: {x: -1, y: 0, z: -1}
+    direction: {x: -1, y: 0, z: -1}
+  - name: impact6
+    pos: {x: -1, y: 0, z: 0}
+    direction: {x: -1, y: 0, z: 0}
+  - name: impact7
+    pos: {x: -1, y: 0, z: 1}
+    direction: {x: -1, y: 0, z: 1}
   meleeAttackDatas:
   - name: default
     attackData:
@@ -28,7 +52,21 @@ MonoBehaviour:
       hitback: 30
       ghostTime: 0
     scale: 1.5
-  shotDatas: []
+  shotDatas:
+  - name: impact
+    attackData:
+      power: 1
+      vectorBlow: 1
+      blowForce: 4
+      hitback: 20
+      ghostTime: 0
+    scale: 1
+    projectileData:
+      speed: 0
+      lifetime: 10
+      yBillBoard: 0
+      flatBillBoard: 1
+      sprite: {fileID: 8792502799067376482, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
   data:
     name: "\u304B\u307F\u3064\u304D\u30B8\u30E3\u30F3\u30D7\u30FB\u30EF\u30A4\u30EB\u30C9"
     totalFrame: 20
@@ -39,14 +77,42 @@ MonoBehaviour:
     - keyFrame: {x: 0.5, y: 1}
       dataName: default
       cursorName: drop
-    shotKeys: []
+    shotKeys:
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact0
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact1
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact2
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact3
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact4
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact5
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact6
+    - keyFrame: {x: 0.75, y: 0.75}
+      dataName: impact
+      cursorName: impact7
     moveKeys:
     - keyFrame: {x: 0, y: 0.5}
       moveVec: {x: 0, y: 4, z: 3}
       easeType: 1
       easePow: 4
-    - keyFrame: {x: 0.5, y: 0.8}
-      moveVec: {x: 0, y: -7, z: 0}
+    - keyFrame: {x: 0.5, y: 0.75}
+      moveVec: {x: 0, y: -4, z: 0}
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.75, y: 0.8}
+      moveVec: {x: 0, y: 0, z: 0}
       easeType: 2
       easePow: 4
     shieldKeys:
@@ -58,4 +124,6 @@ MonoBehaviour:
       se: {fileID: 8300000, guid: d2195e32c419e4dd6b3b9abbc4aa7046, type: 3}
     - keyFrame: 0.5
       se: {fileID: 8300000, guid: a7fcc920e72554cdb9e4980078d2ffd0, type: 3}
+    - keyFrame: 0.75
+      se: {fileID: 8300000, guid: 1bf3880b1c057492a9a06184e018ecb4, type: 3}
     animationKeys: []
