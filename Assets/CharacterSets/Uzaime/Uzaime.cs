@@ -25,11 +25,7 @@ public class Uzaime : Enemy
             else if (!IsAttacking() && GetNearestTarget() != null)
             {
                 //‘_‚¤
-                targetCursor = transform.InverseTransformPoint(
-                    GetNearestTarget().transform.position);
-                transform.Rotate(0,
-                    Mathf.Atan2(targetCursor.x, targetCursor.z) / Mathf.Deg2Rad,
-                    0, Space.Self);
+                TargetAimY(GetNearestTarget().transform.position);
                 //UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ğÄ¶
                 SetAttackMotion(GetData().GetDefaultAttackMotionName());
             }

@@ -24,12 +24,12 @@ public class Frien : Enemy
         }
 
         //–Ú‚ğŠo‚Ü‚µ‚Ä‚¢‚é
-        if(awake)
+        if (awake)
         {
             //•\î‚ğ•Ï‚¦‚é
             facialExpressionName = "awake";
             //‹ß‚­‚É“G‚ª‚¢‚½‚çÚ‹ß
-            if(GetNearestTarget() != null)
+            if (GetNearestTarget() != null)
             {
                 targetCursor = transform.InverseTransformPoint(
                 GetNearestTarget().transform.position).normalized;

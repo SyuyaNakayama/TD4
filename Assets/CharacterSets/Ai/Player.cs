@@ -108,7 +108,7 @@ public class Player : LiveEntity
     protected override void LiveEntityOnHit(Collider col)
     {
         Item item = col.GetComponent<Item>();
-        if (item != null)
+        if (item)
         {
             //ここで接触したアイテムを配列に追加
             //(不正にアイテムを取得するチートを防止するためこのような措置を取っています)

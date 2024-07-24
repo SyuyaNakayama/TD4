@@ -13,11 +13,7 @@ public class Enemy : LiveEntity
         if (!IsAttacking() && GetNearestTarget() != null)
         {
             //狙う
-            targetCursor = transform.InverseTransformPoint(
-                GetNearestTarget().transform.position);
-            transform.Rotate(0,
-                Mathf.Atan2(targetCursor.x, targetCursor.z) / Mathf.Deg2Rad,
-                0, Space.Self);
+            TargetAimY(GetNearestTarget().transform.position);
             //攻撃モーションを再生
             SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
@@ -81,5 +77,16 @@ public class Enemy : LiveEntity
         }
 
         return ret;
+    }
+
+    //標的の方向を向く（Y軸のみ）
+    protected void TargetAimY(Vector3 targetWorldPos, float intensity = 1)
+    {
+        //狙う
+        Vector3 targetLocalPos = transform.InverseTransformPoint(
+            targetWorldPos);
+        transform.Rotate(0,
+            Mathf.Atan2(targetLocalPos.x, targetLocalPos.z) / Mathf.Deg2Rad,
+            0, Space.Self);
     }
 }
