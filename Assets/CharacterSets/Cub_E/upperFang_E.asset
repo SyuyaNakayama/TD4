@@ -30,16 +30,17 @@ MonoBehaviour:
     name: "\u304B\u307F\u3064\u304D\u30B8\u30E3\u30F3\u30D7"
     totalFrame: 100
     meleeAttackKeys:
-    - keyFrame: {x: 0.4, y: 0.6}
+    - keyFrame: {x: 0.5, y: 0.8}
       dataName: default
       cursorName: drop
+      postMove: 0
     shotKeys: []
     moveKeys:
-    - keyFrame: {x: 0, y: 0.4}
+    - keyFrame: {x: 0, y: 0.5}
       moveVec: {x: 0, y: 4, z: 3}
       easeType: 1
       easePow: 4
-    - keyFrame: {x: 0.4, y: 0.6}
+    - keyFrame: {x: 0.5, y: 0.8}
       moveVec: {x: 0, y: -7, z: 0}
       easeType: 2
       easePow: 4
@@ -52,7 +53,7 @@ MonoBehaviour:
     - keyFrame: 0.5
       se: {fileID: 8300000, guid: a7fcc920e72554cdb9e4980078d2ffd0, type: 3}
     animationKeys:
-    - keyFrame: {x: 0, y: 0.4}
+    - keyFrame: {x: 0, y: 0.5}
       animationName: preAttack
-    - keyFrame: {x: 0.4, y: 0.6}
+    - keyFrame: {x: 0.5, y: 0.8}
       animationName: attack
