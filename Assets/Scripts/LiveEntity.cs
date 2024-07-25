@@ -975,32 +975,38 @@ public class LiveEntity : GeoGroObject
             }
             else
             {
-                //ê∂ê¨
-                Projectile current =
-                        Instantiate(resourcePalette.GetProjectile().gameObject,
-                        transform.position,
-                        transform.rotation * Quaternion.Euler(0, direction, 0),
-                        transform)
-                        .GetComponent<Projectile>();
+                if (attackMotionData)
+                {
+                    AttackMotionData.Cursor currentCursor =
+                        cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)];
 
-                current.transform.parent = gameObject.transform;
+                    //ê∂ê¨
+                    Projectile current =
+                            Instantiate(resourcePalette.GetProjectile().gameObject,
+                            transform.position,
+                            transform.rotation * Quaternion.Euler(0, direction, 0),
+                            transform)
+                            .GetComponent<Projectile>();
 
-                float projectileScale = currentData.data.scale;
-                current.transform.localScale =
-                    new Vector3(projectileScale, projectileScale, projectileScale);
-                current.transform.localPosition =
-                    Quaternion.Euler(new Vector3(0, direction, 0))
-                    * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
-                current.transform.localRotation =
-                    Quaternion.Euler(new Vector3(0, direction, 0));
-                current.SetAttacker(this);
-                current.SetData(currentData.data.attackData,
-                    cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
-                current.SetProjectileData(currentData.data.projectileData,
-                    cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
-                current.Lock();
+                    current.transform.parent = gameObject.transform;
 
-                current.transform.parent = null;
+                    float projectileScale = currentData.data.scale;
+                    current.transform.localScale =
+                        new Vector3(projectileScale, projectileScale, projectileScale);
+                    current.transform.localPosition =
+                        Quaternion.Euler(new Vector3(0, direction, 0))
+                        * currentCursor.pos;
+                    current.transform.localRotation =
+                        Quaternion.Euler(new Vector3(0, direction, 0));
+                    current.SetAttacker(this);
+                    current.SetData(currentData.data.attackData,
+                        currentCursor.direction);
+                    current.SetProjectileData(currentData.data.projectileData,
+                        currentCursor.direction);
+                    current.Lock();
+
+                    current.transform.parent = null;
+                }
 
                 shotDatas[i].used = true;
             }
