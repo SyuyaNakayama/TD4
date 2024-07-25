@@ -78,11 +78,11 @@ public class PlayerUI : MonoBehaviour
         {
             int currentIndex = Mathf.RoundToInt(
                 Mathf.Repeat(i - player.GetCurrentCharaIndex(),
-                player.GetCharacters().Length));
+                Mathf.Max(player.GetCharacters().Length, 1)));
 
-            Image currentTray = charaImages[i];
+            Image currentIcon = charaImages[i];
             RectTransform currentTrayRect =
-                currentTray.gameObject.GetComponent<RectTransform>();
+                currentIcon.gameObject.GetComponent<RectTransform>();
 
             Vector2 currentPosition = currentCharaIconPos;
             Vector3 currentScale = new Vector3(1, 1, 1);
@@ -106,11 +106,11 @@ public class PlayerUI : MonoBehaviour
 
             if (i < player.GetCharacters().Length)
             {
-                currentTray.sprite = player.GetCharacters()[i].GetIconGraph();
+                currentIcon.sprite = player.GetCharacters()[i].GetIconGraph();
             }
             else
             {
-                currentTray.sprite = null;
+                currentIcon.sprite = null;
                 currentTrayRect.localScale = Vector3.zero;
             }
         }

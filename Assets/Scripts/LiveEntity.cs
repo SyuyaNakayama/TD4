@@ -798,21 +798,37 @@ public class LiveEntity : GeoGroObject
             if (attackMotionData.GetData().moveKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
-                        moveKeys.Length; i++)
+                    moveKeys.Length; i++)
                 {
                     AttackMotionData.MoveKey current =
                         attackMotionData.GetData().moveKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        float key0 = KX_netUtil.Ease(KX_netUtil.RangeMap(prevAttackProgress,
+                        movement = Vector3.zero;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < attackMotionData.GetData().
+                    moveKeys.Length; i++)
+                {
+                    AttackMotionData.MoveKey current =
+                        attackMotionData.GetData().moveKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        float key0 = KX_netUtil.Ease(KX_netUtil.RangeMap(
+                            Mathf.Clamp(prevAttackProgress,
+                            current.keyFrame.x, current.keyFrame.y),
                             current.keyFrame.x, current.keyFrame.y, 0, 1),
                             current.easeType, current.easePow);
 
-                        float key1 = KX_netUtil.Ease(KX_netUtil.RangeMap(GetAttackProgress(),
+                        float key1 = KX_netUtil.Ease(KX_netUtil.RangeMap(
+                            Mathf.Clamp(GetAttackProgress(),
+                            current.keyFrame.x, current.keyFrame.y),
                             current.keyFrame.x, current.keyFrame.y, 0, 1),
                             current.easeType, current.easePow);
 
-                        movement = Quaternion.Euler(new Vector3(0, direction, 0))
+                        movement += Quaternion.Euler(new Vector3(0, direction, 0))
                             * current.moveVec * (key1 - key0) / Time.deltaTime;
                     }
                 }
