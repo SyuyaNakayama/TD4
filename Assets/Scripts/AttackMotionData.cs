@@ -52,6 +52,7 @@ public class AttackMotionData : ScriptableObject
         public Vector2 keyFrame;
         public string dataName;
         public string cursorName;
+        public bool postMove;
     }
     [System.Serializable]
     public struct MoveKey

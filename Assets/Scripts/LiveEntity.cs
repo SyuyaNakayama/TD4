@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class LiveEntity : GeoGroObject
 {
@@ -12,6 +13,8 @@ public class LiveEntity : GeoGroObject
     {
         public string cursorName;
         public AttackMotionData.ShotData data;
+        public bool postMove;
+        public bool used;
     }
 
     [System.Serializable]
@@ -746,9 +749,14 @@ public class LiveEntity : GeoGroObject
     //設定されたモーションデータを読み出して実行（実行中は常に呼ぶ）
     void UpdateAttackMotion()
     {
-        //近接、遠距離攻撃のデータをリセット
+        //近接、遠距離攻撃のデータから使用済みの要素を除去
         Array.Resize(ref meleeAttackDatas, 0);
-        Array.Resize(ref shotDatas, 0);
+
+        List<ShotAndCursorName> shotDataList =
+            new List<ShotAndCursorName>(shotDatas);
+        shotDataList.RemoveAll(where => where.used);
+        shotDatas = shotDataList.ToArray();
+
         //3Dカーソルをリセット
         Array.Resize(ref cursors, 0);
 
@@ -788,8 +796,8 @@ public class LiveEntity : GeoGroObject
                     if (IsHitKeyPoint(current.keyFrame))
                     {
                         AttackMotionData.ShotData shotData =
-                            attackMotionData.SearchShotData(current.dataName);
-                        Shot(shotData, current.cursorName);
+                                attackMotionData.SearchShotData(current.dataName);
+                        Shot(shotData, current.cursorName, current.postMove);
                     }
                 }
             }
@@ -960,32 +968,42 @@ public class LiveEntity : GeoGroObject
         {
             ShotAndCursorName currentData = shotDatas[i];
 
-            //生成
-            Projectile current =
-                    Instantiate(resourcePalette.GetProjectile().gameObject,
-                    transform.position,
-                    transform.rotation * Quaternion.Euler(0, direction, 0),
-                    transform)
-                    .GetComponent<Projectile>();
+            if (currentData.postMove)
+            {
+                //postMoveがtrueなら1フレーム遅らせる
+                shotDatas[i].postMove = false;
+            }
+            else
+            {
+                //生成
+                Projectile current =
+                        Instantiate(resourcePalette.GetProjectile().gameObject,
+                        transform.position,
+                        transform.rotation * Quaternion.Euler(0, direction, 0),
+                        transform)
+                        .GetComponent<Projectile>();
 
-            current.transform.parent = gameObject.transform;
+                current.transform.parent = gameObject.transform;
 
-            float projectileScale = currentData.data.scale;
-            current.transform.localScale =
-                new Vector3(projectileScale, projectileScale, projectileScale);
-            current.transform.localPosition =
-                Quaternion.Euler(new Vector3(0, direction, 0))
-                * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
-            current.transform.localRotation =
-                Quaternion.Euler(new Vector3(0, direction, 0));
-            current.SetAttacker(this);
-            current.SetData(currentData.data.attackData,
-                cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
-            current.SetProjectileData(currentData.data.projectileData,
-                cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
-            current.Lock();
+                float projectileScale = currentData.data.scale;
+                current.transform.localScale =
+                    new Vector3(projectileScale, projectileScale, projectileScale);
+                current.transform.localPosition =
+                    Quaternion.Euler(new Vector3(0, direction, 0))
+                    * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
+                current.transform.localRotation =
+                    Quaternion.Euler(new Vector3(0, direction, 0));
+                current.SetAttacker(this);
+                current.SetData(currentData.data.attackData,
+                    cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
+                current.SetProjectileData(currentData.data.projectileData,
+                    cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
+                current.Lock();
 
-            current.transform.parent = null;
+                current.transform.parent = null;
+
+                shotDatas[i].used = true;
+            }
         }
     }
 
@@ -997,11 +1015,13 @@ public class LiveEntity : GeoGroObject
         meleeAttackDatas[meleeAttackDatas.Length - 1].cursorName = cursorName;
     }
     //遠距離攻撃
-    void Shot(AttackMotionData.ShotData shotData, string cursorName)
+    void Shot(AttackMotionData.ShotData shotData, string cursorName, bool postMove)
     {
         Array.Resize(ref shotDatas, shotDatas.Length + 1);
         shotDatas[shotDatas.Length - 1].data = shotData;
         shotDatas[shotDatas.Length - 1].cursorName = cursorName;
+        shotDatas[shotDatas.Length - 1].postMove = postMove;
+        shotDatas[shotDatas.Length - 1].used = false;
     }
     //動ける状態なら移動
     public void Move(Vector3 setMovement)
