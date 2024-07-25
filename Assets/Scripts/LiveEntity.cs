@@ -20,7 +20,7 @@ public class LiveEntity : GeoGroObject
     [System.Serializable]
     public struct TextureSendData
     {
-        public MeshRenderer meshRenderer;
+        public Renderer meshRenderer;
         public int index;
         public string propertyName;
     }
