@@ -36,7 +36,7 @@ public class GeoGroObject : UnLandableObject
         get;
         private set;
     }
-    bool isLanding = false; //ç€åœ°ã—ã¦ã„ã‚‹ã‹
+    bool isLanding = false; //’…’n‚µ‚Ä‚¢‚é‚©
     public bool GetIsLanding()
     {
         return isLanding;
@@ -60,12 +60,12 @@ public class GeoGroObject : UnLandableObject
         GGOAwake();
     }
 
-    //ç‰©ç†æ¼”ç®—ãŒæ›´æ–°ã•ã‚Œã‚‹ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹
-    //æ³¨æ„ï¼ã€€Update()ã¨ã¯å‘¼ã°ã‚Œã‚‹å‘¨æœŸãŒç•°ãªã‚‹ãŸã‚å‘¨æœŸã‚ºãƒ¬ã«ã‚ˆã‚‹ä¸å…·åˆã«æ°—ã‚’ä»˜ã‘ã¦ä¸‹ã•ã„
+    //•¨—‰‰Z‚ªXV‚³‚ê‚éƒ^ƒCƒ~ƒ“ƒO‚Å–ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚é
+    //’ˆÓI@Update()‚Æ‚ÍŒÄ‚Î‚ê‚éüŠú‚ªˆÙ‚È‚é‚½‚ßüŠúƒYƒŒ‚É‚æ‚é•s‹ï‡‚É‹C‚ğ•t‚¯‚Ä‰º‚³‚¢
     void FixedUpdate()
     {
         Collider tempGround = currentGround;
-        //è§¦ã‚ŒãŸã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã†ã¡æœ€ã‚‚è¿‘ã„ã‚‚ã®ã‚’ä¸€æ—¦è‡ªèº«ã®è¶³å ´ã¨ã™ã‚‹
+        //G‚ê‚½ƒRƒ‰ƒCƒ_[‚Ì‚¤‚¿Å‚à‹ß‚¢‚à‚Ì‚ğˆê’U©g‚Ì‘«ê‚Æ‚·‚é
         float nearestGroundDistance = 0;
         bool detected = false;
         for (int i = 0; i < touchedGrounds.Length; i++)
@@ -80,7 +80,7 @@ public class GeoGroObject : UnLandableObject
             }
         }
 
-        //ãã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒä»–ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨ã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ã«ãªã£ã¦ã„ã‚‹ã‹æ¤œç´¢
+        //‚»‚ÌƒRƒ‰ƒCƒ_[‚ª‘¼‚ÌƒRƒ‰ƒCƒ_[‚ÆƒNƒ‰ƒXƒ^[‚É‚È‚Á‚Ä‚¢‚é‚©ŒŸõ
         foreach (MargedGround obj in UnityEngine.Object.FindObjectsOfType<MargedGround>())
         {
             MargedGround.GroundCluster[] groundClusters = obj.GetGroundClusters();
@@ -89,7 +89,7 @@ public class GeoGroObject : UnLandableObject
                 Collider[] currentColliders = groundClusters[i].colliders;
                 for (int j = 0; j < currentColliders.Length; j++)
                 {
-                    //ã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ãŒè¦‹ã¤ã‹ã£ãŸã‚‰ãã®ä¸­ã§æœ€ã‚‚è¿‘ã„ã‚‚ã®ã‚’ä¸€æ—¦è‡ªèº«ã®è¶³å ´ã¨ã™ã‚‹
+                    //ƒNƒ‰ƒXƒ^[‚ªŒ©‚Â‚©‚Á‚½‚ç‚»‚Ì’†‚ÅÅ‚à‹ß‚¢‚à‚Ì‚ğˆê’U©g‚Ì‘«ê‚Æ‚·‚é
                     if (currentColliders[j] == tempGround)
                     {
                         detected = false;
@@ -114,49 +114,49 @@ public class GeoGroObject : UnLandableObject
             }
         }
 
-        //ãã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒç€åœ°ã§ãã‚‹ã‚‚ã®ã§ã‚ã‚Œã°æ­£å¼ã«è‡ªèº«ã®è¶³å ´ã¨ã™ã‚‹
+        //‚»‚ÌƒRƒ‰ƒCƒ_[‚ª’…’n‚Å‚«‚é‚à‚Ì‚Å‚ ‚ê‚Î³®‚É©g‚Ì‘«ê‚Æ‚·‚é
         if (tempGround != null && tempGround.GetComponent<UnLandableObject>() == null)
         {
             currentGround = tempGround;
         }
 
-        //è§¦ã‚ŒãŸã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®æƒ…å ±ã‚’ãƒªã‚»ãƒƒãƒˆ
+        //G‚ê‚½ƒRƒ‰ƒCƒ_[‚Ìî•ñ‚ğƒŠƒZƒbƒg
         Array.Resize(ref touchedGrounds, 0);
 
-        //è¶³ã‚’åœ°é¢ã«å‘ã‘ã‚‹
+        //‘«‚ğ’n–Ê‚ÉŒü‚¯‚é
         if (currentGround != null
             && currentGround.ClosestPoint(transform.position) != transform.position)
         {
-            //è¶³ã‚’å‘ã‘ã‚‹ã¹ãä½ç½®ã‚’ç®—å‡ºã™ã‚‹
+            //‘«‚ğŒü‚¯‚é‚×‚«ˆÊ’u‚ğZo‚·‚é
             Vector3 localClosestPoint = transform.InverseTransformPoint(
                 currentGround.ClosestPoint(transform.position));
-            //ã©ã¡ã‚‰ã‹ã¨ã„ãˆã°ç¸¦å‘ãã«å¤§ããå›è»¢ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ãªã‚‰
+            //‚Ç‚¿‚ç‚©‚Æ‚¢‚¦‚ÎcŒü‚«‚É‘å‚«‚­‰ñ“]‚·‚é•K—v‚ª‚ ‚é‚È‚ç
             if (Mathf.Abs(localClosestPoint.z) > Mathf.Abs(localClosestPoint.x))
             {
-                //xè»¸ã‚’ä¸­å¿ƒã«ãã®ä½ç½®ã‚’å‘ãã‚ˆã†ã«å›è»¢ã•ã›ã‚‹
+                //x²‚ğ’†S‚É‚»‚ÌˆÊ’u‚ğŒü‚­‚æ‚¤‚É‰ñ“]‚³‚¹‚é
                 transform.Rotate(
                     -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
                     / Mathf.Deg2Rad, 0, 0, Space.Self);
 
-                //å†åº¦è¶³ã‚’å‘ã‘ã‚‹ã¹ãä½ç½®ã‚’ç®—å‡ºã—ã€
+                //Ä“x‘«‚ğŒü‚¯‚é‚×‚«ˆÊ’u‚ğZo‚µA
                 localClosestPoint = transform.InverseTransformPoint(
                     currentGround.ClosestPoint(transform.position));
-                //zè»¸ã‚’ä¸­å¿ƒã«ãã®ä½ç½®ã‚’å‘ãã‚ˆã†ã«å›è»¢ã•ã›ã‚‹
+                //z²‚ğ’†S‚É‚»‚ÌˆÊ’u‚ğŒü‚­‚æ‚¤‚É‰ñ“]‚³‚¹‚é
                 transform.Rotate(0, 0,
                     Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
                     / Mathf.Deg2Rad, Space.Self);
             }
             else
             {
-                //zè»¸ã‚’ä¸­å¿ƒã«ãã®ä½ç½®ã‚’å‘ãã‚ˆã†ã«å›è»¢ã•ã›ã‚‹
+                //z²‚ğ’†S‚É‚»‚ÌˆÊ’u‚ğŒü‚­‚æ‚¤‚É‰ñ“]‚³‚¹‚é
                 transform.Rotate(0, 0,
                     Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
                     / Mathf.Deg2Rad, Space.Self);
 
-                //å†åº¦è¶³ã‚’å‘ã‘ã‚‹ã¹ãä½ç½®ã‚’ç®—å‡ºã—ã€
+                //Ä“x‘«‚ğŒü‚¯‚é‚×‚«ˆÊ’u‚ğZo‚µA
                 localClosestPoint = transform.InverseTransformPoint(
                     currentGround.ClosestPoint(transform.position));
-                //xè»¸ã‚’ä¸­å¿ƒã«ãã®ä½ç½®ã‚’å‘ãã‚ˆã†ã«å›è»¢ã•ã›ã‚‹
+                //x²‚ğ’†S‚É‚»‚ÌˆÊ’u‚ğŒü‚­‚æ‚¤‚É‰ñ“]‚³‚¹‚é
                 transform.Rotate(
                     -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
                     / Mathf.Deg2Rad, 0, 0, Space.Self);
@@ -165,15 +165,15 @@ public class GeoGroObject : UnLandableObject
 
         GGOUpdate();
 
-        //ã€é‡è¦ã€‘ã“ã“ã‹ã‚‰ã€ŒpreMovement = movement;ã€ã¾ã§movementã®å€¤ã‚’æ›¸ãæ›ãˆãªã„ã“ã¨
-        //movementã‚’velocityã«å¤‰æ›
+        //yd—vz‚±‚±‚©‚çupreMovement = movement;v‚Ü‚Åmovement‚Ì’l‚ğ‘‚«Š·‚¦‚È‚¢‚±‚Æ
+        //movement‚ğvelocity‚É•ÏŠ·
         GetComponent<Rigidbody>().velocity =
             transform.rotation * movement * transform.localScale.x;
 
         Vector3 playerLocalPosPin = transform.InverseTransformPoint(prevPos);
         prevPos = transform.position;
 
-        //ã‚®ãƒŸãƒƒã‚¯ã«ã‚ˆã‚‹ç§»å‹•ã«é–¢ã™ã‚‹æ›´æ–°å‡¦ç†
+        //ƒMƒ~ƒbƒN‚É‚æ‚éˆÚ“®‚ÉŠÖ‚·‚éXVˆ—
         GetComponent<Rigidbody>().velocity += fieldMove;
         playerLocalPosPin += transform.InverseTransformPoint(transform.position + fieldMove * Time.deltaTime);
         localGrandMove = -playerLocalPosPin;
@@ -184,9 +184,9 @@ public class GeoGroObject : UnLandableObject
 
         Vector3 movementDiff = movement - preMovement;
         preMovement = movement;
-        //ã“ã‚Œä»¥é™ã¯movementã®å€¤ã‚’æ›¸ãæ›ãˆã¦è‰¯ã„
+        //‚±‚êˆÈ~‚Ímovement‚Ì’l‚ğ‘‚«Š·‚¦‚Ä—Ç‚¢
 
-        //ç€åœ°åˆ¤å®š
+        //’…’n”»’è
         Vector3 pushBackedMovement =
             localGrandMove / Time.deltaTime + movementDiff;
 
@@ -195,7 +195,7 @@ public class GeoGroObject : UnLandableObject
             movement = Vector3.Lerp(movement, pushBackedMovement, 0.5f);
         }
 
-        //ç©ºæ°—æŠµæŠ—
+        //‹ó‹C’ïR
         if (dragAxis.x && dragAxis.y && dragAxis.z)
         {
             movement *= drag;
@@ -215,44 +215,44 @@ public class GeoGroObject : UnLandableObject
                 movement.z *= drag;
             }
         }
-        //é‡åŠ›
+        //d—Í
         if (!noGravity)
         {
             movement += new Vector3(0, -gravityScale, 0);
         }
         noGravity = false;
 
-        //åœ°é¢ã¨ã®æ¥è§¦åˆ¤å®šã‚’è¡Œã†å‰ã«ä¸€æ—¦ç€åœ°ã—ã¦ã„ãªã„çŠ¶æ…‹ã«ã™ã‚‹
+        //’n–Ê‚Æ‚ÌÚG”»’è‚ğs‚¤‘O‚Éˆê’U’…’n‚µ‚Ä‚¢‚È‚¢ó‘Ô‚É‚·‚é
         isLanding = false;
     }
 
-    //ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã«è§¦ã‚Œã¦ã„ã‚‹é–“æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã“ã®é–¢æ•°ãŒå‘¼ã°ã‚Œã‚‹ï¼ˆè§¦ã‚Œã¦ã„ã‚‹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒè‡ªå‹•çš„ã«å¼•æ•°ã«å…¥ã‚‹ï¼‰
-    //æ³¨æ„ï¼ã€€OnTriggerStay()ã¨é•ã£ã¦å‰›ä½“åŒå£«ã®è¡çªåˆ¤å®šå°‚ç”¨ã§ã™
+    //‚±‚ÌƒIƒuƒWƒFƒNƒg‚ªƒRƒ‰ƒCƒ_[‚ÉG‚ê‚Ä‚¢‚éŠÔ–ˆƒtƒŒ[ƒ€‚±‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚éiG‚ê‚Ä‚¢‚éƒRƒ‰ƒCƒ_[‚ª©“®“I‚Éˆø”‚É“ü‚éj
+    //’ˆÓI@OnTriggerStay()‚Æˆá‚Á‚Ä„‘Ì“¯m‚ÌÕ“Ë”»’èê—p‚Å‚·
     void OnCollisionStay(Collision col)
     {
         if (allowGroundSet)
         {
-            //è¶³ã‚’å‘ã‘ã‚‹ã¹ãåœ°å½¢ã®å€™è£œã¨ã—ã¦ç™»éŒ²
+            //‘«‚ğŒü‚¯‚é‚×‚«’nŒ`‚ÌŒó•â‚Æ‚µ‚Ä“o˜^
             Array.Resize(ref touchedGrounds, touchedGrounds.Length + 1);
             touchedGrounds[touchedGrounds.Length - 1] = col.collider;
-            // ç€åœ°åˆ¤å®š
+            // ’…’n”»’è
             isLanding = true;
         }
 
         GGOOnCollisionStay(col);
     }
 
-    //ãƒªãƒ•ãƒˆã«ä¹—ã£ã¦ã„ã‚‹æ™‚ã‚„é¢¨ã«ç…½ã‚‰ã‚Œã¦ã„ã‚‹ã®å‹•ãã‚’å®Ÿç¾ã™ã‚‹ãŸã‚ã®é–¢æ•°
+    //ƒŠƒtƒg‚Éæ‚Á‚Ä‚¢‚é‚â•—‚Éø‚ç‚ê‚Ä‚¢‚é‚Ì“®‚«‚ğÀŒ»‚·‚é‚½‚ß‚ÌŠÖ”
     public void AddFieldMove(Vector3 force)
     {
         fieldMove += force;
     }
-    //æ“¬ä¼¼çš„ã«å£ã«æŠ¼ã•ã‚ŒãŸã‚ˆã†ãªå‹•ãã‚’å®Ÿç¾ã™ã‚‹ãŸã‚ã®é–¢æ•°
+    //‹[—“I‚É•Ç‚É‰Ÿ‚³‚ê‚½‚æ‚¤‚È“®‚«‚ğÀŒ»‚·‚é‚½‚ß‚ÌŠÖ”
     public void AddPushBackMove(Vector3 force)
     {
         pushBackMove += force;
     }
-    //ã“ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã¿é‡åŠ›ã®å½±éŸ¿ã‚’å—ã‘ãªãã™ã‚‹
+    //‚±‚ÌƒtƒŒ[ƒ€‚Ì‚İd—Í‚Ì‰e‹¿‚ğó‚¯‚È‚­‚·‚é
     public void SetNoGravity()
     {
         noGravity = true;

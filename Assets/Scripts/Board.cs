@@ -17,12 +17,17 @@ public class Board : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) { textComponent.SetActive(false); }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            textComponent.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag != "Player") { return; }
-        textComponent.SetActive(true);
+        if (other.GetComponent<Player>() != null)
+        {
+            textComponent.SetActive(true);
+        }
     }
 }
