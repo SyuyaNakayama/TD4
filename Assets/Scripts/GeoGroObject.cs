@@ -95,14 +95,17 @@ public class GeoGroObject : UnLandableObject
                         detected = false;
                         for (int k = 0; k < currentColliders.Length; k++)
                         {
-                            float currentGroundDistance = Vector3.Magnitude(
-                                currentColliders[k].ClosestPoint(transform.position) - transform.position);
-                            if ((!detected || currentGroundDistance < nearestGroundDistance)
-                                && currentColliders[k].GetComponent<UnLandableObject>() == null)
+                            if (currentColliders[k] != null)
                             {
-                                tempGround = currentColliders[k];
-                                nearestGroundDistance = currentGroundDistance;
-                                detected = true;
+                                float currentGroundDistance = Vector3.Magnitude(
+                                    currentColliders[k].ClosestPoint(transform.position) - transform.position);
+                                if ((!detected || currentGroundDistance < nearestGroundDistance)
+                                    && currentColliders[k].GetComponent<UnLandableObject>() == null)
+                                {
+                                    tempGround = currentColliders[k];
+                                    nearestGroundDistance = currentGroundDistance;
+                                    detected = true;
+                                }
                             }
                         }
                         break;
