@@ -196,6 +196,9 @@ public class LiveEntity : GeoGroObject
         }
         gravityScale = data.GetGravityScale();
 
+        //スケールを1に固定
+        transform.localScale = new Vector3(1, 1, 1);
+
         //allowGroundSetをリセット
         allowGroundSet = true;
         //shieldをリセット
