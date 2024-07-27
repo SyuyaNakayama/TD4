@@ -48,6 +48,12 @@ public class Player : LiveEntity
         Array.Resize(ref touchedItems, 0);
         allowedItemEffect = false;
 
+        //着地していない、かつ攻撃中でもなければ空中モーションを再生
+        if (!IsLanding() && !IsAttacking())
+        {
+            animationName = "midair";
+        }
+
         // 移動
         // コントローラーとキーボード両方に対応
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
@@ -60,6 +66,11 @@ public class Player : LiveEntity
             direction = Mathf.Atan2(
                 Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))
                 / Mathf.Deg2Rad;
+            //着地していたら移動モーションを再生
+            if (IsLanding())
+            {
+                animationName = "walk";
+            }
         }
 
         //スペースキーでジャンプ

@@ -40,6 +40,7 @@ public class CharaData : ScriptableObject
     public struct RigAnimationKey
     {
         public Vector2 keyFrame;
+        public int animatorIndex;
         public int rigAnimationID;
     }
     [System.Serializable]
@@ -163,7 +164,6 @@ public class CharaData : ScriptableObject
     {
         return defaultSprites[index];
     }
-
     [SerializeField]
     Animation[] animations = { };
     public Animation SearchAnimation(string name)

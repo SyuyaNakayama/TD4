@@ -28,13 +28,16 @@ public class GeoGroObject : AlhaPhysicsObject
         bool detected = false;
         for (int i = 0; i < touchedGrounds.Length; i++)
         {
-            float currentGroundDistance = Vector3.Magnitude(
-                touchedGrounds[i].ClosestPoint(transform.position) - transform.position);
-            if ((!detected || currentGroundDistance < nearestGroundDistance))
+            if (touchedGrounds[i] != null)
             {
-                tempGround = touchedGrounds[i];
-                nearestGroundDistance = currentGroundDistance;
-                detected = true;
+                float currentGroundDistance = Vector3.Magnitude(
+                touchedGrounds[i].ClosestPoint(transform.position) - transform.position);
+                if ((!detected || currentGroundDistance < nearestGroundDistance))
+                {
+                    tempGround = touchedGrounds[i];
+                    nearestGroundDistance = currentGroundDistance;
+                    detected = true;
+                }
             }
         }
 

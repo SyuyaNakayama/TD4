@@ -251,8 +251,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0faa42b96b6e2fb4483c81dc1bc61dab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGround: {fileID: 0}
-  allowGroundSet: 1
   drag: 0.8
   dragAxis:
     x: 0
@@ -260,6 +258,8 @@ MonoBehaviour:
     z: 0
   gravityScale: 0
   noGravity: 0
+  currentGround: {fileID: 0}
+  allowGroundSet: 1
   resourcePalette: {fileID: 11400000, guid: e6a7368562eca47d9951b4b5df5a3f6f, type: 2}
   visual: {fileID: 1887172623895679725}
   meshes:
@@ -306,7 +306,10 @@ MonoBehaviour:
     index: 10
     propertyName: _OutlineMap
   sprites: []
-  bodyParts: []
+  animators:
+  - {fileID: 7021862784957377056}
+  bodyParts:
+  - {fileID: 1259676576859326551}
   view: {fileID: 3288290714761945413}
   data: {fileID: 11400000, guid: 5c5e8b3b957af4608a94db88fcd6ab0f, type: 2}
   teamID: player

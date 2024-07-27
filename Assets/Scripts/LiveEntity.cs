@@ -60,6 +60,8 @@ public class LiveEntity : GeoGroObject
     [SerializeField]
     SpriteSendData[] sprites = { };
     [SerializeField]
+    Animator[] animators = { };
+    [SerializeField]
     Transform[] bodyParts = { };
     [SerializeField]
     Camera view;
@@ -372,6 +374,31 @@ public class LiveEntity : GeoGroObject
             if (animationData.totalFrame > 0)
             {
                 animationSpeed = 1f / animationData.totalFrame;
+            }
+        }
+
+        //スキンアニメーションを適用
+        if (animationData.rigAnimationKeys != null)
+        {
+            for (int i = 0; i < animationData.rigAnimationKeys.Length; i++)
+            {
+                CharaData.RigAnimationKey rAnimData =
+                    animationData.rigAnimationKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    rAnimData.keyFrame.x, rAnimData.keyFrame.y,
+                    false, false))
+                {
+                    Animator current = animators[rAnimData.animatorIndex];
+                    float animationPartProgress =
+                        KX_netUtil.RangeMap(animationProgress,
+                        rAnimData.keyFrame.x, rAnimData.keyFrame.y,
+                        0, 1);
+
+                    current.SetInteger("statusID", rAnimData.rigAnimationID);
+                    current.Play(current.GetNextAnimatorStateInfo(0).nameHash,
+                    0, animationPartProgress);
+                }
             }
         }
 

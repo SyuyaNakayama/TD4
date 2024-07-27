@@ -25,7 +25,10 @@ MonoBehaviour:
   weaponedAttackMotionName: 
   attackMotions:
   - {fileID: 11400000, guid: e9521568f842b498d813ff8595e72587, type: 2}
-  defaultBodyPartsTransform: []
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
   defaultTextures:
   - {fileID: 2800000, guid: 214bf282d9e2e493ea55a10aa85e05f3, type: 3}
   - {fileID: 2800000, guid: a82956c27def5436bb7c72595c1dddca, type: 3}
@@ -42,5 +45,67 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 43f00faef46de462d8b7b289e622c447, type: 3}
   - {fileID: 2800000, guid: 6745222ec1c6d4895bfbd4013ead64e2, type: 3}
   defaultSprites: []
-  animations: []
-  facialExpressions: []
+  animations:
+  - name: idol
+    totalFrame: 120
+    transformAnimationKeys: []
+    rigAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      animatorIndex: 0
+      rigAnimationID: 0
+    facialExpressionKeys: []
+  - name: walk
+    totalFrame: 20
+    transformAnimationKeys: []
+    rigAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      animatorIndex: 0
+      rigAnimationID: 1
+    facialExpressionKeys: []
+  - name: damage
+    totalFrame: 10
+    transformAnimationKeys: []
+    rigAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      animatorIndex: 0
+      rigAnimationID: 4
+    facialExpressionKeys:
+    - keyFrame: {x: 0, y: 1}
+      facialExpressionName: damage
+  - name: midair
+    totalFrame: 10
+    transformAnimationKeys: []
+    rigAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      animatorIndex: 0
+      rigAnimationID: 2
+    facialExpressionKeys: []
+  - name: jump
+    totalFrame: 10
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 720, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 3
+    rigAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      animatorIndex: 0
+      rigAnimationID: 2
+    facialExpressionKeys: []
+  facialExpressions:
+  - name: damage
+    indexAndTextures: []
+    indexAndSprites: []

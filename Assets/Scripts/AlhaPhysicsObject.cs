@@ -33,11 +33,7 @@ public class AlhaPhysicsObject : MonoBehaviour
         get;
         private set;
     }
-    bool isLanding = false; //着地しているか
-    public bool GetIsLanding()
-    {
-        return isLanding;
-    }
+    int landing;
     [SerializeField]
     protected float drag = 0.8f;
     [SerializeField]
@@ -82,11 +78,18 @@ public class AlhaPhysicsObject : MonoBehaviour
         //これ以降はmovementの値を書き換えて良い
 
         //着地判定
+        landing = Mathf.Max(0, landing - 1);
         Vector3 pushBackedMovement =
             localGrandMove / Time.deltaTime + movementDiff;
 
         if (Vector3.Magnitude(pushBackedMovement) < Vector3.Magnitude(movement))
         {
+            if (Vector3.Dot(new Vector3(0, gravityScale, 0),
+            (Vector3.Lerp(movement, pushBackedMovement, 0.5f) - movement))
+            / Mathf.Pow(Vector3.Magnitude(new Vector3(0, -gravityScale, 0)), 2) > 0.75f)
+            {
+                landing = 3;
+            }
             movement = Vector3.Lerp(movement, pushBackedMovement, 0.5f);
         }
 
@@ -116,9 +119,6 @@ public class AlhaPhysicsObject : MonoBehaviour
             movement += new Vector3(0, -gravityScale, 0);
         }
         noGravity = false;
-
-        //地面との接触判定を行う前に一旦着地していない状態にする
-        isLanding = false;
     }
 
     //リフトに乗っている時や風に煽られているの動きを実現するための関数
@@ -135,6 +135,11 @@ public class AlhaPhysicsObject : MonoBehaviour
     public void SetNoGravity()
     {
         noGravity = true;
+    }
+    //着地しているか
+    public bool IsLanding()
+    {
+        return landing > 0;
     }
 
     protected virtual void APOUpdate()
