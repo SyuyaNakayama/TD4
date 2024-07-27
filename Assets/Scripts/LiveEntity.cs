@@ -39,7 +39,7 @@ public class LiveEntity : GeoGroObject
     public const float maxCameraAngle = 90;
     const float goaledCameraAngle = 0;
     const float goaledCameraDistance = 3;
-    const float goaledDirection = 0;
+    const float goaledDirection = 180;
     const float ghostTimeMul = 30;
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 600;
@@ -450,8 +450,9 @@ public class LiveEntity : GeoGroObject
         if (visual != null)
         {
             //ƒqƒbƒgŒã–³“GŽžŠÔ’†‚È‚ç“_–Å
-            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f) && IsLive()
-            || IsDestructed())
+            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
+                && IsLive() && !GetGoaled()
+                || IsDestructed())
             {
                 visual.transform.localScale = Vector3.zero;
             }
