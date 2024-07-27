@@ -25,12 +25,6 @@ public class CharaData : ScriptableObject
         public IndexAndSprite[] indexAndSprites;
     }
     [System.Serializable]
-    public struct FacialExpressionKey
-    {
-        public Vector2 keyFrame;
-        public string facialExpressionName;
-    }
-    [System.Serializable]
     public struct TransformAnimationKey
     {
         public Vector2 keyFrame;
@@ -43,11 +37,24 @@ public class CharaData : ScriptableObject
         public float easePow;
     }
     [System.Serializable]
+    public struct RigAnimationKey
+    {
+        public Vector2 keyFrame;
+        public int rigAnimationID;
+    }
+    [System.Serializable]
+    public struct FacialExpressionKey
+    {
+        public Vector2 keyFrame;
+        public string facialExpressionName;
+    }
+    [System.Serializable]
     public struct Animation
     {
         public string name;
         public int totalFrame;
         public TransformAnimationKey[] transformAnimationKeys;
+        public RigAnimationKey[] rigAnimationKeys;
         public FacialExpressionKey[] facialExpressionKeys;
     }
 
