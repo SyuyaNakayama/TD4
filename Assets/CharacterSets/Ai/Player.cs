@@ -48,9 +48,17 @@ public class Player : LiveEntity
         Array.Resize(ref touchedItems, 0);
         allowedItemEffect = false;
 
-        //着地していない、かつ攻撃中でもなければ空中モーションを再生
-        if (!IsLanding() && !IsAttacking())
+        if (IsAttacking())
         {
+            //固有ワザ以外の技を使っている間は攻撃モーションを再生
+            if (!IsAttacking(GetData().GetDefaultAttackMotionName()))
+            {
+                animationName = "attack";
+            }
+        }
+        else if (!IsLanding())
+        {
+            //着地していない、かつ攻撃中でもなければ空中モーションを再生
             animationName = "midair";
         }
 
