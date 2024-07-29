@@ -44,7 +44,9 @@ public class LiveEntity : GeoGroObject
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 600;
     const float autoRepairPower = 0.003f;
-    const int maxCadaverLifeTimeFrame = 30;
+    const int maxCadaverLifeTimeFrame = 40;
+    const int freezeCadaverLifeTimeFrame = 30;
+
     const int maxDamageReactionTimeFrame = 10;
     const int maxBattery = 300;
 
@@ -245,8 +247,10 @@ public class LiveEntity : GeoGroObject
             {
                 animationName = "defeat";
                 animationProgress =
-                    KX_netUtil.RangeMap(cadaverLifeTimeFrame,
-                    maxCadaverLifeTimeFrame, 0,
+                    KX_netUtil.RangeMap(
+                    Mathf.Clamp(cadaverLifeTimeFrame,
+                    0, freezeCadaverLifeTimeFrame),
+                    freezeCadaverLifeTimeFrame, 0,
                     0, 1);
                 cadaverLifeTimeFrame--;
             }
@@ -610,7 +614,7 @@ public class LiveEntity : GeoGroObject
     //攻撃モーション中かつ指定の攻撃アクションを行なっているか
     protected bool IsAttacking(string name)
     {
-        return IsAttacking() && attackMotionData.GetData().name == name;
+        return IsAttacking() && attackMotionData.name == name;
     }
     //attackProgressが指定のキーポイントを通過したか
     protected bool IsHitKeyPoint(float keyPoint)
