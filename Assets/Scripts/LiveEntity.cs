@@ -137,6 +137,7 @@ public class LiveEntity : GeoGroObject
     AttackArea[] attackAreas = { };
     protected string animationName;
     protected float animationProgress;
+    float prevAnimationProgress;
     protected float animationSpeed;
     protected string facialExpressionName;
     bool updating;
@@ -200,8 +201,9 @@ public class LiveEntity : GeoGroObject
         }
         gravityScale = data.GetGravityScale();
 
-        //スケールを1に固定
-        transform.localScale = new Vector3(1, 1, 1);
+        //スケールを設定に合わせる
+        float scale = data.GetScale();
+        transform.localScale = new Vector3(scale, scale, scale);
 
         //allowGroundSetをリセット
         allowGroundSet = true;
@@ -439,6 +441,34 @@ public class LiveEntity : GeoGroObject
                 }
             }
         }
+
+        //効果音
+        if (animationData.seKeys != null)
+        {
+            for (int i = 0; i < animationData.
+                seKeys.Length; i++)
+            {
+                AttackMotionData.SEKey current =
+                    animationData.seKeys[i];
+
+                float shiftedprevAnimationProgress = prevAnimationProgress;
+                if (animationProgress < prevAnimationProgress)
+                {
+                    shiftedprevAnimationProgress -= 1;
+                }
+
+                if (KX_netUtil.IsIntoRange(
+                    current.keyFrame,
+                    shiftedprevAnimationProgress, animationProgress,
+                    false, false))
+                {
+                    GetComponent<AudioSource>().clip = current.se;
+                    GetComponent<AudioSource>().Play();
+                }
+            }
+        }
+
+        prevAnimationProgress = animationProgress;
 
         //デフォルトのテクスチャをモデルに貼る
         for (int i = 0; i < meshes.Length; i++)

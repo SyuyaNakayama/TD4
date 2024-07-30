@@ -18,9 +18,9 @@ public class Furip : Enemy
             if (GetNearestTarget() != null)
             {
                 //ë_Ç§
+                TargetAimY(GetNearestTarget().transform.position);
                 targetCursor = transform.InverseTransformPoint(
                 GetNearestTarget().transform.position).normalized;
-                TargetAimY(GetNearestTarget().transform.position);
                 //ëOêi
                 Move(GetMovement() + new Vector3(0, targetCursor.y, targetCursor.z) * moveSpeed);
             }

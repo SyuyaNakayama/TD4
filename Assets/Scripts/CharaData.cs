@@ -57,6 +57,7 @@ public class CharaData : ScriptableObject
         public TransformAnimationKey[] transformAnimationKeys;
         public RigAnimationKey[] rigAnimationKeys;
         public FacialExpressionKey[] facialExpressionKeys;
+        public AttackMotionData.SEKey[] seKeys;
     }
 
     public const int totalStatusValue = 3000;
@@ -111,6 +112,13 @@ public class CharaData : ScriptableObject
     public KX_netUtil.AxisSwitch GetDragAxis()
     {
         return dragAxis;
+    }
+
+    [SerializeField]
+    float scale = 1;
+    public float GetScale()
+    {
+        return scale;
     }
 
     [SerializeField]
