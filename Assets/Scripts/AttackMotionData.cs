@@ -59,6 +59,7 @@ public class AttackMotionData : ScriptableObject
     {
         public Vector2 keyFrame;
         public Vector3 moveVec;
+        public KX_netUtil.AxisSwitch ignoreAxis;
         public KX_netUtil.EaseType easeType;
         public float easePow;
     }

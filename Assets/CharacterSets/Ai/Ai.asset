@@ -21,6 +21,7 @@ MonoBehaviour:
     x: 1
     y: 0
     z: 1
+  scale: 1
   defaultAttackMotionName: popJump
   weaponedAttackMotionName: 
   attackMotions:
@@ -60,6 +61,7 @@ MonoBehaviour:
       animatorIndex: 0
       rigAnimationID: 0
     facialExpressionKeys: []
+    seKeys: []
   - name: walk
     totalFrame: 20
     transformAnimationKeys: []
@@ -68,6 +70,11 @@ MonoBehaviour:
       animatorIndex: 0
       rigAnimationID: 1
     facialExpressionKeys: []
+    seKeys:
+    - keyFrame: 0.25
+      se: {fileID: 8300000, guid: a01eaa7271a384510bd8c78c0b042a0f, type: 3}
+    - keyFrame: 0.75
+      se: {fileID: 8300000, guid: a01eaa7271a384510bd8c78c0b042a0f, type: 3}
   - name: damage
     totalFrame: 10
     transformAnimationKeys: []
@@ -78,6 +85,7 @@ MonoBehaviour:
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: damage
+    seKeys: []
   - name: midair
     totalFrame: 10
     transformAnimationKeys: []
@@ -86,6 +94,7 @@ MonoBehaviour:
       animatorIndex: 0
       rigAnimationID: 2
     facialExpressionKeys: []
+    seKeys: []
   - name: jump
     totalFrame: 0
     transformAnimationKeys:
@@ -111,6 +120,7 @@ MonoBehaviour:
       animatorIndex: 0
       rigAnimationID: 2
     facialExpressionKeys: []
+    seKeys: []
   - name: attack
     totalFrame: 0
     transformAnimationKeys: []
@@ -119,6 +129,7 @@ MonoBehaviour:
       animatorIndex: 0
       rigAnimationID: 3
     facialExpressionKeys: []
+    seKeys: []
   - name: defeat
     totalFrame: 0
     transformAnimationKeys:
@@ -167,6 +178,9 @@ MonoBehaviour:
       facialExpressionName: defeat
     - keyFrame: {x: 0.8, y: 1}
       facialExpressionName: dead
+    seKeys:
+    - keyFrame: 0.7
+      se: {fileID: 8300000, guid: 745d61f5ce15f4430857e2b1adae393d, type: 3}
   - name: dead
     totalFrame: 200
     transformAnimationKeys:
@@ -194,6 +208,27 @@ MonoBehaviour:
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: dead
+    seKeys:
+    - keyFrame: 0
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.12
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.21
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.3
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.43
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.47
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.7
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.79
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.83
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.97
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
   facialExpressions:
   - name: damage
     indexAndTextures:

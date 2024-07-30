@@ -887,6 +887,10 @@ public class LiveEntity : GeoGroObject
             //ˆÚ“®
             if (attackMotionData.GetData().moveKeys != null)
             {
+                Vector3 savedMovement = movement;
+                Vector3 replaceVector = Vector3.zero;
+                KX_netUtil.AxisSwitch replaceAxis =
+                    new KX_netUtil.AxisSwitch();
                 for (int i = 0; i < attackMotionData.GetData().
                     moveKeys.Length; i++)
                 {
@@ -918,10 +922,12 @@ public class LiveEntity : GeoGroObject
                             current.keyFrame.x, current.keyFrame.y, 0, 1),
                             current.easeType, current.easePow);
 
-                        movement += Quaternion.Euler(new Vector3(0, direction, 0))
+                        replaceVector += Quaternion.Euler(new Vector3(0, direction, 0))
                             * current.moveVec * (key1 - key0) / Time.deltaTime;
                     }
                 }
+
+                movement += replaceVector;
             }
 
             //–³“GŽžŠÔ

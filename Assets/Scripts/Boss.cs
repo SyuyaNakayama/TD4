@@ -8,7 +8,6 @@ public class Boss : Enemy
     BossBehaviourData behaviourData;
     int behaviourProgress;
     LiveEntity target;
-    protected Vector3 targetPos;
     protected override void LiveEntityUpdate()
     {
         if (behaviourData && !IsAttacking())
@@ -22,7 +21,7 @@ public class Boss : Enemy
 
         if (target)
         {
-            targetPos = target.transform.position;
+            targetCursor = target.transform.position;
         }
     }
     protected void TargetChange()
