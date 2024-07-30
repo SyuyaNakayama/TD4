@@ -44,9 +44,9 @@ public class LiveEntity : GeoGroObject
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 600;
     const float autoRepairPower = 0.003f;
-    const int maxCadaverLifeTimeFrame = 40;
-    const int freezeCadaverLifeTimeFrame = 30;
-
+    const int maxCadaverLifeTimeFrame = 60;
+    const int freezeCadaverLifeTimeFrame = 40;
+    const int shakeCadaverLifeTimeFrame = 43;
     const int maxDamageReactionTimeFrame = 10;
     const int maxBattery = 300;
 
@@ -240,44 +240,61 @@ public class LiveEntity : GeoGroObject
             //カメラを演出用の位置に調整
             cameraAngle = goaledCameraAngle;
             cameraDistance = goaledCameraDistance;
-            //正面を向く
-            direction = goaledDirection;
-
-            if (cadaverLifeTimeFrame > 0)
+            if (IsPlayer())
             {
-                animationName = "defeat";
-                animationProgress =
-                    KX_netUtil.RangeMap(
-                    Mathf.Clamp(cadaverLifeTimeFrame,
-                    0, freezeCadaverLifeTimeFrame),
-                    freezeCadaverLifeTimeFrame, 0,
-                    0, 1);
-                cadaverLifeTimeFrame--;
+                //正面を向く
+                direction = goaledDirection;
             }
-            else
+
+            if (!IsLive())
             {
-                if (IsPlayer())
+                if (cadaverLifeTimeFrame > 0)
                 {
-                    //何かボタンを押したらゴール時はステージを出る、死亡時は復活
-                    if (Input.GetKey(KeyCode.Space)
-                        || Input.GetKey("joystick button 0")
-                        || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
-                        || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
-                        || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
-                        || Input.GetKey(KeyCode.M)
-                        || Input.GetKey("joystick button 1"))
-                        if (GetGoaled())
-                        {
-                            Quit();
-                        }
-                        else
-                        {
-                            Revive();
-                        }
+                    cadaverLifeTimeFrame--;
+                    animationName = "defeat";
+                    animationProgress =
+                        KX_netUtil.RangeMap(
+                        Mathf.Clamp(cadaverLifeTimeFrame,
+                        0, freezeCadaverLifeTimeFrame),
+                        freezeCadaverLifeTimeFrame, 0,
+                        0, 1);
                 }
                 else
                 {
-                    Destroy(gameObject);
+                    animationName = "dead";
+
+                    if (IsPlayer())
+                    {
+                        //何かボタンを押したら復活
+                        if (Input.GetKey(KeyCode.Space)
+                            || Input.GetKey("joystick button 0")
+                            || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
+                            || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
+                            || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
+                            || Input.GetKey(KeyCode.M)
+                            || Input.GetKey("joystick button 1"))
+                        {
+                            Revive();
+                        }
+                    }
+                    else
+                    {
+                        Destroy(gameObject);
+                    }
+                }
+            }
+            else
+            {
+                //何かボタンを押したらステージを出る
+                if (Input.GetKey(KeyCode.Space)
+                    || Input.GetKey("joystick button 0")
+                    || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
+                    || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
+                    || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
+                    || Input.GetKey(KeyCode.M)
+                    || Input.GetKey("joystick button 1"))
+                {
+                    Quit();
                 }
             }
         }
@@ -482,13 +499,13 @@ public class LiveEntity : GeoGroObject
         {
             //ヒット後無敵時間中なら点滅
             if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
-                && IsLive() && !GetGoaled()
-                || IsDestructed())
+                && IsLive() && !GetGoaled())
             {
                 visual.transform.localScale = Vector3.zero;
             }
             //攻撃を受けた直後ならシェイク
-            if (damageReactionTimeFrame > 0)
+            if (damageReactionTimeFrame > 0
+                || (!IsLive() && cadaverLifeTimeFrame > shakeCadaverLifeTimeFrame))
             {
                 visual.transform.localPosition +=
                     Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),

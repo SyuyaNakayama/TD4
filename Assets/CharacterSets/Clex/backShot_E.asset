@@ -22,7 +22,7 @@ MonoBehaviour:
     attackData:
       power: 3
       vectorBlow: 1
-      blowForce: 0.5
+      blowForce: 10
       hitback: 5
       ghostTime: 0
     scale: 1
@@ -40,6 +40,7 @@ MonoBehaviour:
     - keyFrame: {x: 0.5, y: 0.5}
       dataName: shot
       cursorName: shot
+      postMove: 0
     moveKeys:
     - keyFrame: {x: 0.5, y: 0.8}
       moveVec: {x: 0, y: 0, z: -4}

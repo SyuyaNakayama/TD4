@@ -10,8 +10,11 @@ ModelImporter:
       74: -6384026752711147552
     second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|damage"
   - first:
-      74: 4014077291029111353
-    second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|ducking"
+      74: 5457705249249736849
+    second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|dead"
+  - first:
+      74: -174655335717140829
+    second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|defeat"
   - first:
       74: 5377072600818060471
     second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|midair"
@@ -21,9 +24,6 @@ ModelImporter:
   - first:
       74: 5004041584230489543
     second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|walk"
-  - first:
-      74: -174655335717140829
-    second: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|defeat"
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -117,6 +117,64 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
+      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|dead"
+      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|dead"
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|defeat"
+      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|defeat"
+      internalID: 0
+      firstFrame: 2
+      lastFrame: 62
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
       name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|midair"
       takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|midair"
       internalID: 0
@@ -157,7 +215,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -180,35 +238,6 @@ ModelImporter:
       internalID: 0
       firstFrame: 0
       lastFrame: 60
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|defeat"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|midair"
-      internalID: 0
-      firstFrame: 1
-      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -268,10 +297,10 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 180
-    normalImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
     tangentImportMode: 3
-    normalCalculationMode: 3
+    normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0

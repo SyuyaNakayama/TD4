@@ -29,6 +29,9 @@ MonoBehaviour:
   - position: {x: 0, y: 0, z: 0}
     eulerAngles: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
+  - position: {x: 0, y: 0.0028, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 0, y: 0, z: 0}
   defaultTextures:
   - {fileID: 2800000, guid: 214bf282d9e2e493ea55a10aa85e05f3, type: 3}
   - {fileID: 2800000, guid: a82956c27def5436bb7c72595c1dddca, type: 3}
@@ -44,6 +47,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 479c5cc92524647229e3f8f791525250, type: 3}
   - {fileID: 2800000, guid: 43f00faef46de462d8b7b289e622c447, type: 3}
   - {fileID: 2800000, guid: 6745222ec1c6d4895bfbd4013ead64e2, type: 3}
+  - {fileID: 2800000, guid: 17424cd7db2634f5191ede1344317b5c, type: 3}
   defaultSprites: []
   animations:
   - name: idol
@@ -115,7 +119,41 @@ MonoBehaviour:
     facialExpressionKeys: []
   - name: defeat
     totalFrame: 0
-    transformAnimationKeys: []
+    transformAnimationKeys:
+    - keyFrame: {x: 0.9, y: 1}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 0, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 1
+        rotation: 1
+        scale: 0
+      lerpAsEuler: 0
+      easeType: 1
+      easePow: 2
+    - keyFrame: {x: 0.8, y: 1}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: -10, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 1
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 1
     rigAnimationKeys:
     - keyFrame: {x: 0, y: 1}
       animatorIndex: 0
@@ -123,8 +161,37 @@ MonoBehaviour:
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 0.1}
       facialExpressionName: damage
-    - keyFrame: {x: 0.1, y: 1}
+    - keyFrame: {x: 0.1, y: 0.8}
       facialExpressionName: defeat
+    - keyFrame: {x: 0.8, y: 1}
+      facialExpressionName: dead
+  - name: dead
+    totalFrame: 200
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 360, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 1
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 1
+    rigAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      animatorIndex: 0
+      rigAnimationID: 6
+    facialExpressionKeys:
+    - keyFrame: {x: 0, y: 1}
+      facialExpressionName: dead
   facialExpressions:
   - name: damage
     indexAndTextures:
@@ -137,6 +204,13 @@ MonoBehaviour:
     indexAndTextures:
     - index: 1
       texture: {fileID: 2800000, guid: 8f5709ed5289040c3b3ae561d80b5dad, type: 3}
+    - index: 2
+      texture: {fileID: 2800000, guid: d2a2f6a1598e4492eafc61fb5f07c4c9, type: 3}
+    indexAndSprites: []
+  - name: dead
+    indexAndTextures:
+    - index: 1
+      texture: {fileID: 2800000, guid: 409d95850be67493980ea9065d717d3f, type: 3}
     - index: 2
       texture: {fileID: 2800000, guid: d2a2f6a1598e4492eafc61fb5f07c4c9, type: 3}
     indexAndSprites: []
