@@ -889,8 +889,12 @@ public class LiveEntity : GeoGroObject
             {
                 Vector3 savedMovement = movement;
                 Vector3 replaceVector = Vector3.zero;
-                KX_netUtil.AxisSwitch replaceAxis =
+                KX_netUtil.AxisSwitch ignoreAxis =
                     new KX_netUtil.AxisSwitch();
+                ignoreAxis.x = true;
+                ignoreAxis.y = true;
+                ignoreAxis.z = true;
+
                 for (int i = 0; i < attackMotionData.GetData().
                     moveKeys.Length; i++)
                 {
@@ -910,6 +914,13 @@ public class LiveEntity : GeoGroObject
                         attackMotionData.GetData().moveKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
+                        ignoreAxis.x =
+                            current.ignoreAxis.x && ignoreAxis.x;
+                        ignoreAxis.y =
+                            current.ignoreAxis.y && ignoreAxis.y;
+                        ignoreAxis.z =
+                            current.ignoreAxis.z && ignoreAxis.z;
+
                         float key0 = KX_netUtil.Ease(KX_netUtil.RangeMap(
                             Mathf.Clamp(prevAttackProgress,
                             current.keyFrame.x, current.keyFrame.y),

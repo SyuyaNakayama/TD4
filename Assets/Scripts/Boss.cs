@@ -23,6 +23,8 @@ public class Boss : Enemy
         {
             targetCursor = target.transform.position;
         }
+
+        BossUpdate();
     }
     protected void TargetChange()
     {
@@ -31,5 +33,9 @@ public class Boss : Enemy
         {
             target = liveEntities[Random.Range(0, liveEntities.Length - 1)];
         }
+    }
+
+    protected virtual void BossUpdate()
+    {
     }
 }

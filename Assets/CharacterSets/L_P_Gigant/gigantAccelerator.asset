@@ -10,32 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b544b4772696443a85c9f0a063c1a99, type: 3}
-  m_Name: gigantSword
+  m_Name: gigantAccelerator
   m_EditorClassIdentifier: 
   cursors:
   - name: sword
     pos: {x: 0, y: 0, z: 1}
-    direction: {x: 0, y: 0.5, z: 1}
+    direction: {x: 0, y: 1, z: 1}
   meleeAttackDatas:
   - name: sword
     attackData:
       power: 5
       vectorBlow: 1
-      blowForce: 8
+      blowForce: 6
       hitback: 60
       ghostTime: 0
     scale: 1.5
   shotDatas: []
   data:
-    name: "\u5DE8\u5200\u65AC"
-    totalFrame: 180
+    name: "\u5DE8\u731B\u9032"
+    totalFrame: 350
     meleeAttackKeys:
-    - keyFrame: {x: 0.7, y: 0.8}
+    - keyFrame: {x: 0.4, y: 0.9}
       dataName: sword
       cursorName: sword
       postMove: 0
     shotKeys: []
-    moveKeys: []
+    moveKeys:
+    - keyFrame: {x: 0.4, y: 1}
+      moveVec: {x: 0, y: 0, z: 7}
+      ignoreAxis:
+        x: 0
+        y: 0
+        z: 0
+      easeType: 2
+      easePow: 3
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []

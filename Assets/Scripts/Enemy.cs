@@ -85,8 +85,13 @@ public class Enemy : LiveEntity
         //‘_‚¤
         Vector3 targetLocalPos = transform.InverseTransformPoint(
             targetWorldPos);
-        transform.Rotate(0,
+        transform.localRotation = Quaternion.Slerp(
+            transform.localRotation,
+            transform.localRotation *
+            Quaternion.Euler(new Vector3(
+            0,
             Mathf.Atan2(targetLocalPos.x, targetLocalPos.z) / Mathf.Deg2Rad,
-            0, Space.Self);
+            0)),
+            intensity);
     }
 }
