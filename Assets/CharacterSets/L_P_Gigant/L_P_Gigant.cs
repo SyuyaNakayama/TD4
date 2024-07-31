@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class L_P_Gigant : Boss
 {
+    const float flipIntensitySoft = 0.01f;
+    const float flipIntensityHard = 0.1f;
+
     protected override void BossUpdate()
     {
-        if (IsAttacking("gigantAccelerator"))
+        if (IsUniqueActing("softAim"))
         {
             TargetChange();
-            TargetAimY(targetCursor, 0.01f);
+            TargetAimY(targetCursor, flipIntensitySoft);
         }
-        if (IsAttacking("gigantSaw"))
+        if (IsUniqueActing("hardAim"))
         {
             TargetChange();
-            TargetAimY(targetCursor, 0.1f);
+            TargetAimY(targetCursor, flipIntensityHard);
         }
     }
 }

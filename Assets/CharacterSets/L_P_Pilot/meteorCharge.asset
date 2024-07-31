@@ -10,43 +10,51 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b544b4772696443a85c9f0a063c1a99, type: 3}
-  m_Name: gigantAccelerator
+  m_Name: meteorCharge
   m_EditorClassIdentifier: 
   cursors:
-  - name: sword
-    pos: {x: 0, y: 0, z: 1}
-    direction: {x: 0, y: 1, z: 1}
+  - name: charge
+    pos: {x: 0, y: 0, z: 0}
+    direction: {x: 0, y: 0.5, z: 0}
   meleeAttackDatas:
-  - name: sword
+  - name: charge
     attackData:
-      power: 5
-      vectorBlow: 1
-      blowForce: 6
+      power: 6
+      vectorBlow: 0
+      blowForce: 8
       hitback: 60
       ghostTime: 0
-    scale: 1.5
+    scale: 1.1
   shotDatas: []
   data:
-    name: "\u5DE8\u731B\u9032"
-    totalFrame: 350
+    name: "\u30E1\u30C6\u30AA\u30C1\u30E3\u30FC\u30B8"
+    totalFrame: 200
     meleeAttackKeys:
-    - keyFrame: {x: 0.4, y: 0.9}
-      dataName: sword
-      cursorName: sword
+    - keyFrame: {x: 0.6, y: 0.8}
+      dataName: charge
+      cursorName: charge
       postMove: 0
     shotKeys: []
     moveKeys:
-    - keyFrame: {x: 0.4, y: 1}
-      moveVec: {x: 0, y: 0, z: 7}
+    - keyFrame: {x: 0.5, y: 0.6}
+      moveVec: {x: 0, y: 0.5, z: 0}
       ignoreAxis:
-        x: 0
+        x: 1
         y: 0
-        z: 0
-      easeType: 2
+        z: 1
+      easeType: 1
       easePow: 3
+    - keyFrame: {x: 0.6, y: 0.8}
+      moveVec: {x: 0, y: -8, z: 0}
+      ignoreAxis:
+        x: 1
+        y: 0
+        z: 1
+      easeType: 2
+      easePow: 5
     uniqueActionKeys:
-    - keyFrame: {x: 0, y: 1}
-      uniqueActName: softAim
+    - keyFrame: {x: 0, y: 0.5}
+      uniqueActName: upSight
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []

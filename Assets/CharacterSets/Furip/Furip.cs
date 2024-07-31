@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//フレン
+//フューリップ
 public class Furip : Enemy
 {
     const float moveSpeed = 1;
+    const float flipIntensity = 0.1f;
 
     protected override void LiveEntityUpdate()
     {
@@ -18,7 +19,7 @@ public class Furip : Enemy
             if (GetNearestTarget() != null)
             {
                 //狙う
-                TargetAimY(GetNearestTarget().transform.position);
+                TargetAimY(GetNearestTarget().transform.position, flipIntensity);
                 targetCursor = transform.InverseTransformPoint(
                 GetNearestTarget().transform.position).normalized;
                 //前進

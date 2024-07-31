@@ -21,6 +21,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  scale: 1
   defaultAttackMotionName: backShot_E
   weaponedAttackMotionName: backShot
   attackMotions:
@@ -80,9 +81,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 2
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: awake
+    seKeys: []
   - name: attack
     totalFrame: 0
     transformAnimationKeys:
@@ -137,9 +140,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 1
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: awake
+    seKeys: []
   - name: recharge
     totalFrame: 0
     transformAnimationKeys:
@@ -160,7 +165,9 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 1
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: idol
     totalFrame: 120
     transformAnimationKeys:
@@ -232,7 +239,9 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 2
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: damage
     totalFrame: 5
     transformAnimationKeys:
@@ -270,9 +279,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 2
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: damage
+    seKeys: []
   - name: defeat
     totalFrame: 5
     transformAnimationKeys:
@@ -280,7 +291,7 @@ MonoBehaviour:
       bodyPartIndex: 0
       startTransform:
         position: {x: 0, y: 0, z: 0}
-        eulerAngles: {x: 0, y: 0, z: -1080}
+        eulerAngles: {x: 0, y: 0, z: -1800}
         scale: {x: 1, y: 1, z: 1}
       endTransform:
         position: {x: 0, y: 0, z: 0}
@@ -327,9 +338,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: defeat
+    seKeys: []
   facialExpressions:
   - name: awake
     indexAndTextures:
