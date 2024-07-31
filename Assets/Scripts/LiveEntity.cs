@@ -810,6 +810,10 @@ public class LiveEntity : GeoGroObject
         }
         return false;
     }
+    public float GetBatteryAmount()
+    {
+        return (float)battery / maxBattery;
+    }
 
     //Ž€‚ñ‚Å‚¢‚é‚Æ‚«‚É‚±‚ê‚ðŒÄ‚Ô‚Æ•œŠˆ‚·‚é
     void Revive()
@@ -1173,8 +1177,12 @@ public class LiveEntity : GeoGroObject
         GetComponent<AudioSource>().PlayOneShot(clip);
     }
 
-    public float GetBatteryAmount()
+    public static void Spawn(LiveEntity liveEntity,
+        Vector3 worldPos, Quaternion worldRot, string setTeamID)
     {
-        return (float)battery / maxBattery;
+        LiveEntity current =
+            Instantiate(liveEntity.gameObject, worldPos, worldRot)
+            .GetComponent<LiveEntity>();
+        current.teamID = setTeamID;
     }
 }

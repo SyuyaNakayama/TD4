@@ -16,12 +16,30 @@ MonoBehaviour:
   meleeAttackDatas: []
   shotDatas: []
   data:
-    name: 
-    totalFrame: 0
+    name: "\u79FB\u52D5"
+    totalFrame: 90
     meleeAttackKeys: []
     shotKeys: []
-    moveKeys: []
-    uniqueActionKeys: []
+    moveKeys:
+    - keyFrame: {x: 0, y: 0.5}
+      moveVec: {x: 0, y: 0, z: 1}
+      ignoreAxis:
+        x: 1
+        y: 1
+        z: 0
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0.5, y: 1}
+      moveVec: {x: 0, y: 0, z: 1}
+      ignoreAxis:
+        x: 1
+        y: 1
+        z: 0
+      easeType: 2
+      easePow: 2
+    uniqueActionKeys:
+    - keyFrame: {x: 0, y: 1}
+      uniqueActName: hardAim
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []

@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: gigantSword
   m_EditorClassIdentifier: 
   cursors:
+  - name: body
+    pos: {x: 0, y: 0, z: 0.25}
+    direction: {x: 0, y: 0.5, z: 1}
   - name: sword
     pos: {x: 0, y: 0, z: 1}
     direction: {x: 0, y: 0.5, z: 1}
@@ -28,14 +31,19 @@ MonoBehaviour:
   shotDatas: []
   data:
     name: "\u5DE8\u5200\u65AC"
-    totalFrame: 180
+    totalFrame: 100
     meleeAttackKeys:
+    - keyFrame: {x: 0.7, y: 0.8}
+      dataName: sword
+      cursorName: body
+      postMove: 0
     - keyFrame: {x: 0.7, y: 0.8}
       dataName: sword
       cursorName: sword
       postMove: 0
     shotKeys: []
     moveKeys: []
+    uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []

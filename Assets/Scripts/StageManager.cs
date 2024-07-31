@@ -56,8 +56,8 @@ public class StageManager : MonoBehaviour
         //自身のオーディオソースを探す
         AudioSource bgmSource = GetComponent<AudioSource>();
 
-        //中ボス戦、ボス戦、雑魚ラッシュができたら下のコードを使ってバトル中であることを検出
-        /*bool battling = false;
+        //バトル中であることを検出
+        bool battling = false;
         bool annihilated = false;
         foreach (BattleField obj in UnityEngine.Object.FindObjectsOfType<BattleField>())
         {
@@ -70,7 +70,7 @@ public class StageManager : MonoBehaviour
                 }
                 break;
             }
-        }*/
+        }
 
         if (!isRushLevel)
         {
@@ -100,15 +100,15 @@ public class StageManager : MonoBehaviour
             {
                 bgmSource.clip = goalBgmIntro;
             }
-            //中ボス戦、ボス戦、雑魚ラッシュができたら下のコードを解放
-            /*else if (annihilated)
+            //戦闘中は曲を変える
+            else if (annihilated)
             {
                 bgmSource.clip = null;
             }
             else if (battling)
             {
                 bgmSource.clip = battleBgm;
-            }*/
+            }
             else
             //何も起きていないときは通常のステージ曲をかける
             {
