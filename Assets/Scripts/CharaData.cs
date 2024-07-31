@@ -101,6 +101,13 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
+    bool heavy;
+    public bool GetHeavy()
+    {
+        return heavy;
+    }
+
+    [SerializeField]
     float gravityScale = 0.5f;
     public float GetGravityScale()
     {

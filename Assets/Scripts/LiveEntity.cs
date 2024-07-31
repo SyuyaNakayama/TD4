@@ -731,7 +731,10 @@ public class LiveEntity : GeoGroObject
                     attackArea.GetBlowVec())).normalized
                     * attackArea.GetData().blowForce;
             }
-            HitBack(hitBackVec, attackArea.GetData().hitback);
+            if (!data.GetHeavy())
+            {
+                HitBack(hitBackVec, attackArea.GetData().hitback);
+            }
         }
     }
     //‘Ì—Í‚ğŒ¸‚ç‚µA–³“GŠÔ‚ğ•t—^
