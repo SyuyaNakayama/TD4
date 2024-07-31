@@ -64,6 +64,12 @@ public class AttackMotionData : ScriptableObject
         public float easePow;
     }
     [System.Serializable]
+    public struct UniqueActionKey
+    {
+        public Vector2 keyFrame;
+        public string uniqueActName;
+    }
+    [System.Serializable]
     public struct SEKey
     {
         public float keyFrame;
@@ -83,6 +89,7 @@ public class AttackMotionData : ScriptableObject
         public AttackKey[] meleeAttackKeys;
         public AttackKey[] shotKeys;
         public MoveKey[] moveKeys;
+        public UniqueActionKey[] uniqueActionKeys;
         public Vector2[] shieldKeys;
         public Vector2[] disAllowGroundSetKeys;
         public SEKey[] seKeys;

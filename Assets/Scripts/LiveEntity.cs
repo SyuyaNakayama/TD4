@@ -135,6 +135,7 @@ public class LiveEntity : GeoGroObject
     MeleeAttackAndCursorName[] meleeAttackDatas = { };
     ShotAndCursorName[] shotDatas = { };
     AttackArea[] attackAreas = { };
+    string[] uniqueActDatas = { };
     protected string animationName;
     protected float animationProgress;
     float prevAnimationProgress;
@@ -798,6 +799,17 @@ public class LiveEntity : GeoGroObject
     {
         return !IsLive() && cadaverLifeTimeFrame <= 0;
     }
+    public bool IsUniqueActing(string uniqueActName)
+    {
+        for (int i = 0; i < uniqueActDatas.Length; i++)
+        {
+            if (uniqueActDatas[i] == uniqueActName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     //死んでいるときにこれを呼ぶと復活する
     void Revive()
@@ -841,6 +853,9 @@ public class LiveEntity : GeoGroObject
 
         //3Dカーソルをリセット
         Array.Resize(ref cursors, 0);
+
+        //固有動作ポイントをリセット
+        Array.Resize(ref uniqueActDatas, 0);
 
         if (IsAttacking())
         {
@@ -939,6 +954,22 @@ public class LiveEntity : GeoGroObject
                 }
 
                 movement += replaceVector;
+            }
+
+            //固有動作ポイント
+            if (attackMotionData.GetData().uniqueActionKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.GetData().
+                        uniqueActionKeys.Length; i++)
+                {
+                    AttackMotionData.UniqueActionKey current =
+                        attackMotionData.GetData().uniqueActionKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        Array.Resize(ref uniqueActDatas, uniqueActDatas.Length + 1);
+                        uniqueActDatas[uniqueActDatas.Length - 1] = current.uniqueActName;
+                    }
+                }
             }
 
             //無敵時間

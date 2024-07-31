@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b544b4772696443a85c9f0a063c1a99, type: 3}
-  m_Name: gigantSaw
+  m_Name: gigantWheel
   m_EditorClassIdentifier: 
   cursors:
   - name: sword
@@ -28,7 +28,7 @@ MonoBehaviour:
   shotDatas: []
   data:
     name: "\u5DE8\u8DF3\u8972"
-    totalFrame: 300
+    totalFrame: 150
     meleeAttackKeys:
     - keyFrame: {x: 0.2, y: 0.8}
       dataName: sword
@@ -60,6 +60,9 @@ MonoBehaviour:
         z: 1
       easeType: 0
       easePow: 3
+    uniqueActionKeys:
+    - keyFrame: {x: 0, y: 1}
+      uniqueActName: hardAim
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
