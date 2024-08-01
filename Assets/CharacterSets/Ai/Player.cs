@@ -48,20 +48,6 @@ public class Player : LiveEntity
         Array.Resize(ref touchedItems, 0);
         allowedItemEffect = false;
 
-        if (IsAttacking())
-        {
-            //固有ワザ以外の技を使っている間は攻撃モーションを再生
-            if (!IsAttacking(GetData().GetDefaultAttackMotionName()))
-            {
-                animationName = "attack";
-            }
-        }
-        else if (!IsLanding())
-        {
-            //着地していない、かつ攻撃中でもなければ空中モーションを再生
-            animationName = "midair";
-        }
-
         // 移動
         // コントローラーとキーボード両方に対応
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
@@ -79,6 +65,20 @@ public class Player : LiveEntity
             {
                 animationName = "walk";
             }
+        }
+
+        if (IsAttacking())
+        {
+            //固有ワザ以外の技を使っている間は攻撃モーションを再生
+            if (!IsAttacking(GetData().GetDefaultAttackMotionName()))
+            {
+                animationName = "attack";
+            }
+        }
+        else if (!IsLanding())
+        {
+            //着地していない、かつ攻撃中でもなければ空中モーションを再生
+            animationName = "midair";
         }
 
         //スペースキーでジャンプ
@@ -101,7 +101,8 @@ public class Player : LiveEntity
             || Input.GetKey(KeyCode.M)
             || Input.GetKey("joystick button 1");
         //攻撃ボタンの押し始めかつ武器を持っているなら
-        if (attackInput && !attackTrigger && !IsAttacking()
+        if (attackInput && !attackTrigger
+            && (!IsAttacking() || IsAttacking(GetData().GetDefaultAttackMotionName()))
             && characters.Length > 0)
         {
             //攻撃モーションを再生

@@ -20,7 +20,7 @@ public class OperationInstructions : MonoBehaviour
 
     void Update()
     {
-        //æ¥ç¶šã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã®æ•°ã‚’èª¿ã¹ã‚‹
+        //Ú‘±‚³‚ê‚Ä‚¢‚éƒRƒ“ƒgƒ[ƒ‰‚Ì”‚ğ’²‚×‚é
         int controllerNum = 0;
         string[] controllers = Input.GetJoystickNames();
         for (int i = 0; i < controllers.Length; i++)
@@ -31,7 +31,7 @@ public class OperationInstructions : MonoBehaviour
             }
         }
 
-        //ä¸€å°ã‚‚æ¥ç¶šã•ã‚Œã¦ãªã‘ã‚Œã°ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å°‚ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+        //ˆê‘ä‚àÚ‘±‚³‚ê‚Ä‚È‚¯‚ê‚ÎƒL[ƒ{[ƒhê—p‚ÌƒeƒLƒXƒg‚ÉØ‚è‘Ö‚¦‚é
         if (controllerNum <= 0)
         {
             button.SetText(keyBoardControlText);
@@ -39,7 +39,7 @@ public class OperationInstructions : MonoBehaviour
         }
         else
         {
-            //æ¥ç¶šã•ã‚Œã¦ã„ã‚Œã°ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å°‚ç”¨ãƒ†ã‚­ã‚¹ãƒˆã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+            //Ú‘±‚³‚ê‚Ä‚¢‚ê‚ÎƒRƒ“ƒgƒ[ƒ‰ê—pƒeƒLƒXƒg‚ÉØ‚è‘Ö‚¦‚é
             button.SetText(gamePadControlText);
             buttonAttack.SetText(gamePadAttackButtonText);
         }

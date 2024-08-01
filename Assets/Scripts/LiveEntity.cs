@@ -482,8 +482,7 @@ public class LiveEntity : GeoGroObject
                     shiftedprevAnimationProgress, animationProgress,
                     false, false))
                 {
-                    GetComponent<AudioSource>().clip = current.se;
-                    GetComponent<AudioSource>().Play();
+                    PlayAsSE(current.se);
                 }
             }
         }
@@ -1038,8 +1037,7 @@ public class LiveEntity : GeoGroObject
                         attackMotionData.GetData().seKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        GetComponent<AudioSource>().clip = current.se;
-                        GetComponent<AudioSource>().Play();
+                        PlayAsSE(current.se);
                     }
                 }
             }
