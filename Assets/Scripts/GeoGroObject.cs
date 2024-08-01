@@ -61,6 +61,8 @@ public class GeoGroObject : AlhaPhysicsObject
                                 float currentGroundDistance = Vector3.Magnitude(
                                     currentColliders[k].ClosestPoint(transform.position) - transform.position);
                                 if ((!detected || currentGroundDistance < nearestGroundDistance)
+                                    && KX_netUtil.IsInsidePosition(
+                                    currentColliders[k], tempGround.ClosestPoint(transform.position))
                                     && currentColliders[k].GetComponent<UnLandableObject>() == null)
                                 {
                                     tempGround = currentColliders[k];
