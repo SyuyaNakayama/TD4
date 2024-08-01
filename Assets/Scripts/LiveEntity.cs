@@ -44,10 +44,11 @@ public class LiveEntity : GeoGroObject
     const int reviveGhostTimeFrame = 90;
     const int maxRepairCoolTimeFrame = 600;
     const float autoRepairPower = 0.003f;
+    const int maxDamageReactionTimeFrame = 10;
     const int maxCadaverLifeTimeFrame = 60;
     const int freezeCadaverLifeTimeFrame = 40;
     const int shakeCadaverLifeTimeFrame = 43;
-    const int maxDamageReactionTimeFrame = 10;
+    const int maxGoalAnimationTimeFrame = 120;
     const int maxBattery = 300;
 
     private GameObject gameManager;
@@ -108,6 +109,7 @@ public class LiveEntity : GeoGroObject
     int repairCoolTimeFrame;
     int damageReactionTimeFrame;
     int cadaverLifeTimeFrame;
+    int goalAnimationTimeFrame;
     int killCount;
     public int GetKillCount()
     {
@@ -224,6 +226,7 @@ public class LiveEntity : GeoGroObject
         if (IsLive() && !GetGoaled())
         {
             cadaverLifeTimeFrame = maxCadaverLifeTimeFrame;
+            goalAnimationTimeFrame = maxGoalAnimationTimeFrame;
 
             if (IsActable())
             {
@@ -288,16 +291,32 @@ public class LiveEntity : GeoGroObject
             }
             else
             {
-                //何かボタンを押したらステージを出る
-                if (Input.GetKey(KeyCode.Space)
+                if (goalAnimationTimeFrame > 0)
+                {
+                    goalAnimationTimeFrame--;
+                    animationName = "goal";
+                    animationProgress =
+                        KX_netUtil.RangeMap(
+                        Mathf.Clamp(goalAnimationTimeFrame,
+                        0, maxGoalAnimationTimeFrame),
+                        maxGoalAnimationTimeFrame, 0,
+                        0, 1);
+                }
+                else
+                {
+                    animationName = "result";
+
+                    //何かボタンを押したらステージを出る
+                    if (Input.GetKey(KeyCode.Space)
                     || Input.GetKey("joystick button 0")
                     || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
                     || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
                     || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
                     || Input.GetKey(KeyCode.M)
                     || Input.GetKey("joystick button 1"))
-                {
-                    Quit();
+                    {
+                        Quit();
+                    }
                 }
             }
         }

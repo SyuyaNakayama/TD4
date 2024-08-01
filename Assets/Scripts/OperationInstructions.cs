@@ -10,19 +10,27 @@ public class OperationInstructions : MonoBehaviour
 
     void Update()
     {
-        //Ú‘±‚³‚ê‚Ä‚¢‚éƒRƒ“ƒgƒ[ƒ‰‚Ì–¼‘O‚ğ’²‚×‚é
-        var controllers = Input.GetJoystickNames();
-
-        //ˆê‘ä‚àÚ‘±‚³‚ê‚Ä‚È‚¯‚ê‚ÎƒL[ƒ{[ƒhê—p‚ÌƒeƒLƒXƒg‚ÉØ‚è‘Ö‚¦‚é
-        if (controllers[0] != "")
+        //æ¥ç¶šã•ã‚Œã¦ã„ã‚‹ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã®æ•°ã‚’èª¿ã¹ã‚‹
+        int controllerNum = 0;
+        string[] controllers = Input.GetJoystickNames();
+        for (int i = 0; i < controllers.Length; i++)
         {
-            button.SetText("[W][A][S][D]FƒJƒƒ‰’²®\r\n[ª][«][©][¨]FˆÚ“®@[SPACE]FƒWƒƒƒ“ƒv\r\n");
+            if (controllers[i] != "")
+            {
+                controllerNum++;
+            }
+        }
+
+        //ä¸€å°ã‚‚æ¥ç¶šã•ã‚Œã¦ãªã‘ã‚Œã°ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å°‚ç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+        if (controllerNum <= 0)
+        {
+            button.SetText("[W][A][S][D]ï¼šã‚«ãƒ¡ãƒ©èª¿æ•´ã€€[Z]ï¼šæ”»æ’ƒ\r\n[â†‘][â†“][â†][â†’]ï¼šç§»å‹•ã€€[SPACE]ï¼šã‚¸ãƒ£ãƒ³ãƒ—\r\n");
             buttonAttack.SetText("[Z]");
         }
         else
         {
-            //Ú‘±‚³‚ê‚Ä‚¢‚ê‚ÎƒRƒ“ƒgƒ[ƒ‰ê—pƒeƒLƒXƒg‚ÉØ‚è‘Ö‚¦‚é
-            button.SetText("‰EƒXƒeƒBƒbƒNFƒJƒƒ‰’²®\r\n¶ƒXƒeƒBƒbƒNFˆÚ“®@[A]FƒWƒƒƒ“ƒv\r\n");
+            //æ¥ç¶šã•ã‚Œã¦ã„ã‚Œã°ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©å°‚ç”¨ãƒ†ã‚­ã‚¹ãƒˆã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+            button.SetText("å³ã‚¹ãƒ†ã‚£ãƒƒã‚¯ï¼šã‚«ãƒ¡ãƒ©èª¿æ•´ã€€[B]ï¼šæ”»æ’ƒ\r\nå·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯ï¼šç§»å‹•ã€€[A]ï¼šã‚¸ãƒ£ãƒ³ãƒ—\r\n");
             buttonAttack.SetText("[B]");
         }
     }
