@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6190804485209357817}
   - component: {fileID: 3992205634949649019}
   - component: {fileID: 1273808525812563555}
+  - component: {fileID: 2043752240984189460}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -117,6 +118,21 @@ MonoBehaviour:
     hitback: 60
     ghostTime: 30
   blowVec: {x: 0, y: 0, z: 0}
+--- !u!114 &2043752240984189460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449566398688142725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e46acf2bba0a64ad686fc8e8b64dd2ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackArea: {fileID: 1273808525812563555}
+  meshRenderer: {fileID: 6190804485209357817}
+  materialIndex: 0
 --- !u!1 &9090563351486721667
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,6 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 373a870e10d4f4696a14f7279a4aaded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAllowMove: 0
   drag: 0.8
   dragAxis:
     x: 0
@@ -203,6 +220,7 @@ MonoBehaviour:
     z: 0
   gravityScale: 1
   noGravity: 0
+  dataLock: 1
   currentGround: {fileID: 0}
   allowGroundSet: 1
   billBoard: {fileID: 9090563351603810709}

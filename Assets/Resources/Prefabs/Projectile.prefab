@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4240701418785611427}
   - component: {fileID: 595236311982695570}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 2611885154353610472}
   - component: {fileID: 2683961382914783630}
   - component: {fileID: -742029273778223884}
+  - component: {fileID: 6969904708402510799}
   - component: {fileID: 6992411041803304385}
   - component: {fileID: 3070349572961504772}
   - component: {fileID: 5639292415618247265}
@@ -222,6 +223,21 @@ MonoBehaviour:
   ggobj: {fileID: 6992411041803304385}
   collider: {fileID: 506478558006460694}
   visual: {fileID: 4240701418785611427}
+--- !u!114 &6969904708402510799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4491665169101572370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e46acf2bba0a64ad686fc8e8b64dd2ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackArea: {fileID: -742029273778223884}
+  meshRenderer: {fileID: 5639292415618247265}
+  materialIndex: 0
 --- !u!114 &6992411041803304385
 MonoBehaviour:
   m_ObjectHideFlags: 0
