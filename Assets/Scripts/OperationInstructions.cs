@@ -5,25 +5,43 @@ using TMPro;
 
 public class OperationInstructions : MonoBehaviour
 {
-    public TextMeshProUGUI button;
-    public TextMeshProUGUI buttonAttack;
+    [SerializeField]
+    TextMeshProUGUI button;
+    [SerializeField]
+    TextMeshProUGUI buttonAttack;
+    [TextArea(1, 16), SerializeField]
+    string keyBoardControlText;
+    [TextArea(1, 16), SerializeField]
+    string keyBoardAttackButtonText;
+    [TextArea(1, 16), SerializeField]
+    string gamePadControlText;
+    [TextArea(1, 16), SerializeField]
+    string gamePadAttackButtonText;
 
     void Update()
     {
-        //接続されているコントローラの名前を調べる
-        var controllers = Input.GetJoystickNames();
+        //接続されているコントローラの数を調べる
+        int controllerNum = 0;
+        string[] controllers = Input.GetJoystickNames();
+        for (int i = 0; i < controllers.Length; i++)
+        {
+            if (controllers[i] != "")
+            {
+                controllerNum++;
+            }
+        }
 
         //一台も接続されてなければキーボード専用のテキストに切り替える
-        if (controllers[0] != "")
+        if (controllerNum <= 0)
         {
-            button.SetText("[W][A][S][D]：カメラ調整\r\n[↑][↓][←][→]：移動　[SPACE]：ジャンプ\r\n");
-            buttonAttack.SetText("[Z]");
+            button.SetText(keyBoardControlText);
+            buttonAttack.SetText(keyBoardAttackButtonText);
         }
         else
         {
             //接続されていればコントローラ専用テキストに切り替える
-            button.SetText("右スティック：カメラ調整\r\n左スティック：移動　[A]：ジャンプ\r\n");
-            buttonAttack.SetText("[B]");
+            button.SetText(gamePadControlText);
+            buttonAttack.SetText(gamePadAttackButtonText);
         }
     }
 }

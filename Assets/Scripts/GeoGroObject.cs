@@ -62,12 +62,33 @@ public class GeoGroObject : AlhaPhysicsObject
                                     currentColliders[k].ClosestPoint(transform.position) - transform.position);
                                 if ((!detected || currentGroundDistance < nearestGroundDistance)
                                     && KX_netUtil.IsInsidePosition(
-                                    currentColliders[k], tempGround.ClosestPoint(transform.position))
-                                    && currentColliders[k].GetComponent<UnLandableObject>() == null)
+                                    currentColliders[k], tempGround.ClosestPoint(transform.position)))
                                 {
-                                    tempGround = currentColliders[k];
-                                    nearestGroundDistance = currentGroundDistance;
-                                    detected = true;
+                                    if (currentColliders[k].GetComponent<UnLandableObject>() == null)
+                                    {
+                                        tempGround = currentColliders[k];
+                                        nearestGroundDistance = currentGroundDistance;
+                                        detected = true;
+                                    }
+                                    else
+                                    {
+                                        for (int l = 0; l < currentColliders.Length; l++)
+                                        {
+                                            if (currentColliders[l] != null)
+                                            {
+                                                currentGroundDistance = Vector3.Magnitude(
+                                                    currentColliders[l].ClosestPoint(transform.position) - transform.position);
+                                                if ((!detected || currentGroundDistance < nearestGroundDistance)
+                                                    && KX_netUtil.IsHit(currentColliders[k], currentColliders[l], 0)
+                                                    && currentColliders[l].GetComponent<UnLandableObject>() == null)
+                                                {
+                                                    tempGround = currentColliders[l];
+                                                    nearestGroundDistance = currentGroundDistance;
+                                                    detected = true;
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

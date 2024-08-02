@@ -16,11 +16,13 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: 2ae5906cb43344d6a8b86a346d2e562c, type: 3}
   themeColor: {r: 1, g: 0.6784314, b: 0.78823537, a: 1}
   lifeRatio: 0.4
+  heavy: 1
   gravityScale: 0
   dragAxis:
     x: 1
     y: 1
     z: 1
+  scale: 1
   defaultAttackMotionName: 
   weaponedAttackMotionName: 
   attackMotions: []
@@ -36,11 +38,13 @@ MonoBehaviour:
   - name: damage
     totalFrame: 8
     transformAnimationKeys: []
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 0.5}
       facialExpressionName: damage
     - keyFrame: {x: 0.5, y: 1}
       facialExpressionName: damage2
+    seKeys: []
   - name: defeat
     totalFrame: 0
     transformAnimationKeys:
@@ -78,6 +82,7 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 4
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 0.125}
       facialExpressionName: defeat
@@ -95,6 +100,7 @@ MonoBehaviour:
       facialExpressionName: defeat
     - keyFrame: {x: 0.875, y: 1}
       facialExpressionName: defeat2
+    seKeys: []
   facialExpressions:
   - name: damage
     indexAndTextures:

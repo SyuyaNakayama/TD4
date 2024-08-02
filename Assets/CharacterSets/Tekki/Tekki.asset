@@ -16,18 +16,136 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: 46e90a38c926342f9bd689d6dd0e5a04, type: 3}
   themeColor: {r: 1, g: 0.5, b: 0, a: 1}
   lifeRatio: 0.5
+  heavy: 0
   gravityScale: 0.5
   dragAxis:
     x: 1
     y: 1
     z: 1
+  scale: 1
   defaultAttackMotionName: spikeBody_E
   weaponedAttackMotionName: spikeBody
   attackMotions:
   - {fileID: 11400000, guid: c6578a7bff8244b5aa26f9b76f9a3d6f, type: 2}
   - {fileID: 11400000, guid: 83c60cf3db63940f0a9c1e4671fe5bad, type: 2}
-  defaultBodyPartsTransform: []
-  defaultTextures: []
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - position: {x: 0.25, y: -0.35, z: 0}
+    eulerAngles: {x: 270, y: 0, z: 0}
+    scale: {x: 0.4, y: 0.8, z: 0.25}
+  - position: {x: -0.25, y: -0.35, z: 0}
+    eulerAngles: {x: 270, y: 0, z: 0}
+    scale: {x: 0.4, y: 0.8, z: 0.25}
+  defaultTextures:
+  - {fileID: 2800000, guid: faf75392b52ae417496a0295bd19b07e, type: 3}
+  - {fileID: 2800000, guid: d469b7dce358d4585a6968fc8c61941b, type: 3}
+  - {fileID: 2800000, guid: 4e40d1954ff4348aba064c344b4c093f, type: 3}
+  - {fileID: 2800000, guid: 4e40d1954ff4348aba064c344b4c093f, type: 3}
   defaultSprites: []
-  animations: []
-  facialExpressions: []
+  animations:
+  - name: walk
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.2}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.25, y: -0.2, z: -0.4}
+        eulerAngles: {x: -45, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.25, y: -0.35, z: 0}
+        eulerAngles: {x: -90, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.2, y: 0.5}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.25, y: -0.35, z: 0}
+        eulerAngles: {x: -90, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.25, y: -0.2, z: 0.4}
+        eulerAngles: {x: -135, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 1
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.7}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.25, y: -0.2, z: 0.4}
+        eulerAngles: {x: -135, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.25, y: -0.35, z: 0}
+        eulerAngles: {x: -90, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.7}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.25, y: -0.35, z: 0}
+        eulerAngles: {x: -90, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.25, y: -0.2, z: -0.4}
+        eulerAngles: {x: -45, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 1
+      easePow: 4
+    rigAnimationKeys: []
+    facialExpressionKeys: []
+    seKeys: []
+  - name: damage
+    totalFrame: 10
+    transformAnimationKeys: []
+    rigAnimationKeys: []
+    facialExpressionKeys:
+    - keyFrame: {x: 0, y: 1}
+      facialExpressionName: damage
+    seKeys: []
+  - name: defeat
+    totalFrame: 10
+    transformAnimationKeys: []
+    rigAnimationKeys: []
+    facialExpressionKeys:
+    - keyFrame: {x: 0, y: 1}
+      facialExpressionName: defeat
+    seKeys: []
+  facialExpressions:
+  - name: damage
+    indexAndTextures:
+    - index: 1
+      texture: {fileID: 2800000, guid: b4142fbd77ff641ee85e0c7932201110, type: 3}
+    indexAndSprites: []
+  - name: defeat
+    indexAndTextures:
+    - index: 1
+      texture: {fileID: 2800000, guid: 2da14516c094c436483d67c0015e8104, type: 3}
+    indexAndSprites: []

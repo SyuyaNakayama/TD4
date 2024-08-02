@@ -28,15 +28,20 @@ MonoBehaviour:
   shotDatas: []
   data:
     name: "\u30C8\u30B2\u30C8\u30B2\u30DC\u30C7\u30A3"
-    totalFrame: 0
+    totalFrame: 60
     meleeAttackKeys:
     - keyFrame: {x: 0, y: 1}
       dataName: spike
       cursorName: center
+      postMove: 0
     shotKeys: []
     moveKeys: []
+    uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys:
     - keyFrame: 0
       se: {fileID: 0}
+    animationKeys:
+    - keyFrame: {x: 0, y: 1}
+      animationName: walk

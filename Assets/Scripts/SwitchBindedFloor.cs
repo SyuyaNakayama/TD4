@@ -33,14 +33,14 @@ public class SwitchBindedFloor : MonoBehaviour
         Vector3 targetLocalPosition = negativeLocalPosition;
         Vector3 targetLocalEulerAngles = negativeLocalEulerAngles;
         Vector3 targetLocalScale = negativeLocalScale;
-        if(bindSwitch.GetActive())
+        if (bindSwitch.GetActive())
         {
             targetLocalPosition = positiveLocalPosition;
             targetLocalEulerAngles = positiveLocalEulerAngles;
             targetLocalScale = positiveLocalScale;
         }
 
-        if(transform.parent != null)
+        if (transform.parent != null)
         {
             rigidbody.MovePosition(Vector3.Lerp(
                 transform.parent.TransformPoint(transform.localPosition),
@@ -59,9 +59,9 @@ public class SwitchBindedFloor : MonoBehaviour
             Quaternion.Slerp(transform.localRotation,
             Quaternion.Euler(targetLocalEulerAngles),
             transformFlipIntensity);
-            
+
         transform.localScale =
-            Vector3.Lerp(transform.localScale,targetLocalScale,
+            Vector3.Lerp(transform.localScale, targetLocalScale,
             transformFlipIntensity);
     }
 }
