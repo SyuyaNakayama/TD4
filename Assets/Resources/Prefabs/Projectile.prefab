@@ -220,6 +220,7 @@ MonoBehaviour:
   blowVec: {x: 0, y: 0, z: 0}
   moveVec: {x: 0, y: 0, z: 0}
   ggobj: {fileID: 6992411041803304385}
+  collider: {fileID: 506478558006460694}
   visual: {fileID: 4240701418785611427}
 --- !u!114 &6992411041803304385
 MonoBehaviour:
@@ -241,8 +242,9 @@ MonoBehaviour:
     z: 0
   gravityScale: 0
   noGravity: 1
+  dataLock: 0
   currentGround: {fileID: 0}
-  allowGroundSet: 1
+  allowGroundSet: 0
 --- !u!33 &3070349572961504772
 MeshFilter:
   m_ObjectHideFlags: 0

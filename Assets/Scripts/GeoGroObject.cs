@@ -6,8 +6,10 @@ using UnityEngine;
 public class GeoGroObject : AlhaPhysicsObject
 {
     [SerializeField]
+    protected bool dataLock = true;
+    [SerializeField]
     Collider currentGround;
-    public Collider GetCurrentGeround()
+    public Collider GetCurrentGround()
     {
         return currentGround;
     }
@@ -178,6 +180,16 @@ public class GeoGroObject : AlhaPhysicsObject
 
     public void SetCurrentGround(Collider setCurrentGround)
     {
-        currentGround = setCurrentGround;
+        if (!dataLock)
+        {
+            currentGround = setCurrentGround;
+        }
+    }
+    public void SetAllowGroundSet(bool setAllowGroundSet)
+    {
+        if (!dataLock)
+        {
+            allowGroundSet = setAllowGroundSet;
+        }
     }
 }

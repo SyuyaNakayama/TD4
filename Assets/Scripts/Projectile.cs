@@ -12,6 +12,8 @@ public class Projectile : AttackArea
     [SerializeField]
     GeoGroObject ggobj;
     [SerializeField]
+    Collider collider;
+    [SerializeField]
     SpriteRenderer visual;
     protected override void AttackAreaUpdate()
     {
@@ -27,6 +29,10 @@ public class Projectile : AttackArea
         {
             scalingTarget = GetAttacker().gameObject;
         }
+
+        ggobj.SetAllowGroundSet(projectileData.setGround);
+        collider.enabled = projectileData.setGround;
+
         //回転角とスケーリングを考慮した方向、スピードで飛んでいく
         ggobj.Move(moveVec * projectileData.speed / Time.deltaTime);
 
@@ -45,6 +51,13 @@ public class Projectile : AttackArea
         {
             projectileData = setData;
             moveVec = setMoveVec;
+
+            if (setData.setGround && GetAttacker())
+            {
+                ggobj.SetCurrentGround(
+                    GetAttacker().GetCurrentGround());
+            }
+
             projectileDataLock = true;
         }
     }
