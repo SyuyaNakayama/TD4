@@ -18,6 +18,8 @@ public class AlhaPhysicsObject : MonoBehaviour
         return movement;
     }
     Vector3 preMovement;
+    [SerializeField]
+    protected bool isAllowMove;
     public Vector3 localGrandMove
     {
         get;
@@ -121,6 +123,14 @@ public class AlhaPhysicsObject : MonoBehaviour
         noGravity = false;
     }
 
+    //動ける状態なら移動
+    public void Move(Vector3 setMovement)
+    {
+        if (isAllowMove)
+        {
+            movement = setMovement;
+        }
+    }
     //リフトに乗っている時や風に煽られているの動きを実現するための関数
     public void AddFieldMove(Vector3 force)
     {

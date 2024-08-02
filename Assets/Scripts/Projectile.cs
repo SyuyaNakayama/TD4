@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(GeoGroObject))]
 public class Projectile : AttackArea
 {
     AttackMotionData.ProjectileData projectileData;
     bool projectileDataLock = false;
+    [SerializeField]
     Vector3 moveVec;
+    [SerializeField]
+    GeoGroObject ggobj;
     [SerializeField]
     SpriteRenderer visual;
     protected override void AttackAreaUpdate()
@@ -24,8 +28,7 @@ public class Projectile : AttackArea
             scalingTarget = GetAttacker().gameObject;
         }
         //回転角とスケーリングを考慮した方向、スピードで飛んでいく
-        transform.position += transform.rotation * moveVec
-            * projectileData.speed * scalingTarget.transform.lossyScale.x;
+        ggobj.Move(moveVec * projectileData.speed / Time.deltaTime);
 
         //寿命が尽きたら消える
         projectileData.lifetime--;

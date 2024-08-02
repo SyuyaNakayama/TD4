@@ -26,6 +26,7 @@ public class AttackMotionData : ScriptableObject
     {
         public float speed;
         public int lifetime;
+        public bool setGround;
         public bool yBillBoard;
         public bool flatBillBoard;
         public Sprite sprite;

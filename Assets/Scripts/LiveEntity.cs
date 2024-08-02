@@ -217,6 +217,8 @@ public class LiveEntity : GeoGroObject
         //アニメーションを通常時のものにする
         animationName = "idol";
 
+        isAllowMove = IsActable();
+
         animationProgress = Mathf.Repeat(animationProgress + animationSpeed, 1);
         animationSpeed = 0;
 
@@ -1182,14 +1184,6 @@ public class LiveEntity : GeoGroObject
         shotDatas[shotDatas.Length - 1].cursorName = cursorName;
         shotDatas[shotDatas.Length - 1].postMove = postMove;
         shotDatas[shotDatas.Length - 1].used = false;
-    }
-    //動ける状態なら移動
-    public void Move(Vector3 setMovement)
-    {
-        if (IsActable())
-        {
-            movement = setMovement;
-        }
     }
     //このLiveEntityから効果音を鳴らす
     public void PlayAsSE(AudioClip clip)
