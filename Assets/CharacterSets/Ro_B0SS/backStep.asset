@@ -10,32 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b544b4772696443a85c9f0a063c1a99, type: 3}
-  m_Name: walk
+  m_Name: backStep
   m_EditorClassIdentifier: 
   cursors: []
   meleeAttackDatas: []
   shotDatas: []
   data:
-    name: "\u79FB\u52D5"
-    totalFrame: 20
+    name: "\u30D0\u30C3\u30AF\u30B9\u30C6\u30C3\u30D7"
+    totalFrame: 10
     meleeAttackKeys: []
     shotKeys: []
     moveKeys:
-    - keyFrame: {x: 0, y: 0.5}
-      moveVec: {x: 0, y: 0, z: 1}
+    - keyFrame: {x: 0, y: 1}
+      moveVec: {x: 0, y: 0, z: -2}
       ignoreAxis:
         x: 1
         y: 1
         z: 0
-      easeType: 2
-      easePow: 2
-    - keyFrame: {x: 0.5, y: 1}
-      moveVec: {x: 0, y: 0, z: 1}
-      ignoreAxis:
-        x: 1
-        y: 1
-        z: 0
-      easeType: 2
+      easeType: 1
       easePow: 2
     uniqueActionKeys:
     - keyFrame: {x: 0, y: 1}

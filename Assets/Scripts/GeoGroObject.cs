@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-[DisallowMultipleComponent]
 public class GeoGroObject : AlhaPhysicsObject
 {
     [SerializeField]
     Collider currentGround;
+    public Collider GetCurrentGeround()
+    {
+        return currentGround;
+    }
     Collider[] touchedGrounds = { };
     [SerializeField]
     protected bool allowGroundSet = true;
@@ -18,12 +20,12 @@ public class GeoGroObject : AlhaPhysicsObject
         GGOAwake();
     }
 
-    //物理演算が更新されるタイミングで毎フレーム呼ばれる
-    //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽ?ｿｽ?ｿｽX?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ^?ｿｽC?ｿｽ~?ｿｽ?ｿｽ?ｿｽO?ｿｽﾅ厄ｿｽ?ｿｽt?ｿｽ?ｿｽ?ｿｽ[?ｿｽ?ｿｽ?ｿｽﾄばゑｿｽ?ｿｽ
+    //?ｿｽ?ｿｽ?ｿｽﾓ！?ｿｽ@Update()?ｿｽﾆは呼ばゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾙなるた?ｿｽﾟ趣ｿｽ?ｿｽ?ｿｽ?ｿｽY?ｿｽ?ｿｽ?ｿｽﾉゑｿｽ?ｿｽs?ｿｽ?合?ｿｽﾉ気?ｿｽ?ｿｽt?ｿｽ?ｿｽ?ｿｽﾄ会ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
     protected override void APOUpdate()
     {
         Collider tempGround = currentGround;
-        //触れたコライダーのうち最も近いものを一旦自身の足場とする
+        //?ｿｽG?ｿｽ黷ｽ?ｿｽR?ｿｽ?ｿｽ?ｿｽC?ｿｽ_?ｿｽ[?ｿｽﾌゑｿｽ?ｿｽ?ｿｽ?ｿｽﾅゑｿｽ?ｿｽﾟゑｿｽ?ｿｽ?ｿｽ?ｿｽﾌゑｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ?ｿｽg?ｿｽﾌ托ｿｽ?ｿｽ?ｿｽﾆゑｿｽ?ｿｽ?ｿｽ
         float nearestGroundDistance = 0;
         bool detected = false;
         for (int i = 0; i < touchedGrounds.Length; i++)
@@ -41,7 +43,7 @@ public class GeoGroObject : AlhaPhysicsObject
             }
         }
 
-        //そのコライダーが他のコライダーとクラスターになっているか検索
+        //?ｿｽ?ｿｽ?ｿｽﾌコ?ｿｽ?ｿｽ?ｿｽC?ｿｽ_?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌコ?ｿｽ?ｿｽ?ｿｽC?ｿｽ_?ｿｽ[?ｿｽﾆク?ｿｽ?ｿｽ?ｿｽX?ｿｽ^?ｿｽ[?ｿｽﾉなゑｿｽ?ｿｽﾄゑｿｽ?ｿｽ驍ｩ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
         foreach (MargedGround obj in UnityEngine.Object.FindObjectsOfType<MargedGround>())
         {
             MargedGround.GroundCluster[] groundClusters = obj.GetGroundClusters();
@@ -50,7 +52,7 @@ public class GeoGroObject : AlhaPhysicsObject
                 Collider[] currentColliders = groundClusters[i].colliders;
                 for (int j = 0; j < currentColliders.Length; j++)
                 {
-                    //クラスターが見つかったらその中で最も近いものを一旦自身の足場とする
+                    //?ｿｽN?ｿｽ?ｿｽ?ｿｽX?ｿｽ^?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾂゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ轤ｻ?ｿｽﾌ抵ｿｽ?ｿｽﾅ最ゑｿｽ?ｿｽﾟゑｿｽ?ｿｽ?ｿｽ?ｿｽﾌゑｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ?ｿｽg?ｿｽﾌ托ｿｽ?ｿｽ?ｿｽﾆゑｿｽ?ｿｽ?ｿｽ
                     if (currentColliders[j] == tempGround)
                     {
                         detected = false;
@@ -98,49 +100,49 @@ public class GeoGroObject : AlhaPhysicsObject
             }
         }
 
-        //そのコライダーが着地できるものであれば正式に自身の足場とする
+        //?ｿｽ?ｿｽ?ｿｽﾌコ?ｿｽ?ｿｽ?ｿｽC?ｿｽ_?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽn?ｿｽﾅゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌでゑｿｽ?ｿｽ?ｿｽﾎ撰ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ趣ｿｽ?ｿｽg?ｿｽﾌ托ｿｽ?ｿｽ?ｿｽﾆゑｿｽ?ｿｽ?ｿｽ
         if (tempGround != null && tempGround.GetComponent<UnLandableObject>() == null)
         {
             currentGround = tempGround;
         }
 
-        //触れたコライダーの情報をリセット
+        //?ｿｽG?ｿｽ黷ｽ?ｿｽR?ｿｽ?ｿｽ?ｿｽC?ｿｽ_?ｿｽ[?ｿｽﾌ擾ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽb?ｿｽg
         Array.Resize(ref touchedGrounds, 0);
 
-        //足を地面に向ける
+        //?ｿｽ?ｿｽ?ｿｽ?ｿｽn?ｿｽﾊに鯉ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
         if (currentGround != null
             && currentGround.ClosestPoint(transform.position) != transform.position)
         {
-            //足を向けるべき位置を算出する
+            //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾗゑｿｽ?ｿｽﾊ置?ｿｽ?ｿｽ?ｿｽZ?ｿｽo?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             Vector3 localClosestPoint = transform.InverseTransformPoint(
                 currentGround.ClosestPoint(transform.position));
-            //どちらかといえば縦向きに大きく回転する必要があるなら
+            //?ｿｽﾇゑｿｽ?ｿｽ轤ｩ?ｿｽﾆゑｿｽ?ｿｽ?ｿｽ?ｿｽﾎ縦?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ大き?ｿｽ?ｿｽ?ｿｽ?ｿｽ]?ｿｽ?ｿｽ?ｿｽ?ｿｽK?ｿｽv?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾈゑｿｽ
             if (Mathf.Abs(localClosestPoint.z) > Mathf.Abs(localClosestPoint.x))
             {
-                //x軸を中心にその位置を向くように回転させる
+                //x?ｿｽ?ｿｽ?ｿｽ??心?ｿｽﾉゑｿｽ?ｿｽﾌ位置?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ謔､?ｿｽﾉ会ｿｽ]?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
                 transform.Rotate(
                     -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
                     / Mathf.Deg2Rad, 0, 0, Space.Self);
 
-                //再度足を向けるべき位置を算出し、
+                //?ｿｽﾄ度?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾗゑｿｽ?ｿｽﾊ置?ｿｽ?ｿｽ?ｿｽZ?ｿｽo?ｿｽ?ｿｽ?ｿｽA
                 localClosestPoint = transform.InverseTransformPoint(
                     currentGround.ClosestPoint(transform.position));
-                //z軸を中心にその位置を向くように回転させる
+                //z?ｿｽ?ｿｽ?ｿｽ??心?ｿｽﾉゑｿｽ?ｿｽﾌ位置?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ謔､?ｿｽﾉ会ｿｽ]?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
                 transform.Rotate(0, 0,
                     Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
                     / Mathf.Deg2Rad, Space.Self);
             }
             else
             {
-                //z軸を中心にその位置を向くように回転させる
+                //z?ｿｽ?ｿｽ?ｿｽ??心?ｿｽﾉゑｿｽ?ｿｽﾌ位置?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ謔､?ｿｽﾉ会ｿｽ]?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
                 transform.Rotate(0, 0,
                     Mathf.Atan2(localClosestPoint.x, -localClosestPoint.y)
                     / Mathf.Deg2Rad, Space.Self);
 
-                //再度足を向けるべき位置を算出し、
+                //?ｿｽﾄ度?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾗゑｿｽ?ｿｽﾊ置?ｿｽ?ｿｽ?ｿｽZ?ｿｽo?ｿｽ?ｿｽ?ｿｽA
                 localClosestPoint = transform.InverseTransformPoint(
                     currentGround.ClosestPoint(transform.position));
-                //x軸を中心にその位置を向くように回転させる
+                //x?ｿｽ?ｿｽ?ｿｽ??心?ｿｽﾉゑｿｽ?ｿｽﾌ位置?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ謔､?ｿｽﾉ会ｿｽ]?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
                 transform.Rotate(
                     -Mathf.Atan2(localClosestPoint.z, -localClosestPoint.y)
                     / Mathf.Deg2Rad, 0, 0, Space.Self);
@@ -150,13 +152,13 @@ public class GeoGroObject : AlhaPhysicsObject
         GGOUpdate();
     }
 
-    //このオブジェクトがコライダーに触れている間毎フレームこの関数が呼ばれる（触れているコライダーが自動的に引数に入る）
-    //注意！　OnTriggerStay()と違って剛体同士の衝突判定専用です
+    //?ｿｽ?ｿｽ?ｿｽﾌオ?ｿｽu?ｿｽW?ｿｽF?ｿｽN?ｿｽg?ｿｽ?ｿｽ?ｿｽR?ｿｽ?ｿｽ?ｿｽC?ｿｽ_?ｿｽ[?ｿｽﾉ触?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽﾔ厄ｿｽ?ｿｽt?ｿｽ?ｿｽ?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ関撰ｿｽ?ｿｽ?ｿｽ?ｿｽﾄばゑｿｽ?ｿｽi?ｿｽG?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽR?ｿｽ?ｿｽ?ｿｽC?ｿｽ_?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽI?ｿｽﾉ茨ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ難ｿｽ?ｿｽ?ｿｽj
+    //?ｿｽ?ｿｽ?ｿｽﾓ！?ｿｽ@OnTriggerStay()?ｿｽﾆ茨ｿｽ?ｿｽ?ｿｽﾄ搾ｿｽ?ｿｽﾌ難ｿｽ?ｿｽm?ｿｽﾌ衝突費ｿｽ?ｿｽ?ｿｽ?ｿｽp?ｿｽﾅゑｿｽ
     void OnCollisionStay(Collision col)
     {
         if (allowGroundSet)
         {
-            //足を向けるべき地形の候補として登録
+            //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾗゑｿｽ?ｿｽn?ｿｽ`?ｿｽﾌ鯉ｿｽ?ｿｽﾆゑｿｽ?ｿｽﾄ登?ｿｽ^
             Array.Resize(ref touchedGrounds, touchedGrounds.Length + 1);
             touchedGrounds[touchedGrounds.Length - 1] = col.collider;
         }
@@ -172,5 +174,10 @@ public class GeoGroObject : AlhaPhysicsObject
     }
     protected virtual void GGOOnCollisionStay(Collision col)
     {
+    }
+
+    public void SetCurrentGround(Collider setCurrentGround)
+    {
+        currentGround = setCurrentGround;
     }
 }
