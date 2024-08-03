@@ -307,7 +307,13 @@ public class LiveEntity : GeoGroObject
                 else
                 {
                     animationName = "result";
-
+                    //何かボタンを押したらステージを出る
+                    if (Input.GetKey(KeyCode.Return)
+                    || Input.GetKey("joystick button 0")
+                    || Input.GetKey("joystick button 1"))
+                    {
+                        NextStage();
+                    }
                     //何かボタンを押したらステージを出る
                     if (Input.GetKey(KeyCode.Space)
                     || Input.GetKey("joystick button 0")
@@ -853,6 +859,18 @@ public class LiveEntity : GeoGroObject
     void Clear()
     {
         goaled = true;
+    }
+    //今いるステージの派生元として次のステージへ進む
+    void NextStage()
+    {
+        foreach (StageManager obj in UnityEngine.Object.FindObjectsOfType<StageManager>())
+        {
+            if (obj.gameObject.activeInHierarchy)
+            {
+                SceneTransition.ChangeScene(obj.GetNextStageName());
+                return;
+            }
+        }
     }
     //今いるステージの派生元として設定されているシーンに戻る
     void Quit()
