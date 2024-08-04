@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleField : Field
 {
     const string teamID = "enemy";
+    const int maxLifeTime = 5;
 
     [System.Serializable]
     public struct GuarderAndTransform
@@ -35,6 +36,7 @@ public class BattleField : Field
     {
         return battled;
     }
+    int lifeTime;
     bool annihilated;
     public bool GetAnnihilated()
     {
@@ -57,7 +59,16 @@ public class BattleField : Field
         battling = tempBattling;
         if (battling)
         {
-            annihilated = wave >= guarders.Length && livingGuardersNum == 0;
+            if (wave >= guarders.Length && livingGuardersNum == 0)
+            {
+                lifeTime = Mathf.Max(0, lifeTime - 1);
+            }
+            else
+            {
+                lifeTime = maxLifeTime;
+            }
+
+            annihilated = lifeTime <= 0;
             if (guardersNum == 0)
             {
                 if (wave < guarders.Length)
@@ -79,6 +90,10 @@ public class BattleField : Field
             }
             guardersNum = 0;
             livingGuardersNum = 0;
+        }
+        else
+        {
+            lifeTime = maxLifeTime;
         }
         GetComponent<Collider>().enabled = !battled;
         GetComponent<MeshRenderer>().enabled = (battling || visible) && !battled;
