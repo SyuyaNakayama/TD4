@@ -81,6 +81,7 @@ public class AttackMotionData : ScriptableObject
     {
         public Vector2 keyFrame;
         public string animationName;
+        public bool useOriginalAnimTime;
     }
     [System.Serializable]
     public struct Data

@@ -22,7 +22,7 @@ MonoBehaviour:
     x: 1
     y: 0
     z: 1
-  scale: 8
+  scale: 6
   defaultAttackMotionName: 
   weaponedAttackMotionName: 
   attackMotions:
@@ -30,8 +30,628 @@ MonoBehaviour:
   - {fileID: 11400000, guid: faf7bc122a283458e8b5d271eff43049, type: 2}
   - {fileID: 11400000, guid: 5abfe58fc897a4113b389ca08c5ae071, type: 2}
   - {fileID: 11400000, guid: 2b41181ff8b594d008e7ad2c33052f4d, type: 2}
-  defaultBodyPartsTransform: []
-  defaultTextures: []
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  - position: {x: 0.3, y: -0.4, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4, y: 0.2, z: 0.8}
+  - position: {x: -0.3, y: -0.4, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4, y: 0.2, z: 0.8}
+  - position: {x: 0.7, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4, y: 0.4, z: 0.4}
+  - position: {x: -0.7, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 0.4, y: 0.4, z: 0.4}
+  - position: {x: 0, y: 0.2, z: 1}
+    eulerAngles: {x: 0, y: 90, z: 90}
+    scale: {x: 5, y: 5, z: 5}
+  defaultTextures:
+  - {fileID: 2800000, guid: 7148f96d4ad1742f3b408dc38da77090, type: 3}
+  - {fileID: 2800000, guid: 2090c5fa6f66c4d83bc51cd6cbb28fdb, type: 3}
   defaultSprites: []
-  animations: []
+  animations:
+  - name: walk
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 2
+      easePow: 3
+    - keyFrame: {x: 0.25, y: 0.35}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.75, y: 0.85}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 2
+      easePow: 3
+    - keyFrame: {x: 0.25, y: 0.35}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.35, y: 0.5}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.75, y: 0.85}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.85, y: 1}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.25, y: 0.35}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.35, y: 0.5}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 2
+      easePow: 3
+    - keyFrame: {x: 0.75, y: 0.85}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.85, y: 1}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    rigAnimationKeys: []
+    facialExpressionKeys: []
+    seKeys:
+    - keyFrame: 0
+      se: {fileID: 8300000, guid: 3d52ab7311ac2409a9750de04a2e4185, type: 3}
+    - keyFrame: 0.5
+      se: {fileID: 8300000, guid: 3d52ab7311ac2409a9750de04a2e4185, type: 3}
+    - keyFrame: 0.35
+      se: {fileID: 8300000, guid: 9932111705e87485eb7b6fd3a3affce7, type: 3}
+    - keyFrame: 0.85
+      se: {fileID: 8300000, guid: 9932111705e87485eb7b6fd3a3affce7, type: 3}
+    - keyFrame: 0.35
+      se: {fileID: 8300000, guid: 59fe79c4f096849f9818027d435ab373, type: 3}
+    - keyFrame: 0.85
+      se: {fileID: 8300000, guid: 59fe79c4f096849f9818027d435ab373, type: 3}
+  - name: spinJump
+    totalFrame: 7
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 360, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 1
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 1
+    rigAnimationKeys: []
+    facialExpressionKeys: []
+    seKeys:
+    - keyFrame: 0
+      se: {fileID: 8300000, guid: 3fd638cc5508d4ac78378d3c537fcd8a, type: 3}
+  - name: charge
+    totalFrame: 15
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 2
+      easePow: 3
+    - keyFrame: {x: 0.25, y: 0.35}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.75, y: 0.85}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.2, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 2
+      easePow: 3
+    - keyFrame: {x: 0.25, y: 0.35}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.35, y: 0.5}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.75, y: 0.85}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.85, y: 1}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0, y: 0.25}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 1
+      easePow: 3
+    - keyFrame: {x: 0.25, y: 0.35}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: -0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.35, y: 0.5}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 0.75}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: -0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 2
+      easePow: 3
+    - keyFrame: {x: 0.75, y: 0.85}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.1, z: 0.2}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0.85, y: 1}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.3, y: -0.4, z: 0.4}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 4
+    rigAnimationKeys: []
+    facialExpressionKeys: []
+    seKeys:
+    - keyFrame: 0.35
+      se: {fileID: 8300000, guid: 9932111705e87485eb7b6fd3a3affce7, type: 3}
+    - keyFrame: 0.85
+      se: {fileID: 8300000, guid: 9932111705e87485eb7b6fd3a3affce7, type: 3}
   facialExpressions: []

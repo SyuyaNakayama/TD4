@@ -11,11 +11,11 @@ public class CharaChip : Item
     [SerializeField]
     CharaData data;
 
-    bool dataLock;
+    bool charaDataLock;
 
     protected override void ItemUpdate()
     {
-        dataLock = true;
+        charaDataLock = true;
 
         //見た目をキャラに対応させる
         chip.material.SetColor("_AddColor", data.GetThemeColor());
@@ -29,10 +29,10 @@ public class CharaChip : Item
 
     public void SetData(CharaData setData)
     {
-        if (!dataLock)
+        if (!charaDataLock)
         {
             data = setData;
-            dataLock = true;
+            charaDataLock = true;
         }
     }
 }

@@ -37,7 +37,7 @@ MonoBehaviour:
     shotKeys: []
     moveKeys:
     - keyFrame: {x: 0.2, y: 0.8}
-      moveVec: {x: 0, y: 0, z: 2.6}
+      moveVec: {x: 0, y: 0, z: 2}
       ignoreAxis:
         x: 1
         y: 1
@@ -45,7 +45,7 @@ MonoBehaviour:
       easeType: 2
       easePow: 1
     - keyFrame: {x: 0.2, y: 0.5}
-      moveVec: {x: 0, y: 2, z: 0}
+      moveVec: {x: 0, y: 4, z: 0}
       ignoreAxis:
         x: 1
         y: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
       easeType: 1
       easePow: 3
     - keyFrame: {x: 0.5, y: 0.8}
-      moveVec: {x: 0, y: -2, z: 0}
+      moveVec: {x: 0, y: -4, z: 0}
       ignoreAxis:
         x: 1
         y: 0
@@ -66,4 +66,7 @@ MonoBehaviour:
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
-    animationKeys: []
+    animationKeys:
+    - keyFrame: {x: 0.2, y: 0.8}
+      animationName: spinJump
+      useOriginalAnimTime: 1

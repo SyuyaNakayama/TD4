@@ -1055,10 +1055,13 @@ public class LiveEntity : GeoGroObject
                     if (IsHitKeyPoint(current.keyFrame))
                     {
                         animationName = current.animationName;
-                        animationProgress =
-                            KX_netUtil.RangeMap(GetAttackProgress(),
-                            current.keyFrame.x, current.keyFrame.y,
-                            0, 1);
+                        if (!current.useOriginalAnimTime)
+                        {
+                            animationProgress =
+                                KX_netUtil.RangeMap(GetAttackProgress(),
+                                current.keyFrame.x, current.keyFrame.y,
+                                0, 1);
+                        }
                     }
                 }
             }
