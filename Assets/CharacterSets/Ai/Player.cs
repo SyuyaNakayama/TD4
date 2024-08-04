@@ -6,12 +6,18 @@ using UnityEditor;
 public class Player : LiveEntity
 {
     public const int maxTeamNum = 5;
+    public const int maxAttackReactionframe = 10;
     const float cameraControlSpeed = 3;
     const float moveSpeed = 1.5f;
     const float jumpPower = 10.0f;
 
     bool jumpTrigger;
     bool attackTrigger;
+    int attackReactionFrame;
+    public int GetAttackReactionFrame()
+    {
+        return attackReactionFrame;
+    }
     int currentCharaIndex;
     public int GetCurrentCharaIndex()
     {
@@ -64,7 +70,6 @@ public class Player : LiveEntity
             if (IsLanding())
             {
                 animationName = "walk";
-
             }
 
         }
@@ -95,6 +100,8 @@ public class Player : LiveEntity
         }
         jumpTrigger = jumpInput;
 
+        attackReactionFrame = Mathf.Max(0, attackReactionFrame - 1);
+
         //下一段のキーを押して攻撃
         // コントローラーならBボタン
         bool attackInput = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
@@ -104,13 +111,16 @@ public class Player : LiveEntity
             || Input.GetKey("joystick button 1");
         //攻撃ボタンの押し始めかつ武器を持っているなら
         if (attackInput && !attackTrigger
-            && (!IsAttacking() || IsAttacking(GetData().GetDefaultAttackMotionName()))
-            && characters.Length > 0)
+            && (!IsAttacking() || IsAttacking(GetData().GetDefaultAttackMotionName())))
         {
-            //攻撃モーションを再生
-            SetAttackMotion(characters[currentCharaIndex].SearchAttackMotion(
-                characters[currentCharaIndex].GetWeaponedAttackMotionName()));
-            currentCharaIndex++;
+            attackReactionFrame = maxAttackReactionframe;
+            if (characters.Length > 0)
+            {
+                //攻撃モーションを再生
+                SetAttackMotion(characters[currentCharaIndex].SearchAttackMotion(
+                    characters[currentCharaIndex].GetWeaponedAttackMotionName()));
+                currentCharaIndex++;
+            }
         }
         attackTrigger = attackInput;
         currentCharaIndex = Mathf.RoundToInt(Mathf.Repeat(currentCharaIndex,

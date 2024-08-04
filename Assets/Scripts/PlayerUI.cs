@@ -26,6 +26,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     Image[] charaImageTrays;
     [SerializeField]
+    Image emptyImage;
+    [SerializeField]
     Image reviveImage;
     [SerializeField]
     TMP_Text reviveCount;
@@ -48,6 +50,15 @@ public class PlayerUI : MonoBehaviour
         gameOverCanvas.enabled = player.IsDestructed();
         //ゴールした時のみ表示
         goalCanvas.enabled = player.GetGoaled();
+
+        //EMPTY表示の位置と大きさ、表示されるタイミングを制御
+        RectTransform emptyRect =
+                emptyImage.gameObject.GetComponent<RectTransform>();
+        emptyRect.anchoredPosition = currentCharaIconPos;
+        emptyRect.localScale = new Vector3(1, 1, 1) * currentCharaIconSize;
+
+        emptyImage.enabled = player.GetAttackReactionFrame() > 0
+            && player.GetCharacters().Length <= 0;
 
         //アイコンの後ろにある黒いトレーの位置と大きさを調整
         for (int i = 0; i < Player.maxTeamNum; i++)
