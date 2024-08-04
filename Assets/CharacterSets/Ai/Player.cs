@@ -125,8 +125,6 @@ public class Player : LiveEntity
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, minCameraAngle, maxCameraAngle);
         cameraAngle = playerCameraAngle;
-
-        Debug.Log(Input.GetAxis("Horizontal") + " " + Input.GetAxis("Vertical"));
     }
 
     protected override void LiveEntityOnHit(Collider col)
