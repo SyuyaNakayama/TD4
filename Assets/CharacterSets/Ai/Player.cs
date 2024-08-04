@@ -64,7 +64,9 @@ public class Player : LiveEntity
             if (IsLanding())
             {
                 animationName = "walk";
+               
             }
+           
         }
 
         if (IsAttacking())
@@ -123,6 +125,9 @@ public class Player : LiveEntity
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, minCameraAngle, maxCameraAngle);
         cameraAngle = playerCameraAngle;
+
+        Debug.Log(Input.GetAxis("Horizontal")+ " hor");
+        Debug.Log(Input.GetAxis("Vertical")+ " ver");
     }
 
     protected override void LiveEntityOnHit(Collider col)
