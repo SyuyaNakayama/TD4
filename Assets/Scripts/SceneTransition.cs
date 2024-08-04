@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class SceneTransition : MonoBehaviour
 {
     const float sceneChangeSpeed = 0.05f;
-    const float shutterScale = 1.415f;
 
+    [SerializeField]
+    float shutterScale;
     static bool sceneChangeSwitch = false;
     public static bool GetSceneChangeSwitch()
     {
