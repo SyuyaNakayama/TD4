@@ -242,9 +242,9 @@ public class LiveEntity : GeoGroObject
 
             if (IsPlayer())
             {
-                //エンターキーでいつでも脱出
+                //エンターキー、メニューボタンでいつでも脱出
                 if (Input.GetKey(KeyCode.Return)
-                    || Input.GetKey("joystick button 2"))
+                    || Input.GetKey("joystick button 2"))//TODO:誰かここのキーコードをメニューボタンのコードに書き換えてくれ
                 {
                     Quit();
                 }
