@@ -239,6 +239,16 @@ public class LiveEntity : GeoGroObject
             {
                 animationName = "damage";
             }
+
+            if (IsPlayer())
+            {
+                //エンターキーでいつでも脱出
+                if (Input.GetKey(KeyCode.Return)
+                    || Input.GetKey("joystick button 2"))
+                {
+                    Quit();
+                }
+            }
         }
         else
         {
@@ -307,23 +317,16 @@ public class LiveEntity : GeoGroObject
                 else
                 {
                     animationName = "result";
-                    //何かボタンを押したらステージを出る
-                    if (Input.GetKey(KeyCode.Return)
-                    || Input.GetKey("joystick button 0")
-                    || Input.GetKey("joystick button 1"))
+                    //何かボタンを押したら次のステージへ
+                    if (Input.GetKey(KeyCode.Space)
+                        || Input.GetKey("joystick button 0")
+                        || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
+                        || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
+                        || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
+                        || Input.GetKey(KeyCode.M)
+                        || Input.GetKey("joystick button 1"))
                     {
                         NextStage();
-                    }
-                    //何かボタンを押したらステージを出る
-                    if (Input.GetKey(KeyCode.Space)
-                    || Input.GetKey("joystick button 0")
-                    || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
-                    || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
-                    || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
-                    || Input.GetKey(KeyCode.M)
-                    || Input.GetKey("joystick button 1"))
-                    {
-                        Quit();
                     }
                 }
             }
@@ -860,7 +863,7 @@ public class LiveEntity : GeoGroObject
     {
         goaled = true;
     }
-    //今いるステージの派生元として次のステージへ進む
+    //今いるステージの次に設定されているステージへ進む
     void NextStage()
     {
         foreach (StageManager obj in UnityEngine.Object.FindObjectsOfType<StageManager>())
