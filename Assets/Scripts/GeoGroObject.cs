@@ -60,7 +60,7 @@ public class GeoGroObject : AlhaPhysicsObject
                         detected = false;
                         for (int k = 0; k < currentColliders.Length; k++)
                         {
-                            if (currentColliders[k] != null)
+                            if (currentColliders[k] != null && tempGround != null)
                             {
                                 float currentGroundDistance = Vector3.Magnitude(
                                     currentColliders[k].ClosestPoint(transform.position) - transform.position);
