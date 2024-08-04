@@ -13,6 +13,10 @@ public class LiveEntityObserver : Switch
     [SerializeField]
     BattleField[] battleFields = { };
 
+    void Awake()
+    {
+        active = true;
+    }
     void FixedUpdate()
     {
         active = false;
