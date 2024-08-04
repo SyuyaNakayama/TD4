@@ -11,6 +11,12 @@ public class StageManager : MonoBehaviour
         return quitSceneName;
     }
     [SerializeField]
+    string nextStageName;
+    public string GetNextStageName()
+    {
+        return nextStageName;
+    }
+    [SerializeField]
     bool isRushLevel;
     [SerializeField]
     Sprite backGround;
