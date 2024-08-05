@@ -30,7 +30,7 @@ public class Spinner : GeoGroObject
         attackArea.SetAttacker(shooter);
     }
 
-    protected override void GGOOnCollisionStay(Collision col)
+    void OnTriggerStay(Collider col)
     {
         if (speed < minAttackSpeed)
         {
