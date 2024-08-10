@@ -32,7 +32,8 @@ public class LiveEntity : GeoGroObject
         public string propertyName;
     }
 
-    const float cameraTiltDiffuse = 0.2f;
+    const float cameraFlipMotionMultiply = 0.01f;
+    const float maxCameraTiltDiffuse = 0.15f;
     const float defaultCameraDistance = 10;
     const float directionTiltIntensity = 0.5f;
     public const float minCameraAngle = 0;
@@ -84,6 +85,8 @@ public class LiveEntity : GeoGroObject
     float visualDirection;
     Quaternion prevRot;
     Quaternion cameraTiltRot;
+    float cameraTiltDiffuse;
+
     protected float cameraAngle = maxCameraAngle;
     float easedCameraAngle = maxCameraAngle;
     protected float cameraDistance = defaultCameraDistance;
@@ -168,16 +171,26 @@ public class LiveEntity : GeoGroObject
                 cameraAngle, minCameraAngle, maxCameraAngle);
             //カメラの仰角値をイージング
             easedCameraAngle = Mathf.Lerp(
-                easedCameraAngle, cameraAngle, cameraTiltDiffuse);
+                easedCameraAngle, cameraAngle, maxCameraTiltDiffuse);
             //カメラの距離をイージング
             easedCameraDistance = Mathf.Lerp(
-                easedCameraDistance, cameraDistance, cameraTiltDiffuse);
+                easedCameraDistance, cameraDistance, maxCameraTiltDiffuse);
             //前フレームからの回転の差に応じてカメラの傾き角を決める
             cameraTiltRot =
                 cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
+
+            //カメラの傾き角の差分を求める
+            float cameraTiltAmount = Mathf.Abs(
+                Quaternion.Angle(cameraTiltRot, Quaternion.identity)) / 180;
+
+            cameraTiltDiffuse = Mathf.Clamp(
+                cameraTiltDiffuse + cameraTiltAmount * cameraFlipMotionMultiply,
+                0, cameraTiltAmount * maxCameraTiltDiffuse);
+
             //カメラの傾き角を減衰させる
             cameraTiltRot = Quaternion.Slerp(
-                cameraTiltRot, Quaternion.identity, cameraTiltDiffuse);
+                cameraTiltRot, Quaternion.identity,
+                cameraTiltDiffuse / KX_netUtil.RangeMap(cameraTiltAmount, 1, 0, 1, 0.001f));
             //まずキャラを見下ろす角度にカメラを向ける
             view.transform.localEulerAngles = new Vector3(easedCameraAngle, 0, 0);
             //カメラの傾き角に応じてカメラを傾ける
@@ -344,216 +357,8 @@ public class LiveEntity : GeoGroObject
                 visualDirection,
                 0);
         }
-        for (int i = 0; i < bodyParts.Length; i++)
-        {
-            Transform current = bodyParts[i];
-            KX_netUtil.TransformData currentData =
-                data.GetDefaultBodyPartsTransform(i);
-            current.localPosition = currentData.position;
-            current.localScale = currentData.scale;
-            if (current != visual.transform)
-            {
-                current.localEulerAngles = currentData.eulerAngles;
-            }
-        }
 
-        //現在の状態にあったアニメーションを取得
-        CharaData.Animation animationData =
-            data.SearchAnimation(animationName);
-        //トランスフォームアニメーションを適用
-        if (animationData.transformAnimationKeys != null)
-        {
-            for (int i = 0; i < animationData.transformAnimationKeys.Length; i++)
-            {
-                CharaData.TransformAnimationKey tAnimData =
-                    animationData.transformAnimationKeys[i];
-                if (KX_netUtil.IsIntoRange(
-                    animationProgress,
-                    tAnimData.keyFrame.x, tAnimData.keyFrame.y,
-                    false, false))
-                {
-                    Transform current = bodyParts[tAnimData.bodyPartIndex];
-                    float animationPartProgress =
-                        KX_netUtil.Ease(KX_netUtil.RangeMap(animationProgress,
-                        tAnimData.keyFrame.x, tAnimData.keyFrame.y,
-                        0, 1),
-                        tAnimData.easeType, tAnimData.easePow);
-
-                    if (!tAnimData.ignoreTransform.position)
-                    {
-                        current.localPosition = Vector3.Lerp(
-                            tAnimData.startTransform.position,
-                            tAnimData.endTransform.position,
-                            animationPartProgress);
-                    }
-
-                    if (!tAnimData.ignoreTransform.rotation)
-                    {
-                        Quaternion rotate;
-                        if (tAnimData.lerpAsEuler)
-                        {
-                            rotate = Quaternion.Euler(Vector3.Lerp(
-                                tAnimData.startTransform.eulerAngles,
-                                tAnimData.endTransform.eulerAngles,
-                                animationPartProgress));
-                        }
-                        else
-                        {
-                            rotate = Quaternion.Slerp(
-                                Quaternion.Euler(tAnimData.startTransform.eulerAngles),
-                                Quaternion.Euler(tAnimData.endTransform.eulerAngles),
-                                animationPartProgress);
-                        }
-
-                        if (current == visual.transform)
-                        {
-                            current.Rotate(rotate.eulerAngles,
-                                Space.Self);
-                        }
-                        else
-                        {
-                            current.localRotation = rotate;
-                        }
-                    }
-
-                    if (!tAnimData.ignoreTransform.scale)
-                    {
-                        current.localScale = Vector3.Lerp(
-                        tAnimData.startTransform.scale,
-                        tAnimData.endTransform.scale,
-                        animationPartProgress);
-                    }
-                }
-            }
-            if (animationData.totalFrame > 0)
-            {
-                animationSpeed = 1f / animationData.totalFrame;
-            }
-        }
-
-        //スキンアニメーションを適用
-        if (animationData.rigAnimationKeys != null)
-        {
-            for (int i = 0; i < animationData.rigAnimationKeys.Length; i++)
-            {
-                CharaData.RigAnimationKey rAnimData =
-                    animationData.rigAnimationKeys[i];
-                if (KX_netUtil.IsIntoRange(
-                    animationProgress,
-                    rAnimData.keyFrame.x, rAnimData.keyFrame.y,
-                    false, false))
-                {
-                    Animator current = animators[rAnimData.animatorIndex];
-                    float animationPartProgress =
-                        KX_netUtil.RangeMap(animationProgress,
-                        rAnimData.keyFrame.x, rAnimData.keyFrame.y,
-                        0, 1);
-
-                    current.SetInteger("statusID", rAnimData.rigAnimationID);
-                    current.Play(current.GetNextAnimatorStateInfo(0).nameHash,
-                    0, animationPartProgress);
-                }
-            }
-        }
-
-        //表情を適用
-        if (animationData.facialExpressionKeys != null)
-        {
-            for (int i = 0; i < animationData.facialExpressionKeys.Length; i++)
-            {
-                CharaData.FacialExpressionKey fKeyData =
-                    animationData.facialExpressionKeys[i];
-                if (KX_netUtil.IsIntoRange(
-                    animationProgress,
-                    fKeyData.keyFrame.x, fKeyData.keyFrame.y,
-                    false, false))
-                {
-                    facialExpressionName = fKeyData.facialExpressionName;
-                }
-            }
-        }
-
-        //効果音
-        if (animationData.seKeys != null)
-        {
-            for (int i = 0; i < animationData.
-                seKeys.Length; i++)
-            {
-                AttackMotionData.SEKey current =
-                    animationData.seKeys[i];
-
-                float shiftedprevAnimationProgress = prevAnimationProgress;
-                if (animationProgress < prevAnimationProgress)
-                {
-                    shiftedprevAnimationProgress -= 1;
-                }
-
-                if (KX_netUtil.IsIntoRange(
-                    current.keyFrame,
-                    shiftedprevAnimationProgress, animationProgress,
-                    false, false))
-                {
-                    PlayAsSE(current.se);
-                }
-            }
-        }
-
-        prevAnimationProgress = animationProgress;
-
-        //デフォルトのテクスチャをモデルに貼る
-        for (int i = 0; i < meshes.Length; i++)
-        {
-            TextureSendData current = meshes[i];
-            current.meshRenderer.materials[current.index].
-                SetTexture(current.propertyName, data.GetDefaultTexture(i));
-        }
-        //デフォルトのスプライトをスプライトレンダラーに貼る
-        for (int i = 0; i < sprites.Length; i++)
-        {
-            SpriteSendData current = sprites[i];
-            if (current.isMainSprite)
-            {
-                current.spriteRenderer.sprite = data.GetDefaultSprite(i);
-            }
-            else
-            {
-                current.spriteRenderer.material.
-                    SetTexture(current.propertyName, data.GetDefaultSprite(i).texture);
-            }
-        }
-
-        //現在の状態にあった表情を取得
-        CharaData.FacialExpression facialData =
-            data.SearchFacialExpression(facialExpressionName);
-        //表情のテクスチャをモデルに貼る
-        if (facialData.indexAndTextures != null)
-        {
-            for (int i = 0; i < facialData.indexAndTextures.Length; i++)
-            {
-                CharaData.IndexAndTexture texData = facialData.indexAndTextures[i];
-                TextureSendData current = meshes[texData.index];
-                current.meshRenderer.materials[current.index].
-                    SetTexture(current.propertyName, texData.texture);
-            }
-        }
-        //表情のスプライトをスプライトレンダラーに貼る
-        if (facialData.indexAndSprites != null)
-        {
-            for (int i = 0; i < facialData.indexAndSprites.Length; i++)
-            {
-                CharaData.IndexAndSprite spriteData = facialData.indexAndSprites[i];
-                SpriteSendData current = sprites[spriteData.index];
-                if (current.isMainSprite)
-                {
-                    current.spriteRenderer.sprite = spriteData.sprite;
-                }
-                else
-                {
-                    current.spriteRenderer.material.
-                        SetTexture(current.propertyName, spriteData.sprite.texture);
-                }
-            }
-        }
+        UpdateAnimation();
 
         if (visual != null)
         {
@@ -888,17 +693,9 @@ public class LiveEntity : GeoGroObject
         }
     }
 
-    //設定されたモーションデータを読み出して実行（実行中は常に呼ぶ）
+    //設定された攻撃モーションデータを読み出して実行（実行中は常に呼ぶ）
     void UpdateAttackMotion()
     {
-        //近接、遠距離攻撃のデータから使用済みの要素を除去
-        Array.Resize(ref meleeAttackDatas, 0);
-
-        List<ShotAndCursorName> shotDataList =
-            new List<ShotAndCursorName>(shotDatas);
-        shotDataList.RemoveAll(where => where.used);
-        shotDatas = shotDataList.ToArray();
-
         //3Dカーソルをリセット
         Array.Resize(ref cursors, 0);
 
@@ -1189,6 +986,229 @@ public class LiveEntity : GeoGroObject
                 }
 
                 shotDatas[i].used = true;
+            }
+        }
+
+        //近接、遠距離攻撃のデータから使用済みの要素を除去
+        Array.Resize(ref meleeAttackDatas, 0);
+
+        List<ShotAndCursorName> shotDataList =
+            new List<ShotAndCursorName>(shotDatas);
+        shotDataList.RemoveAll(where => where.used);
+        shotDatas = shotDataList.ToArray();
+    }
+
+    //設定されたアニメーションデータを読み出して実行（実行中は常に呼ぶ）
+    void UpdateAnimation()
+    {
+        //まずパーツのトランスフォームをデフォルト値に揃える
+        for (int i = 0; i < bodyParts.Length; i++)
+        {
+            Transform current = bodyParts[i];
+            KX_netUtil.TransformData currentData =
+                data.GetDefaultBodyPartsTransform(i);
+            current.localPosition = currentData.position;
+            current.localScale = currentData.scale;
+            if (current != visual.transform)
+            {
+                current.localEulerAngles = currentData.eulerAngles;
+            }
+        }
+        //現在の状態にあったアニメーションを取得
+        CharaData.Animation animationData =
+            data.SearchAnimation(animationName);
+        //トランスフォームアニメーションを適用
+        if (animationData.transformAnimationKeys != null)
+        {
+            for (int i = 0; i < animationData.transformAnimationKeys.Length; i++)
+            {
+                CharaData.TransformAnimationKey tAnimData =
+                    animationData.transformAnimationKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    tAnimData.keyFrame.x, tAnimData.keyFrame.y,
+                    false, false))
+                {
+                    Transform current = bodyParts[tAnimData.bodyPartIndex];
+                    float animationPartProgress =
+                        KX_netUtil.Ease(KX_netUtil.RangeMap(animationProgress,
+                        tAnimData.keyFrame.x, tAnimData.keyFrame.y,
+                        0, 1),
+                        tAnimData.easeType, tAnimData.easePow);
+
+                    if (!tAnimData.ignoreTransform.position)
+                    {
+                        current.localPosition = Vector3.Lerp(
+                            tAnimData.startTransform.position,
+                            tAnimData.endTransform.position,
+                            animationPartProgress);
+                    }
+
+                    if (!tAnimData.ignoreTransform.rotation)
+                    {
+                        Quaternion rotate;
+                        if (tAnimData.lerpAsEuler)
+                        {
+                            rotate = Quaternion.Euler(Vector3.Lerp(
+                                tAnimData.startTransform.eulerAngles,
+                                tAnimData.endTransform.eulerAngles,
+                                animationPartProgress));
+                        }
+                        else
+                        {
+                            rotate = Quaternion.Slerp(
+                                Quaternion.Euler(tAnimData.startTransform.eulerAngles),
+                                Quaternion.Euler(tAnimData.endTransform.eulerAngles),
+                                animationPartProgress);
+                        }
+
+                        if (current == visual.transform)
+                        {
+                            current.Rotate(rotate.eulerAngles,
+                                Space.Self);
+                        }
+                        else
+                        {
+                            current.localRotation = rotate;
+                        }
+                    }
+
+                    if (!tAnimData.ignoreTransform.scale)
+                    {
+                        current.localScale = Vector3.Lerp(
+                        tAnimData.startTransform.scale,
+                        tAnimData.endTransform.scale,
+                        animationPartProgress);
+                    }
+                }
+            }
+            if (animationData.totalFrame > 0)
+            {
+                animationSpeed = 1f / animationData.totalFrame;
+            }
+        }
+
+        //スキンアニメーションを適用
+        if (animationData.rigAnimationKeys != null)
+        {
+            for (int i = 0; i < animationData.rigAnimationKeys.Length; i++)
+            {
+                CharaData.RigAnimationKey rAnimData =
+                    animationData.rigAnimationKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    rAnimData.keyFrame.x, rAnimData.keyFrame.y,
+                    false, false))
+                {
+                    Animator current = animators[rAnimData.animatorIndex];
+                    float animationPartProgress =
+                        KX_netUtil.RangeMap(animationProgress,
+                        rAnimData.keyFrame.x, rAnimData.keyFrame.y,
+                        0, 1);
+
+                    current.SetInteger("statusID", rAnimData.rigAnimationID);
+                    current.Play(current.GetNextAnimatorStateInfo(0).nameHash,
+                    0, animationPartProgress);
+                }
+            }
+        }
+
+        //表情を適用
+        if (animationData.facialExpressionKeys != null)
+        {
+            for (int i = 0; i < animationData.facialExpressionKeys.Length; i++)
+            {
+                CharaData.FacialExpressionKey fKeyData =
+                    animationData.facialExpressionKeys[i];
+                if (KX_netUtil.IsIntoRange(
+                    animationProgress,
+                    fKeyData.keyFrame.x, fKeyData.keyFrame.y,
+                    false, false))
+                {
+                    facialExpressionName = fKeyData.facialExpressionName;
+                }
+            }
+        }
+
+        //効果音
+        if (animationData.seKeys != null)
+        {
+            for (int i = 0; i < animationData.
+                seKeys.Length; i++)
+            {
+                AttackMotionData.SEKey current =
+                    animationData.seKeys[i];
+
+                float shiftedprevAnimationProgress = prevAnimationProgress;
+                if (animationProgress < prevAnimationProgress)
+                {
+                    shiftedprevAnimationProgress -= 1;
+                }
+
+                if (KX_netUtil.IsIntoRange(
+                    current.keyFrame,
+                    shiftedprevAnimationProgress, animationProgress,
+                    false, false))
+                {
+                    PlayAsSE(current.se);
+                }
+            }
+        }
+
+        prevAnimationProgress = animationProgress;
+
+        //デフォルトのテクスチャをモデルに貼る
+        for (int i = 0; i < meshes.Length; i++)
+        {
+            TextureSendData current = meshes[i];
+            current.meshRenderer.materials[current.index].
+                SetTexture(current.propertyName, data.GetDefaultTexture(i));
+        }
+        //デフォルトのスプライトをスプライトレンダラーに貼る
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            SpriteSendData current = sprites[i];
+            if (current.isMainSprite)
+            {
+                current.spriteRenderer.sprite = data.GetDefaultSprite(i);
+            }
+            else
+            {
+                current.spriteRenderer.material.
+                    SetTexture(current.propertyName, data.GetDefaultSprite(i).texture);
+            }
+        }
+
+        //現在の状態にあった表情を取得
+        CharaData.FacialExpression facialData =
+            data.SearchFacialExpression(facialExpressionName);
+        //表情のテクスチャをモデルに貼る
+        if (facialData.indexAndTextures != null)
+        {
+            for (int i = 0; i < facialData.indexAndTextures.Length; i++)
+            {
+                CharaData.IndexAndTexture texData = facialData.indexAndTextures[i];
+                TextureSendData current = meshes[texData.index];
+                current.meshRenderer.materials[current.index].
+                    SetTexture(current.propertyName, texData.texture);
+            }
+        }
+        //表情のスプライトをスプライトレンダラーに貼る
+        if (facialData.indexAndSprites != null)
+        {
+            for (int i = 0; i < facialData.indexAndSprites.Length; i++)
+            {
+                CharaData.IndexAndSprite spriteData = facialData.indexAndSprites[i];
+                SpriteSendData current = sprites[spriteData.index];
+                if (current.isMainSprite)
+                {
+                    current.spriteRenderer.sprite = spriteData.sprite;
+                }
+                else
+                {
+                    current.spriteRenderer.material.
+                        SetTexture(current.propertyName, spriteData.sprite.texture);
+                }
             }
         }
     }
