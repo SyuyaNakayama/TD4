@@ -41,10 +41,6 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     AudioClip gameOverBgm;
     Player player;
-    public Player GetPlayer()
-    {
-        return player;
-    }
 
     void FixedUpdate()
     {
