@@ -32,6 +32,14 @@ public class LiveEntity : GeoGroObject
         public string propertyName;
     }
 
+    static LiveEntity[] allInstances = { };
+    public static LiveEntity[] GetAllInstances()
+    {
+        LiveEntity[] ret = new LiveEntity[allInstances.Length];
+        Array.Copy(allInstances, ret, allInstances.Length);
+        return ret;
+    }
+
     const float cameraFlipMotionMultiply = 0.01f;
     const float maxCameraTiltDiffuse = 0.15f;
     const float defaultCameraDistance = 10;
@@ -91,12 +99,12 @@ public class LiveEntity : GeoGroObject
     float easedCameraAngle = maxCameraAngle;
     protected float cameraDistance = defaultCameraDistance;
     float easedCameraDistance = defaultCameraDistance;
-    float hpAmount = 1;//残り体力の割合
+    float hpAmount = 1;//?ｿｽc?ｿｽ?ｿｽﾌ力の奇ｿｽ?ｿｽ?ｿｽ
     public float GetHPAmount()
     {
         return hpAmount;
     }
-    bool shield;//これがtrueの間は技による無敵時間
+    bool shield;//?ｿｽ?ｿｽ?ｿｽ黷ｪtrue?ｿｽﾌ間は技?ｿｽﾉゑｿｽ髢ｳ?ｿｽG?ｿｽ?ｿｽ?ｿｽ?ｿｽ
     public bool GetShield()
     {
         return shield;
@@ -108,7 +116,7 @@ public class LiveEntity : GeoGroObject
     }
     int battery = maxBattery;
     int hitBackTimeFrame;
-    int ghostTimeFrame;//ヒット後無敵時間
+    int ghostTimeFrame;//?ｿｽq?ｿｽb?ｿｽg?ｿｽ纐ｳ?ｿｽG?ｿｽ?ｿｽ?ｿｽ?ｿｽ
     int repairCoolTimeFrame;
     int damageReactionTimeFrame;
     int cadaverLifeTimeFrame;
@@ -164,22 +172,30 @@ public class LiveEntity : GeoGroObject
     {
         updating = true;
 
+        //全インスタンスを入れる変数を更新
+        List<LiveEntity> allInstancesList =
+            new List<LiveEntity>(allInstances);
+        allInstancesList.RemoveAll(where => !where || where == this);
+        allInstances = allInstancesList.ToArray();
+        Array.Resize(ref allInstances, allInstances.Length + 1);
+        allInstances[allInstances.Length - 1] = this;
+
         if (view != null)
         {
-            //カメラの仰角値を規定範囲に収める
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ仰角?ｿｽl?ｿｽ?ｿｽ?ｿｽK?ｿｽ?ｿｽﾍ囲に趣ｿｽ?ｿｽﾟゑｿｽ
             cameraAngle = Mathf.Clamp(
                 cameraAngle, minCameraAngle, maxCameraAngle);
-            //カメラの仰角値をイージング
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ仰角?ｿｽl?ｿｽ?ｿｽ?ｿｽC?ｿｽ[?ｿｽW?ｿｽ?ｿｽ?ｿｽO
             easedCameraAngle = Mathf.Lerp(
                 easedCameraAngle, cameraAngle, maxCameraTiltDiffuse);
-            //カメラの距離をイージング
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ具ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽC?ｿｽ[?ｿｽW?ｿｽ?ｿｽ?ｿｽO
             easedCameraDistance = Mathf.Lerp(
                 easedCameraDistance, cameraDistance, maxCameraTiltDiffuse);
-            //前フレームからの回転の差に応じてカメラの傾き角を決める
+            //?ｿｽO?ｿｽt?ｿｽ?ｿｽ?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ会ｿｽ]?ｿｽﾌ搾ｿｽ?ｿｽﾉ会ｿｽ?ｿｽ?ｿｽ?ｿｽﾄカ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ傾?ｿｽ?ｿｽ?ｿｽp?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾟゑｿｽ
             cameraTiltRot =
                 cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
 
-            //カメラの傾き角の差分を求める
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ傾?ｿｽ?ｿｽ?ｿｽp?ｿｽﾌ搾ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾟゑｿｽ
             float cameraTiltAmount = Mathf.Abs(
                 Quaternion.Angle(cameraTiltRot, Quaternion.identity)) / 180;
 
@@ -187,20 +203,20 @@ public class LiveEntity : GeoGroObject
                 cameraTiltDiffuse + cameraTiltAmount * cameraFlipMotionMultiply,
                 0, cameraTiltAmount * maxCameraTiltDiffuse);
 
-            //カメラの傾き角を減衰させる
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ傾?ｿｽ?ｿｽ?ｿｽp?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             cameraTiltRot = Quaternion.Slerp(
                 cameraTiltRot, Quaternion.identity,
                 cameraTiltDiffuse / KX_netUtil.RangeMap(cameraTiltAmount, 1, 0, 1, 0.001f));
-            //まずキャラを見下ろす角度にカメラを向ける
+            //?ｿｽﾜゑｿｽ?ｿｽL?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?す?ｿｽp?ｿｽx?ｿｽﾉカ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             view.transform.localEulerAngles = new Vector3(easedCameraAngle, 0, 0);
-            //カメラの傾き角に応じてカメラを傾ける
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ傾?ｿｽ?ｿｽ?ｿｽp?ｿｽﾉ会ｿｽ?ｿｽ?ｿｽ?ｿｽﾄカ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽX?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             view.transform.rotation =
                 cameraTiltRot * view.transform.rotation;
-            //カメラの位置をカメラから見て後ろ側にする
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ位置?ｿｽ?ｿｽ?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ迪ｩ?ｿｽﾄ鯉ｿｽ?側?ｿｽﾉゑｿｽ?ｿｽ?ｿｽ
             view.transform.localPosition =
                 view.transform.localRotation * new Vector3(0, 0, -1)
                 * easedCameraDistance;
-            //カメラの距離をデフォルト値に
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ具ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽt?ｿｽH?ｿｽ?ｿｽ?ｿｽg?ｿｽl?ｿｽ?ｿｽ
             cameraDistance = defaultCameraDistance;
         }
 
@@ -217,17 +233,17 @@ public class LiveEntity : GeoGroObject
         }
         gravityScale = data.GetGravityScale();
 
-        //スケールを設定に合わせる
+        //?ｿｽX?ｿｽP?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽﾝ抵ｿｽﾉ搾ｿｽ?ｿｽ墲ｹ?ｿｽ?ｿｽ
         float scale = data.GetScale();
         transform.localScale = new Vector3(scale, scale, scale);
 
-        //allowGroundSetをリセット
+        //allowGroundSet?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽb?ｿｽg
         allowGroundSet = true;
-        //shieldをリセット
+        //shield?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽb?ｿｽg
         shield = false;
-        //表情をリセット
+        //?ｿｽ\?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽb?ｿｽg
         facialExpressionName = "";
-        //アニメーションを通常時のものにする
+        //?ｿｽA?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾊ常時?ｿｽﾌゑｿｽ?ｿｽﾌにゑｿｽ?ｿｽ?ｿｽ
         animationName = "idol";
 
         isAllowMove = IsActable();
@@ -235,7 +251,7 @@ public class LiveEntity : GeoGroObject
         animationProgress = Mathf.Repeat(animationProgress + animationSpeed, 1);
         animationSpeed = 0;
 
-        //スクリプタブルオブジェクトから攻撃モーションの内容を読み出す
+        //?ｿｽX?ｿｽN?ｿｽ?ｿｽ?ｿｽv?ｿｽ^?ｿｽu?ｿｽ?ｿｽ?ｿｽI?ｿｽu?ｿｽW?ｿｽF?ｿｽN?ｿｽg?ｿｽ?ｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ難ｿｽ?ｿｽe?ｿｽ?ｿｽﾇみ出?ｿｽ?ｿｽ
         UpdateAttackMotion();
 
         if (IsLive() && !GetGoaled())
@@ -245,7 +261,7 @@ public class LiveEntity : GeoGroObject
 
             if (IsActable())
             {
-                //ここで各派生クラスの固有更新処理を呼ぶ
+                //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾅ各?ｿｽh?ｿｽ?ｿｽ?ｿｽN?ｿｽ?ｿｽ?ｿｽX?ｿｽﾌ固有?ｿｽX?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄゑｿｽ
                 LiveEntityUpdate();
             }
             else
@@ -255,9 +271,9 @@ public class LiveEntity : GeoGroObject
 
             if (IsPlayer())
             {
-                //エンターキー、メニューボタンでいつでも脱出
+                //?ｿｽG?ｿｽ?ｿｽ?ｿｽ^?ｿｽ[?ｿｽL?ｿｽ[?ｿｽA?ｿｽ?ｿｽ?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽ{?ｿｽ^?ｿｽ?ｿｽ?ｿｽﾅゑｿｽ?ｿｽﾂでゑｿｽ?ｿｽE?ｿｽo
                 if (Input.GetKey(KeyCode.Return)
-                    || Input.GetKey("joystick button 2"))//TODO:誰かここのキーコードをメニューボタンのコードに書き換えてくれ
+                    || Input.GetKey("joystick button 2"))//TODO:?ｿｽN?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌキ?ｿｽ[?ｿｽR?ｿｽ[?ｿｽh?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽ{?ｿｽ^?ｿｽ?ｿｽ?ｿｽﾌコ?ｿｽ[?ｿｽh?ｿｽﾉ擾ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽ
                 {
                     Quit();
                 }
@@ -265,15 +281,15 @@ public class LiveEntity : GeoGroObject
         }
         else
         {
-            //攻撃動作を解除する
+            //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             attackMotionData = null;
 
-            //カメラを演出用の位置に調整
+            //?ｿｽJ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽo?ｿｽp?ｿｽﾌ位置?ｿｽﾉ抵ｿｽ?ｿｽ?ｿｽ
             cameraAngle = goaledCameraAngle;
             cameraDistance = goaledCameraDistance;
             if (IsPlayer())
             {
-                //正面を向く
+                //?ｿｽ?ｿｽ?ｿｽﾊゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
                 direction = goaledDirection;
             }
 
@@ -296,7 +312,7 @@ public class LiveEntity : GeoGroObject
 
                     if (IsPlayer())
                     {
-                        //何かボタンを押したら復活
+                        //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ{?ｿｽ^?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ逡懶ｿｽ?ｿｽ
                         if (Input.GetKey(KeyCode.Space)
                             || Input.GetKey("joystick button 0")
                             || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
@@ -330,7 +346,7 @@ public class LiveEntity : GeoGroObject
                 else
                 {
                     animationName = "result";
-                    //何かボタンを押したら次のステージへ
+                    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ{?ｿｽ^?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ邇滂ｿｽﾌス?ｿｽe?ｿｽ[?ｿｽW?ｿｽ?ｿｽ
                     if (Input.GetKey(KeyCode.Space)
                         || Input.GetKey("joystick button 0")
                         || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
@@ -347,10 +363,10 @@ public class LiveEntity : GeoGroObject
 
         if (visual != null)
         {
-            //体のパーツのトランスフォームをデフォルト状態に
+            //?ｿｽﾌのパ?ｿｽ[?ｿｽc?ｿｽﾌト?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽX?ｿｽt?ｿｽH?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽt?ｿｽH?ｿｽ?ｿｽ?ｿｽg?ｿｽ?ｿｽﾔゑｿｽ
             visual.transform.localScale = new Vector3(1, 1, 1);
             visual.transform.localPosition = Vector3.zero;
-            //キャラの見た目を向いている方向へ向ける
+            //?ｿｽL?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ鯉ｿｽ?ｿｽ?ｿｽ?ｿｽﾚゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾖ鯉ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             visualDirection += KX_netUtil.AngleDiff(visualDirection, direction)
                 * directionTiltIntensity;
             visual.transform.localEulerAngles = new Vector3(0,
@@ -362,13 +378,13 @@ public class LiveEntity : GeoGroObject
 
         if (visual != null)
         {
-            //ヒット後無敵時間中なら点滅
+            //?ｿｽq?ｿｽb?ｿｽg?ｿｽ纐ｳ?ｿｽG?ｿｽ?ｿｽ?ｿｽﾔ抵ｿｽ?ｿｽﾈゑｿｽ_?ｿｽ?ｿｽ
             if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
                 && IsLive() && !GetGoaled())
             {
                 visual.transform.localScale = Vector3.zero;
             }
-            //攻撃を受けた直後ならシェイク
+            //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｯゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾈゑｿｽV?ｿｽF?ｿｽC?ｿｽN
             if (damageReactionTimeFrame > 0
                 || (!IsLive() && cadaverLifeTimeFrame > shakeCadaverLifeTimeFrame))
             {
@@ -379,9 +395,9 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //prevAttackProgressを更新
+        //prevAttackProgress?ｿｽ?ｿｽ?ｿｽX?ｿｽV
         prevAttackProgress = GetAttackProgress();
-        //攻撃モーションの進行度を増加
+        //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ進?ｿｽs?ｿｽx?ｿｽ?揄?ｿｽ
         attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
         attackProgress = Mathf.Clamp(attackProgress, 0, 1);
 
@@ -390,14 +406,14 @@ public class LiveEntity : GeoGroObject
         damageReactionTimeFrame =
             Mathf.Max(0, damageReactionTimeFrame - 1);
 
-        //ゴールしたら無敵に
+        //?ｿｽS?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ逍ｳ?ｿｽG?ｿｽ?ｿｽ
         if (GetGoaled())
         {
             ghostTimeFrame = reviveGhostTimeFrame;
         }
 
-        //無敵技中はバッテリーが減る
-        //減り切った時と回復し切った時に無敵になれるか否かのフラグを切り替える
+        //?ｿｽ?ｿｽ?ｿｽG?ｿｽZ?ｿｽ?ｿｽ?ｿｽﾍバ?ｿｽb?ｿｽe?ｿｽ?ｿｽ?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
+        //?ｿｽ?ｿｽ?ｿｽ?ｿｽﾘゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾆ回復ゑｿｽ?ｿｽﾘゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ厄ｿｽ?ｿｽG?ｿｽﾉなゑｿｽ驍ｩ?ｿｽﾛゑｿｽ?ｿｽﾌフ?ｿｽ?ｿｽ?ｿｽO?ｿｽ?ｿｽﾘゑｿｽﾖゑｿｽ?ｿｽ?ｿｽ
         if (IsShield())
         {
             battery--;
@@ -416,7 +432,7 @@ public class LiveEntity : GeoGroObject
         }
         battery = Mathf.Clamp(battery, 0, maxBattery);
 
-        //しばらくダメージを受けていなければ回復
+        //?ｿｽ?ｿｽ?ｿｽﾎらく?ｿｽ_?ｿｽ?ｿｽ?ｿｽ[?ｿｽW?ｿｽ?ｿｽ?ｿｽ?ｯてゑｿｽ?ｿｽﾈゑｿｽ?ｿｽ?ｿｽﾎ会ｿｽ
         if (IsLive() && IsDamageTakeable())
         {
             repairCoolTimeFrame--;
@@ -449,7 +465,7 @@ public class LiveEntity : GeoGroObject
         OnHit(col);
     }
 
-    //OnCollisionStayとOnTriggerStayを一纏めにした関数
+    //OnCollisionStay?ｿｽ?ｿｽOnTriggerStay?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽﾟにゑｿｽ?ｿｽ?ｿｽ?ｿｽﾖ撰ｿｽ
     void OnHit(Collider col)
     {
         if (col.gameObject.GetComponent<AttackArea>() != null)
@@ -457,29 +473,29 @@ public class LiveEntity : GeoGroObject
             AttackHit(col.gameObject.GetComponent<AttackArea>());
         }
 
-        //ここで各派生クラスの固有接触処理を呼ぶ
+        //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾅ各?ｿｽh?ｿｽ?ｿｽ?ｿｽN?ｿｽ?ｿｽ?ｿｽX?ｿｽﾌ固有?ｿｽﾚ触?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄゑｿｽ
         LiveEntityOnHit(col);
     }
 
-    //各派生クラスの固有更新処理（派生クラス内でオーバーライドして使う）
+    //?ｿｽe?ｿｽh?ｿｽ?ｿｽ?ｿｽN?ｿｽ?ｿｽ?ｿｽX?ｿｽﾌ固有?ｿｽX?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽi?ｿｽh?ｿｽ?ｿｽ?ｿｽN?ｿｽ?ｿｽ?ｿｽX?ｿｽ?ｿｽ?ｿｽﾅオ?ｿｽ[?ｿｽo?ｿｽ[?ｿｽ?ｿｽ?ｿｽC?ｿｽh?ｿｽ?ｿｽ?ｿｽﾄ使?ｿｽ?ｿｽ?ｿｽj
     protected virtual void LiveEntityUpdate()
     {
     }
 
-    //TODO:開発終盤で必要か否か判断し、不要なら消す
-    //各派生クラスの固有衝突処理（派生クラス内でオーバーライドして使う）
+    //TODO:?ｿｽJ?ｿｽ?ｿｽ?ｿｽI?ｿｽﾕで必?ｿｽv?ｿｽ?ｿｽ?ｿｽﾛゑｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽ?ｿｽ?ｿｽA?ｿｽs?ｿｽv?ｿｽﾈゑｿｽ?ｿｽ?ｿｽ?ｿｽ
+    //?ｿｽe?ｿｽh?ｿｽ?ｿｽ?ｿｽN?ｿｽ?ｿｽ?ｿｽX?ｿｽﾌ固有?ｿｽﾕ突擾ｿｽ?ｿｽ?ｿｽ?ｿｽi?ｿｽh?ｿｽ?ｿｽ?ｿｽN?ｿｽ?ｿｽ?ｿｽX?ｿｽ?ｿｽ?ｿｽﾅオ?ｿｽ[?ｿｽo?ｿｽ[?ｿｽ?ｿｽ?ｿｽC?ｿｽh?ｿｽ?ｿｽ?ｿｽﾄ使?ｿｽ?ｿｽ?ｿｽj
     protected virtual void LiveEntityOnHit(Collider col)
     {
 
     }
 
-    //攻撃モーションに移行
+    //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ移行
     protected void SetAttackMotion(string name)
     {
         SetAttackMotion(data.SearchAttackMotion(name));
     }
 
-    //攻撃モーションに移行
+    //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ移行
     protected void SetAttackMotion(AttackMotionData attackMotion)
     {
         attackMotionData = attackMotion;
@@ -487,25 +503,25 @@ public class LiveEntity : GeoGroObject
         attackProgress = 0;
     }
 
-    //攻撃モーション中か
+    //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
     protected bool IsAttacking()
     {
         return attackMotionData != null
             && (attackTimeFrame < 1 || prevAttackProgress < 1);
     }
-    //攻撃モーション中かつ指定の攻撃アクションを行なっているか
+    //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾂ指?ｿｽ?ｿｽﾌ攻?ｿｽ?ｿｽ?ｿｽA?ｿｽN?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽs?ｿｽﾈゑｿｽ?ｿｽﾄゑｿｽ?ｿｽ驍ｩ
     protected bool IsAttacking(string name)
     {
         return IsAttacking() && attackMotionData.name == name;
     }
-    //attackProgressが指定のキーポイントを通過したか
+    //attackProgress?ｿｽ?ｿｽ?ｿｽw?ｿｽ?ｿｽﾌキ?ｿｽ[?ｿｽ|?ｿｽC?ｿｽ?ｿｽ?ｿｽg?ｿｽ?ｿｽﾊ過ゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
     protected bool IsHitKeyPoint(float keyPoint)
     {
         return KX_netUtil.IsIntoRange(
             keyPoint, prevAttackProgress, GetAttackProgress(),
             false, true);
     }
-    //attackProgressが指定の範囲内、もしくはその範囲を1フレーム内で通過したか
+    //attackProgress?ｿｽ?ｿｽ?ｿｽw?ｿｽ?ｿｽﾌ範囲難ｿｽ?ｿｽA?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾍゑｿｽ?ｿｽﾌ範囲ゑｿｽ1?ｿｽt?ｿｽ?ｿｽ?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾅ通過ゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
     protected bool IsHitKeyPoint(Vector2 keyPoint)
     {
         return KX_netUtil.IsCrossingRange(
@@ -514,26 +530,26 @@ public class LiveEntity : GeoGroObject
             false, false);
     }
 
-    //これを呼んでいる間は地形に触れてもそっちに足を向けなくなる
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄゑｿｽﾅゑｿｽ?ｿｽ?ｿｽﾔは地?ｿｽ`?ｿｽﾉ触?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ托ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾈゑｿｽ?ｿｽﾈゑｿｽ
     protected void DisAllowGroundSet()
     {
         allowGroundSet = false;
     }
 
-    //攻撃を受けた際にこれを呼ぶ
+    //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｯゑｿｽ?ｿｽﾛにゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄゑｿｽ
     void AttackHit(AttackArea attackArea)
     {
         LiveEntity attacker = attackArea.GetAttacker();
 
-        //攻撃を受け付ける状態、かつ味方以外からの攻撃なら
+        //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｯ付?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾔ、?ｿｽ?ｿｽ?ｿｽﾂ厄ｿｽ?ｿｽ?ｿｽ?ｿｽﾈ外?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ攻?ｿｽ?ｿｽ?ｿｽﾈゑｿｽ
         if (IsLive() && !IsShield() && ghostTimeFrame <= 0
             && (attacker == null
                 || attacker.GetTeamID() != teamID))
         {
-            //ギミックならデータ上の数値をそのまま使う
+            //?ｿｽM?ｿｽ~?ｿｽb?ｿｽN?ｿｽﾈゑｿｽf?ｿｽ[?ｿｽ^?ｿｽ?ｿｽﾌ撰ｿｽ?ｿｽl?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌまま使?ｿｽ?ｿｽ
             float damageValue = attackArea.GetData().power;
             int ghostTime = attackArea.GetData().ghostTime;
-            //キャラの攻撃ならダメージ値と無敵時間を算出
+            //?ｿｽL?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ攻?ｿｽ?ｿｽ?ｿｽﾈゑｿｽ_?ｿｽ?ｿｽ?ｿｽ[?ｿｽW?ｿｽl?ｿｽﾆ厄ｿｽ?ｿｽG?ｿｽ?ｿｽ?ｿｽﾔゑｿｽ?ｿｽZ?ｿｽo
             if (attacker != null)
             {
                 float attackerPower =
@@ -571,14 +587,14 @@ public class LiveEntity : GeoGroObject
             }
         }
     }
-    //体力を減らし、無敵時間を付与
+    //?ｿｽﾌ力ゑｿｽ?ｿｽ?ｿｽ?ｿｽ轤ｵ?ｿｽA?ｿｽ?ｿｽ?ｿｽG?ｿｽ?ｿｽ?ｿｽﾔゑｿｽt?ｿｽ^
     void Damage(float damage, int setGhostTimeFrame)
     {
         hpAmount -= Mathf.Max(0, damage / data.GetLife());
         ghostTimeFrame = setGhostTimeFrame;
         repairCoolTimeFrame = maxRepairCoolTimeFrame;
         damageReactionTimeFrame = maxDamageReactionTimeFrame;
-        //ダメージ音を鳴らす
+        //?ｿｽ_?ｿｽ?ｿｽ?ｿｽ[?ｿｽW?ｿｽ?ｿｽ?ｿｽ?ｿｽﾂらす
         if (IsLive())
         {
             PlayAsSE(resourcePalette.GetDamageSE());
@@ -588,7 +604,7 @@ public class LiveEntity : GeoGroObject
             PlayAsSE(resourcePalette.GetDefeatSE());
             if (!IsPlayer() && GetData().GetWeaponedAttackMotionName() != "")
             {
-                //アイテムを生成
+                //?ｿｽA?ｿｽC?ｿｽe?ｿｽ?ｿｽ?ｿｽ?ｶ撰ｿｽ
                 CharaChip current =
                     Instantiate(resourcePalette.GetCharaChip().gameObject,
                     transform.position, transform.rotation, transform)
@@ -598,7 +614,7 @@ public class LiveEntity : GeoGroObject
             }
         }
     }
-    //吹っ飛ばされる
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾎゑｿｽ?ｿｽ?ｿｽ?ｿｽ
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
     {
         movement = Quaternion.Inverse(transform.rotation)
@@ -607,27 +623,27 @@ public class LiveEntity : GeoGroObject
         attackMotionData = null;
     }
 
-    //生きているか
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ驍ｩ
     public bool IsLive()
     {
         return hpAmount > 0;
     }
-    //技による無敵状態か
+    //?ｿｽZ?ｿｽﾉゑｿｽ髢ｳ?ｿｽG?ｿｽ?ｿｽﾔゑｿｽ
     public bool IsShield()
     {
         return shieldable && shield;
     }
-    //ダメージを受け付ける状態か
+    //?ｿｽ_?ｿｽ?ｿｽ?ｿｽ[?ｿｽW?ｿｽ?ｿｽ?ｿｽ?ｯ付?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾔゑｿｽ
     public bool IsDamageTakeable()
     {
         return !IsShield() && ghostTimeFrame <= 0;
     }
-    //行動できる状態か
+    //?ｿｽs?ｿｽ?ｿｽ?ｿｽﾅゑｿｽ?ｿｽ?ｿｽ?ｿｽﾔゑｿｽ
     public bool IsActable()
     {
         return hitBackTimeFrame <= 0;
     }
-    //これはプレイヤーか
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽﾍプ?ｿｽ?ｿｽ?ｿｽC?ｿｽ?ｿｽ?ｿｽ[?ｿｽ?ｿｽ
     public bool IsPlayer()
     {
         return GetComponent<Player>() != null;
@@ -652,7 +668,7 @@ public class LiveEntity : GeoGroObject
         return (float)battery / maxBattery;
     }
 
-    //死んでいるときにこれを呼ぶと復活する
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽﾅゑｿｽ?ｿｽ?ｿｽﾆゑｿｽ?ｿｽﾉゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄぶと包ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
     void Revive()
     {
         if (!IsLive())
@@ -663,54 +679,47 @@ public class LiveEntity : GeoGroObject
             reviveCount++;
         }
     }
-    //ゴールに入った時の処理
+    //?ｿｽS?ｿｽ[?ｿｽ?ｿｽ?ｿｽﾉ難ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ擾ｿｽ?ｿｽ?ｿｽ
     void Clear()
     {
         goaled = true;
     }
-    //今いるステージの次に設定されているステージへ進む
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽX?ｿｽe?ｿｽ[?ｿｽW?ｿｽﾌ趣ｿｽ?ｿｽﾉ設定さ?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽX?ｿｽe?ｿｽ[?ｿｽW?ｿｽﾖ進?ｿｽ?ｿｽ
     void NextStage()
     {
-        foreach (StageManager obj in UnityEngine.Object.FindObjectsOfType<StageManager>())
+        if (StageManager.GetCurrent().gameObject.activeInHierarchy)
         {
-            if (obj.gameObject.activeInHierarchy)
-            {
-                SceneTransition.ChangeScene(obj.GetNextStageName());
-                return;
-            }
+            SceneTransition.ChangeScene(StageManager.GetCurrent().GetNextStageName());
+            return;
         }
     }
-    //今いるステージの派生元として設定されているシーンに戻る
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽX?ｿｽe?ｿｽ[?ｿｽW?ｿｽﾌ派?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾆゑｿｽ?ｿｽﾄ設定さ?ｿｽ?ｿｽﾄゑｿｽ?ｿｽ?ｿｽV?ｿｽ[?ｿｽ?ｿｽ?ｿｽﾉ戻ゑｿｽ
     void Quit()
     {
-        foreach (StageManager obj in UnityEngine.Object.FindObjectsOfType<StageManager>())
+        if (StageManager.GetCurrent().gameObject.activeInHierarchy)
         {
-            if (obj.gameObject.activeInHierarchy)
-            {
-                SceneTransition.ChangeScene(obj.GetQuitSceneName());
-                return;
-            }
+            SceneTransition.ChangeScene(StageManager.GetCurrent().GetQuitSceneName());
         }
     }
 
-    //設定された攻撃モーションデータを読み出して実行（実行中は常に呼ぶ）
+    //?ｿｽﾝ定さ?ｿｽ黷ｽ?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽ[?ｿｽ^?ｿｽ?ｿｽﾇみ出?ｿｽ?ｿｽ?ｿｽﾄ趣ｿｽ?ｿｽs?ｿｽi?ｿｽ?ｿｽ?ｿｽs?ｿｽ?ｿｽ?ｿｽﾍ擾ｿｽﾉ呼ぶ）
     void UpdateAttackMotion()
     {
-        //3Dカーソルをリセット
+        //3D?ｿｽJ?ｿｽ[?ｿｽ\?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽb?ｿｽg
         Array.Resize(ref cursors, 0);
 
-        //固有動作ポイントをリセット
+        //?ｿｽﾅ有?ｿｽ?ｿｽ?ｿｽ?ｿｽ|?ｿｽC?ｿｽ?ｿｽ?ｿｽg?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽZ?ｿｽb?ｿｽg
         Array.Resize(ref uniqueActDatas, 0);
 
         if (IsAttacking())
         {
-            //3Dカーソルを取得
+            //3D?ｿｽJ?ｿｽ[?ｿｽ\?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ謫ｾ
             if (attackMotionData.GetCursors() != null)
             {
                 cursors = attackMotionData.GetCursors();
             }
 
-            //近接攻撃
+            //?ｿｽﾟ接攻?ｿｽ?ｿｽ
             if (attackMotionData.GetData().meleeAttackKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -727,7 +736,7 @@ public class LiveEntity : GeoGroObject
                 }
             }
 
-            //遠距離攻撃
+            //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ
             if (attackMotionData.GetData().shotKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -744,7 +753,7 @@ public class LiveEntity : GeoGroObject
                 }
             }
 
-            //移動
+            //?ｿｽﾚ難ｿｽ
             if (attackMotionData.GetData().moveKeys != null)
             {
                 Vector3 savedMovement = movement;
@@ -801,7 +810,7 @@ public class LiveEntity : GeoGroObject
                 movement += replaceVector;
             }
 
-            //固有動作ポイント
+            //?ｿｽﾅ有?ｿｽ?ｿｽ?ｿｽ?ｿｽ|?ｿｽC?ｿｽ?ｿｽ?ｿｽg
             if (attackMotionData.GetData().uniqueActionKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -817,7 +826,7 @@ public class LiveEntity : GeoGroObject
                 }
             }
 
-            //無敵時間
+            //?ｿｽ?ｿｽ?ｿｽG?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             if (attackMotionData.GetData().shieldKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -832,7 +841,7 @@ public class LiveEntity : GeoGroObject
                 }
             }
 
-            //着陸不可時間
+            //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽs?ｿｽﾂ趣ｿｽ?ｿｽ?ｿｽ
             if (attackMotionData.GetData().disAllowGroundSetKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -847,7 +856,7 @@ public class LiveEntity : GeoGroObject
                 }
             }
 
-            //効果音
+            //?ｿｽ?ｿｽ?ｿｽﾊ会ｿｽ
             if (attackMotionData.GetData().seKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -862,7 +871,7 @@ public class LiveEntity : GeoGroObject
                 }
             }
 
-            //アニメーション
+            //?ｿｽA?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ
             if (attackMotionData.GetData().animationKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
@@ -885,15 +894,15 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //攻撃判定を出す
-        //まずは近接攻撃のデータと同じ数だけ領域を用意
+        //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽo?ｿｽ?ｿｽ
+        //?ｿｽﾜゑｿｽ?ｿｽﾍ近接攻?ｿｽ?ｿｽ?ｿｽﾌデ?ｿｽ[?ｿｽ^?ｿｽﾆ難ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾌ茨ｿｽ?ｿｽp?ｿｽ?ｿｽ
         Array.Resize(ref attackAreas, meleeAttackDatas.Length);
-        //領域内の攻撃判定に近接攻撃のデータを代入
+        //?ｿｽﾌ茨ｿｽ?ｿｽ?ｿｽﾌ攻?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾉ近接攻?ｿｽ?ｿｽ?ｿｽﾌデ?ｿｽ[?ｿｽ^?ｿｽ?ｿｽ?ｿｽ?ｿｽ
         for (int i = 0; i < attackAreas.Length; i++)
         {
             MeleeAttackAndCursorName currentData = meleeAttackDatas[i];
 
-            //無ければ生成
+            //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾎ撰ｿｽ?ｿｽ?ｿｽ
             if (attackAreas[i] == null)
             {
                 attackAreas[i] =
@@ -917,7 +926,7 @@ public class LiveEntity : GeoGroObject
                 cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
             current.Lock();
         }
-        //不要な攻撃判定を消す
+        //?ｿｽs?ｿｽv?ｿｽﾈ攻?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
         for (int i = 0; i < transform.childCount; i++)
         {
             AttackArea current =
@@ -940,14 +949,14 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //弾を出す
+        //?ｿｽe?ｿｽ?ｿｽ?ｿｽo?ｿｽ?ｿｽ
         for (int i = 0; i < shotDatas.Length; i++)
         {
             ShotAndCursorName currentData = shotDatas[i];
 
             if (currentData.postMove)
             {
-                //postMoveがtrueなら1フレーム遅らせる
+                //postMove?ｿｽ?ｿｽtrue?ｿｽﾈゑｿｽ1?ｿｽt?ｿｽ?ｿｽ?ｿｽ[?ｿｽ?ｿｽ?ｿｽx?ｿｽ轤ｹ?ｿｽ?ｿｽ
                 shotDatas[i].postMove = false;
             }
             else
@@ -957,7 +966,7 @@ public class LiveEntity : GeoGroObject
                     AttackMotionData.Cursor currentCursor =
                         cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)];
 
-                    //生成
+                    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ
                     Projectile current =
                             Instantiate(resourcePalette.GetProjectile().gameObject,
                             transform.position,
@@ -989,7 +998,7 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //近接、遠距離攻撃のデータから使用済みの要素を除去
+        //?ｿｽﾟ接、?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ?ｿｽﾌデ?ｿｽ[?ｿｽ^?ｿｽ?ｿｽ?ｿｽ?ｿｽg?ｿｽp?ｿｽﾏみの要?ｿｽf?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
         Array.Resize(ref meleeAttackDatas, 0);
 
         List<ShotAndCursorName> shotDataList =
@@ -998,10 +1007,10 @@ public class LiveEntity : GeoGroObject
         shotDatas = shotDataList.ToArray();
     }
 
-    //設定されたアニメーションデータを読み出して実行（実行中は常に呼ぶ）
+    //?ｿｽﾝ定さ?ｿｽ黷ｽ?ｿｽA?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽ[?ｿｽ^?ｿｽ?ｿｽﾇみ出?ｿｽ?ｿｽ?ｿｽﾄ趣ｿｽ?ｿｽs?ｿｽi?ｿｽ?ｿｽ?ｿｽs?ｿｽ?ｿｽ?ｿｽﾍ擾ｿｽﾉ呼ぶ）
     void UpdateAnimation()
     {
-        //まずパーツのトランスフォームをデフォルト値に揃える
+        //?ｿｽﾜゑｿｽ?ｿｽp?ｿｽ[?ｿｽc?ｿｽﾌト?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽX?ｿｽt?ｿｽH?ｿｽ[?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽt?ｿｽH?ｿｽ?ｿｽ?ｿｽg?ｿｽl?ｿｽﾉ托ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
         for (int i = 0; i < bodyParts.Length; i++)
         {
             Transform current = bodyParts[i];
@@ -1014,10 +1023,10 @@ public class LiveEntity : GeoGroObject
                 current.localEulerAngles = currentData.eulerAngles;
             }
         }
-        //現在の状態にあったアニメーションを取得
+        //?ｿｽ?ｿｽ?ｿｽﾝの擾ｿｽﾔにゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽA?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ謫ｾ
         CharaData.Animation animationData =
             data.SearchAnimation(animationName);
-        //トランスフォームアニメーションを適用
+        //?ｿｽg?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽX?ｿｽt?ｿｽH?ｿｽ[?ｿｽ?ｿｽ?ｿｽA?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽK?ｿｽp
         if (animationData.transformAnimationKeys != null)
         {
             for (int i = 0; i < animationData.transformAnimationKeys.Length; i++)
@@ -1088,7 +1097,7 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //スキンアニメーションを適用
+        //?ｿｽX?ｿｽL?ｿｽ?ｿｽ?ｿｽA?ｿｽj?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽK?ｿｽp
         if (animationData.rigAnimationKeys != null)
         {
             for (int i = 0; i < animationData.rigAnimationKeys.Length; i++)
@@ -1113,7 +1122,7 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //表情を適用
+        //?ｿｽ\?ｿｽ?ｿｽ?ｿｽK?ｿｽp
         if (animationData.facialExpressionKeys != null)
         {
             for (int i = 0; i < animationData.facialExpressionKeys.Length; i++)
@@ -1130,7 +1139,7 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //効果音
+        //?ｿｽ?ｿｽ?ｿｽﾊ会ｿｽ
         if (animationData.seKeys != null)
         {
             for (int i = 0; i < animationData.
@@ -1157,14 +1166,14 @@ public class LiveEntity : GeoGroObject
 
         prevAnimationProgress = animationProgress;
 
-        //デフォルトのテクスチャをモデルに貼る
+        //?ｿｽf?ｿｽt?ｿｽH?ｿｽ?ｿｽ?ｿｽg?ｿｽﾌテ?ｿｽN?ｿｽX?ｿｽ`?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽ?ｿｽ?ｿｽﾉ貼?ｿｽ?ｿｽ
         for (int i = 0; i < meshes.Length; i++)
         {
             TextureSendData current = meshes[i];
             current.meshRenderer.materials[current.index].
                 SetTexture(current.propertyName, data.GetDefaultTexture(i));
         }
-        //デフォルトのスプライトをスプライトレンダラーに貼る
+        //?ｿｽf?ｿｽt?ｿｽH?ｿｽ?ｿｽ?ｿｽg?ｿｽﾌス?ｿｽv?ｿｽ?ｿｽ?ｿｽC?ｿｽg?ｿｽ?ｿｽ?ｿｽX?ｿｽv?ｿｽ?ｿｽ?ｿｽC?ｿｽg?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ_?ｿｽ?ｿｽ?ｿｽ[?ｿｽﾉ貼?ｿｽ?ｿｽ
         for (int i = 0; i < sprites.Length; i++)
         {
             SpriteSendData current = sprites[i];
@@ -1179,10 +1188,10 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        //現在の状態にあった表情を取得
+        //?ｿｽ?ｿｽ?ｿｽﾝの擾ｿｽﾔにゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ\?ｿｽ?ｿｽ?ｿｽ?ｿｽ謫ｾ
         CharaData.FacialExpression facialData =
             data.SearchFacialExpression(facialExpressionName);
-        //表情のテクスチャをモデルに貼る
+        //?ｿｽ\?ｿｽ?ｿｽﾌテ?ｿｽN?ｿｽX?ｿｽ`?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽf?ｿｽ?ｿｽ?ｿｽﾉ貼?ｿｽ?ｿｽ
         if (facialData.indexAndTextures != null)
         {
             for (int i = 0; i < facialData.indexAndTextures.Length; i++)
@@ -1193,7 +1202,7 @@ public class LiveEntity : GeoGroObject
                     SetTexture(current.propertyName, texData.texture);
             }
         }
-        //表情のスプライトをスプライトレンダラーに貼る
+        //?ｿｽ\?ｿｽ?ｿｽﾌス?ｿｽv?ｿｽ?ｿｽ?ｿｽC?ｿｽg?ｿｽ?ｿｽ?ｿｽX?ｿｽv?ｿｽ?ｿｽ?ｿｽC?ｿｽg?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ_?ｿｽ?ｿｽ?ｿｽ[?ｿｽﾉ貼?ｿｽ?ｿｽ
         if (facialData.indexAndSprites != null)
         {
             for (int i = 0; i < facialData.indexAndSprites.Length; i++)
@@ -1213,14 +1222,14 @@ public class LiveEntity : GeoGroObject
         }
     }
 
-    //近接および範囲攻撃
+    //?ｿｽﾟ接ゑｿｽ?ｿｽ?ｿｽﾑ範囲攻?ｿｽ?ｿｽ
     void MeleeAttack(AttackMotionData.MeleeAttackData attackData, string cursorName)
     {
         Array.Resize(ref meleeAttackDatas, meleeAttackDatas.Length + 1);
         meleeAttackDatas[meleeAttackDatas.Length - 1].data = attackData;
         meleeAttackDatas[meleeAttackDatas.Length - 1].cursorName = cursorName;
     }
-    //遠距離攻撃
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ
     void Shot(AttackMotionData.ShotData shotData, string cursorName, bool postMove)
     {
         Array.Resize(ref shotDatas, shotDatas.Length + 1);
@@ -1229,7 +1238,7 @@ public class LiveEntity : GeoGroObject
         shotDatas[shotDatas.Length - 1].postMove = postMove;
         shotDatas[shotDatas.Length - 1].used = false;
     }
-    //このLiveEntityから効果音を鳴らす
+    //?ｿｽ?ｿｽ?ｿｽ?ｿｽLiveEntity?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾊ会ｿｽ?ｿｽ?ｿｽﾂらす
     public void PlayAsSE(AudioClip clip)
     {
         GetComponent<AudioSource>().PlayOneShot(clip);

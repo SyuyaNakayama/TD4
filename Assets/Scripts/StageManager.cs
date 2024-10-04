@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    static StageManager current;
+    public static StageManager GetCurrent()
+    {
+        return current;
+    }
 
     [SerializeField]
     string quitSceneName;
@@ -44,26 +49,30 @@ public class StageManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        //現在のインスタンスを入れる変数を更新
+        current = this;
+
         //床のテクスチャを貼り替える
         groundMaterial.SetTexture(texPropertyName, groundTex);
 
-        if (player == null)
+        //プレイヤーを探す
+        foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
-            //プレイヤーを探す
-            foreach (Player obj in UnityEngine.Object.FindObjectsOfType<Player>())
+            if (obj && obj.GetComponent<Player>())
             {
-                player = obj;
+                player = obj.GetComponent<Player>();
             }
         }
+
         //自身のオーディオソースを探す
         AudioSource bgmSource = GetComponent<AudioSource>();
 
         //バトル中であることを検出
         bool battling = false;
         bool annihilated = false;
-        foreach (BattleField obj in UnityEngine.Object.FindObjectsOfType<BattleField>())
+        foreach (BattleField obj in BattleField.GetAllInstances())
         {
-            if (obj.gameObject.activeInHierarchy && obj.GetBattling())
+            if (obj && obj.gameObject.activeInHierarchy && obj.GetBattling())
             {
                 battling = true;
                 if (obj.GetAnnihilated())

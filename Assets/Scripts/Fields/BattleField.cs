@@ -1,9 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleField : Field
 {
+    static BattleField[] allInstances = { };
+    public static BattleField[] GetAllInstances()
+    {
+        BattleField[] ret = new BattleField[allInstances.Length];
+        Array.Copy(allInstances, ret, allInstances.Length);
+        return ret;
+    }
+
     const string teamID = "enemy";
     const int maxLifeTime = 5;
 
@@ -56,6 +65,14 @@ public class BattleField : Field
     }
     protected override void UniqueFixedUpdate()
     {
+        //全インスタンスを入れる変数を更新
+        List<BattleField> allInstancesList =
+            new List<BattleField>(allInstances);
+        allInstancesList.RemoveAll(where => !where || where == this);
+        allInstances = allInstancesList.ToArray();
+        Array.Resize(ref allInstances, allInstances.Length + 1);
+        allInstances[allInstances.Length - 1] = this;
+
         battling = tempBattling;
         if (battling)
         {
