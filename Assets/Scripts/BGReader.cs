@@ -10,6 +10,9 @@ public class BGReader : MonoBehaviour
 
     void FixedUpdate()
     {
-        image.sprite = StageManager.GetCurrent().GetBackGround();
+        if (StageManager.GetCurrent())
+        {
+            image.sprite = StageManager.GetCurrent().GetBackGround();
+        }
     }
 }

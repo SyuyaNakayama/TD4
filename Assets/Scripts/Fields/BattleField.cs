@@ -13,7 +13,6 @@ public class BattleField : Field
         return ret;
     }
 
-    const string teamID = "enemy";
     const int maxLifeTime = 5;
 
     [System.Serializable]
@@ -33,6 +32,8 @@ public class BattleField : Field
     bool visible;
     [SerializeField]
     GuardersTeamData[] guarders;
+    [SerializeField]
+    string teamID = "enemy";
 
     bool tempBattling;
     bool battling;

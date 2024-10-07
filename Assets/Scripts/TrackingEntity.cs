@@ -8,9 +8,6 @@ public class TrackingEntity : MonoBehaviour
     //追尾するエンティディ
     [SerializeField]
     GameObject target;
-    //ターゲットの回転用
-    [SerializeField]
-    GameObject rotate;
     //自身
     private GameObject me;
     //読み込ませる座標群
@@ -21,9 +18,9 @@ public class TrackingEntity : MonoBehaviour
     void Start()
     {
         me = this.gameObject;
-        for(int i = 0; i < dataNum; i++)
+        for (int i = 0; i < dataNum; i++)
         {
-            loadPos[i] = new Vector3 (0, 100, 0);
+            loadPos[i] = new Vector3(0, 100, 0);
             loadRot[i] = new Quaternion(0, 0, 0, 0);
         }
 
@@ -32,13 +29,12 @@ public class TrackingEntity : MonoBehaviour
     {
         //ターゲットのデータ入力
         loadPos[0] = target.transform.position;
-        loadRot[0] = rotate.transform.rotation;
-        Debug.Log(rotate.transform.rotation);
+        loadRot[0] = target.transform.rotation;
         //データをずらす
-        for(int i = dataNum;i > 0; i--)
+        for (int i = dataNum; i > 0; i--)
         {
-            loadPos[i] = loadPos[i-1];
-            loadRot[i] = loadRot[i-1];
+            loadPos[i] = loadPos[i - 1];
+            loadRot[i] = loadRot[i - 1];
         }
         //最後尾を適用させる
         me.transform.position = new Vector3(loadPos[dataNum].x, loadPos[dataNum].y, loadPos[dataNum].z);
