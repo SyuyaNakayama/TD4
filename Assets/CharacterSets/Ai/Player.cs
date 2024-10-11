@@ -74,12 +74,30 @@ public class Player : LiveEntity
 
         }
 
-            //if (Input.GetKeyDown("Horizontal"))
-            //{
-            //    Debug.Log("horizontal");
-            //}
+        //if (Input.GetAxis("MoveLR_Horizontal") != 0 || Input.GetAxis("MoveUD_Vatical") != 0)
+        //{
+        //    Move(GetMovement() + new Vector3(
+        //        Input.GetAxis("MoveLR_Horizontal"),
+        //        0,
+        //        Input.GetAxis("MoveUD_Vatical")).normalized
+        //        * moveSpeed);
+        //    direction = Mathf.Atan2(
+        //        Input.GetAxis("MoveLR_Horizontal"), Input.GetAxis("MoveUD_Vatical"))
+        //        / Mathf.Deg2Rad;
+        //    //着地していたら移動モーションを再生
+        //    if (IsLanding())
+        //    {
+        //        animationName = "walk";
+        //    }
 
-            if (IsAttacking())
+        //}
+
+        //if (Input.GetKeyDown("Horizontal"))
+        //{
+        //    Debug.Log("horizontal");
+        //}
+
+        if (IsAttacking())
         {
             //固有ワザ以外の技を使っている間は攻撃モーションを再生
             if (!IsAttacking(GetData().GetDefaultAttackMotionName()))
