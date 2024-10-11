@@ -56,15 +56,33 @@ public class Player : LiveEntity
 
         // 移動
         // コントローラーとキーボード両方に対応
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        if (Input.GetAxis("L_Stick_H") != 0 || Input.GetAxis("L_Stick_V") != 0)
         {
             Move(GetMovement() + new Vector3(
-                Input.GetAxis("Horizontal"),
+                Input.GetAxis("L_Stick_H"),
                 0,
-                Input.GetAxis("Vertical")).normalized
+                Input.GetAxis("L_Stick_V")).normalized
                 * moveSpeed);
             direction = Mathf.Atan2(
-                Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))
+                Input.GetAxis("L_Stick_H"), Input.GetAxis("L_Stick_V"))
+                / Mathf.Deg2Rad;
+            //着地していたら移動モーションを再生
+            if (IsLanding())
+            {
+                animationName = "walk";
+            }
+
+        }
+
+        if (Input.GetAxis("MoveLR_Horizontal") != 0 || Input.GetAxis("MoveDU_Vertical") != 0)
+        {
+            Move(GetMovement() + new Vector3(
+                Input.GetAxis("MoveLR_Horizontal"),
+                0,
+                Input.GetAxis("MoveDU_Vertical")).normalized
+                * moveSpeed);
+            direction = Mathf.Atan2(
+                Input.GetAxis("MoveLR_Horizontal"), Input.GetAxis("MoveDU_Vertical"))
                 / Mathf.Deg2Rad;
             //着地していたら移動モーションを再生
             if (IsLanding())
@@ -128,13 +146,20 @@ public class Player : LiveEntity
 
         //自機を回転
         transform.Rotate(
-            0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
+            0, Input.GetAxis("R_Stick_H") * cameraControlSpeed, 0, Space.Self);
+        //カメラを傾ける
+        playerCameraAngle += Input.GetAxis("R_Stick_V") * cameraControlSpeed;
+
+        transform.Rotate(
+           0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
         //カメラを傾ける
         playerCameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
+
         //カメラの仰角値を規定範囲に収める
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, minCameraAngle, maxCameraAngle);
         cameraAngle = playerCameraAngle;
+
     }
 
     protected override void LiveEntityOnHit(Collider col)
