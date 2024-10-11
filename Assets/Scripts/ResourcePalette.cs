@@ -35,4 +35,10 @@ public class ResourcePalette : ScriptableObject
     {
         return defeatSE;
     }
+    [SerializeField]
+    GameObject despawnEffect;
+    public GameObject GetDespawnEffect()
+    {
+        return despawnEffect;
+    }
 }
