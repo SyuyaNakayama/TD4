@@ -56,15 +56,15 @@ public class Player : LiveEntity
 
         // 移動
         // コントローラーとキーボード両方に対応
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        if (Input.GetAxis("L_Stick_H") != 0 || Input.GetAxis("L_Stick_V") != 0)
         {
             Move(GetMovement() + new Vector3(
-                Input.GetAxis("Horizontal"),
+                Input.GetAxis("L_Stick_H"),
                 0,
-                Input.GetAxis("Vertical")).normalized
+                Input.GetAxis("L_Stick_V")).normalized
                 * moveSpeed);
             direction = Mathf.Atan2(
-                Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))
+                Input.GetAxis("L_Stick_H"), Input.GetAxis("L_Stick_V"))
                 / Mathf.Deg2Rad;
             //着地していたら移動モーションを再生
             if (IsLanding())
@@ -74,7 +74,12 @@ public class Player : LiveEntity
 
         }
 
-        if (IsAttacking())
+            //if (Input.GetKeyDown("Horizontal"))
+            //{
+            //    Debug.Log("horizontal");
+            //}
+
+            if (IsAttacking())
         {
             //固有ワザ以外の技を使っている間は攻撃モーションを再生
             if (!IsAttacking(GetData().GetDefaultAttackMotionName()))
@@ -128,9 +133,9 @@ public class Player : LiveEntity
 
         //自機を回転
         transform.Rotate(
-            0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
+            0, Input.GetAxis("R_Stick_H") * cameraControlSpeed, 0, Space.Self);
         //カメラを傾ける
-        playerCameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
+        playerCameraAngle += Input.GetAxis("R_Stick_V") * cameraControlSpeed;
         //カメラの仰角値を規定範囲に収める
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, minCameraAngle, maxCameraAngle);
