@@ -15,15 +15,12 @@ public class Board : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            textComponent.SetActive(false);
-        }
+        textComponent.SetActive(false);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.GetComponent<Player>() != null)
         {
