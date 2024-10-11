@@ -74,28 +74,23 @@ public class Player : LiveEntity
 
         }
 
-        //if (Input.GetAxis("MoveLR_Horizontal") != 0 || Input.GetAxis("MoveUD_Vatical") != 0)
-        //{
-        //    Move(GetMovement() + new Vector3(
-        //        Input.GetAxis("MoveLR_Horizontal"),
-        //        0,
-        //        Input.GetAxis("MoveUD_Vatical")).normalized
-        //        * moveSpeed);
-        //    direction = Mathf.Atan2(
-        //        Input.GetAxis("MoveLR_Horizontal"), Input.GetAxis("MoveUD_Vatical"))
-        //        / Mathf.Deg2Rad;
-        //    //着地していたら移動モーションを再生
-        //    if (IsLanding())
-        //    {
-        //        animationName = "walk";
-        //    }
+        if (Input.GetAxis("MoveLR_Horizontal") != 0 || Input.GetAxis("MoveDU_Vertical") != 0)
+        {
+            Move(GetMovement() + new Vector3(
+                Input.GetAxis("MoveLR_Horizontal"),
+                0,
+                Input.GetAxis("MoveDU_Vertical")).normalized
+                * moveSpeed);
+            direction = Mathf.Atan2(
+                Input.GetAxis("MoveLR_Horizontal"), Input.GetAxis("MoveDU_Vertical"))
+                / Mathf.Deg2Rad;
+            //着地していたら移動モーションを再生
+            if (IsLanding())
+            {
+                animationName = "walk";
+            }
 
-        //}
-
-        //if (Input.GetKeyDown("Horizontal"))
-        //{
-        //    Debug.Log("horizontal");
-        //}
+        }
 
         if (IsAttacking())
         {
@@ -154,10 +149,17 @@ public class Player : LiveEntity
             0, Input.GetAxis("R_Stick_H") * cameraControlSpeed, 0, Space.Self);
         //カメラを傾ける
         playerCameraAngle += Input.GetAxis("R_Stick_V") * cameraControlSpeed;
+
+        transform.Rotate(
+           0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
+        //カメラを傾ける
+        playerCameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
+
         //カメラの仰角値を規定範囲に収める
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, minCameraAngle, maxCameraAngle);
         cameraAngle = playerCameraAngle;
+
     }
 
     protected override void LiveEntityOnHit(Collider col)
