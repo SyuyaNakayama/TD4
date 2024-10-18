@@ -36,6 +36,18 @@ public class ResourcePalette : ScriptableObject
         return defeatSE;
     }
     [SerializeField]
+    GameObject damageEffect;
+    public GameObject GetDamageEffect()
+    {
+        return damageEffect;
+    }
+    [SerializeField]
+    GameObject guardEffect;
+    public GameObject GetGuardEffect()
+    {
+        return guardEffect;
+    }
+    [SerializeField]
     GameObject despawnEffect;
     public GameObject GetDespawnEffect()
     {

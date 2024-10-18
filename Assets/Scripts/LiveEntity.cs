@@ -620,6 +620,12 @@ public class LiveEntity : GeoGroObject
                 current.gameObject.transform.parent = transform.parent;
             }
         }
+
+        GameObject damageEffect =
+                Instantiate(resourcePalette.GetDamageEffect(),
+                transform.position, transform.rotation, transform);
+        damageEffect.transform.localScale = new Vector3(1, 1, 1);
+        damageEffect.GetComponent<ParticleSystem>().startColor = data.GetThemeColor();
     }
     //?��?��?��?��?��?��΂�?��?��?��
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
