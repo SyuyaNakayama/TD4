@@ -5,39 +5,44 @@ using UnityEngine;
 
 public class TrackingEntity : MonoBehaviour
 {
+    //データ群の最大数
+    const int dataNum = 20;
+
     //追尾するエンティディ
     [SerializeField]
     GameObject target;
-    //自身
-    private GameObject me;
+    //予測線
+    [SerializeField]
+    LineRenderer lineRenderer;
+
     //読み込ませる座標群
-    private Vector3[] loadPos = new Vector3[121];
-    private Quaternion[] loadRot = new Quaternion[1211];
-    //データ群の最大数
-    private const int dataNum = 120;
+    Vector3[] loadPos = new Vector3[dataNum];
+    Quaternion[] loadRot = new Quaternion[dataNum];
+
     void Start()
     {
-        me = this.gameObject;
         for (int i = 0; i < dataNum; i++)
         {
-            loadPos[i] = new Vector3(0, 100, 0);
-            loadRot[i] = new Quaternion(0, 0, 0, 0);
+            loadPos[i] = transform.position;
+            loadRot[i] = transform.rotation;
         }
-
     }
-    void Update()
+    void FixedUpdate()
     {
         //ターゲットのデータ入力
         loadPos[0] = target.transform.position;
         loadRot[0] = target.transform.rotation;
         //データをずらす
-        for (int i = dataNum; i > 0; i--)
+        for (int i = dataNum - 1; i > 0; i--)
         {
             loadPos[i] = loadPos[i - 1];
             loadRot[i] = loadRot[i - 1];
         }
         //最後尾を適用させる
-        me.transform.position = new Vector3(loadPos[dataNum].x, loadPos[dataNum].y, loadPos[dataNum].z);
-        me.transform.rotation = new Quaternion(loadRot[dataNum].x, loadRot[dataNum].y, loadRot[dataNum].z, loadRot[dataNum].w);
+        transform.position = loadPos[dataNum - 1];
+        transform.rotation = loadRot[dataNum - 1];
+        //頂点データをlineRendererに渡す
+        lineRenderer.positionCount = loadPos.Length;
+        lineRenderer.SetPositions(loadPos);
     }
 }

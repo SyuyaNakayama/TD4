@@ -136,7 +136,7 @@ MonoBehaviour:
   - name: defeat
     totalFrame: 0
     transformAnimationKeys:
-    - keyFrame: {x: 0.9, y: 1}
+    - keyFrame: {x: 0.05, y: 0.15}
       bodyPartIndex: 1
       startTransform:
         position: {x: 0, y: 0, z: 0}
@@ -153,11 +153,28 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 1
       easePow: 2
-    - keyFrame: {x: 0.8, y: 1}
+    - keyFrame: {x: 0.15, y: 1}
       bodyPartIndex: 1
       startTransform:
         position: {x: 0, y: 0, z: 0}
-        eulerAngles: {x: 0, y: -10, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 1
+        rotation: 1
+        scale: 0
+      lerpAsEuler: 0
+      easeType: 1
+      easePow: 2
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: -50, z: 0}
         scale: {x: 0, y: 0, z: 0}
       endTransform:
         position: {x: 0, y: 0, z: 0}
@@ -175,13 +192,17 @@ MonoBehaviour:
       animatorIndex: 0
       rigAnimationID: 5
     facialExpressionKeys:
-    - keyFrame: {x: 0, y: 0.1}
+    - keyFrame: {x: 0, y: 0.05}
       facialExpressionName: damage
-    - keyFrame: {x: 0.1, y: 0.8}
+    - keyFrame: {x: 0.05, y: 0.8}
       facialExpressionName: defeat
-    - keyFrame: {x: 0.8, y: 1}
+    - keyFrame: {x: 0.1, y: 1}
       facialExpressionName: dead
     seKeys:
+    - keyFrame: 0.1
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
+    - keyFrame: 0.6
+      se: {fileID: 8300000, guid: 474e51b2a4065468bb7ccfbd6be166c9, type: 3}
     - keyFrame: 0.75
       se: {fileID: 8300000, guid: 745d61f5ce15f4430857e2b1adae393d, type: 3}
   - name: dead
