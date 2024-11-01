@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6529571517474156119}
   m_RootOrder: 0
@@ -63,6 +64,7 @@ MonoBehaviour:
     blowForce: 0
     hitback: 0
     ghostTime: 30
+  blowVec: {x: 0, y: 0, z: 0}
 --- !u!1 &6529571517474156075
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,8 +94,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6529571517474156075}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: 15, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6580246518864267418}
   m_Father: {fileID: 0}
@@ -118,6 +121,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -180,6 +184,7 @@ MonoBehaviour:
   abledTex_flash: {fileID: 2800000, guid: 7a0a5abb8aa7543329a82ccda816fa36, type: 3}
   attackArea: {fileID: 9214681594851649674}
   oneLoopTimeFrame: 240
+  inverse: 0
 --- !u!114 &75195136676556566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,8 +197,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb21b6cec54da4fc79d63a056e12fe98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: b28dc0e9ac4344f409f5cdc768d3f7d0, type: 2}
+  matIndex: 0
   squareTiling: 1
+  offsetObjectPosition: 1
   tiling: {x: 8, y: 8}
   offset: {x: 0, y: 0}
   alpha: 1
