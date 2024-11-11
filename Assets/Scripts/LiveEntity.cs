@@ -215,6 +215,10 @@ public class LiveEntity : GeoGroObject
         Array.Resize(ref allInstances, allInstances.Length + 1);
         allInstances[allInstances.Length - 1] = this;
 
+        //操作しているキャラクターのカメラとオーディオリスナーをオンにする
+        view.enabled =
+        view.GetComponent<AudioListener>().enabled = userControl;
+
         List<Item> touchedItemList = new List<Item>(touchedItems);
         touchedItemList.Remove(null);
         touchedItems = touchedItemList.ToArray();

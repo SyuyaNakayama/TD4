@@ -22,7 +22,7 @@ public class LiveEntityHUD : MonoBehaviour
 
     void FixedUpdate()
     {
-        //ï¿½Ì—ÍƒQï¿½[ï¿½Wï¿½ï¿½ï¿½Xï¿½V
+        //‘Ì—ÍƒQ[ƒW‚ğXV
         Color lifeGaugeColor = liveEntity.GetCassetteData().GetThemeColor();
         lifeGaugeColor.a = 1;
         lifeGauge.material.SetColor("_GaugeColor1", lifeGaugeColor);
@@ -38,7 +38,7 @@ public class LiveEntityHUD : MonoBehaviour
         lifeGauge.material.SetFloat("_FillAmount1", liveEntity.GetLife());
 
         if (lifeGauge.material.GetFloat("_FillAmount1")
-                         <= lifeGauge.material.GetFloat("_FillAmount2"))
+            <= lifeGauge.material.GetFloat("_FillAmount2"))
         {
             lifeGauge.material.SetFloat("_FillAmount2",
                 lifeGauge.material.GetFloat("_FillAmount2") - 0.005f);
@@ -49,7 +49,7 @@ public class LiveEntityHUD : MonoBehaviour
                 lifeGauge.material.GetFloat("_FillAmount1"));
         }
 
-        //ï¿½dï¿½ÍƒQï¿½[ï¿½Wï¿½ï¿½ï¿½Xï¿½V
+        //“d—ÍƒQ[ƒW‚ğXV
         Color batteryGaugeColor = new Color(0, 0.8f, 0, 1);
         if (liveEntity.IsShield())
         {
@@ -68,7 +68,7 @@ public class LiveEntityHUD : MonoBehaviour
             ));
         batteryGauge.material.SetFloat("_FillAmount1", liveEntity.GetBatteryAmount());
         batteryGauge.material.SetFloat("_FillAmount2", 0);
-        //ï¿½dï¿½ÍƒQï¿½[ï¿½Wï¿½ï¿½Kï¿½Ø‚ÈˆÊ’uï¿½ï¿½
+        //“d—ÍƒQ[ƒW‚ğ“KØ‚ÈˆÊ’u‚É
         Vector3 targetPos = batteryGaugePos;
         if (liveEntity.GetBatteryAmount() >= 1)
         {
@@ -78,7 +78,7 @@ public class LiveEntityHUD : MonoBehaviour
             batteryGauge.transform.localPosition, targetPos,
             batteryGaugeShiftIntensity);
 
-        //ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V
+        //ƒLƒƒƒ‰ƒNƒ^[–¼•\¦‚ğXV
         name.text = liveEntity.GetCassetteData().GetCharaName();
     }
 
