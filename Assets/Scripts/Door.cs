@@ -18,7 +18,7 @@ public class Door : MonoBehaviour
     }
     void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.GetComponent<Player>() != null)
+        if (col.gameObject.GetComponent<LiveEntity>() != null)
         {
             SceneTransition.ChangeScene(nextScene);
         }

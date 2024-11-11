@@ -105,6 +105,10 @@ public class LiveEntity : GeoGroObject
     {
         return direction;
     }
+    public Quaternion GetDirectionQuat()
+    {
+        return Quaternion.Euler(0, direction, 0);
+    }
     Quaternion prevRot;
     Quaternion cameraTiltRot;
     float cameraTiltDiffuse;

@@ -63,8 +63,6 @@ public class CharacterCassette : MonoBehaviour
     }
     float moveSpeed;
     KX_netUtil.AxisSwitch moveLock;
-    protected Quaternion direction;
-    protected float directionAngle;
     bool directionSwitchX = true;
     bool directionSwitchY = true;
     bool directionLock;
@@ -153,19 +151,31 @@ public class CharacterCassette : MonoBehaviour
                 {
                     if (liveEntity.IsLive())
                     {
-                        SetAttackMotion(data.SearchAttackMotion(
-                            AttackMotionData.TriggerInputType.nutral));
+                        if (data.IsHitAttackMotion(
+                            AttackMotionData.TriggerInputType.nutral))
+                        {
+                            SetAttackMotion(data.SearchAttackMotion(
+                                AttackMotionData.TriggerInputType.nutral));
+                        }
 
                         if (moveInputVec.x != 0 || moveInputVec.y != 0)
                         {
-                            SetAttackMotion(data.SearchAttackMotion(
+                            if (data.IsHitAttackMotion(
+                            AttackMotionData.TriggerInputType.move))
+                            {
+                                SetAttackMotion(data.SearchAttackMotion(
                                 AttackMotionData.TriggerInputType.move));
+                            }
                         }
 
                         if (IsAttackInput())
                         {
-                            SetAttackMotion(data.SearchAttackMotion(
+                            if (data.IsHitAttackMotion(
+                            AttackMotionData.TriggerInputType.tap))
+                            {
+                                SetAttackMotion(data.SearchAttackMotion(
                                 AttackMotionData.TriggerInputType.tap));
+                            }
                         }
                         CharaUpdate();
                     }
@@ -466,7 +476,7 @@ public class CharacterCassette : MonoBehaviour
                             current.keyFrame.x, current.keyFrame.y, 0, 1),
                             current.easeType, current.easePow);
 
-                        replaceVector += direction * current.moveVec
+                        replaceVector += liveEntity.GetDirectionQuat() * current.moveVec
                             * (key1 - key0) / Time.deltaTime;
                     }
                 }
@@ -516,7 +526,7 @@ public class CharacterCassette : MonoBehaviour
                         ignoreAxis.z =
                             current.ignoreAxis.z && ignoreAxis.z;
 
-                        replaceVector += direction * current.moveVec
+                        replaceVector += liveEntity.GetDirectionQuat() * current.moveVec
                             / Time.deltaTime;
                     }
                 }
@@ -672,7 +682,7 @@ public class CharacterCassette : MonoBehaviour
                     Instantiate(
                     liveEntity.GetResourcePalette().GetAttackArea().gameObject,
                     transform.position,
-                    transform.rotation * direction,
+                    transform.rotation * liveEntity.GetDirectionQuat(),
                     liveEntity.transform)
                     .GetComponent<AttackArea>();
             }
@@ -685,7 +695,7 @@ public class CharacterCassette : MonoBehaviour
             current.transform.localScale =
                 new Vector3(areaScale, areaScale, areaScale);
             current.transform.localPosition =
-                direction
+                liveEntity.GetDirectionQuat()
                 * currentData.cursor.pos;
             current.SetAttacker(liveEntity);
             current.SetData(currentData.data.attackData,
@@ -737,7 +747,7 @@ public class CharacterCassette : MonoBehaviour
                         Instantiate(
                         liveEntity.GetResourcePalette().GetProjectile().gameObject,
                         transform.position,
-                        transform.rotation * direction,
+                        transform.rotation * liveEntity.GetDirectionQuat(),
                         liveEntity.transform)
                         .GetComponent<Projectile>();
 
@@ -749,10 +759,10 @@ public class CharacterCassette : MonoBehaviour
                     current.transform.localScale =
                         new Vector3(projectileScale, projectileScale, projectileScale);
                     current.transform.localPosition =
-                        direction
+                        liveEntity.GetDirectionQuat()
                         * currentData.cursor.pos;
                     current.transform.localRotation =
-                        direction;
+                        liveEntity.GetDirectionQuat();
                     current.SetAttacker(liveEntity);
                     current.SetData(currentData.data.attackData,
                         currentData.cursor.direction);

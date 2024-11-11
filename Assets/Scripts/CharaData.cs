@@ -193,6 +193,36 @@ public class CharaData : ScriptableObject
         }
         return new AttackMotionData();
     }
+    public bool IsHitAttackMotion(string name)
+    {
+        if (attackMotions != null)
+        {
+            for (int i = 0; i < attackMotions.Length; i++)
+            {
+                if (attackMotions[i] && name == attackMotions[i].name)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public bool IsHitAttackMotion(
+        AttackMotionData.TriggerInputType triggerInputType)
+    {
+        if (attackMotions != null)
+        {
+            for (int i = 0; i < attackMotions.Length; i++)
+            {
+                if (attackMotions[i] && triggerInputType ==
+                    attackMotions[i].GetData().triggerInputType)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     [SerializeField]
     KX_netUtil.TransformData[] defaultBodyPartsTransform = { };
