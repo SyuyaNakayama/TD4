@@ -36,13 +36,6 @@ public class CassetteSlot : MonoBehaviour
         Array.Copy(team, ret, team.Length);
         return ret;
     }
-    float[] life = { };
-    public float[] GetLife()
-    {
-        float[] ret = new float[life.Length];
-        Array.Copy(life, ret, life.Length);
-        return ret;
-    }
     bool restartAble;
 
 
@@ -50,7 +43,6 @@ public class CassetteSlot : MonoBehaviour
     {
         Array.Resize(ref team, teamNum);
         Array.Resize(ref instantCharaID, teamNum);
-        Array.Resize(ref life, teamNum);
 
         restartAble = true;
     }
@@ -59,7 +51,6 @@ public class CassetteSlot : MonoBehaviour
         restartAble = false;
         Array.Resize(ref team, teamNum);
         Array.Resize(ref instantCharaID, teamNum);
-        Array.Resize(ref life, teamNum);
 
         if (inventoryCharaID.Length <= 0)
         {
@@ -78,8 +69,6 @@ public class CassetteSlot : MonoBehaviour
         list.Remove(null);
         inventoryCharaID = list.ToArray();
 
-        restartAble = GetLiveMemberNum() <= 0;
-
         for (int i = teamNum - 1; i >= 0; i--)
         {
             for (int j = i - 1; j >= 0; j--)
@@ -97,58 +86,9 @@ public class CassetteSlot : MonoBehaviour
         }
     }
 
-    public void Restart(string[] setInventoryCharaID)
-    {
-        if (restartAble)
-        {
-            Array.Resize(ref life, teamNum);
-            if (setInventoryCharaID.Length != 0)
-            {
-                inventoryCharaID = setInventoryCharaID;
-            }
-            for (int i = 0; i < teamNum; i++)
-            {
-                life[i] = 1;
-            }
-            restartAble = false;
-        }
-    }
-
-    public void AddInstantCassette(int cassetteIndex, string cassetteID)
-    {
-        cassetteIndex =
-            Mathf.RoundToInt(Mathf.Repeat(cassetteIndex, instantCharaID.Length));
-        instantCharaID[cassetteIndex].id = cassetteID;
-        instantCharaID[cassetteIndex].enabled = true;
-    }
-
-    public void Restart()
-    {
-        string[] setInventoryCharaID = { };
-        Restart(setInventoryCharaID);
-    }
-
-    public bool GetLive(int cassetteIndex)
-    {
-        return GetEnabled(cassetteIndex) && life[cassetteIndex] >= 0;
-    }
-
     public bool GetEnabled(int cassetteIndex)
     {
         return team[cassetteIndex] >= 0;
-    }
-
-    public int GetLiveMemberNum()
-    {
-        int ret = 0;
-        for (int i = 0; i < teamNum; i++)
-        {
-            if (GetLive(i))
-            {
-                ret++;
-            }
-        }
-        return ret;
     }
 
     public int GetEnabledMemberNum()
@@ -176,7 +116,6 @@ public class CassetteSlot : MonoBehaviour
                     string json = File.ReadAllText(path);
                     SaveData data = JsonUtility.FromJson<SaveData>(json);
 
-                    life = data.life;
                     team = data.teamCharaIndex;
                     inventoryCharaID = data.inventoryCharaID;
                     for (int i = 0; i < inventoryCharaID.Length; i++)
@@ -184,14 +123,6 @@ public class CassetteSlot : MonoBehaviour
                         inventoryCharaID[i] = data.inventoryCharaID[i];
                     }
                 }
-                else
-                {
-                    Restart();
-                }
-            }
-            else
-            {
-                Restart();
             }
             restartAble = false;
         }

@@ -195,10 +195,14 @@ public class LiveEntity : GeoGroObject
     {
         return allowedItemEffect;
     }
+    bool initAble = true;
 
     protected override void GGOAwake()
     {
-        prevRot = transform.rotation;
+        initAble = true;
+        Init(transform.rotation, userControl, teamID,
+            GetSlot().GetInventoryCharaID(),
+            GetSlot().GetTeam(), tempCassetteIndex);
 
         gameManager = GameObject.Find("/GameManager");
         saveMedals = gameManager.GetComponent<MedalCounter>();
@@ -651,7 +655,25 @@ public class LiveEntity : GeoGroObject
         return (float)battery / maxBattery;
     }
 
-    //??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾅゑｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾆゑｿｽ??ｿｽ?ｿｽﾉゑｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾄぶと包ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ
+    void Init(Quaternion setRotation, bool setUserControl, string setTeamID, string[] inventoryCharaID, int[] setTeamMember, int setCassetteIndex, float setLife = 1)
+    {
+        if (initAble)
+        {
+            goaled = false;
+            userControl = setUserControl;
+            teamID = setTeamID;
+            life = setLife;
+            if (userControl)
+            {
+                //Load();
+            }
+            transform.rotation = setRotation;
+            ghostTimeFrame = reviveGhostTimeFrame;
+            prevRot = setRotation;
+        }
+        initAble = false;
+    }
+    //死んでいたら復活
     void Revive()
     {
         if (!IsLive())
@@ -662,12 +684,16 @@ public class LiveEntity : GeoGroObject
             reviveCount++;
         }
     }
-    //??ｿｽ?ｿｽS??ｿｽ?ｿｽ[??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾉ難ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾌ擾ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ
+    void CharacterChange(int setCassetteIndex)
+    {
+        setCassetteIndex = Mathf.RoundToInt(Mathf.Repeat(setCassetteIndex, CassetteSlot.teamNum));
+    }
+    //ゴールエリアに触れた時の処理
     void Clear()
     {
         goaled = true;
     }
-    //??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽX??ｿｽ?ｿｽe??ｿｽ?ｿｽ[??ｿｽ?ｿｽW??ｿｽ?ｿｽﾌ趣ｿｽ??ｿｽ?ｿｽﾉ設定さ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾄゑｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽX??ｿｽ?ｿｽe??ｿｽ?ｿｽ[??ｿｽ?ｿｽW??ｿｽ?ｿｽﾖ進??ｿｽ?ｿｽ??ｿｽ?ｿｽ
+    //次のステージとして設定されているシーンへ飛ぶ
     void NextStage()
     {
         if (StageManager.GetCurrent().gameObject.activeInHierarchy)
@@ -676,7 +702,7 @@ public class LiveEntity : GeoGroObject
             return;
         }
     }
-    //??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽX??ｿｽ?ｿｽe??ｿｽ?ｿｽ[??ｿｽ?ｿｽW??ｿｽ?ｿｽﾌ派??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾆゑｿｽ??ｿｽ?ｿｽﾄ設定さ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾄゑｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽV??ｿｽ?ｿｽ[??ｿｽ?ｿｽ??ｿｽ?ｿｽ??ｿｽ?ｿｽﾉ戻ゑｿｽ
+    //ステージから脱出
     void Quit()
     {
         if (StageManager.GetCurrent().gameObject.activeInHierarchy)
@@ -746,12 +772,15 @@ public class LiveEntity : GeoGroObject
         }
     }
 
-    public static void Spawn(LiveEntity liveEntity,
-        Vector3 worldPos, Quaternion worldRot, string setTeamID)
+    public static LiveEntity Spawn(ResourcePalette palette,
+        Vector3 setPosition, Quaternion setRotation, bool setUserControl,
+        string setTeamID,
+        string[] inventoryCharaID, int[] setTeamMember, int cassetteIndex)
     {
-        LiveEntity current =
-            Instantiate(liveEntity.gameObject, worldPos, worldRot)
-            .GetComponent<LiveEntity>();
-        current.teamID = setTeamID;
+        LiveEntity liveEntity = Instantiate(palette.GetLiveEntity().gameObject,
+            setPosition, setRotation).GetComponent<LiveEntity>();
+        liveEntity.Init(setRotation, setUserControl, setTeamID,
+            inventoryCharaID, setTeamMember, cassetteIndex);
+        return liveEntity;
     }
 }

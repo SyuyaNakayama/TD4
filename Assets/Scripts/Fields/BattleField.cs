@@ -8,32 +8,27 @@ public class BattleField : Field
     static BattleField[] allInstances = { };
     public static BattleField[] GetAllInstances()
     {
-        BattleField[] ret = new BattleField[allInstances.Length];
-        Array.Copy(allInstances, ret, allInstances.Length);
-        return ret;
+        return KX_netUtil.CopyArray<BattleField>(allInstances);
     }
 
-    const int maxLifeTime = 5;
+    const string enemiesTeamCode = "enemy";
 
     [System.Serializable]
-    public struct GuarderAndTransform
+    public struct EnemyAndTransform
     {
-        public LiveEntity liveEntity;
-        public Vector3 position;
-        public Vector3 eulerAngles;
-    }
-    [System.Serializable]
-    public struct GuardersTeamData
-    {
-        public GuarderAndTransform[] data;
+        public string cassetteID;
+        public Vector3 enemyPos;
+        public Vector3 enemyRot;
     }
 
+    [SerializeField]
+    ResourcePalette resourcePalette;
     [SerializeField]
     bool visible;
     [SerializeField]
-    GuardersTeamData[] guarders;
+    EnemyAndTransform[] enemies;
     [SerializeField]
-    string teamID = "enemy";
+    int[] waveEnemyNum;
 
     bool tempBattling;
     bool battling;
@@ -46,7 +41,6 @@ public class BattleField : Field
     {
         return battled;
     }
-    int lifeTime;
     bool annihilated;
     public bool GetAnnihilated()
     {
@@ -56,6 +50,7 @@ public class BattleField : Field
     int waveWait;
     int guardersNum;
     int livingGuardersNum;
+
     void Awake()
     {
         waveWait = 10;
@@ -77,27 +72,25 @@ public class BattleField : Field
         battling = tempBattling;
         if (battling)
         {
-            if (wave >= guarders.Length && livingGuardersNum == 0)
-            {
-                lifeTime = Mathf.Max(0, lifeTime - 1);
-            }
-            else
-            {
-                lifeTime = maxLifeTime;
-            }
-
-            annihilated = lifeTime <= 0;
             if (guardersNum == 0)
             {
-                if (wave < guarders.Length)
+                int prevWaveEnemyNum = 0;
+                for (int i = 0; i < wave; i++)
                 {
-                    for (int i = 0; i < guarders[wave].data.Length; i++)
+                    prevWaveEnemyNum += waveEnemyNum[i];
+                }
+                if (prevWaveEnemyNum < enemies.Length)
+                {
+                    for (int i = 0; i < waveEnemyNum[wave]; i++)
                     {
-                        GuarderAndTransform current = guarders[wave].data[i];
-                        LiveEntity.Spawn(current.liveEntity,
-                            transform.TransformPoint(current.position),
-                            transform.rotation * Quaternion.Euler(current.eulerAngles),
-                            teamID);
+                        if (prevWaveEnemyNum + i < enemies.Length)
+                        {
+                            LiveEntity.Spawn(resourcePalette,
+                                transform.TransformPoint(enemies[prevWaveEnemyNum + i].enemyPos),
+                                transform.rotation * Quaternion.Euler(enemies[prevWaveEnemyNum + i].enemyRot),
+                                false, enemiesTeamCode,
+                                new string[] { enemies[prevWaveEnemyNum + i].cassetteID }, new int[] { 0 }, 0);
+                        }
                     }
                     wave++;
                 }
@@ -106,12 +99,9 @@ public class BattleField : Field
                     battled = true;
                 }
             }
+            annihilated = wave >= waveEnemyNum.Length && livingGuardersNum == 0;
             guardersNum = 0;
             livingGuardersNum = 0;
-        }
-        else
-        {
-            lifeTime = maxLifeTime;
         }
         GetComponent<Collider>().enabled = !battled;
         GetComponent<MeshRenderer>().enabled = (battling || visible) && !battled;
@@ -119,17 +109,17 @@ public class BattleField : Field
     }
     protected override void UniqueOnTriggerStay(Collider col)
     {
-        LiveEntity currentTarget = col.GetComponent<LiveEntity>();
-        if (currentTarget != null)
+        LiveEntity tempLiveEntity = col.GetComponent<LiveEntity>();
+        if (tempLiveEntity != null)
         {
-            if (currentTarget.GetTeamID() != teamID)
+            if (tempLiveEntity.GetUserControl())
             {
                 tempBattling = true;
             }
-            else
+            else if (tempLiveEntity.GetTeamID() == enemiesTeamCode)
             {
                 guardersNum++;
-                if (currentTarget.IsLive())
+                if (tempLiveEntity.IsLive())
                 {
                     livingGuardersNum++;
                 }

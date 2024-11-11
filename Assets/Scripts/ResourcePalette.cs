@@ -6,6 +6,12 @@ using UnityEngine;
 public class ResourcePalette : ScriptableObject
 {
     [SerializeField]
+    LiveEntity liveEntity;
+    public LiveEntity GetLiveEntity()
+    {
+        return liveEntity;
+    }
+    [SerializeField]
     AttackArea attackArea;
     public AttackArea GetAttackArea()
     {
