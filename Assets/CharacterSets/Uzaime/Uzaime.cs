@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ÔøΩEÔøΩUÔøΩCÔøΩÔøΩ
+//?øΩE?øΩU?øΩC?øΩ?øΩ
 public class Uzaime : Enemy
 {
     const float stickRadius = 0.5f;
@@ -10,6 +10,14 @@ public class Uzaime : Enemy
 
     protected override void CharaUpdate()
     {
+        if (GetNearestTarget() != null)
+        {
+            //?øΩ_?øΩ?øΩ
+            TargetAimY(GetNearestTarget().transform.position);
+            //?øΩU?øΩ?øΩ?øΩ?øΩ?øΩ[?øΩV?øΩ?øΩ?øΩ?øΩ?øΩ?øΩ?øΩƒêÔøΩ
+            SetAttackMotion(GetData().GetDefaultAttackMotionName());
+        }
+
         LiveEntity[] targets = GetTargets();
         for (int i = 0; i < targets.Length; i++)
         {
@@ -21,12 +29,12 @@ public class Uzaime : Enemy
                     target.transform.InverseTransformPoint(transform.position)
                     * stickPower);
             }
-            //ÔøΩUÔøΩÔøΩÔøΩÔøΩÔøΩÏíÜÔøΩ≈Ç»ÇÔøΩÔøΩÔøΩÔøΩ…älÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ¬ÇÔøΩÔøΩÔøΩÔøΩÔøΩUÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
+            //?øΩU?øΩ?øΩ?øΩ?øΩ?øΩ?íÜ?øΩ≈Ç»ÇÔøΩ?øΩ?øΩ?øΩ…äl?øΩ?øΩ?øΩ?øΩ?øΩ?øΩ?øΩ¬ÇÔøΩ?øΩ?øΩ?øΩ?øΩU?øΩ?øΩ?øΩ?øΩ?øΩ?øΩ?øΩ
             else if (!IsAttacking() && GetNearestTarget() != null)
             {
-                //ÔøΩ_ÔøΩÔøΩ
+                //?øΩ_?øΩ?øΩ
                 TargetAimY(GetNearestTarget().transform.position);
-                //ÔøΩUÔøΩÔøΩÔøΩÔøΩÔøΩ[ÔøΩVÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩƒêÔøΩ
+                //?øΩU?øΩ?øΩ?øΩ?øΩ?øΩ[?øΩV?øΩ?øΩ?øΩ?øΩ?øΩ?øΩ?øΩƒêÔøΩ
                 SetAttackMotion(GetData().GetDefaultAttackMotionName());
             }
         }

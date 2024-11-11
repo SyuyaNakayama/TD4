@@ -3,69 +3,77 @@ using UnityEngine;
 
 public class Enemy : CharacterCassette
 {
-    [SerializeField]
-    Sensor sensor;
+    float TargetSearchRange = 5;
+
     protected Vector3 targetCursor;
 
     protected override void CharaUpdate()
     {
-        //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ì’†ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½ÉŠlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //?¿½U?¿½?¿½?¿½?¿½?¿½?’†?¿½Å‚È‚ï¿½?¿½?¿½?¿½ÉŠl?¿½?¿½?¿½?¿½?¿½?¿½?¿½Â‚ï¿½?¿½?¿½?¿½?¿½U?¿½?¿½?¿½?¿½?¿½?¿½?¿½
         if (!IsAttacking() && GetNearestTarget() != null)
         {
-            //ï¿½_ï¿½ï¿½
+            //?¿½_?¿½?¿½
             TargetAimY(GetNearestTarget().transform.position);
-            //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+            //?¿½U?¿½?¿½?¿½?¿½?¿½[?¿½V?¿½?¿½?¿½?¿½?¿½?¿½?¿½Äï¿½
             SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
     }
 
-    //ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½LiveEntityï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½Iï¿½ï¿½
+    //?¿½?¿½?¿½Â‚ï¿½?¿½?¿½LiveEntity?¿½Ì’ï¿½?¿½?¿½?¿½?¿½G?¿½?¿½I?¿½?¿½
     public LiveEntity[] GetTargets()
     {
         LiveEntity[] ret = { };
-        LiveEntity[] detectedLiveEntities = sensor.GetTargets();
-
-        //teamIDï¿½ï¿½ï¿½á‚¤ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
-        for (int i = 0; i < detectedLiveEntities.Length; i++)
+        foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
-            if (detectedLiveEntities[i].GetTeamID() != GetLiveEntity().GetTeamID())
+            if (obj.gameObject.activeInHierarchy
+                && obj.GetTeamID() != GetLiveEntity().GetTeamID())
             {
-                //ï¿½zï¿½ï¿½É’Ç‰ï¿½
-                Array.Resize(ref ret, ret.Length + 1);
-                ret[ret.Length - 1] = detectedLiveEntities[i];
+                Vector3 localPos =
+                KX_netUtil.RelativePosition(
+                    GetLiveEntity().transform, obj.transform, Vector3.zero);
+
+                if (Vector3.Magnitude(localPos) <= TargetSearchRange)
+                {
+                    Array.Resize(ref ret, ret.Length + 1);
+                    ret[ret.Length - 1] = obj;
+                }
             }
         }
 
         return ret;
     }
 
-    //ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½LiveEntityï¿½Ì’ï¿½ï¿½ï¿½ï¿½ç’‡ï¿½Ô‚ï¿½Iï¿½ï¿½
+    //?¿½?¿½?¿½Â‚ï¿½?¿½?¿½LiveEntity?¿½Ì’ï¿½?¿½?¿½?¿½ç’??¿½Ô‚ï¿½I?¿½?¿½
     public LiveEntity[] GetFriends()
     {
         LiveEntity[] ret = { };
-        LiveEntity[] detectedLiveEntities = sensor.GetTargets();
-
-        //teamIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
-        for (int i = 0; i < detectedLiveEntities.Length; i++)
+        foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
-            if (detectedLiveEntities[i].GetTeamID() == GetLiveEntity().GetTeamID())
+            if (obj.gameObject.activeInHierarchy
+                && obj.GetTeamID() == GetLiveEntity().GetTeamID())
             {
-                //ï¿½zï¿½ï¿½É‘ï¿½ï¿½
-                Array.Resize(ref ret, ret.Length + 1);
-                ret[ret.Length - 1] = detectedLiveEntities[i];
+                Vector3 localPos =
+                KX_netUtil.RelativePosition(
+                    GetLiveEntity().transform, obj.transform, Vector3.zero);
+
+                if (Vector3.Magnitude(localPos) <= TargetSearchRange)
+                {
+                    Array.Resize(ref ret, ret.Length + 1);
+                    ret[ret.Length - 1] = obj;
+                }
             }
         }
 
         return ret;
     }
 
-    //ï¿½Å‚ï¿½ï¿½ß‚ï¿½ï¿½Wï¿½Iï¿½ï¿½ï¿½æ“¾
+    //?¿½Å‚ï¿½?¿½ß‚ï¿½?¿½W?¿½I?¿½?¿½?¿½æ“¾
     public LiveEntity GetNearestTarget()
     {
         LiveEntity ret = null;
         LiveEntity[] targets = GetTargets();
 
-        //ï¿½Å‚ï¿½ï¿½ß‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½retï¿½É“ï¿½ï¿½ï¿½ï¿½
+        //?¿½Å‚ï¿½?¿½ß‚ï¿½?¿½?¿½?¿½Ì‚ï¿½ret?¿½É“ï¿½?¿½?¿½?¿½
         for (int i = 0; i < targets.Length; i++)
         {
             if (ret == null ||
@@ -79,19 +87,14 @@ public class Enemy : CharacterCassette
         return ret;
     }
 
-    //ï¿½Wï¿½Iï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iYï¿½ï¿½ï¿½Ì‚İj
+    //?¿½W?¿½I?¿½Ì•ï¿½?¿½?¿½?¿½?¿½?¿½?¿½?¿½?¿½?¿½iY?¿½?¿½?¿½Ì‚İj
     protected void TargetAimY(Vector3 targetWorldPos, float intensity = 1)
     {
-        //ï¿½_ï¿½ï¿½
-        Vector3 targetLocalPos = transform.InverseTransformPoint(
-            targetWorldPos);
-        transform.localRotation = Quaternion.Slerp(
-            transform.localRotation,
-            transform.localRotation *
-            Quaternion.Euler(new Vector3(
-            0,
-            Mathf.Atan2(targetLocalPos.x, targetLocalPos.z) / Mathf.Deg2Rad,
-            0)),
-            intensity);
+        Quaternion prevRot = GetLiveEntity().transform.rotation;
+
+        Vector3 targetLocalPos = GetLiveEntity().transform.InverseTransformPoint(targetWorldPos);
+        GetLiveEntity().transform.Rotate(0, Mathf.Atan2(targetLocalPos.x, targetLocalPos.z) / Mathf.Deg2Rad, 0, Space.Self);
+
+        GetLiveEntity().transform.rotation = Quaternion.Lerp(prevRot, GetLiveEntity().transform.rotation, intensity);
     }
 }
