@@ -11,8 +11,6 @@ public class BattleField : Field
         return KX_netUtil.CopyArray<BattleField>(allInstances);
     }
 
-    const string enemiesTeamCode = "enemy";
-
     [System.Serializable]
     public struct EnemyAndTransform
     {
@@ -25,6 +23,8 @@ public class BattleField : Field
     ResourcePalette resourcePalette;
     [SerializeField]
     bool visible;
+    [SerializeField]
+    string TeamID = "enemy";
     [SerializeField]
     EnemyAndTransform[] enemies;
     [SerializeField]
@@ -88,7 +88,7 @@ public class BattleField : Field
                             LiveEntity.Spawn(resourcePalette,
                                 transform.TransformPoint(enemies[prevWaveEnemyNum + i].enemyPos),
                                 transform.rotation * Quaternion.Euler(enemies[prevWaveEnemyNum + i].enemyRot),
-                                false, enemiesTeamCode,
+                                false, TeamID,
                                 new string[] { enemies[prevWaveEnemyNum + i].cassetteID }, new int[] { 0 }, 0);
                         }
                     }
@@ -116,7 +116,7 @@ public class BattleField : Field
             {
                 tempBattling = true;
             }
-            else if (tempLiveEntity.GetTeamID() == enemiesTeamCode)
+            else if (tempLiveEntity.GetTeamID() == TeamID)
             {
                 guardersNum++;
                 if (tempLiveEntity.IsLive())
