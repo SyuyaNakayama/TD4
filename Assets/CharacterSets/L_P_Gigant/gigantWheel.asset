@@ -25,10 +25,17 @@ MonoBehaviour:
       hitback: 60
       ghostTime: 0
     scale: 1.5
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u5DE8\u8DF3\u8972"
     totalFrame: 200
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.2, y: 0.8}
       dataName: sword
@@ -60,12 +67,18 @@ MonoBehaviour:
         z: 1
       easeType: 0
       easePow: 3
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys:
     - keyFrame: {x: 0, y: 1}
       uniqueActName: hardAim
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
+    uniqueMotionStateKeys: []
     animationKeys:
     - keyFrame: {x: 0.2, y: 0.8}
       animationName: spinJump

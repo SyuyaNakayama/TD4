@@ -2,7 +2,7 @@ Shader "Unlit/Outline"
 {
     Properties
     {
-        _OutlineMap ("OutLineMap", 2D) = "white" {}
+        _OutlineMap ("OutlineMap", 2D) = "white" {}
         _OutlineColor("OutlineColor", Color) = (0, 0, 0, 1)
         _OutlineWidth("OutlineWidth", float) = 0.006
     }
@@ -84,6 +84,55 @@ Shader "Unlit/Outline"
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
                 clip(c.a - 0.7);
+                return fixed4(0,0,0,0);
+            }
+            ENDCG
+        }
+
+        //モデルの形に合わせてステンシル
+        Pass
+        {
+            Stencil
+            {
+                Ref 1
+                Comp Always
+                Pass Replace
+            }
+
+            CGPROGRAM
+
+            struct appdata
+            {
+                half4 vertex : POSITION;
+                half3 normal : NORMAL;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 vertex : SV_POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            half _OutlineWidth;
+            sampler2D _OutlineMap;
+            float4 _OutlineMap_ST;
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+
+                o.vertex = UnityObjectToClipPos(v.vertex); //頂点をMVP行列変換
+
+                o.uv = TRANSFORM_TEX(v.uv, _OutlineMap);
+
+				return o;
+            }
+            
+            fixed4 frag (v2f i) : SV_Target
+            {
+                fixed4 c = tex2D(_OutlineMap, i.uv);
+                clip((1-c.r)*c.a - 0.7);
                 return fixed4(0,0,0,0);
             }
             ENDCG

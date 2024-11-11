@@ -25,10 +25,17 @@ MonoBehaviour:
       hitback: 30
       ghostTime: 0
     scale: 1.1
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u30E1\u30C6\u30AA\u30C1\u30E3\u30FC\u30B8"
     totalFrame: 200
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.6, y: 0.8}
       dataName: charge
@@ -52,10 +59,16 @@ MonoBehaviour:
         z: 1
       easeType: 2
       easePow: 5
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys:
     - keyFrame: {x: 0, y: 0.5}
       uniqueActName: upSight
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
+    uniqueMotionStateKeys: []
     animationKeys: []

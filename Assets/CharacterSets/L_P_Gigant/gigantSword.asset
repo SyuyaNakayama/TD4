@@ -28,10 +28,17 @@ MonoBehaviour:
       hitback: 60
       ghostTime: 0
     scale: 1.5
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u5DE8\u5200\u65AC"
     totalFrame: 150
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.7, y: 0.8}
       dataName: sword
@@ -43,6 +50,11 @@ MonoBehaviour:
       postMove: 0
     shotKeys: []
     moveKeys: []
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys: []
@@ -51,4 +63,5 @@ MonoBehaviour:
       se: {fileID: 8300000, guid: 3d52ab7311ac2409a9750de04a2e4185, type: 3}
     - keyFrame: 0.7
       se: {fileID: 8300000, guid: 718e6c82a11d0435c81a8532b7d388f2, type: 3}
+    uniqueMotionStateKeys: []
     animationKeys: []

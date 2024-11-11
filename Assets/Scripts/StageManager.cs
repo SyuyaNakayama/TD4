@@ -45,7 +45,7 @@ public class StageManager : MonoBehaviour
     AudioClip gameOverBgmIntro;
     [SerializeField]
     AudioClip gameOverBgm;
-    Player player;
+    LiveEntity player;
 
     void FixedUpdate()
     {
@@ -58,9 +58,9 @@ public class StageManager : MonoBehaviour
         //プレイヤーを探す
         foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
-            if (obj && obj.GetComponent<Player>())
+            if (obj)
             {
-                player = obj.GetComponent<Player>();
+                player = obj;
             }
         }
 

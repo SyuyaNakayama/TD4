@@ -40,12 +40,12 @@ public class LiveEntity : GeoGroObject
         return ret;
     }
 
-    const float cameraFlipMotionMultiply = 0.01f;
-    const float maxCameraTiltDiffuse = 0.15f;
-    const float defaultCameraDistance = 10;
-    const float directionTiltIntensity = 0.5f;
-    public const float minCameraAngle = 0;
-    public const float maxCameraAngle = 90;
+    public const float cameraFlipMotionMultiply = 0.01f;
+    public const float maxCameraTiltDiffuse = 0.15f;
+    public const float defaultCameraDistance = 10;
+    public const float directionTiltIntensity = 0.5f;
+    public const float MinCameraAngle = 0;
+    public const float MaxCameraAngle = 90;
     const float goaledCameraAngle = 0;
     const float goaledCameraDistance = 3;
     const float goaledDirection = 180;
@@ -54,9 +54,9 @@ public class LiveEntity : GeoGroObject
     const int maxRepairCoolTimeFrame = 600;
     const float autoRepairPower = 0.003f;
     const int maxDamageReactionTimeFrame = 10;
-    const int maxCadaverLifeTimeFrame = 60;
-    const int freezeCadaverLifeTimeFrame = 40;
-    const int shakeCadaverLifeTimeFrame = 43;
+    public const int MaxCadaverLifeTimeFrame = 60;
+    public const int FreezeCadaverLifeTimeFrame = 40;
+    public const int DeadIndicateCadaverLifeTimeFrame = 43;
     const int maxGoalAnimationTimeFrame = 120;
     const int maxBattery = 300;
 
@@ -65,23 +65,27 @@ public class LiveEntity : GeoGroObject
 
     [SerializeField]
     ResourcePalette resourcePalette;
+    public ResourcePalette GetResourcePalette()
+    {
+        return resourcePalette;
+    }
     [SerializeField]
-    GameObject visual;
+    CharaDataLib lib;
+    public CharaDataLib GetLib()
+    {
+        return lib;
+    }
     [SerializeField]
-    TextureSendData[] meshes = { };
-    [SerializeField]
-    SpriteSendData[] sprites = { };
-    [SerializeField]
-    Animator[] animators = { };
-    [SerializeField]
-    Transform[] bodyParts = { };
+    ControlMapPlayPart controlMap;
+    public ControlMapPlayPart GetControlMap()
+    {
+        return controlMap;
+    }
     [SerializeField]
     Camera view;
-    [SerializeField]
-    CharaData data;
-    public CharaData GetData()
+    public Camera GetView()
     {
-        return data;
+        return view;
     }
     [SerializeField]
     string teamID;
@@ -89,25 +93,40 @@ public class LiveEntity : GeoGroObject
     {
         return teamID;
     }
-    protected float direction;
-    float visualDirection;
+    [SerializeField]
+    bool userControl;
+    public bool GetUserControl()
+    {
+        return userControl;
+    }
+
+    float direction;
+    public float GetDirection()
+    {
+        return direction;
+    }
     Quaternion prevRot;
     Quaternion cameraTiltRot;
     float cameraTiltDiffuse;
 
-    protected float cameraAngle = maxCameraAngle;
-    float easedCameraAngle = maxCameraAngle;
+    protected float cameraAngle = MaxCameraAngle;
+    float easedCameraAngle = MaxCameraAngle;
     protected float cameraDistance = defaultCameraDistance;
     float easedCameraDistance = defaultCameraDistance;
-    float hpAmount = 1;//?ï¿½ï¿½c?ï¿½ï¿½?ï¿½ï¿½Ì—Í‚ÌŠï¿½?ï¿½ï¿½?ï¿½ï¿½
-    public float GetHPAmount()
+
+    float life = 1;//c‚è‘Ì—Í‚ÌŠ„‡
+    public float GetLife()
     {
-        return hpAmount;
+        return life;
     }
-    bool shield;//?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ê‚ªtrue?ï¿½ï¿½ÌŠÔ‚Í‹Z?ï¿½ï¿½É‚ï¿½é–³?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
+    bool shield;//‚±‚ê‚ªtrue‚ÌŠÔ‚Í‹Z‚É‚æ‚é–³“GŠÔ
     public bool GetShield()
     {
         return shield;
+    }
+    public void Shield()
+    {
+        shield = true;
     }
     bool shieldable;
     public bool GetShieldable()
@@ -115,11 +134,19 @@ public class LiveEntity : GeoGroObject
         return shieldable;
     }
     int battery = maxBattery;
-    int hitBackTimeFrame;
-    int ghostTimeFrame;//?ï¿½ï¿½q?ï¿½ï¿½b?ï¿½ï¿½g?ï¿½ï¿½ã–³?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
+    int hitbackTimeFrame;
+    int ghostTimeFrame;//ƒqƒbƒgŒã–³“GŠÔ
     int repairCoolTimeFrame;
     int damageReactionTimeFrame;
+    public int GetDamageReactionTimeFrame()
+    {
+        return damageReactionTimeFrame;
+    }
     int cadaverLifeTimeFrame;
+    public int GetCadaverLifeTimeFrame()
+    {
+        return cadaverLifeTimeFrame;
+    }
     int goalAnimationTimeFrame;
     int killCount;
     public int GetKillCount()
@@ -136,28 +163,37 @@ public class LiveEntity : GeoGroObject
     {
         return goaled;
     }
-    AttackMotionData attackMotionData;
-    int attackTimeFrame;
-    float attackProgress;
-    public float GetAttackProgress()
-    {
-        return attackProgress;
-    }
-    float prevAttackProgress;
-    AttackMotionData.Cursor[] cursors = { };
-    MeleeAttackAndCursorName[] meleeAttackDatas = { };
-    ShotAndCursorName[] shotDatas = { };
-    AttackArea[] attackAreas = { };
     string[] uniqueActDatas = { };
     protected string animationName;
     protected float animationProgress;
-    float prevAnimationProgress;
-    protected float animationSpeed;
-    protected string facialExpressionName;
     bool updating;
     public bool GetUpdating()
     {
         return updating;
+    }
+    bool isAllowCassetteUpdate;
+    public bool GetIsAllowCassetteUpdate()
+    {
+        return isAllowCassetteUpdate;
+    }
+    GameObject cassetteObj;
+    [SerializeField]
+    CassetteSlot slot;
+    public CassetteSlot GetSlot()
+    {
+        return slot;
+    }
+    int tempCassetteIndex;
+    int cassetteIndex = -1;
+    public int GetCassetteIndex()
+    {
+        return cassetteIndex;
+    }
+    Item[] touchedItems = { };
+    bool allowedItemEffect;
+    public bool GetAllowedItemEffect()
+    {
+        return allowedItemEffect;
     }
 
     protected override void GGOAwake()
@@ -172,7 +208,6 @@ public class LiveEntity : GeoGroObject
     {
         updating = true;
 
-        //ï¿½Sï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïï¿½ï¿½ï¿½ï¿½Xï¿½V
         List<LiveEntity> allInstancesList =
             new List<LiveEntity>(allInstances);
         allInstancesList.RemoveAll(where => !where || where == this);
@@ -180,100 +215,82 @@ public class LiveEntity : GeoGroObject
         Array.Resize(ref allInstances, allInstances.Length + 1);
         allInstances[allInstances.Length - 1] = this;
 
-        if (view != null)
+        List<Item> touchedItemList = new List<Item>(touchedItems);
+        touchedItemList.Remove(null);
+        touchedItems = touchedItemList.ToArray();
+
+        allowedItemEffect = true;
+        for (int i = 0; i < touchedItems.Length; i++)
         {
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ì‹ÂŠp?ï¿½ï¿½l?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½K?ï¿½ï¿½?ï¿½ï¿½ÍˆÍ‚Éï¿½?ï¿½ï¿½ß‚ï¿½
-            cameraAngle = Mathf.Clamp(
-                cameraAngle, minCameraAngle, maxCameraAngle);
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ì‹ÂŠp?ï¿½ï¿½l?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½O
-            easedCameraAngle = Mathf.Lerp(
-                easedCameraAngle, cameraAngle, maxCameraTiltDiffuse);
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ì‹ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½O
-            easedCameraDistance = Mathf.Lerp(
-                easedCameraDistance, cameraDistance, maxCameraTiltDiffuse);
-            //?ï¿½ï¿½O?ï¿½ï¿½t?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ì‰ï¿½]?ï¿½ï¿½Ìï¿½?ï¿½ï¿½É‰ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÄƒJ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌŒX?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½p?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ß‚ï¿½
-            cameraTiltRot =
-                cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
-
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌŒX?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½p?ï¿½ï¿½Ìï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ß‚ï¿½
-            float cameraTiltAmount = Mathf.Abs(
-                Quaternion.Angle(cameraTiltRot, Quaternion.identity)) / 180;
-
-            cameraTiltDiffuse = Mathf.Clamp(
-                cameraTiltDiffuse + cameraTiltAmount * cameraFlipMotionMultiply,
-                0, cameraTiltAmount * maxCameraTiltDiffuse);
-
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌŒX?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½p?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            cameraTiltRot = Quaternion.Slerp(
-                cameraTiltRot, Quaternion.identity,
-                cameraTiltDiffuse / KX_netUtil.RangeMap(cameraTiltAmount, 1, 0, 1, 0.001f));
-            //?ï¿½ï¿½Ü‚ï¿½?ï¿½ï¿½L?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½p?ï¿½ï¿½x?ï¿½ï¿½ÉƒJ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            view.transform.localEulerAngles = new Vector3(easedCameraAngle, 0, 0);
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌŒX?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½p?ï¿½ï¿½É‰ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÄƒJ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            view.transform.rotation =
-                cameraTiltRot * view.transform.rotation;
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌˆÊ’u?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½çŒ©?ï¿½ï¿½ÄŒï¿½?ï¿½ï¿½?ï¿½ï¿½É‚ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            view.transform.localPosition =
-                view.transform.localRotation * new Vector3(0, 0, -1)
-                * easedCameraDistance;
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ì‹ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½l?ï¿½ï¿½?ï¿½ï¿½
-            cameraDistance = defaultCameraDistance;
+            touchedItems[i].Activation(this);
         }
+        Array.Resize(ref touchedItems, 0);
+        allowedItemEffect = false;
 
-        prevRot = transform.rotation;
-        dragAxis = data.GetDragAxis();
+        UpdateView();
 
-        if (hitBackTimeFrame > 0)
+        dragAxis = GetCassetteData().GetDragAxis();
+        if (hitbackTimeFrame > 0)
         {
-            drag = 1;
+            drag = 0;
         }
         else
         {
-            drag = 0.8f;
+            drag = 0.3f;
         }
-        gravityScale = data.GetGravityScale();
+        gravityVec = new Vector3(0, -GetCassetteData().GetGravityScale(), 0);
 
-        //?ï¿½ï¿½X?ï¿½ï¿½P?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½İ’ï¿½Éï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        float scale = data.GetScale();
+        float scale = GetCassetteData().GetScale();
         transform.localScale = new Vector3(scale, scale, scale);
 
-        //allowGroundSet?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Z?ï¿½ï¿½b?ï¿½ï¿½g
         allowGroundSet = true;
-        //shield?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Z?ï¿½ï¿½b?ï¿½ï¿½g
         shield = false;
-        //?ï¿½ï¿½\?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Z?ï¿½ï¿½b?ï¿½ï¿½g
-        facialExpressionName = "";
-        //?ï¿½ï¿½A?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Êí?ï¿½ï¿½Ì‚ï¿½?ï¿½ï¿½Ì‚É‚ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        animationName = "idol";
 
         isAllowMove = IsActable();
 
-        animationProgress = Mathf.Repeat(animationProgress + animationSpeed, 1);
-        animationSpeed = 0;
+        //g‚Á‚Ä‚¢‚È‚¢ƒLƒƒƒ‰ƒNƒ^[ƒIƒuƒWƒFƒNƒg‚ğÁ‚·
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            CharacterCassette currentCassette
+                = transform.GetChild(i).gameObject.
+                GetComponent<CharacterCassette>();
+            if (currentCassette && currentCassette != GetCassette())
+            {
+                Destroy(currentCassette.gameObject);
+            }
+        }
 
-        //?ï¿½ï¿½X?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½v?ï¿½ï¿½^?ï¿½ï¿½u?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½I?ï¿½ï¿½u?ï¿½ï¿½W?ï¿½ï¿½F?ï¿½ï¿½N?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ì“ï¿½?ï¿½ï¿½e?ï¿½ï¿½?ï¿½ï¿½Ç‚İo?ï¿½ï¿½?ï¿½ï¿½
-        UpdateAttackMotion();
+        //ƒLƒƒƒ‰ƒNƒ^[ƒIƒuƒWƒFƒNƒg‚ğ¶¬
+        if (GetSlot().GetEnabled(tempCassetteIndex) && (!cassetteObj
+            || (cassetteObj.GetComponent<CharacterCassette>().GetData().name
+            != GetSlot().GetTeamCharaID(tempCassetteIndex)
+            && cassetteObj.GetComponent<CharacterCassette>().GetData().name
+            != lib.FindCharacterCassette(GetSlot().GetTeamCharaID(tempCassetteIndex)).GetData().name)))
+        {
+            cassetteObj = Instantiate(lib.FindCharacterCassette(
+                GetSlot().GetTeamCharaID(tempCassetteIndex)).gameObject,
+                transform.position, transform.rotation, transform);
+        }
+
+        //ƒLƒƒƒ‰ƒNƒ^[‚ÌXVˆ—
+        if (GetCassette())
+        {
+            cassetteObj.transform.parent = transform;
+            isAllowCassetteUpdate = true;
+            GetCassette().CassetteUpdate();
+        }
+        isAllowCassetteUpdate = false;
 
         if (IsLive() && !GetGoaled())
         {
-            cadaverLifeTimeFrame = maxCadaverLifeTimeFrame;
+            cadaverLifeTimeFrame = MaxCadaverLifeTimeFrame;
             goalAnimationTimeFrame = maxGoalAnimationTimeFrame;
 
-            if (IsActable())
-            {
-                //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÅŠe?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½ÌŒÅ—L?ï¿½ï¿½X?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½
-                LiveEntityUpdate();
-            }
-            else
-            {
-                animationName = "damage";
-            }
+            LiveEntityUpdate();
 
-            if (IsPlayer())
+            if (userControl)
             {
-                //?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½^?ï¿½ï¿½[?ï¿½ï¿½L?ï¿½ï¿½[?ï¿½ï¿½A?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½{?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Å‚ï¿½?ï¿½ï¿½Â‚Å‚ï¿½?ï¿½ï¿½E?ï¿½ï¿½o
-                if (Input.GetKey(KeyCode.Return)
-                    || Input.GetKey("joystick button 2"))//TODO:?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌƒL?ï¿½ï¿½[?ï¿½ï¿½R?ï¿½ï¿½[?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½{?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌƒR?ï¿½ï¿½[?ï¿½ï¿½h?ï¿½ï¿½Éï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½?ï¿½ï¿½
+                if (GetControlMap().GetMenuInput())
                 {
                     Quit();
                 }
@@ -281,15 +298,10 @@ public class LiveEntity : GeoGroObject
         }
         else
         {
-            //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            attackMotionData = null;
-
-            //?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½o?ï¿½ï¿½p?ï¿½ï¿½ÌˆÊ’u?ï¿½ï¿½É’ï¿½?ï¿½ï¿½?ï¿½ï¿½
             cameraAngle = goaledCameraAngle;
             cameraDistance = goaledCameraDistance;
-            if (IsPlayer())
+            if (userControl)
             {
-                //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ê‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
                 direction = goaledDirection;
             }
 
@@ -302,24 +314,16 @@ public class LiveEntity : GeoGroObject
                     animationProgress =
                         KX_netUtil.RangeMap(
                         Mathf.Clamp(cadaverLifeTimeFrame,
-                        0, freezeCadaverLifeTimeFrame),
-                        freezeCadaverLifeTimeFrame, 0,
+                        0, FreezeCadaverLifeTimeFrame),
+                        FreezeCadaverLifeTimeFrame, 0,
                         0, 1);
                 }
                 else
                 {
-                    animationName = "dead";
-
-                    if (IsPlayer())
+                    if (userControl)
                     {
-                        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½{?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ç•œï¿½?ï¿½ï¿½
-                        if (Input.GetKey(KeyCode.Space)
-                            || Input.GetKey("joystick button 0")
-                            || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
-                            || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
-                            || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
-                            || Input.GetKey(KeyCode.M)
-                            || Input.GetKey("joystick button 1"))
+                        if (GetControlMap().GetJumpInput()
+                            || GetControlMap().GetWeaponInput())
                         {
                             Revive();
                         }
@@ -332,7 +336,7 @@ public class LiveEntity : GeoGroObject
                         transform.parent);
                         despawnEffect.transform.localScale = transform.localScale;
                         despawnEffect.GetComponent<ParticleSystem>().startColor =
-                            data.GetThemeColor();
+                            GetCassetteData().GetThemeColor();
                         Destroy(gameObject);
                     }
                 }
@@ -353,14 +357,8 @@ public class LiveEntity : GeoGroObject
                 else
                 {
                     animationName = "result";
-                    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½{?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½çŸï¿½ÌƒX?ï¿½ï¿½e?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½?ï¿½ï¿½
-                    if (Input.GetKey(KeyCode.Space)
-                        || Input.GetKey("joystick button 0")
-                        || Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
-                        || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
-                        || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
-                        || Input.GetKey(KeyCode.M)
-                        || Input.GetKey("joystick button 1"))
+                    if (GetControlMap().GetJumpInput()
+                        || GetControlMap().GetWeaponInput())
                     {
                         NextStage();
                     }
@@ -368,59 +366,16 @@ public class LiveEntity : GeoGroObject
             }
         }
 
-        if (visual != null)
-        {
-            //?ï¿½ï¿½Ì‚Ìƒp?ï¿½ï¿½[?ï¿½ï¿½c?ï¿½ï¿½Ìƒg?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½Ô‚ï¿½
-            visual.transform.localScale = new Vector3(1, 1, 1);
-            visual.transform.localPosition = Vector3.zero;
-            //?ï¿½ï¿½L?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌŒï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ú‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÖŒï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            visualDirection += KX_netUtil.AngleDiff(visualDirection, direction)
-                * directionTiltIntensity;
-            visual.transform.localEulerAngles = new Vector3(0,
-                visualDirection,
-                0);
-        }
-
-        UpdateAnimation();
-
-        if (visual != null)
-        {
-            //?ï¿½ï¿½q?ï¿½ï¿½b?ï¿½ï¿½g?ï¿½ï¿½ã–³?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ô’ï¿½?ï¿½ï¿½È‚ï¿½_?ï¿½ï¿½?ï¿½ï¿½
-            if ((ghostTimeFrame > 0 && Time.time % 0.1f < 0.05f)
-                && IsLive() && !GetGoaled())
-            {
-                visual.transform.localScale = Vector3.zero;
-            }
-            //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½È‚ï¿½V?ï¿½ï¿½F?ï¿½ï¿½C?ï¿½ï¿½N
-            if (damageReactionTimeFrame > 0
-                || (!IsLive() && cadaverLifeTimeFrame > shakeCadaverLifeTimeFrame))
-            {
-                visual.transform.localPosition +=
-                    Vector3.Normalize(new Vector3(UnityEngine.Random.Range(1f, -1f),
-                    UnityEngine.Random.Range(1f, -1f),
-                    UnityEngine.Random.Range(1f, -1f))) * 0.2f; ;
-            }
-        }
-
-        //prevAttackProgress?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½V
-        prevAttackProgress = GetAttackProgress();
-        //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ìi?ï¿½ï¿½s?ï¿½ï¿½x?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
-        attackProgress = Mathf.Clamp(attackProgress, 0, 1);
-
         ghostTimeFrame = Mathf.Max(0, ghostTimeFrame - 1);
-        hitBackTimeFrame = Mathf.Max(0, hitBackTimeFrame - 1);
+        hitbackTimeFrame = Mathf.Max(0, hitbackTimeFrame - 1);
         damageReactionTimeFrame =
             Mathf.Max(0, damageReactionTimeFrame - 1);
 
-        //?ï¿½ï¿½S?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ç–³?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½
         if (GetGoaled())
         {
             ghostTimeFrame = reviveGhostTimeFrame;
         }
 
-        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½G?ï¿½ï¿½Z?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Íƒo?ï¿½ï¿½b?ï¿½ï¿½e?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ø‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Æ‰ñ•œ‚ï¿½?ï¿½ï¿½Ø‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½É–ï¿½?ï¿½ï¿½G?ï¿½ï¿½É‚È‚ï¿½é‚©?ï¿½ï¿½Û‚ï¿½?ï¿½ï¿½Ìƒt?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½O?ï¿½ï¿½?ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½?ï¿½ï¿½?ï¿½ï¿½
         if (IsShield())
         {
             battery--;
@@ -439,19 +394,18 @@ public class LiveEntity : GeoGroObject
         }
         battery = Mathf.Clamp(battery, 0, maxBattery);
 
-        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Î‚ç‚­?ï¿½ï¿½_?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½È‚ï¿½?ï¿½ï¿½?ï¿½ï¿½Î‰ï¿½
         if (IsLive() && IsDamageTakeable())
         {
             repairCoolTimeFrame--;
             if (repairCoolTimeFrame <= 0)
             {
-                hpAmount += autoRepairPower;
+                life += autoRepairPower;
             }
         }
         repairCoolTimeFrame = Mathf.RoundToInt(
             Mathf.Clamp(repairCoolTimeFrame, 0, maxRepairCoolTimeFrame));
 
-        hpAmount = Mathf.Clamp(hpAmount, 0, 1);
+        life = Mathf.Clamp(life, 0, 1);
 
         updating = false;
     }
@@ -463,7 +417,7 @@ public class LiveEntity : GeoGroObject
 
     void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.GetComponent<Goal>() != null && IsPlayer())
+        if (col.gameObject.GetComponent<Goal>() != null && userControl)
         {
             Clear();
             saveMedals.Save();
@@ -472,7 +426,7 @@ public class LiveEntity : GeoGroObject
         OnHit(col);
     }
 
-    //OnCollisionStay?ï¿½ï¿½?ï¿½ï¿½OnTriggerStay?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Z?ï¿½ï¿½ß‚É‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Öï¿½
+    //OnCollisionStay??¿½?¿½??¿½?¿½OnTriggerStay??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Z??¿½?¿½ß‚É‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½Öï¿½
     void OnHit(Collider col)
     {
         if (col.gameObject.GetComponent<AttackArea>() != null)
@@ -480,87 +434,74 @@ public class LiveEntity : GeoGroObject
             AttackHit(col.gameObject.GetComponent<AttackArea>());
         }
 
-        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÅŠe?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½ÌŒÅ—L?ï¿½ï¿½ÚG?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½
+        //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÅŠe??¿½?¿½h??¿½?¿½??¿½?¿½??¿½?¿½N??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½ÌŒÅ—L??¿½?¿½ÚG??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ä‚ï¿½
         LiveEntityOnHit(col);
     }
 
-    //?ï¿½ï¿½e?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½ÌŒÅ—L?ï¿½ï¿½X?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½i?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÅƒI?ï¿½ï¿½[?ï¿½ï¿½o?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Äg?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½j
+    //??¿½?¿½e??¿½?¿½h??¿½?¿½??¿½?¿½??¿½?¿½N??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½ÌŒÅ—L??¿½?¿½X??¿½?¿½V??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½i??¿½?¿½h??¿½?¿½??¿½?¿½??¿½?¿½N??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½??¿½?¿½??¿½?¿½ÅƒI??¿½?¿½[??¿½?¿½o??¿½?¿½[??¿½?¿½??¿½?¿½??¿½?¿½C??¿½?¿½h??¿½?¿½??¿½?¿½??¿½?¿½Äg??¿½?¿½??¿½?¿½??¿½?¿½j
     protected virtual void LiveEntityUpdate()
     {
     }
 
-    //TODO:?ï¿½ï¿½J?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½I?ï¿½ï¿½Õ‚Å•K?ï¿½ï¿½v?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Û‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½A?ï¿½ï¿½s?ï¿½ï¿½v?ï¿½ï¿½È‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-    //?ï¿½ï¿½e?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½ÌŒÅ—L?ï¿½ï¿½Õ“Ëï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½i?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½N?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÅƒI?ï¿½ï¿½[?ï¿½ï¿½o?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Äg?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½j
+    //TODO:??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½I??¿½?¿½Õ‚Å•K??¿½?¿½v??¿½?¿½??¿½?¿½??¿½?¿½Û‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½f??¿½?¿½??¿½?¿½??¿½?¿½A??¿½?¿½s??¿½?¿½v??¿½?¿½È‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½
+    //??¿½?¿½e??¿½?¿½h??¿½?¿½??¿½?¿½??¿½?¿½N??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½ÌŒÅ—L??¿½?¿½Õ“Ëï¿½??¿½?¿½??¿½?¿½??¿½?¿½i??¿½?¿½h??¿½?¿½??¿½?¿½??¿½?¿½N??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½??¿½?¿½??¿½?¿½ÅƒI??¿½?¿½[??¿½?¿½o??¿½?¿½[??¿½?¿½??¿½?¿½??¿½?¿½C??¿½?¿½h??¿½?¿½??¿½?¿½??¿½?¿½Äg??¿½?¿½??¿½?¿½??¿½?¿½j
+
     protected virtual void LiveEntityOnHit(Collider col)
     {
-
+        Item item = col.GetComponent<Item>();
+        if (item)
+        {
+            //?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¾?æ¥è§¦?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½A?¿½?½¿?½½C?¿½?½¿?½½e?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½z?¿½?½¿?½½?¿½?½¿?½½?¾‰è¿½ä¼šï½¿?½½
+            //(?¿½?½¿?½½s?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¾‰ã‚¢?¿½?½¿?½½C?¿½?½¿?½½e?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½è¬«?½¾?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½`?¿½?½¿?½½[?¿½?½¿?½½g?¿½?½¿?½½?¿½?½¿?½½h?¿½?½¿?½½~?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½é©ï½½?¿½?½¿?½½?¾Ÿã‚‘?½¿?½½?¿½?½¿?½½?¾Œã‚ˆã??¿½?½¿?½½?¾ˆæª?¿½?½¿?½½u?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¿½?½¿?½½?¾?ã‚‘ï½¿?½½?¿½?½¿?½½?¾œã‚‘?½¿?½½)
+            Array.Resize(ref touchedItems, touchedItems.Length + 1);
+            touchedItems[touchedItems.Length - 1] = item;
+        }
     }
 
-    //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÉˆÚs
-    protected void SetAttackMotion(string name)
+    public CharacterCassette GetCassette()
     {
-        SetAttackMotion(data.SearchAttackMotion(name));
+        if (!cassetteObj)
+        {
+            return null;
+        }
+        return cassetteObj.GetComponent<CharacterCassette>();
+    }
+    public CharaData GetCassetteData()
+    {
+        if (!GetCassette())
+        {
+            return new CharaData();
+        }
+        return GetCassette().GetData();
     }
 
-    //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÉˆÚs
-    protected void SetAttackMotion(AttackMotionData attackMotion)
+    //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ä‚ï¿½Å‚ï¿½??¿½?¿½??¿½?¿½Ô‚Í’n??¿½?¿½`??¿½?¿½ÉG??¿½?¿½??¿½?¿½Ä‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½É‘ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½È‚ï¿½??¿½?¿½È‚ï¿½
+    public void DisAllowGroundSet()
     {
-        attackMotionData = attackMotion;
-        attackTimeFrame = Mathf.Max(attackMotionData.GetData().totalFrame, 1);
-        attackProgress = 0;
+        if (isAllowCassetteUpdate)
+        {
+            allowGroundSet = false;
+        }
     }
 
-    //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-    protected bool IsAttacking()
-    {
-        return attackMotionData != null
-            && (attackTimeFrame < 1 || prevAttackProgress < 1);
-    }
-    //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Âw?ï¿½ï¿½?ï¿½ï¿½ÌU?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½A?ï¿½ï¿½N?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½s?ï¿½ï¿½È‚ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½é‚©
-    protected bool IsAttacking(string name)
-    {
-        return IsAttacking() && attackMotionData.name == name;
-    }
-    //attackProgress?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½w?ï¿½ï¿½?ï¿½ï¿½ÌƒL?ï¿½ï¿½[?ï¿½ï¿½|?ï¿½ï¿½C?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½Ê‰ß‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-    protected bool IsHitKeyPoint(float keyPoint)
-    {
-        return KX_netUtil.IsIntoRange(
-            keyPoint, prevAttackProgress, GetAttackProgress(),
-            false, true);
-    }
-    //attackProgress?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½w?ï¿½ï¿½?ï¿½ï¿½Ì”ÍˆÍ“ï¿½?ï¿½ï¿½A?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Í‚ï¿½?ï¿½ï¿½Ì”ÍˆÍ‚ï¿½1?ï¿½ï¿½t?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Å’Ê‰ß‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-    protected bool IsHitKeyPoint(Vector2 keyPoint)
-    {
-        return KX_netUtil.IsCrossingRange(
-            prevAttackProgress, GetAttackProgress(),
-            keyPoint.x, keyPoint.y,
-            false, false);
-    }
-
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½Å‚ï¿½?ï¿½ï¿½?ï¿½ï¿½Ô‚Í’n?ï¿½ï¿½`?ï¿½ï¿½ÉG?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½É‘ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½È‚ï¿½?ï¿½ï¿½È‚ï¿½
-    protected void DisAllowGroundSet()
-    {
-        allowGroundSet = false;
-    }
-
-    //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½?ï¿½ï¿½Û‚É‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½
+    //??¿½?¿½U??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½?¿½??¿½?¿½Û‚É‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ä‚ï¿½
     void AttackHit(AttackArea attackArea)
     {
         LiveEntity attacker = attackArea.GetAttacker();
 
-        //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½t?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÔA?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Â–ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÈŠO?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌU?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½È‚ï¿½
+        //??¿½?¿½U??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½t??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÔA??¿½?¿½??¿½?¿½??¿½?¿½Â–ï¿½??¿½?¿½??¿½?¿½??¿½?¿½ÈŠO??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÌU??¿½?¿½??¿½?¿½??¿½?¿½È‚ï¿½
         if (IsLive() && !IsShield() && ghostTimeFrame <= 0
             && (attacker == null
                 || attacker.GetTeamID() != teamID))
         {
-            //?ï¿½ï¿½M?ï¿½ï¿½~?ï¿½ï¿½b?ï¿½ï¿½N?ï¿½ï¿½È‚ï¿½f?ï¿½ï¿½[?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½Ìï¿½?ï¿½ï¿½l?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ì‚Ü‚Üg?ï¿½ï¿½?ï¿½ï¿½
+            //??¿½?¿½M??¿½?¿½~??¿½?¿½b??¿½?¿½N??¿½?¿½È‚ï¿½f??¿½?¿½[??¿½?¿½^??¿½?¿½??¿½?¿½Ìï¿½??¿½?¿½l??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ì‚Ü‚Üg??¿½?¿½??¿½?¿½
             float damageValue = attackArea.GetData().power;
             int ghostTime = attackArea.GetData().ghostTime;
-            //?ï¿½ï¿½L?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ÌU?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½È‚ï¿½_?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½l?ï¿½ï¿½Æ–ï¿½?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ô‚ï¿½?ï¿½ï¿½Z?ï¿½ï¿½o
+            //??¿½?¿½L??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÌU??¿½?¿½??¿½?¿½??¿½?¿½È‚ï¿½_??¿½?¿½??¿½?¿½??¿½?¿½[??¿½?¿½W??¿½?¿½l??¿½?¿½Æ–ï¿½??¿½?¿½G??¿½?¿½??¿½?¿½??¿½?¿½Ô‚ï¿½??¿½?¿½Z??¿½?¿½o
             if (attacker != null)
             {
                 float attackerPower =
-                    attacker.GetData().GetAttackPower();
+                    attacker.GetCassetteData().GetAttackPower();
                 damageValue *= attackerPower;
                 ghostTime = Mathf.RoundToInt(
                     damageValue / attackerPower * ghostTimeMul);
@@ -588,20 +529,20 @@ public class LiveEntity : GeoGroObject
                     attackArea.GetBlowVec())).normalized
                     * attackArea.GetData().blowForce;
             }
-            if (!data.GetHeavy())
+            if (!GetCassetteData().GetHeavy())
             {
                 HitBack(hitBackVec, attackArea.GetData().hitback);
             }
         }
     }
-    //?ï¿½ï¿½Ì—Í‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ç‚µ?ï¿½ï¿½A?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ô‚ï¿½t?ï¿½ï¿½^
+    //??¿½?¿½Ì—Í‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½ç‚µ??¿½?¿½A??¿½?¿½??¿½?¿½??¿½?¿½G??¿½?¿½??¿½?¿½??¿½?¿½Ô‚ï¿½t??¿½?¿½^
     void Damage(float damage, int setGhostTimeFrame)
     {
-        hpAmount -= Mathf.Max(0, damage / data.GetLife());
+        life -= Mathf.Max(0, damage / GetCassetteData().GetLife());
         ghostTimeFrame = setGhostTimeFrame;
         repairCoolTimeFrame = maxRepairCoolTimeFrame;
         damageReactionTimeFrame = maxDamageReactionTimeFrame;
-        //?ï¿½ï¿½_?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Â‚ç‚·
+
         if (IsLive())
         {
             PlayAsSE(resourcePalette.GetDamageSE());
@@ -609,14 +550,13 @@ public class LiveEntity : GeoGroObject
         else
         {
             PlayAsSE(resourcePalette.GetDefeatSE());
-            if (!IsPlayer() && GetData().GetWeaponedAttackMotionName() != "")
+            if (!userControl && GetCassetteData().GetWeaponedAttackMotionName() != "")
             {
-                //?ï¿½ï¿½A?ï¿½ï¿½C?ï¿½ï¿½e?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½
                 CharaChip current =
                     Instantiate(resourcePalette.GetCharaChip().gameObject,
                     transform.position, transform.rotation, transform)
                     .GetComponent<CharaChip>();
-                current.SetData(GetData());
+                current.SetData(GetCassetteData());
                 current.gameObject.transform.parent = transform.parent;
             }
         }
@@ -625,41 +565,67 @@ public class LiveEntity : GeoGroObject
                 Instantiate(resourcePalette.GetDamageEffect(),
                 transform.position, transform.rotation, transform);
         damageEffect.transform.localScale = new Vector3(1, 1, 1);
-        damageEffect.GetComponent<ParticleSystem>().startColor = data.GetThemeColor();
+        damageEffect.GetComponent<ParticleSystem>().startColor = GetCassetteData().GetThemeColor();
     }
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Î‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
+    //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Î‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
     {
         movement = Quaternion.Inverse(transform.rotation)
             * hitBackVec;
-        hitBackTimeFrame = setHitBackTimeFrame;
-        attackMotionData = null;
+        hitbackTimeFrame = setHitBackTimeFrame;
     }
 
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½é‚©
+    public bool IsTouchedThisItem(Item item)
+    {
+        if (item == null)
+        {
+            return false;
+        }
+        for (int i = 0; i < touchedItems.Length; i++)
+        {
+            if (touchedItems[i] == item)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsHitBacking()
+    {
+        return hitbackTimeFrame > 0;
+    }
+    //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ä‚ï¿½??¿½?¿½é‚©
     public bool IsLive()
     {
-        return hpAmount > 0;
+        return life > 0;
     }
-    //?ï¿½ï¿½Z?ï¿½ï¿½É‚ï¿½é–³?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½Ô‚ï¿½
+    public bool IsPeril()
+    {
+        return life <= 0.25f;
+    }
+    public bool IsVanished()
+    {
+        return !IsLive() && cadaverLifeTimeFrame <= 0;
+    }
+    //??¿½?¿½Z??¿½?¿½É‚ï¿½é–³??¿½?¿½G??¿½?¿½??¿½?¿½Ô‚ï¿½
     public bool IsShield()
     {
         return shieldable && shield;
     }
-    //?ï¿½ï¿½_?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½t?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ô‚ï¿½
+    public bool IsGhostTime()
+    {
+        return ghostTimeFrame > 0;
+    }
+    //??¿½?¿½_??¿½?¿½??¿½?¿½??¿½?¿½[??¿½?¿½W??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½t??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ô‚ï¿½
     public bool IsDamageTakeable()
     {
-        return !IsShield() && ghostTimeFrame <= 0;
+        return !IsShield() && !IsGhostTime();
     }
-    //?ï¿½ï¿½s?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Å‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ô‚ï¿½
+    //??¿½?¿½s??¿½?¿½??¿½?¿½??¿½?¿½Å‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½Ô‚ï¿½
     public bool IsActable()
     {
-        return hitBackTimeFrame <= 0;
-    }
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Íƒv?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½
-    public bool IsPlayer()
-    {
-        return GetComponent<Player>() != null;
+        return hitbackTimeFrame <= 0;
     }
     public bool IsDestructed()
     {
@@ -681,23 +647,23 @@ public class LiveEntity : GeoGroObject
         return (float)battery / maxBattery;
     }
 
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Å‚ï¿½?ï¿½ï¿½?ï¿½ï¿½Æ‚ï¿½?ï¿½ï¿½É‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ä‚Ô‚Æ•ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
+    //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Å‚ï¿½??¿½?¿½??¿½?¿½Æ‚ï¿½??¿½?¿½É‚ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ä‚Ô‚Æ•ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½
     void Revive()
     {
         if (!IsLive())
         {
-            hpAmount = 1;
-            hitBackTimeFrame = 0;
+            life = 1;
+            hitbackTimeFrame = 0;
             ghostTimeFrame = reviveGhostTimeFrame;
             reviveCount++;
         }
     }
-    //?ï¿½ï¿½S?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½É“ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ìï¿½?ï¿½ï¿½?ï¿½ï¿½
+    //??¿½?¿½S??¿½?¿½[??¿½?¿½??¿½?¿½??¿½?¿½É“ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ìï¿½??¿½?¿½??¿½?¿½
     void Clear()
     {
         goaled = true;
     }
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½e?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½Ìï¿½?ï¿½ï¿½Éİ’è‚³?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½e?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½Öi?ï¿½ï¿½?ï¿½ï¿½
+    //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½e??¿½?¿½[??¿½?¿½W??¿½?¿½Ìï¿½??¿½?¿½Éİ’è‚³??¿½?¿½??¿½?¿½Ä‚ï¿½??¿½?¿½??¿½?¿½X??¿½?¿½e??¿½?¿½[??¿½?¿½W??¿½?¿½Öi??¿½?¿½??¿½?¿½
     void NextStage()
     {
         if (StageManager.GetCurrent().gameObject.activeInHierarchy)
@@ -706,7 +672,7 @@ public class LiveEntity : GeoGroObject
             return;
         }
     }
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½e?ï¿½ï¿½[?ï¿½ï¿½W?ï¿½ï¿½Ì”h?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Æ‚ï¿½?ï¿½ï¿½Äİ’è‚³?ï¿½ï¿½?ï¿½ï¿½Ä‚ï¿½?ï¿½ï¿½?ï¿½ï¿½V?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½É–ß‚ï¿½
+    //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½e??¿½?¿½[??¿½?¿½W??¿½?¿½Ì”h??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Æ‚ï¿½??¿½?¿½Äİ’è‚³??¿½?¿½??¿½?¿½Ä‚ï¿½??¿½?¿½??¿½?¿½V??¿½?¿½[??¿½?¿½??¿½?¿½??¿½?¿½É–ß‚ï¿½
     void Quit()
     {
         if (StageManager.GetCurrent().gameObject.activeInHierarchy)
@@ -715,546 +681,65 @@ public class LiveEntity : GeoGroObject
         }
     }
 
-    //?ï¿½ï¿½İ’è‚³?ï¿½ï¿½ê‚½?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½[?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½Ç‚İo?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Äï¿½?ï¿½ï¿½s?ï¿½ï¿½i?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½s?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Íï¿½ÉŒÄ‚Ôj
-    void UpdateAttackMotion()
+    void UpdateView()
     {
-        //3D?ï¿½ï¿½J?ï¿½ï¿½[?ï¿½ï¿½\?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Z?ï¿½ï¿½b?ï¿½ï¿½g
-        Array.Resize(ref cursors, 0);
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ì‹ÂŠp??¿½?¿½l??¿½?¿½??¿½?¿½??¿½?¿½K??¿½?¿½??¿½?¿½ÍˆÍ‚Éï¿½??¿½?¿½ß‚ï¿½
+        cameraAngle = Mathf.Clamp(
+            cameraAngle, MinCameraAngle, MaxCameraAngle);
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ì‹ÂŠp??¿½?¿½l??¿½?¿½??¿½?¿½??¿½?¿½C??¿½?¿½[??¿½?¿½W??¿½?¿½??¿½?¿½??¿½?¿½O
+        easedCameraAngle = Mathf.Lerp(
+            easedCameraAngle, cameraAngle, maxCameraTiltDiffuse);
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ì‹ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½C??¿½?¿½[??¿½?¿½W??¿½?¿½??¿½?¿½??¿½?¿½O
+        easedCameraDistance = Mathf.Lerp(
+            easedCameraDistance, cameraDistance, maxCameraTiltDiffuse);
+        //??¿½?¿½O??¿½?¿½t??¿½?¿½??¿½?¿½??¿½?¿½[??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ì‰ï¿½]??¿½?¿½Ìï¿½??¿½?¿½É‰ï¿½??¿½?¿½??¿½?¿½??¿½?¿½ÄƒJ??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÌŒX??¿½?¿½??¿½?¿½??¿½?¿½p??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ß‚ï¿½
+        cameraTiltRot =
+            cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
 
-        //?ï¿½ï¿½Å—L?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½|?ï¿½ï¿½C?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Z?ï¿½ï¿½b?ï¿½ï¿½g
-        Array.Resize(ref uniqueActDatas, 0);
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÌŒX??¿½?¿½??¿½?¿½??¿½?¿½p??¿½?¿½Ìï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ß‚ï¿½
+        float cameraTiltAmount = Mathf.Abs(
+            Quaternion.Angle(cameraTiltRot, Quaternion.identity)) / 180;
 
-        if (IsAttacking())
-        {
-            //3D?ï¿½ï¿½J?ï¿½ï¿½[?ï¿½ï¿½\?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½æ“¾
-            if (attackMotionData.GetCursors() != null)
-            {
-                cursors = attackMotionData.GetCursors();
-            }
+        cameraTiltDiffuse = Mathf.Clamp(
+            cameraTiltDiffuse + cameraTiltAmount * cameraFlipMotionMultiply,
+            0, cameraTiltAmount * maxCameraTiltDiffuse);
 
-            //?ï¿½ï¿½ßÚU?ï¿½ï¿½?ï¿½ï¿½
-            if (attackMotionData.GetData().meleeAttackKeys != null)
-            {
-                for (int i = 0; i < attackMotionData.GetData().
-                        meleeAttackKeys.Length; i++)
-                {
-                    AttackMotionData.AttackKey current =
-                        attackMotionData.GetData().meleeAttackKeys[i];
-                    if (IsHitKeyPoint(current.keyFrame))
-                    {
-                        AttackMotionData.MeleeAttackData meleeAttackData =
-                            attackMotionData.SearchMeleeAttackData(current.dataName);
-                        MeleeAttack(meleeAttackData, current.cursorName);
-                    }
-                }
-            }
-
-            //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½
-            if (attackMotionData.GetData().shotKeys != null)
-            {
-                for (int i = 0; i < attackMotionData.GetData().
-                    shotKeys.Length; i++)
-                {
-                    AttackMotionData.AttackKey current =
-                        attackMotionData.GetData().shotKeys[i];
-                    if (IsHitKeyPoint(current.keyFrame))
-                    {
-                        AttackMotionData.ShotData shotData =
-                                attackMotionData.SearchShotData(current.dataName);
-                        Shot(shotData, current.cursorName, current.postMove);
-                    }
-                }
-            }
-
-            //?ï¿½ï¿½Ú“ï¿½
-            if (attackMotionData.GetData().moveKeys != null)
-            {
-                Vector3 savedMovement = movement;
-                Vector3 replaceVector = Vector3.zero;
-                KX_netUtil.AxisSwitch ignoreAxis =
-                    new KX_netUtil.AxisSwitch();
-                ignoreAxis.x = true;
-                ignoreAxis.y = true;
-                ignoreAxis.z = true;
-
-                for (int i = 0; i < attackMotionData.GetData().
-                    moveKeys.Length; i++)
-                {
-                    AttackMotionData.MoveKey current =
-                        attackMotionData.GetData().moveKeys[i];
-                    if (IsHitKeyPoint(current.keyFrame))
-                    {
-                        movement = Vector3.zero;
-                        break;
-                    }
-                }
-
-                for (int i = 0; i < attackMotionData.GetData().
-                    moveKeys.Length; i++)
-                {
-                    AttackMotionData.MoveKey current =
-                        attackMotionData.GetData().moveKeys[i];
-                    if (IsHitKeyPoint(current.keyFrame))
-                    {
-                        ignoreAxis.x =
-                            current.ignoreAxis.x && ignoreAxis.x;
-                        ignoreAxis.y =
-                            current.ignoreAxis.y && ignoreAxis.y;
-                        ignoreAxis.z =
-                            current.ignoreAxis.z && ignoreAxis.z;
-
-                        float key0 = KX_netUtil.Ease(KX_netUtil.RangeMap(
-                            Mathf.Clamp(prevAttackProgress,
-                            current.keyFrame.x, current.keyFrame.y),
-                            current.keyFrame.x, current.keyFrame.y, 0, 1),
-                            current.easeType, current.easePow);
-
-                        float key1 = KX_netUtil.Ease(KX_netUtil.RangeMap(
-                            Mathf.Clamp(GetAttackProgress(),
-                            current.keyFrame.x, current.keyFrame.y),
-                            current.keyFrame.x, current.keyFrame.y, 0, 1),
-                            current.easeType, current.easePow);
-
-                        replaceVector += Quaternion.Euler(new Vector3(0, direction, 0))
-                            * current.moveVec * (key1 - key0) / Time.deltaTime;
-                    }
-                }
-
-                movement += replaceVector;
-            }
-
-            //?ï¿½ï¿½Å—L?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½|?ï¿½ï¿½C?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g
-            if (attackMotionData.GetData().uniqueActionKeys != null)
-            {
-                for (int i = 0; i < attackMotionData.GetData().
-                        uniqueActionKeys.Length; i++)
-                {
-                    AttackMotionData.UniqueActionKey current =
-                        attackMotionData.GetData().uniqueActionKeys[i];
-                    if (IsHitKeyPoint(current.keyFrame))
-                    {
-                        Array.Resize(ref uniqueActDatas, uniqueActDatas.Length + 1);
-                        uniqueActDatas[uniqueActDatas.Length - 1] = current.uniqueActName;
-                    }
-                }
-            }
-
-            //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½G?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            if (attackMotionData.GetData().shieldKeys != null)
-            {
-                for (int i = 0; i < attackMotionData.GetData().
-                        shieldKeys.Length; i++)
-                {
-                    Vector2 current =
-                        attackMotionData.GetData().shieldKeys[i];
-                    if (IsHitKeyPoint(current))
-                    {
-                        shield = true;
-                    }
-                }
-            }
-
-            //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½s?ï¿½ï¿½Âï¿½?ï¿½ï¿½?ï¿½ï¿½
-            if (attackMotionData.GetData().disAllowGroundSetKeys != null)
-            {
-                for (int i = 0; i < attackMotionData.GetData().
-                        disAllowGroundSetKeys.Length; i++)
-                {
-                    Vector2 current =
-                        attackMotionData.GetData().disAllowGroundSetKeys[i];
-                    if (IsHitKeyPoint(current))
-                    {
-                        DisAllowGroundSet();
-                    }
-                }
-            }
-
-            //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ê‰ï¿½
-            if (attackMotionData.GetData().seKeys != null)
-            {
-                for (int i = 0; i < attackMotionData.GetData().
-                    seKeys.Length; i++)
-                {
-                    AttackMotionData.SEKey current =
-                        attackMotionData.GetData().seKeys[i];
-                    if (IsHitKeyPoint(current.keyFrame))
-                    {
-                        PlayAsSE(current.se);
-                    }
-                }
-            }
-
-            //?ï¿½ï¿½A?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-            if (attackMotionData.GetData().animationKeys != null)
-            {
-                for (int i = 0; i < attackMotionData.GetData().
-                    animationKeys.Length; i++)
-                {
-                    AttackMotionData.AnimationKey current =
-                        attackMotionData.GetData().animationKeys[i];
-                    if (IsHitKeyPoint(current.keyFrame))
-                    {
-                        animationName = current.animationName;
-                        if (!current.useOriginalAnimTime)
-                        {
-                            animationProgress =
-                                KX_netUtil.RangeMap(GetAttackProgress(),
-                                current.keyFrame.x, current.keyFrame.y,
-                                0, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-        //?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½o?ï¿½ï¿½?ï¿½ï¿½
-        //?ï¿½ï¿½Ü‚ï¿½?ï¿½ï¿½Í‹ßÚU?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ìƒf?ï¿½ï¿½[?ï¿½ï¿½^?ï¿½ï¿½Æ“ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ìˆï¿½?ï¿½ï¿½p?ï¿½ï¿½?ï¿½ï¿½
-        Array.Resize(ref attackAreas, meleeAttackDatas.Length);
-        //?ï¿½ï¿½Ìˆï¿½?ï¿½ï¿½?ï¿½ï¿½ÌU?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½É‹ßÚU?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ìƒf?ï¿½ï¿½[?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        for (int i = 0; i < attackAreas.Length; i++)
-        {
-            MeleeAttackAndCursorName currentData = meleeAttackDatas[i];
-
-            //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Îï¿½?ï¿½ï¿½?ï¿½ï¿½
-            if (attackAreas[i] == null)
-            {
-                attackAreas[i] =
-                    Instantiate(resourcePalette.GetAttackArea().gameObject,
-                    transform.position,
-                    transform.rotation * Quaternion.Euler(0, direction, 0),
-                    transform)
-                    .GetComponent<AttackArea>();
-            }
-
-            AttackArea current = attackAreas[i];
-            current.transform.parent = gameObject.transform;
-            float areaScale = currentData.data.scale;
-            current.transform.localScale =
-                new Vector3(areaScale, areaScale, areaScale);
-            current.transform.localPosition =
-                Quaternion.Euler(new Vector3(0, direction, 0))
-                * cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].pos;
-            current.SetAttacker(this);
-            current.SetData(currentData.data.attackData,
-                cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)].direction);
-            current.Lock();
-        }
-        //?ï¿½ï¿½s?ï¿½ï¿½v?ï¿½ï¿½ÈU?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            AttackArea current =
-                transform.GetChild(i).GetComponent<AttackArea>();
-            if (current != null)
-            {
-                bool needDestroy = true;
-                for (int j = 0; j < attackAreas.Length; j++)
-                {
-                    if (current == attackAreas[j])
-                    {
-                        needDestroy = false;
-                        break;
-                    }
-                }
-                if (needDestroy)
-                {
-                    Destroy(transform.GetChild(i).gameObject);
-                }
-            }
-        }
-
-        //?ï¿½ï¿½e?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½o?ï¿½ï¿½?ï¿½ï¿½
-        for (int i = 0; i < shotDatas.Length; i++)
-        {
-            ShotAndCursorName currentData = shotDatas[i];
-
-            if (currentData.postMove)
-            {
-                //postMove?ï¿½ï¿½?ï¿½ï¿½true?ï¿½ï¿½È‚ï¿½1?ï¿½ï¿½t?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½x?ï¿½ï¿½ç‚¹?ï¿½ï¿½?ï¿½ï¿½
-                shotDatas[i].postMove = false;
-            }
-            else
-            {
-                if (attackMotionData)
-                {
-                    AttackMotionData.Cursor currentCursor =
-                        cursors[attackMotionData.SearchCursorIndex(currentData.cursorName)];
-
-                    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-                    Projectile current =
-                            Instantiate(resourcePalette.GetProjectile().gameObject,
-                            transform.position,
-                            transform.rotation * Quaternion.Euler(0, direction, 0),
-                            transform)
-                            .GetComponent<Projectile>();
-
-                    current.transform.parent = gameObject.transform;
-
-                    float projectileScale = currentData.data.scale;
-                    current.transform.localScale =
-                        new Vector3(projectileScale, projectileScale, projectileScale);
-                    current.transform.localPosition =
-                        Quaternion.Euler(new Vector3(0, direction, 0))
-                        * currentCursor.pos;
-                    current.transform.localRotation =
-                        Quaternion.Euler(new Vector3(0, direction, 0));
-                    current.SetAttacker(this);
-                    current.SetData(currentData.data.attackData,
-                        currentCursor.direction);
-                    current.SetProjectileData(currentData.data.projectileData,
-                        currentCursor.direction);
-                    current.Lock();
-
-                    current.transform.parent = null;
-                }
-
-                shotDatas[i].used = true;
-            }
-        }
-
-        //?ï¿½ï¿½ßÚA?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ìƒf?ï¿½ï¿½[?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½p?ï¿½ï¿½Ï‚İ‚Ì—v?ï¿½ï¿½f?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        Array.Resize(ref meleeAttackDatas, 0);
-
-        List<ShotAndCursorName> shotDataList =
-            new List<ShotAndCursorName>(shotDatas);
-        shotDataList.RemoveAll(where => where.used);
-        shotDatas = shotDataList.ToArray();
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÌŒX??¿½?¿½??¿½?¿½??¿½?¿½p??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½
+        cameraTiltRot = Quaternion.Slerp(
+            cameraTiltRot, Quaternion.identity,
+            cameraTiltDiffuse / KX_netUtil.RangeMap(cameraTiltAmount, 1, 0, 1, 0.001f));
+        //??¿½?¿½Ü‚ï¿½??¿½?¿½L??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½p??¿½?¿½x??¿½?¿½ÉƒJ??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½
+        view.transform.localEulerAngles = new Vector3(easedCameraAngle, 0, 0);
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÌŒX??¿½?¿½??¿½?¿½??¿½?¿½p??¿½?¿½É‰ï¿½??¿½?¿½??¿½?¿½??¿½?¿½ÄƒJ??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½X??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½
+        view.transform.rotation =
+            cameraTiltRot * view.transform.rotation;
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½ÌˆÊ’u??¿½?¿½??¿½?¿½??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½çŒ©??¿½?¿½ÄŒï¿½??¿½?¿½??¿½?¿½É‚ï¿½??¿½?¿½??¿½?¿½
+        view.transform.localPosition =
+            view.transform.localRotation * new Vector3(0, 0, -1)
+            * easedCameraDistance;
+        //??¿½?¿½J??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ì‹ï¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½f??¿½?¿½t??¿½?¿½H??¿½?¿½??¿½?¿½??¿½?¿½g??¿½?¿½l??¿½?¿½??¿½?¿½
+        cameraDistance = defaultCameraDistance;
+        prevRot = transform.rotation;
     }
 
-    //?ï¿½ï¿½İ’è‚³?ï¿½ï¿½ê‚½?ï¿½ï¿½A?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½[?ï¿½ï¿½^?ï¿½ï¿½?ï¿½ï¿½Ç‚İo?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Äï¿½?ï¿½ï¿½s?ï¿½ï¿½i?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½s?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Íï¿½ÉŒÄ‚Ôj
-    void UpdateAnimation()
-    {
-        //?ï¿½ï¿½Ü‚ï¿½?ï¿½ï¿½p?ï¿½ï¿½[?ï¿½ï¿½c?ï¿½ï¿½Ìƒg?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½l?ï¿½ï¿½É‘ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½
-        for (int i = 0; i < bodyParts.Length; i++)
-        {
-            Transform current = bodyParts[i];
-            KX_netUtil.TransformData currentData =
-                data.GetDefaultBodyPartsTransform(i);
-            current.localPosition = currentData.position;
-            current.localScale = currentData.scale;
-            if (current != visual.transform)
-            {
-                current.localEulerAngles = currentData.eulerAngles;
-            }
-        }
-        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½İ‚Ìï¿½Ô‚É‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½A?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½æ“¾
-        CharaData.Animation animationData =
-            data.SearchAnimation(animationName);
-        //?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½[?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½A?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½K?ï¿½ï¿½p
-        if (animationData.transformAnimationKeys != null)
-        {
-            for (int i = 0; i < animationData.transformAnimationKeys.Length; i++)
-            {
-                CharaData.TransformAnimationKey tAnimData =
-                    animationData.transformAnimationKeys[i];
-                if (KX_netUtil.IsIntoRange(
-                    animationProgress,
-                    tAnimData.keyFrame.x, tAnimData.keyFrame.y,
-                    false, false))
-                {
-                    Transform current = bodyParts[tAnimData.bodyPartIndex];
-                    float animationPartProgress =
-                        KX_netUtil.Ease(KX_netUtil.RangeMap(animationProgress,
-                        tAnimData.keyFrame.x, tAnimData.keyFrame.y,
-                        0, 1),
-                        tAnimData.easeType, tAnimData.easePow);
-
-                    if (!tAnimData.ignoreTransform.position)
-                    {
-                        current.localPosition = Vector3.Lerp(
-                            tAnimData.startTransform.position,
-                            tAnimData.endTransform.position,
-                            animationPartProgress);
-                    }
-
-                    if (!tAnimData.ignoreTransform.rotation)
-                    {
-                        Quaternion rotate;
-                        if (tAnimData.lerpAsEuler)
-                        {
-                            rotate = Quaternion.Euler(Vector3.Lerp(
-                                tAnimData.startTransform.eulerAngles,
-                                tAnimData.endTransform.eulerAngles,
-                                animationPartProgress));
-                        }
-                        else
-                        {
-                            rotate = Quaternion.Slerp(
-                                Quaternion.Euler(tAnimData.startTransform.eulerAngles),
-                                Quaternion.Euler(tAnimData.endTransform.eulerAngles),
-                                animationPartProgress);
-                        }
-
-                        if (current == visual.transform)
-                        {
-                            current.Rotate(rotate.eulerAngles,
-                                Space.Self);
-                        }
-                        else
-                        {
-                            current.localRotation = rotate;
-                        }
-                    }
-
-                    if (!tAnimData.ignoreTransform.scale)
-                    {
-                        current.localScale = Vector3.Lerp(
-                        tAnimData.startTransform.scale,
-                        tAnimData.endTransform.scale,
-                        animationPartProgress);
-                    }
-                }
-            }
-            if (animationData.totalFrame > 0)
-            {
-                animationSpeed = 1f / animationData.totalFrame;
-            }
-        }
-
-        //?ï¿½ï¿½X?ï¿½ï¿½L?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½A?ï¿½ï¿½j?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½V?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½K?ï¿½ï¿½p
-        if (animationData.rigAnimationKeys != null)
-        {
-            for (int i = 0; i < animationData.rigAnimationKeys.Length; i++)
-            {
-                CharaData.RigAnimationKey rAnimData =
-                    animationData.rigAnimationKeys[i];
-                if (KX_netUtil.IsIntoRange(
-                    animationProgress,
-                    rAnimData.keyFrame.x, rAnimData.keyFrame.y,
-                    false, false))
-                {
-                    Animator current = animators[rAnimData.animatorIndex];
-                    float animationPartProgress =
-                        KX_netUtil.RangeMap(animationProgress,
-                        rAnimData.keyFrame.x, rAnimData.keyFrame.y,
-                        0, 1);
-
-                    current.SetInteger("statusID", rAnimData.rigAnimationID);
-                    current.Play(current.GetNextAnimatorStateInfo(0).nameHash,
-                    0, animationPartProgress);
-                }
-            }
-        }
-
-        //?ï¿½ï¿½\?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½K?ï¿½ï¿½p
-        if (animationData.facialExpressionKeys != null)
-        {
-            for (int i = 0; i < animationData.facialExpressionKeys.Length; i++)
-            {
-                CharaData.FacialExpressionKey fKeyData =
-                    animationData.facialExpressionKeys[i];
-                if (KX_netUtil.IsIntoRange(
-                    animationProgress,
-                    fKeyData.keyFrame.x, fKeyData.keyFrame.y,
-                    false, false))
-                {
-                    facialExpressionName = fKeyData.facialExpressionName;
-                }
-            }
-        }
-
-        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ê‰ï¿½
-        if (animationData.seKeys != null)
-        {
-            for (int i = 0; i < animationData.
-                seKeys.Length; i++)
-            {
-                AttackMotionData.SEKey current =
-                    animationData.seKeys[i];
-
-                float shiftedprevAnimationProgress = prevAnimationProgress;
-                if (animationProgress < prevAnimationProgress)
-                {
-                    shiftedprevAnimationProgress -= 1;
-                }
-
-                if (KX_netUtil.IsIntoRange(
-                    current.keyFrame,
-                    shiftedprevAnimationProgress, animationProgress,
-                    false, false))
-                {
-                    PlayAsSE(current.se);
-                }
-            }
-        }
-
-        prevAnimationProgress = animationProgress;
-
-        //?ï¿½ï¿½f?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½Ìƒe?ï¿½ï¿½N?ï¿½ï¿½X?ï¿½ï¿½`?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½É“\?ï¿½ï¿½?ï¿½ï¿½
-        for (int i = 0; i < meshes.Length; i++)
-        {
-            TextureSendData current = meshes[i];
-            current.meshRenderer.materials[current.index].
-                SetTexture(current.propertyName, data.GetDefaultTexture(i));
-        }
-        //?ï¿½ï¿½f?ï¿½ï¿½t?ï¿½ï¿½H?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½g?ï¿½ï¿½ÌƒX?ï¿½ï¿½v?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½v?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½_?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½É“\?ï¿½ï¿½?ï¿½ï¿½
-        for (int i = 0; i < sprites.Length; i++)
-        {
-            SpriteSendData current = sprites[i];
-            if (current.isMainSprite)
-            {
-                current.spriteRenderer.sprite = data.GetDefaultSprite(i);
-            }
-            else
-            {
-                current.spriteRenderer.material.
-                    SetTexture(current.propertyName, data.GetDefaultSprite(i).texture);
-            }
-        }
-
-        //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½İ‚Ìï¿½Ô‚É‚ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½\?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½æ“¾
-        CharaData.FacialExpression facialData =
-            data.SearchFacialExpression(facialExpressionName);
-        //?ï¿½ï¿½\?ï¿½ï¿½?ï¿½ï¿½Ìƒe?ï¿½ï¿½N?ï¿½ï¿½X?ï¿½ï¿½`?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½f?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½É“\?ï¿½ï¿½?ï¿½ï¿½
-        if (facialData.indexAndTextures != null)
-        {
-            for (int i = 0; i < facialData.indexAndTextures.Length; i++)
-            {
-                CharaData.IndexAndTexture texData = facialData.indexAndTextures[i];
-                TextureSendData current = meshes[texData.index];
-                current.meshRenderer.materials[current.index].
-                    SetTexture(current.propertyName, texData.texture);
-            }
-        }
-        //?ï¿½ï¿½\?ï¿½ï¿½?ï¿½ï¿½ÌƒX?ï¿½ï¿½v?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½X?ï¿½ï¿½v?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½C?ï¿½ï¿½g?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½_?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½[?ï¿½ï¿½É“\?ï¿½ï¿½?ï¿½ï¿½
-        if (facialData.indexAndSprites != null)
-        {
-            for (int i = 0; i < facialData.indexAndSprites.Length; i++)
-            {
-                CharaData.IndexAndSprite spriteData = facialData.indexAndSprites[i];
-                SpriteSendData current = sprites[spriteData.index];
-                if (current.isMainSprite)
-                {
-                    current.spriteRenderer.sprite = spriteData.sprite;
-                }
-                else
-                {
-                    current.spriteRenderer.material.
-                        SetTexture(current.propertyName, spriteData.sprite.texture);
-                }
-            }
-        }
-    }
-
-    //?ï¿½ï¿½ßÚ‚ï¿½?ï¿½ï¿½?ï¿½ï¿½Ñ”ÍˆÍU?ï¿½ï¿½?ï¿½ï¿½
-    void MeleeAttack(AttackMotionData.MeleeAttackData attackData, string cursorName)
-    {
-        Array.Resize(ref meleeAttackDatas, meleeAttackDatas.Length + 1);
-        meleeAttackDatas[meleeAttackDatas.Length - 1].data = attackData;
-        meleeAttackDatas[meleeAttackDatas.Length - 1].cursorName = cursorName;
-    }
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½U?ï¿½ï¿½?ï¿½ï¿½
-    void Shot(AttackMotionData.ShotData shotData, string cursorName, bool postMove)
-    {
-        Array.Resize(ref shotDatas, shotDatas.Length + 1);
-        shotDatas[shotDatas.Length - 1].data = shotData;
-        shotDatas[shotDatas.Length - 1].cursorName = cursorName;
-        shotDatas[shotDatas.Length - 1].postMove = postMove;
-        shotDatas[shotDatas.Length - 1].used = false;
-    }
-    //?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½LiveEntity?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½Ê‰ï¿½?ï¿½ï¿½?ï¿½ï¿½Â‚ç‚·
+    //??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½LiveEntity??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½??¿½?¿½Ê‰ï¿½??¿½?¿½??¿½?¿½Â‚ç‚·
     public void PlayAsSE(AudioClip clip)
     {
         GetComponent<AudioSource>().PlayOneShot(clip);
+    }
+    public void SetDirection(float setDirection)
+    {
+        if (isAllowCassetteUpdate)
+        {
+            direction = setDirection;
+        }
+    }
+    public void SetCameraAngle(float setCameraAngle)
+    {
+        if (updating)
+        {
+            cameraAngle = setCameraAngle;
+        }
     }
 
     public static void Spawn(LiveEntity liveEntity,

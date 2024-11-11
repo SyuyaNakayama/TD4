@@ -1,36 +1,36 @@
 using System;
 using UnityEngine;
 
-public class Enemy : LiveEntity
+public class Enemy : CharacterCassette
 {
     [SerializeField]
     Sensor sensor;
     protected Vector3 targetCursor;
 
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
-        //UŒ‚“®ì’†‚Å‚È‚¢‚ÉŠl•¨‚ğŒ©‚Â‚¯‚½‚çUŒ‚“®ì‚Ö
+        //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ì’†ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½ÉŠlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (!IsAttacking() && GetNearestTarget() != null)
         {
-            //‘_‚¤
+            //ï¿½_ï¿½ï¿½
             TargetAimY(GetNearestTarget().transform.position);
-            //UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ğÄ¶
+            //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
             SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
     }
 
-    //Œ©‚Â‚¯‚½LiveEntity‚Ì’†‚©‚ç“G‚ğ‘I•Ê
+    //ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½LiveEntityï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½Iï¿½ï¿½
     public LiveEntity[] GetTargets()
     {
         LiveEntity[] ret = { };
         LiveEntity[] detectedLiveEntities = sensor.GetTargets();
 
-        //teamID‚ªˆá‚¤‚à‚Ì‚¾‚¯‘I•Ê
+        //teamIDï¿½ï¿½ï¿½á‚¤ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
         for (int i = 0; i < detectedLiveEntities.Length; i++)
         {
-            if (detectedLiveEntities[i].GetTeamID() != GetTeamID())
+            if (detectedLiveEntities[i].GetTeamID() != GetLiveEntity().GetTeamID())
             {
-                //”z—ñ‚É’Ç‰Á
+                //ï¿½zï¿½ï¿½É’Ç‰ï¿½
                 Array.Resize(ref ret, ret.Length + 1);
                 ret[ret.Length - 1] = detectedLiveEntities[i];
             }
@@ -39,18 +39,18 @@ public class Enemy : LiveEntity
         return ret;
     }
 
-    //Œ©‚Â‚¯‚½LiveEntity‚Ì’†‚©‚ç’‡ŠÔ‚ğ‘I•Ê
+    //ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½LiveEntityï¿½Ì’ï¿½ï¿½ï¿½ï¿½ç’‡ï¿½Ô‚ï¿½Iï¿½ï¿½
     public LiveEntity[] GetFriends()
     {
         LiveEntity[] ret = { };
         LiveEntity[] detectedLiveEntities = sensor.GetTargets();
 
-        //teamID‚ª“¯‚¶‚à‚Ì‚¾‚¯‘I•Ê
+        //teamIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
         for (int i = 0; i < detectedLiveEntities.Length; i++)
         {
-            if (detectedLiveEntities[i].GetTeamID() == GetTeamID())
+            if (detectedLiveEntities[i].GetTeamID() == GetLiveEntity().GetTeamID())
             {
-                //”z—ñ‚É‘ã“ü
+                //ï¿½zï¿½ï¿½É‘ï¿½ï¿½
                 Array.Resize(ref ret, ret.Length + 1);
                 ret[ret.Length - 1] = detectedLiveEntities[i];
             }
@@ -59,13 +59,13 @@ public class Enemy : LiveEntity
         return ret;
     }
 
-    //Å‚à‹ß‚¢•W“I‚ğæ“¾
+    //ï¿½Å‚ï¿½ï¿½ß‚ï¿½ï¿½Wï¿½Iï¿½ï¿½ï¿½æ“¾
     public LiveEntity GetNearestTarget()
     {
         LiveEntity ret = null;
         LiveEntity[] targets = GetTargets();
 
-        //Å‚à‹ß‚¢‚à‚Ì‚ğret‚É“ü‚ê‚é
+        //ï¿½Å‚ï¿½ï¿½ß‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½retï¿½É“ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < targets.Length; i++)
         {
             if (ret == null ||
@@ -79,10 +79,10 @@ public class Enemy : LiveEntity
         return ret;
     }
 
-    //•W“I‚Ì•ûŒü‚ğŒü‚­iY²‚Ì‚İj
+    //ï¿½Wï¿½Iï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iYï¿½ï¿½ï¿½Ì‚İj
     protected void TargetAimY(Vector3 targetWorldPos, float intensity = 1)
     {
-        //‘_‚¤
+        //ï¿½_ï¿½ï¿½
         Vector3 targetLocalPos = transform.InverseTransformPoint(
             targetWorldPos);
         transform.localRotation = Quaternion.Slerp(

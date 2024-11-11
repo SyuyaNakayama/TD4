@@ -40,100 +40,109 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     TMP_Text resultReviveCount;
     [SerializeField]
-    Player player;
+    LiveEntity liveEntity;
 
     void FixedUpdate()
     {
-        //“®‚¯‚éó‘Ô‚Å‚Ì‚İ•\¦
-        playPartCanvas.enabled = player.IsLive() && !player.GetGoaled();
-        //€‚ñ‚¾‚Ì‚İ•\¦
-        gameOverCanvas.enabled = player.IsDestructed();
-        //ƒS[ƒ‹‚µ‚½‚Ì‚İ•\¦
-        goalCanvas.enabled = player.GetGoaled();
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚Å‚Ì‚İ•\ï¿½ï¿½
+        playPartCanvas.enabled = liveEntity.IsLive() && !liveEntity.GetGoaled();
+        //ï¿½ï¿½ï¿½ñ‚¾ï¿½ï¿½Ì‚İ•\ï¿½ï¿½
+        gameOverCanvas.enabled = liveEntity.IsDestructed();
+        //ï¿½Sï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚İ•\ï¿½ï¿½
+        goalCanvas.enabled = liveEntity.GetGoaled();
 
-        //EMPTY•\¦‚ÌˆÊ’u‚Æ‘å‚«‚³A•\¦‚³‚ê‚éƒ^ƒCƒ~ƒ“ƒO‚ğ§Œä
-        RectTransform emptyRect =
-                emptyImage.gameObject.GetComponent<RectTransform>();
-        emptyRect.anchoredPosition = currentCharaIconPos;
-        emptyRect.localScale = new Vector3(1, 1, 1) * currentCharaIconSize;
+        Player player = null;
 
-        emptyImage.enabled = player.GetAttackReactionFrame() > 0
-            && player.GetCharacters().Length <= 0;
-
-        //ƒAƒCƒRƒ“‚ÌŒã‚ë‚É‚ ‚é•‚¢ƒgƒŒ[‚ÌˆÊ’u‚Æ‘å‚«‚³‚ğ’²®
-        for (int i = 0; i < Player.maxTeamNum; i++)
+        if (liveEntity.GetCassette())
         {
-            Image currentTray = charaImageTrays[i];
-            RectTransform currentTrayRect =
-                currentTray.gameObject.GetComponent<RectTransform>();
+            player = liveEntity.GetCassette().GetComponent<Player>();
+        }
+        if (player)
+        {
+            //EMPTYï¿½\ï¿½ï¿½ï¿½ÌˆÊ’uï¿½Æ‘å‚«ï¿½ï¿½ï¿½Aï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½~ï¿½ï¿½ï¿½Oï¿½ğ§Œï¿½
+            RectTransform emptyRect =
+                    emptyImage.gameObject.GetComponent<RectTransform>();
+            emptyRect.anchoredPosition = currentCharaIconPos;
+            emptyRect.localScale = new Vector3(1, 1, 1) * currentCharaIconSize;
 
-            Vector2 currentPosition = currentCharaIconPos;
-            Vector3 currentScale = new Vector3(1, 1, 1);
-            if (i == 0)
+            emptyImage.enabled = player.GetAttackReactionFrame() > 0
+                && player.GetWeapons().Length <= 0;
+
+            //ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ÌŒï¿½ï¿½É‚ï¿½ï¿½é•ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ÌˆÊ’uï¿½Æ‘å‚«ï¿½ï¿½ï¿½ğ’²ï¿½
+            for (int i = 0; i < Player.maxTeamNum; i++)
             {
-                currentScale *= currentCharaIconSize;
+                Image currentTray = charaImageTrays[i];
+                RectTransform currentTrayRect =
+                    currentTray.gameObject.GetComponent<RectTransform>();
+
+                Vector2 currentPosition = currentCharaIconPos;
+                Vector3 currentScale = new Vector3(1, 1, 1);
+                if (i == 0)
+                {
+                    currentScale *= currentCharaIconSize;
+                }
+                else
+                {
+                    currentPosition -= new Vector2(0,
+                        (currentCharaIconSize + (subCharaIconSize) * (i - 1))
+                        * imgEXRate + (tabSize) * i);
+                    currentScale *= subCharaIconSize;
+                }
+                currentTrayRect.anchoredPosition = currentPosition;
+                currentTrayRect.localScale = currentScale;
             }
-            else
+
+            //ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ÌˆÊ’uï¿½Æ‘å‚«ï¿½ï¿½ï¿½ğ’²ï¿½
+            for (int i = 0; i < Player.maxTeamNum; i++)
             {
-                currentPosition -= new Vector2(0,
-                    (currentCharaIconSize + (subCharaIconSize) * (i - 1))
-                    * imgEXRate + (tabSize) * i);
-                currentScale *= subCharaIconSize;
+                int currentIndex = Mathf.RoundToInt(
+                    Mathf.Repeat(i - player.GetCurrentCharaIndex(),
+                    Mathf.Max(player.GetWeapons().Length, 1)));
+
+                Image currentIcon = charaImages[i];
+                RectTransform currentTrayRect =
+                    currentIcon.gameObject.GetComponent<RectTransform>();
+
+                Vector2 currentPosition = currentCharaIconPos;
+                Vector3 currentScale = new Vector3(1, 1, 1);
+                if (currentIndex == 0)
+                {
+                    currentScale *= currentCharaIconSize;
+                }
+                else
+                {
+                    currentPosition -= new Vector2(0,
+                        (currentCharaIconSize + (subCharaIconSize) * (currentIndex - 1))
+                        * imgEXRate + (tabSize) * currentIndex);
+                    currentScale *= subCharaIconSize;
+                }
+                currentTrayRect.anchoredPosition =
+                    Vector2.Lerp(currentTrayRect.anchoredPosition, currentPosition,
+                    iconSlideIntensity);
+                currentTrayRect.localScale =
+                    Vector3.Lerp(currentTrayRect.localScale, currentScale,
+                    iconSlideIntensity);
+
+                if (i < player.GetWeapons().Length)
+                {
+                    currentIcon.sprite = player.GetWeapons()[i].GetIconGraph();
+                }
+                else
+                {
+                    currentIcon.sprite = null;
+                    currentTrayRect.localScale = Vector3.zero;
+                }
             }
-            currentTrayRect.anchoredPosition = currentPosition;
-            currentTrayRect.localScale = currentScale;
         }
 
-        //ƒAƒCƒRƒ“‚ÌˆÊ’u‚Æ‘å‚«‚³‚ğ’²®
-        for (int i = 0; i < Player.maxTeamNum; i++)
-        {
-            int currentIndex = Mathf.RoundToInt(
-                Mathf.Repeat(i - player.GetCurrentCharaIndex(),
-                Mathf.Max(player.GetCharacters().Length, 1)));
+        //ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î•ï¿½ï¿½ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½\ï¿½ï¿½
+        reviveImage.gameObject.SetActive(liveEntity.GetReviveCount() > 0);
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½É•ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½\ï¿½ï¿½
+        reviveCount.text = liveEntity.GetReviveCount().ToString();
 
-            Image currentIcon = charaImages[i];
-            RectTransform currentTrayRect =
-                currentIcon.gameObject.GetComponent<RectTransform>();
-
-            Vector2 currentPosition = currentCharaIconPos;
-            Vector3 currentScale = new Vector3(1, 1, 1);
-            if (currentIndex == 0)
-            {
-                currentScale *= currentCharaIconSize;
-            }
-            else
-            {
-                currentPosition -= new Vector2(0,
-                    (currentCharaIconSize + (subCharaIconSize) * (currentIndex - 1))
-                    * imgEXRate + (tabSize) * currentIndex);
-                currentScale *= subCharaIconSize;
-            }
-            currentTrayRect.anchoredPosition =
-                Vector2.Lerp(currentTrayRect.anchoredPosition, currentPosition,
-                iconSlideIntensity);
-            currentTrayRect.localScale =
-                Vector3.Lerp(currentTrayRect.localScale, currentScale,
-                iconSlideIntensity);
-
-            if (i < player.GetCharacters().Length)
-            {
-                currentIcon.sprite = player.GetCharacters()[i].GetIconGraph();
-            }
-            else
-            {
-                currentIcon.sprite = null;
-                currentTrayRect.localScale = Vector3.zero;
-            }
-        }
-
-        //ˆê“x‚à€‚ñ‚Å‚¢‚È‚¯‚ê‚Î•œŠˆƒJƒEƒ“ƒg‚ğ”ñ•\¦
-        reviveImage.gameObject.SetActive(player.GetReviveCount() > 0);
-        //•œŠˆƒJƒEƒ“ƒg‚É•œŠˆ‰ñ”‚ğ•\¦
-        reviveCount.text = player.GetReviveCount().ToString();
-
-        //ƒŠƒUƒ‹ƒg‚ÌƒLƒ‹ƒJƒEƒ“ƒg‚ÉŒ‚”j”‚ğ•\¦
-        resultKillCount.text = player.GetKillCount().ToString();
-        //ƒŠƒUƒ‹ƒg‚Ì•œŠˆƒJƒEƒ“ƒg‚É‚à•œŠˆ‰ñ”‚ğ•\¦
-        resultReviveCount.text = player.GetReviveCount().ToString();
+        //ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½gï¿½ÌƒLï¿½ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ÉŒï¿½ï¿½jï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½
+        resultKillCount.text = liveEntity.GetKillCount().ToString();
+        //ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½gï¿½Ì•ï¿½ï¿½ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½\ï¿½ï¿½
+        resultReviveCount.text = liveEntity.GetReviveCount().ToString();
     }
 }

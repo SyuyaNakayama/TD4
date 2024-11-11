@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ƒLƒ‚ƒCƒ€
+//ï¿½Lï¿½ï¿½ï¿½Cï¿½ï¿½
 public class Kimoime : Enemy
 {
     const float stickRadius = 0.5f;
     const float stickPower = 10;
 
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
         LiveEntity[] targets = GetTargets();
-        for(int i = 0;i < targets.Length;i++)
+        for (int i = 0; i < targets.Length; i++)
         {
             LiveEntity target = targets[i];
-            if(Vector3.Magnitude(transform.InverseTransformPoint(
+            if (Vector3.Magnitude(transform.InverseTransformPoint(
                 target.transform.position)) <= stickRadius)
             {
-            target.Move(
-                target.transform.InverseTransformPoint(transform.position)
-                * stickPower);
+                target.SetMovement(
+                    target.transform.InverseTransformPoint(transform.position)
+                    * stickPower);
             }
         }
     }

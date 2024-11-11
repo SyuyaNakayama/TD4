@@ -19,20 +19,20 @@ public class L_P_Pilot : Boss
         {
             TargetChange();
             TargetAimY(targetCursor, flipIntensityHard);
-            Move((transform.InverseTransformPoint(targetCursor) - farTargetSight)
+            GetLiveEntity().SetMovement((transform.InverseTransformPoint(targetCursor) - farTargetSight)
                 * targetingIntensitySoft / Time.deltaTime);
         }
         if (IsUniqueActing("nearSight"))
         {
             TargetChange();
             TargetAimY(targetCursor, flipIntensityHard);
-            Move((transform.InverseTransformPoint(targetCursor) - nearTargetSight)
+            GetLiveEntity().SetMovement((transform.InverseTransformPoint(targetCursor) - nearTargetSight)
                 * targetingIntensityHard / Time.deltaTime);
         }
         if (IsUniqueActing("upSight"))
         {
             TargetChange();
-            Move((transform.InverseTransformPoint(targetCursor) - upTargetSight)
+            GetLiveEntity().SetMovement((transform.InverseTransformPoint(targetCursor) - upTargetSight)
                 * targetingIntensitySoft / Time.deltaTime);
         }
     }

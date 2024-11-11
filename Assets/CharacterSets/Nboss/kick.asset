@@ -31,6 +31,10 @@ MonoBehaviour:
       hitback: 60
       ghostTime: 0
     scale: 0.7
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   - name: kick
     attackData:
       power: 7
@@ -39,10 +43,17 @@ MonoBehaviour:
       hitback: 60
       ghostTime: 0
     scale: 0.7
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u30AD\u30C3\u30AF"
     totalFrame: 120
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.75, y: 0.8}
       dataName: body
@@ -90,6 +101,11 @@ MonoBehaviour:
         z: 0
       easeType: 1
       easePow: 3
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys:
     - keyFrame: {x: 0, y: 0.75}
       uniqueActName: hardAim
@@ -98,4 +114,5 @@ MonoBehaviour:
     - {x: 0.75, y: 0.9}
     disAllowGroundSetKeys: []
     seKeys: []
+    uniqueMotionStateKeys: []
     animationKeys: []

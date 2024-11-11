@@ -22,8 +22,8 @@ public class LiveEntityHUD : MonoBehaviour
 
     void FixedUpdate()
     {
-        //‘Ì—ÍƒQ[ƒW‚ğXV
-        Color lifeGaugeColor = liveEntity.GetData().GetThemeColor();
+        //ï¿½Ì—ÍƒQï¿½[ï¿½Wï¿½ï¿½ï¿½Xï¿½V
+        Color lifeGaugeColor = liveEntity.GetCassetteData().GetThemeColor();
         lifeGaugeColor.a = 1;
         lifeGauge.material.SetColor("_GaugeColor1", lifeGaugeColor);
         lifeGauge.material.SetColor("_GaugeColor2",
@@ -35,7 +35,7 @@ public class LiveEntityHUD : MonoBehaviour
                 lifeGauge.material.GetColor("_BackGroundColor")
             ));
 
-        lifeGauge.material.SetFloat("_FillAmount1", liveEntity.GetHPAmount());
+        lifeGauge.material.SetFloat("_FillAmount1", liveEntity.GetLife());
 
         if (lifeGauge.material.GetFloat("_FillAmount1")
                          <= lifeGauge.material.GetFloat("_FillAmount2"))
@@ -49,7 +49,7 @@ public class LiveEntityHUD : MonoBehaviour
                 lifeGauge.material.GetFloat("_FillAmount1"));
         }
 
-        //“d—ÍƒQ[ƒW‚ğXV
+        //ï¿½dï¿½ÍƒQï¿½[ï¿½Wï¿½ï¿½ï¿½Xï¿½V
         Color batteryGaugeColor = new Color(0, 0.8f, 0, 1);
         if (liveEntity.IsShield())
         {
@@ -68,7 +68,7 @@ public class LiveEntityHUD : MonoBehaviour
             ));
         batteryGauge.material.SetFloat("_FillAmount1", liveEntity.GetBatteryAmount());
         batteryGauge.material.SetFloat("_FillAmount2", 0);
-        //“d—ÍƒQ[ƒW‚ğ“KØ‚ÈˆÊ’u‚É
+        //ï¿½dï¿½ÍƒQï¿½[ï¿½Wï¿½ï¿½Kï¿½Ø‚ÈˆÊ’uï¿½ï¿½
         Vector3 targetPos = batteryGaugePos;
         if (liveEntity.GetBatteryAmount() >= 1)
         {
@@ -78,8 +78,8 @@ public class LiveEntityHUD : MonoBehaviour
             batteryGauge.transform.localPosition, targetPos,
             batteryGaugeShiftIntensity);
 
-        //ƒLƒƒƒ‰–¼•\¦‚ğXV
-        name.text = liveEntity.GetData().GetCharaName();
+        //ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½V
+        name.text = liveEntity.GetCassetteData().GetCharaName();
     }
 
     void OnWillRenderObject()

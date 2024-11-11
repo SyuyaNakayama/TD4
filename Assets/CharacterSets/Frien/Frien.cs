@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ƒtƒŒƒ“
+//ï¿½tï¿½ï¿½ï¿½ï¿½
 public class Frien : Enemy
 {
     const float moveSpeed = 1;
 
     bool awake;
 
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
-        //‚Ü‚¸üˆÍ‚É‚¢‚éŒ©•û‚ğƒT[ƒ`
+        //ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Í‚É‚ï¿½ï¿½éŒ©ï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½[ï¿½`
         LiveEntity[] friends = GetFriends();
-        //ƒT[ƒ`‚µ‚½–¡•û‚Ì“àˆê‘Ì‚Å‚à€‚ñ‚Å‚¢‚½‚ç–Ú‚ğŠo‚Ü‚·
+        //ï¿½Tï¿½[ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½ï¿½Ì‚Å‚ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ï¿½ï¿½oï¿½Ü‚ï¿½
         for (int i = 0; i < friends.Length; i++)
         {
             if (!friends[i].IsLive())
@@ -23,19 +23,19 @@ public class Frien : Enemy
             }
         }
 
-        //–Ú‚ğŠo‚Ü‚µ‚Ä‚¢‚é
+        //ï¿½Ú‚ï¿½ï¿½oï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½é
         if (awake)
         {
-            //•\î‚ğ•Ï‚¦‚é
+            //ï¿½\ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½
             facialExpressionName = "awake";
-            //‹ß‚­‚É“G‚ª‚¢‚½‚çÚ‹ß
+            //ï¿½ß‚ï¿½ï¿½É“Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‹ï¿½
             if (GetNearestTarget() != null)
             {
                 targetCursor = transform.InverseTransformPoint(
                 GetNearestTarget().transform.position).normalized;
-                Move(GetMovement() + targetCursor * moveSpeed);
+                GetLiveEntity().SetMovement(GetLiveEntity().GetMovement() + targetCursor * moveSpeed);
             }
-            //í‚ÉUŒ‚
+            //ï¿½ï¿½ÉUï¿½ï¿½
             if (!IsAttacking())
             {
                 SetAttackMotion(GetData().GetDefaultAttackMotionName());

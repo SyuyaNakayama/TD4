@@ -22,9 +22,13 @@ public class CharaChip : Item
         label.sprite = data.GetIconGraph();
     }
 
-    protected override void ItemActivation(Player player)
+    protected override void ItemActivation(LiveEntity liveEntity)
     {
-        player.EquipCharacter(data);
+        Player player = liveEntity.GetCassette().GetComponent<Player>();
+        if (player)
+        {
+            player.EquipCharacter(data);
+        }
     }
 
     public void SetData(CharaData setData)

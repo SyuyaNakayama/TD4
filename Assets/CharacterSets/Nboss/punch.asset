@@ -31,6 +31,10 @@ MonoBehaviour:
       hitback: 60
       ghostTime: 0
     scale: 0.7
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   - name: punch
     attackData:
       power: 7
@@ -39,10 +43,17 @@ MonoBehaviour:
       hitback: 60
       ghostTime: 0
     scale: 0.7
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u30D1\u30F3\u30C1"
     totalFrame: 60
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.5, y: 0.6}
       dataName: body
@@ -66,6 +77,11 @@ MonoBehaviour:
         z: 0
       easeType: 1
       easePow: 3
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys:
     - keyFrame: {x: 0, y: 0.5}
       uniqueActName: hardAim
@@ -73,4 +89,5 @@ MonoBehaviour:
     - {x: 0.5, y: 0.7}
     disAllowGroundSetKeys: []
     seKeys: []
+    uniqueMotionStateKeys: []
     animationKeys: []

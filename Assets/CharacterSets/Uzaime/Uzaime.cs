@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ƒEƒUƒCƒ€
+//ï¿½Eï¿½Uï¿½Cï¿½ï¿½
 public class Uzaime : Enemy
 {
     const float stickRadius = 0.5f;
     const float stickPower = 10;
 
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
         LiveEntity[] targets = GetTargets();
         for (int i = 0; i < targets.Length; i++)
@@ -17,16 +17,16 @@ public class Uzaime : Enemy
             if (Vector3.Magnitude(transform.InverseTransformPoint(
                 target.transform.position)) <= stickRadius)
             {
-                target.Move(
+                target.SetMovement(
                     target.transform.InverseTransformPoint(transform.position)
                     * stickPower);
             }
-            //UŒ‚“®ì’†‚Å‚È‚¢Žž‚ÉŠl•¨‚ðŒ©‚Â‚¯‚½‚çUŒ‚“®ì‚Ö
+            //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ì’†ï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½ÉŠlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             else if (!IsAttacking() && GetNearestTarget() != null)
             {
-                //‘_‚¤
+                //ï¿½_ï¿½ï¿½
                 TargetAimY(GetNearestTarget().transform.position);
-                //UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ðÄ¶
+                //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
                 SetAttackMotion(GetData().GetDefaultAttackMotionName());
             }
         }

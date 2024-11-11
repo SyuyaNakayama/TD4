@@ -5,12 +5,34 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CreateAttackMotionData")]
 public class AttackMotionData : ScriptableObject
 {
+    public enum TriggerInputType
+    {
+        tap,
+        preMove,
+        move,
+        postMove,
+        preWalk,
+        walk,
+        postWalk,
+        jump,
+        nutral,
+    }
+
     [System.Serializable]
     public struct Cursor
     {
         public string name;
         public Vector3 pos;
         public Vector3 direction;
+    }
+    [System.Serializable]
+    public struct CursorSweepData
+    {
+        public string cursorName;
+        public string startCursorName;
+        public string endCursorName;
+        public KX_netUtil.EaseType easeType;
+        public float easePow;
     }
     [System.Serializable]
     public struct AttackData
@@ -27,9 +49,13 @@ public class AttackMotionData : ScriptableObject
         public float speed;
         public int lifetime;
         public bool setGround;
-        public bool yBillBoard;
-        public bool flatBillBoard;
+    }
+    [System.Serializable]
+    public struct BillboardData
+    {
         public Sprite sprite;
+        public bool yBillboard;
+        public bool flatBillboard;
     }
 
     [System.Serializable]
@@ -38,6 +64,7 @@ public class AttackMotionData : ScriptableObject
         public string name;
         public AttackData attackData;
         public float scale;
+        public BillboardData billboardData;
     }
     [System.Serializable]
     public struct ShotData
@@ -45,6 +72,7 @@ public class AttackMotionData : ScriptableObject
         public string name;
         public AttackData attackData;
         public float scale;
+        public BillboardData billboardData;
         public ProjectileData projectileData;
     }
     [System.Serializable]
@@ -65,16 +93,35 @@ public class AttackMotionData : ScriptableObject
         public float easePow;
     }
     [System.Serializable]
+    public struct ImpulseMoveKey
+    {
+        public Vector2 keyFrame;
+        public Vector3 moveVec;
+        public KX_netUtil.AxisSwitch ignoreAxis;
+    }
+    [System.Serializable]
+    public struct CursorSweepKey
+    {
+        public Vector2 keyFrame;
+        public CursorSweepData cursorSweepData;
+    }
+    [System.Serializable]
+    public struct UniqueMoveSpeedKey
+    {
+        public Vector2 keyFrame;
+        public float moveSpeed;
+    }
+    [System.Serializable]
+    public struct UniqueDragKey
+    {
+        public Vector2 keyFrame;
+        public float drag;
+    }
+    [System.Serializable]
     public struct UniqueActionKey
     {
         public Vector2 keyFrame;
         public string uniqueActName;
-    }
-    [System.Serializable]
-    public struct SEKey
-    {
-        public float keyFrame;
-        public AudioClip se;
     }
     [System.Serializable]
     public struct AnimationKey
@@ -88,13 +135,21 @@ public class AttackMotionData : ScriptableObject
     {
         public string name;
         public int totalFrame;
+        public TriggerInputType triggerInputType;
+        public Vector2[] attackMotionLockKeys;
         public AttackKey[] meleeAttackKeys;
         public AttackKey[] shotKeys;
         public MoveKey[] moveKeys;
+        public ImpulseMoveKey[] impulseMoveKeys;
+        public CursorSweepKey[] cursorSweepKeys;
+        public Vector2[] directionLockKeys;
+        public UniqueMoveSpeedKey[] uniqueMoveSpeedKeys;
+        public UniqueDragKey[] uniqueDragKeys;
         public UniqueActionKey[] uniqueActionKeys;
         public Vector2[] shieldKeys;
         public Vector2[] disAllowGroundSetKeys;
-        public SEKey[] seKeys;
+        public CharaData.SEKey[] seKeys;
+        public CharaData.UniqueMotionStateKey[] uniqueMotionStateKeys;
         public AnimationKey[] animationKeys;
     }
     [SerializeField]

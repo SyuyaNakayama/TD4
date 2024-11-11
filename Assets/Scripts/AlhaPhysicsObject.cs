@@ -8,42 +8,52 @@ using UnityEngine;
 public class AlhaPhysicsObject : MonoBehaviour
 {
     Vector3 prevPos;
-    public Vector3 GetPrevPos()
-    {
-        return prevPos;
-    }
+    Vector3 move;
+    Vector3 prevMove;
     protected Vector3 movement;
     public Vector3 GetMovement()
     {
         return movement;
     }
-    Vector3 preMovement;
+    Vector3 prevMovement;
+    public Vector3 GetPrevMovement()
+    {
+        return prevMovement;
+    }
+    Vector3 pushBackedMovement;
+    public Vector3 GetPushBackedMovement()
+    {
+        return pushBackedMovement;
+    }
     [SerializeField]
     protected bool isAllowMove;
-    public Vector3 localGrandMove
+    Vector3 forceTranslate;
+    public Vector3 GetForceTranslate()
     {
-        get;
-        private set;
+        return forceTranslate;
     }
-    public Vector3 fieldMove
+    Vector3 prevForceTranslate;
+    public Vector3 GetPrevForceTranslate()
     {
-        get;
-        private set;
+        return prevForceTranslate;
     }
-    public Vector3 pushBackMove
+    Vector3 pushBackVec;
+    public Vector3 GetPushBackVec()
     {
-        get;
-        private set;
+        return pushBackVec;
     }
-    int landing;
+
+    protected Vector3 fieldMove;
+    protected Vector3 pushBackMove;
+    protected int landing;
     [SerializeField]
     protected float drag = 0.8f;
     [SerializeField]
     protected KX_netUtil.AxisSwitch dragAxis;
     [SerializeField]
-    protected float gravityScale;
+    protected Vector3 gravityVec;
     [SerializeField]
-    bool noGravity;
+    protected bool noGravity;
 
     void Awake()
     {
@@ -56,75 +66,93 @@ public class AlhaPhysicsObject : MonoBehaviour
     //注意！　Update()とは呼ばれる周期が異なるため周期ズレによる不具合に気を付けて下さい
     void FixedUpdate()
     {
-        APOUpdate();
-
-        //【重要】ここから「preMovement = movement;」までmovementの値を書き換えないこと
-        //movementをvelocityに変換
-        GetComponent<Rigidbody>().velocity =
-            transform.rotation * movement * transform.localScale.x;
-
-        Vector3 playerLocalPosPin = transform.InverseTransformPoint(prevPos);
-        prevPos = transform.position;
-
-        //ギミックによる移動に関する更新処理
-        GetComponent<Rigidbody>().velocity += fieldMove;
-        playerLocalPosPin += transform.InverseTransformPoint(transform.position + fieldMove * Time.deltaTime);
-        localGrandMove = -playerLocalPosPin;
-        fieldMove = Vector3.zero;
-
-        GetComponent<Rigidbody>().velocity += pushBackMove;
-        pushBackMove = Vector3.zero;
-
-        Vector3 movementDiff = movement - preMovement;
-        preMovement = movement;
-        //これ以降はmovementの値を書き換えて良い
-
-        //着地判定
-        landing = Mathf.Max(0, landing - 1);
-        Vector3 pushBackedMovement =
-            localGrandMove / Time.deltaTime + movementDiff;
-
-        if (Vector3.Magnitude(pushBackedMovement) < Vector3.Magnitude(movement))
-        {
-            if (Vector3.Dot(new Vector3(0, gravityScale, 0),
-            (Vector3.Lerp(movement, pushBackedMovement, 0.5f) - movement))
-            / Mathf.Pow(Vector3.Magnitude(new Vector3(0, -gravityScale, 0)), 2) > 0.75f)
-            {
-                landing = 3;
-            }
-            movement = Vector3.Lerp(movement, pushBackedMovement, 0.5f);
-        }
-
         //空気抵抗
+        float velocityDiffuse = Mathf.Max(drag, 0) + 1;
         if (dragAxis.x && dragAxis.y && dragAxis.z)
         {
-            movement *= drag;
+            movement /= velocityDiffuse;
         }
         else
         {
             if (dragAxis.x)
             {
-                movement.x *= drag;
+                movement.x /= velocityDiffuse;
             }
             if (dragAxis.y)
             {
-                movement.y *= drag;
+                movement.y /= velocityDiffuse;
             }
             if (dragAxis.z)
             {
-                movement.z *= drag;
+                movement.z /= velocityDiffuse;
             }
         }
         //重力
         if (!noGravity)
         {
-            movement += new Vector3(0, -gravityScale, 0);
+            movement += gravityVec;
         }
         noGravity = false;
+
+        Vector3 playerLocalPosPin = transform.InverseTransformPoint(prevPos);
+        playerLocalPosPin += transform.InverseTransformPoint(
+            transform.position + fieldMove * Time.deltaTime);
+        prevMove = move;
+        move = transform.position - prevPos;
+        prevPos = transform.position;
+
+        //壁などに押し返されたらmovementを減衰
+        Vector3 prevPushBackedMovement = pushBackedMovement;
+        pushBackedMovement =
+            -playerLocalPosPin / Time.deltaTime;
+        pushBackedMovement =
+            MinimizeMovement(prevMovement, pushBackedMovement);
+
+        //movement以外によって生じた移動をforceTranslateに格納
+        prevForceTranslate = forceTranslate;
+        forceTranslate = prevMove
+            - (transform.rotation * prevPushBackedMovement)
+            * transform.localScale.x * Time.deltaTime;
+
+        Vector3 holdPos = transform.position;
+        APOUpdate();
+        transform.position = holdPos;
+
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        //movementをvelocityに変換
+        rigidbody.velocity =
+            transform.rotation * movement * transform.localScale.x;
+        Vector3 movementDiff = movement - prevMovement;
+        prevMovement = movement;
+
+        Vector3 addedPushBackedMovement =
+        pushBackedMovement + movementDiff;
+
+        addedPushBackedMovement =
+            MinimizeMovement(movement, addedPushBackedMovement);
+
+        pushBackVec = addedPushBackedMovement - movement;
+
+        //着地判定
+        landing = Mathf.Max(0, landing - 1);
+        if (Vector3.Dot(-gravityVec, pushBackVec) > 0.01f)
+        {
+            landing = 1;
+        }
+
+        movement = addedPushBackedMovement;
+
+        //ギミックによる移動に関する更新処理
+        //空間ごと動いているものとみなして移動
+        rigidbody.velocity += fieldMove;
+        fieldMove = Vector3.zero;
+        //壁に押されたものとみなして移動
+        rigidbody.velocity += pushBackMove;
+        pushBackMove = Vector3.zero;
     }
 
     //動ける状態なら移動
-    public void Move(Vector3 setMovement)
+    public void SetMovement(Vector3 setMovement)
     {
         if (isAllowMove)
         {
@@ -141,15 +169,53 @@ public class AlhaPhysicsObject : MonoBehaviour
     {
         pushBackMove += force;
     }
-    //このフレームのみ重力の影響を受けなくする
-    public void SetNoGravity()
+    public void SetNoGravity(bool setNoGravity)
     {
-        noGravity = true;
+        noGravity = setNoGravity;
     }
     //着地しているか
     public bool IsLanding()
     {
         return landing > 0;
+    }
+
+    //
+    Vector3 MinimizeMovement(Vector3 setMovement, Vector3 setPushBackedMovement)
+    {
+        if (Mathf.Sign(setMovement.x) != Mathf.Sign(setPushBackedMovement.x))
+        {
+            setPushBackedMovement =
+                new Vector3(0, setPushBackedMovement.y, setPushBackedMovement.z);
+        }
+        else if (Mathf.Abs(setMovement.x) < Mathf.Abs(setPushBackedMovement.x))
+        {
+            setPushBackedMovement =
+                new Vector3(setMovement.x, setPushBackedMovement.y, setPushBackedMovement.z);
+        }
+
+        if (Mathf.Sign(setMovement.y) != Mathf.Sign(setPushBackedMovement.y))
+        {
+            setPushBackedMovement =
+                new Vector3(setPushBackedMovement.x, 0, setPushBackedMovement.z);
+        }
+        else if (Mathf.Abs(setMovement.y) < Mathf.Abs(setPushBackedMovement.y))
+        {
+            setPushBackedMovement =
+                new Vector3(setPushBackedMovement.x, setMovement.y, setPushBackedMovement.z);
+        }
+
+        if (Mathf.Sign(setMovement.z) != Mathf.Sign(setPushBackedMovement.z))
+        {
+            setPushBackedMovement =
+                new Vector3(setPushBackedMovement.x, setPushBackedMovement.y, 0);
+        }
+        else if (Mathf.Abs(setMovement.z) < Mathf.Abs(setPushBackedMovement.z))
+        {
+            setPushBackedMovement =
+                new Vector3(setPushBackedMovement.x, setPushBackedMovement.y, setMovement.z);
+        }
+
+        return setPushBackedMovement;
     }
 
     protected virtual void APOUpdate()
