@@ -69,8 +69,8 @@ public class Player : CharacterCassette
             attackReactionFrame = maxAttackReactionframe;
             if (weapons.Length > 0)
             {
-                SetAttackMotion(weapons[currentCharaIndex].SearchAttackMotion(
-                    weapons[currentCharaIndex].GetWeaponedAttackMotionName()));
+                SetAttackMotion(
+                    weapons[currentCharaIndex].GetWeaponedAttackMotionName());
                 currentCharaIndex++;
             }
         }

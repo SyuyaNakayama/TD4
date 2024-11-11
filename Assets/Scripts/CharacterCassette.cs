@@ -151,31 +151,19 @@ public class CharacterCassette : MonoBehaviour
                 {
                     if (liveEntity.IsLive())
                     {
-                        if (data.IsHitAttackMotion(
-                            AttackMotionData.TriggerInputType.nutral))
-                        {
-                            SetAttackMotion(data.SearchAttackMotion(
-                                AttackMotionData.TriggerInputType.nutral));
-                        }
+                        SetAttackMotion(
+                            AttackMotionData.TriggerInputType.nutral);
 
                         if (moveInputVec.x != 0 || moveInputVec.y != 0)
                         {
-                            if (data.IsHitAttackMotion(
-                            AttackMotionData.TriggerInputType.move))
-                            {
-                                SetAttackMotion(data.SearchAttackMotion(
-                                AttackMotionData.TriggerInputType.move));
-                            }
+                            SetAttackMotion(
+                                AttackMotionData.TriggerInputType.move);
                         }
 
                         if (IsAttackInput())
                         {
-                            if (data.IsHitAttackMotion(
-                            AttackMotionData.TriggerInputType.tap))
-                            {
-                                SetAttackMotion(data.SearchAttackMotion(
-                                AttackMotionData.TriggerInputType.tap));
-                            }
+                            SetAttackMotion(
+                                AttackMotionData.TriggerInputType.tap);
                         }
                         CharaUpdate();
                     }
@@ -213,6 +201,23 @@ public class CharacterCassette : MonoBehaviour
                 {
                     attackMotionData = null;
                     attackTimeFrame = 0;
+                }
+            }
+            else if (visual)
+            {
+                if (liveEntity.GetGoalAnimationTimeFrame() > 0)
+                {
+                    visual.animationName = "goal";
+                    visual.animationProgress =
+                        KX_netUtil.RangeMap(
+                        Mathf.Clamp(liveEntity.GetGoalAnimationTimeFrame(),
+                        0, LiveEntity.maxGoalAnimationTimeFrame),
+                        LiveEntity.maxGoalAnimationTimeFrame, 0,
+                        0, 1);
+                }
+                else
+                {
+                    visual.animationName = "result";
                 }
             }
 
@@ -277,14 +282,25 @@ public class CharacterCassette : MonoBehaviour
     {
     }
 
-    //攻撃モーションに移行
+    //該当する攻撃モーションがある場合はそれに移行
     protected void SetAttackMotion(string name)
     {
-        SetAttackMotion(data.SearchAttackMotion(name));
+        if (data.IsHitAttackMotion(name))
+        {
+            SetAttackMotion(data.SearchAttackMotion(name));
+        }
+    }
+    //該当する攻撃モーションがある場合はそれに移行
+    protected void SetAttackMotion(AttackMotionData.TriggerInputType triggerInputType)
+    {
+        if (data.IsHitAttackMotion(triggerInputType))
+        {
+            SetAttackMotion(data.SearchAttackMotion(triggerInputType));
+        }
     }
 
     //攻撃モーションに移行
-    protected void SetAttackMotion(AttackMotionData attackMotion)
+    void SetAttackMotion(AttackMotionData attackMotion)
     {
         if (!attackMotionLock)
         {

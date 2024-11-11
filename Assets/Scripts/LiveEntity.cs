@@ -57,7 +57,7 @@ public class LiveEntity : GeoGroObject
     public const int MaxCadaverLifeTimeFrame = 60;
     public const int FreezeCadaverLifeTimeFrame = 40;
     public const int DeadIndicateCadaverLifeTimeFrame = 43;
-    const int maxGoalAnimationTimeFrame = 120;
+    public const int maxGoalAnimationTimeFrame = 120;
     const int maxBattery = 300;
 
     private GameObject gameManager;
@@ -152,6 +152,10 @@ public class LiveEntity : GeoGroObject
         return cadaverLifeTimeFrame;
     }
     int goalAnimationTimeFrame;
+    public int GetGoalAnimationTimeFrame()
+    {
+        return goalAnimationTimeFrame;
+    }
     int killCount;
     public int GetKillCount()
     {
@@ -168,8 +172,6 @@ public class LiveEntity : GeoGroObject
         return goaled;
     }
     string[] uniqueActDatas = { };
-    protected string animationName;
-    protected float animationProgress;
     bool updating;
     public bool GetUpdating()
     {
@@ -322,13 +324,6 @@ public class LiveEntity : GeoGroObject
                 if (cadaverLifeTimeFrame > 0)
                 {
                     cadaverLifeTimeFrame--;
-                    animationName = "defeat";
-                    animationProgress =
-                        KX_netUtil.RangeMap(
-                        Mathf.Clamp(cadaverLifeTimeFrame,
-                        0, FreezeCadaverLifeTimeFrame),
-                        FreezeCadaverLifeTimeFrame, 0,
-                        0, 1);
                 }
                 else
                 {
@@ -358,17 +353,9 @@ public class LiveEntity : GeoGroObject
                 if (goalAnimationTimeFrame > 0)
                 {
                     goalAnimationTimeFrame--;
-                    animationName = "goal";
-                    animationProgress =
-                        KX_netUtil.RangeMap(
-                        Mathf.Clamp(goalAnimationTimeFrame,
-                        0, maxGoalAnimationTimeFrame),
-                        maxGoalAnimationTimeFrame, 0,
-                        0, 1);
                 }
                 else
                 {
-                    animationName = "result";
                     if (GetControlMap().GetJumpInput()
                         || GetControlMap().GetWeaponInput())
                     {
