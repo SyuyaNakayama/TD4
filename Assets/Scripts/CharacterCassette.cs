@@ -283,18 +283,17 @@ public class CharacterCassette : MonoBehaviour
     }
 
     //該当する攻撃モーションがある場合はそれに移行
-    protected void SetAttackMotion(string name, bool forceExecute = false)
+    protected void SetAttackMotion(string name)
     {
-        if (forceExecute || data.IsHitAttackMotion(name))
+        if (data.IsHitAttackMotion(name))
         {
             SetAttackMotion(data.SearchAttackMotion(name));
         }
     }
     //該当する攻撃モーションがある場合はそれに移行
-    protected void SetAttackMotion(AttackMotionData.TriggerInputType triggerInputType,
-        bool forceExecute = false)
+    protected void SetAttackMotion(AttackMotionData.TriggerInputType triggerInputType)
     {
-        if (forceExecute || data.IsHitAttackMotion(triggerInputType))
+        if (data.IsHitAttackMotion(triggerInputType))
         {
             SetAttackMotion(data.SearchAttackMotion(triggerInputType));
         }
