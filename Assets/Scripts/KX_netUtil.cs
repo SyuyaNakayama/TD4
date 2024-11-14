@@ -392,6 +392,21 @@ public class KX_netUtil : object
         }
         return angle3;
     }
+    //Vector2をそのまま入れられるAtan2関数
+    public static float Atan2(Vector2 vec)
+    {
+        return Mathf.Atan2(vec.x, vec.y);
+    }
+    //一周をいくつかの範囲に分割し、その角度がどのセグメントの範囲内にあるか
+    public static int RadToSegmentIndex(float rad, int divNum)
+    {
+        int ret = Mathf.RoundToInt(rad / (Mathf.PI * 2) * divNum);
+        if (ret < 0)
+        {
+            ret = ret + divNum;
+        }
+        return ret;
+    }
     //数値を0~1の範囲内に収める
     public static float Saturate(float value)
     {

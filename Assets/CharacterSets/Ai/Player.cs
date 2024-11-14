@@ -11,7 +11,7 @@ public class Player : CharacterCassette
     const float moveSpeed = 1.5f;
     const float jumpPower = 10.0f;
 
-    bool jumpTrigger;
+    bool prevJumpInput;
     bool attackTrigger;
     int attackReactionFrame;
     public int GetAttackReactionFrame()
@@ -53,12 +53,15 @@ public class Player : CharacterCassette
 
         //ジャンプの入力でジャンプ
         bool jumpInput = GetLiveEntity().GetControlMap().GetJumpInput();
-        if (jumpInput && !jumpTrigger)
+        if (jumpInput && !prevJumpInput)
         {
-            GetLiveEntity().SetMovement(new Vector3(GetLiveEntity().GetMovement().x, jumpPower, GetLiveEntity().GetMovement().z));
+            GetLiveEntity().SetMovement(new Vector3(
+                GetLiveEntity().GetMovement().x,
+                jumpPower,
+                GetLiveEntity().GetMovement().z));
             SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
-        jumpTrigger = jumpInput;
+        prevJumpInput = jumpInput;
 
         attackReactionFrame = Mathf.Max(0, attackReactionFrame - 1);
 
@@ -70,7 +73,7 @@ public class Player : CharacterCassette
             if (weapons.Length > 0)
             {
                 SetAttackMotion(
-                    weapons[currentCharaIndex].GetWeaponedAttackMotionName());
+                    weapons[currentCharaIndex].GetWeaponedAttackMotionName(), true);
                 currentCharaIndex++;
             }
         }

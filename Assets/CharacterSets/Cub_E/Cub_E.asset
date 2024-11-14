@@ -16,11 +16,13 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: e6b9fe41dffe145659b709f45151cd0d, type: 3}
   themeColor: {r: 1, g: 0.6, b: 0, a: 1}
   lifeRatio: 0.5
+  heavy: 0
   gravityScale: 0.5
   dragAxis:
     x: 1
     y: 0
     z: 1
+  scale: 1
   defaultAttackMotionName: upperFang_E
   weaponedAttackMotionName: upperFang
   attackMotions:
@@ -41,6 +43,13 @@ MonoBehaviour:
   defaultSprites:
   - {fileID: 21300000, guid: f61dfccc9ed049649bedec680e1b6521, type: 3}
   - {fileID: 21300000, guid: 7244f805993d53a428ee7856519cc4eb, type: 3}
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 292a26ed2015fd54e89bd47276b2e2f9, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: preAttack
     totalFrame: 0
@@ -55,6 +64,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 120, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 1
     - keyFrame: {x: 0.1, y: 0.2}
@@ -67,6 +81,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 240, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 1
     - keyFrame: {x: 0.2, y: 1}
@@ -79,6 +98,11 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 5
     - keyFrame: {x: 0, y: 1}
@@ -91,11 +115,18 @@ MonoBehaviour:
         position: {x: 0, y: -0.5, z: -0.5}
         eulerAngles: {x: -45, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: preAttack
+    seKeys: []
   - name: attack
     totalFrame: 0
     transformAnimationKeys:
@@ -109,6 +140,11 @@ MonoBehaviour:
         position: {x: 0, y: -0.5, z: -0.5}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 1
       easePow: 2
     - keyFrame: {x: 0.5, y: 1}
@@ -121,11 +157,18 @@ MonoBehaviour:
         position: {x: 0, y: -0.5, z: -0.5}
         eulerAngles: {x: -45, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 0
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: attack
+    seKeys: []
   - name: idol
     totalFrame: 90
     transformAnimationKeys:
@@ -139,6 +182,11 @@ MonoBehaviour:
         position: {x: 0, y: -0.5, z: -0.5}
         eulerAngles: {x: -40, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0.3, y: 1}
@@ -151,6 +199,11 @@ MonoBehaviour:
         position: {x: 0, y: -0.5, z: -0.5}
         eulerAngles: {x: -50, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0, y: 0.5}
@@ -163,6 +216,11 @@ MonoBehaviour:
         position: {x: 0, y: 0.5, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0.5, y: 1}
@@ -175,9 +233,16 @@ MonoBehaviour:
         position: {x: 0, y: 0.5, z: 0}
         eulerAngles: {x: 3, y: 0, z: 0}
         scale: {x: 1, y: 0.95, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: damage
     totalFrame: 5
     transformAnimationKeys:
@@ -191,6 +256,11 @@ MonoBehaviour:
         position: {x: 0, y: 0.2, z: -0.05}
         eulerAngles: {x: -20, y: 0, z: 0}
         scale: {x: 1, y: 1.5, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
     - keyFrame: {x: 0.4, y: 1}
@@ -203,11 +273,18 @@ MonoBehaviour:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: -20, y: 0, z: 0}
         scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: damage
+    seKeys: []
   - name: defeat
     totalFrame: 5
     transformAnimationKeys:
@@ -221,29 +298,60 @@ MonoBehaviour:
         position: {x: 0, y: -0.25, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
         scale: {x: 1.5, y: 0.5, z: 1.5}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
       easeType: 2
       easePow: 5
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: defeat
+    seKeys: []
   facialExpressions:
   - name: preAttack
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 00198c509dcd86c47893fbaf7b5daf8e, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 00198c509dcd86c47893fbaf7b5daf8e, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: attack
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: a296e1569bf9feb46a4c9ccd55acdb59, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: a296e1569bf9feb46a4c9ccd55acdb59, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: damage
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: a296e1569bf9feb46a4c9ccd55acdb59, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: a296e1569bf9feb46a4c9ccd55acdb59, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: defeat
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: c239b2874c7fd1f418ce4f5d9b77ab3e, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: c239b2874c7fd1f418ce4f5d9b77ab3e, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
