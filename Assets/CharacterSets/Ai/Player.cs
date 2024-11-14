@@ -73,7 +73,8 @@ public class Player : CharacterCassette
             if (weapons.Length > 0)
             {
                 SetAttackMotion(
-                    weapons[currentCharaIndex].GetWeaponedAttackMotionName(), true);
+                    weapons[currentCharaIndex].SearchAttackMotion(
+                    weapons[currentCharaIndex].GetWeaponedAttackMotionName()));
                 currentCharaIndex++;
             }
         }

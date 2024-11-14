@@ -263,13 +263,13 @@ public class CharacterCassette : MonoBehaviour
             {
                 transform.localPosition = new Vector3(
                     Mathf.Sin(KX_netUtil.RangeMap(liveEntity.GetCadaverLifeTimeFrame(),
-                        LiveEntity.MaxCadaverLifeTimeFrame,
-                        LiveEntity.DeadIndicateCadaverLifeTimeFrame,
-                        Mathf.PI * 10, 0))
-                        * KX_netUtil.RangeMap(liveEntity.GetCadaverLifeTimeFrame(),
-                        LiveEntity.MaxCadaverLifeTimeFrame,
-                        LiveEntity.DeadIndicateCadaverLifeTimeFrame,
-                        0.2f, 0)
+                    LiveEntity.MaxCadaverLifeTimeFrame,
+                    LiveEntity.DeadIndicateCadaverLifeTimeFrame,
+                    Mathf.PI * 10, 0))
+                    * KX_netUtil.RangeMap(liveEntity.GetCadaverLifeTimeFrame(),
+                    LiveEntity.MaxCadaverLifeTimeFrame,
+                    LiveEntity.DeadIndicateCadaverLifeTimeFrame,
+                    0.2f, 0)
                 , 0, 0);
             }
             else
@@ -301,7 +301,7 @@ public class CharacterCassette : MonoBehaviour
     }
 
     //çUåÇÉÇÅ[ÉVÉáÉìÇ…à⁄çs
-    void SetAttackMotion(AttackMotionData attackMotion)
+    protected void SetAttackMotion(AttackMotionData attackMotion)
     {
         if (!attackMotionLock)
         {
