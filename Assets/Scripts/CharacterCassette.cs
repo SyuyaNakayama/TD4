@@ -128,7 +128,7 @@ public class CharacterCassette : MonoBehaviour
                     {
                         visual.animationName = "damage";
                     }
-                    else if (!liveEntity.IsLanding())
+                    else if (!liveEntity.IsLanding() && data.GetGravityScale() > 0)
                     {
                         visual.animationName = "midair";
                         visual.animationProgress = KX_netUtil.RangeMap(Mathf.Clamp(liveEntity.GetMovement().y, -3, 3), 3, -3, 0, 1);

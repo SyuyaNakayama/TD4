@@ -16,11 +16,12 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: 9943baa14d0964657b380ed4bbd6661e, type: 3}
   themeColor: {r: 1, g: 0.36078432, b: 0.36078432, a: 1}
   lifeRatio: 0.2
+  heavy: 0
   gravityScale: 0
   dragAxis:
-    x: 0
-    y: 0
-    z: 0
+    x: 1
+    y: 1
+    z: 1
   scale: 1
   defaultAttackMotionName: backShot_E
   weaponedAttackMotionName: backShot
@@ -43,6 +44,13 @@ MonoBehaviour:
   - {fileID: 7399050265613314139, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
   - {fileID: -2819450648232468865, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
   - {fileID: -6466381842461050571, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 7bd110c991de74ec1b573949995755ce, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: awake
     totalFrame: 0
@@ -242,6 +250,80 @@ MonoBehaviour:
     rigAnimationKeys: []
     facialExpressionKeys: []
     seKeys: []
+  - name: midair
+    totalFrame: 120
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.4}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: -0.05, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 0.9, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0.4, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: -0.05, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 0.9, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0, y: 0.5}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 45, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 60, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
+      easeType: 2
+      easePow: 2
+    - keyFrame: {x: 0.5, y: 1}
+      bodyPartIndex: 1
+      startTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 60, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0.5, z: 0}
+        eulerAngles: {x: 45, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 0
+      lerpAsEuler: 0
+      easeType: 2
+      easePow: 2
+    rigAnimationKeys: []
+    facialExpressionKeys: []
+    seKeys: []
   - name: damage
     totalFrame: 5
     transformAnimationKeys:
@@ -345,28 +427,52 @@ MonoBehaviour:
     seKeys: []
   facialExpressions:
   - name: awake
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 7fee69af156514bbf8268d553b5f4f26, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 7fee69af156514bbf8268d553b5f4f26, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: attack
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 7fee69af156514bbf8268d553b5f4f26, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 7fee69af156514bbf8268d553b5f4f26, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites:
     - index: 1
       sprite: {fileID: 0}
   - name: damage
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 7fee69af156514bbf8268d553b5f4f26, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 7fee69af156514bbf8268d553b5f4f26, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites:
     - index: 1
       sprite: {fileID: 8792502799067376482, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
   - name: defeat
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 520b0fc0416a648bf8b18c47d4166ea8, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 520b0fc0416a648bf8b18c47d4166ea8, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites:
     - index: 1
       sprite: {fileID: 8792502799067376482, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
