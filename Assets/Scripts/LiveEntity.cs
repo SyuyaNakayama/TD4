@@ -206,6 +206,10 @@ public class LiveEntity : GeoGroObject
     protected override void GGOAwake()
     {
         initAble = true;
+    }
+
+    void Start()
+    {
         Init(transform.rotation, userControl, teamID,
             GetSlot().GetInventoryCharaID(),
             GetSlot().GetTeam(), tempCassetteIndex);
@@ -654,10 +658,7 @@ public class LiveEntity : GeoGroObject
             userControl = setUserControl;
             teamID = setTeamID;
             life = setLife;
-            if (userControl)
-            {
-                //Load();
-            }
+            GetSlot().Restart(inventoryCharaID);
             transform.rotation = setRotation;
             ghostTimeFrame = reviveGhostTimeFrame;
             prevRot = setRotation;

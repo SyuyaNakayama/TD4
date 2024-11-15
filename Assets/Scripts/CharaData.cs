@@ -232,12 +232,6 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
-    Texture[] defaultTextures = { };
-    public Texture GetDefaultTexture(int index)
-    {
-        return defaultTextures[index];
-    }
-    [SerializeField]
     Sprite[] defaultSprites = { };
     public Sprite GetDefaultSprite(int index)
     {
