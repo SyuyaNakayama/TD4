@@ -35,6 +35,10 @@ MonoBehaviour:
       hitback: 60
       ghostTime: 0
     scale: 1
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
     projectileData:
       speed: 0.2
       lifetime: 120
@@ -45,6 +49,9 @@ MonoBehaviour:
   data:
     name: "\u30AF\u30ED\u30B9\u30A2\u30F3\u30DA\u30A2"
     totalFrame: 80
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys: []
     shotKeys:
     - keyFrame: {x: 0.5, y: 0.5}
@@ -80,8 +87,14 @@ MonoBehaviour:
         z: 1
       easeType: 0
       easePow: 4
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
+    uniqueMotionStateKeys: []
     animationKeys: []

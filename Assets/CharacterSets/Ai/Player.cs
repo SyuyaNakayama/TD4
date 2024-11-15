@@ -3,15 +3,17 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 
-public class Player : LiveEntity
+public class Player : CharacterCassette
 {
     public const int maxTeamNum = 5;
     public const int maxAttackReactionframe = 10;
     const float cameraControlSpeed = 3;
     const float moveSpeed = 1.5f;
     const float jumpPower = 10.0f;
+    const float maxPlayerRotSpeed = 3;
+    const float playerRotSpeedDiffuse = 0.5f;
 
-    bool jumpTrigger;
+    bool prevJumpInput;
     bool attackTrigger;
     int attackReactionFrame;
     public int GetAttackReactionFrame()
@@ -24,192 +26,102 @@ public class Player : LiveEntity
         return currentCharaIndex;
     }
     [SerializeField]
-    CharaData[] characters;
-    public CharaData[] GetCharacters()
+    CharaData[] weapons;
+    public CharaData[] GetWeapons()
     {
-        return characters;
+        return weapons;
     }
-    float playerCameraAngle = maxCameraAngle;
-    bool allowedItemEffect;
-    Item[] touchedItems = { };
+    float playerCameraAngle = LiveEntity.MaxCameraAngle;
+    float playerRotSpeed;
 
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
-        //キャラクターの配列からnullを消す
-        List<CharaData> characterList = new List<CharaData>(characters);
-        characterList.Remove(null);
-        characters = characterList.ToArray();
+        List<CharaData> weaponList = new List<CharaData>(weapons);
+        weaponList.Remove(null);
+        weapons = weaponList.ToArray();
 
-        //接触したアイテムの配列からnullを消す
-        List<Item> touchedItemList = new List<Item>(touchedItems);
-        touchedItemList.Remove(null);
-        touchedItems = touchedItemList.ToArray();
-        //前の接触判定で触れたアイテムをここで一気に取得
-        //(不正にアイテムを取得するチートを防止するためこのような措置を取っています)
-        allowedItemEffect = true;
-        for (int i = 0; i < touchedItems.Length; i++)
+        //移動用の方向入力で移動
+        Vector2 moveInputVec = GetLiveEntity().GetControlMap().GetMoveInputVec();
+        if (moveInputVec.x != 0 || moveInputVec.y != 0)
         {
-            touchedItems[i].Activation(this);
-        }
-        Array.Resize(ref touchedItems, 0);
-        allowedItemEffect = false;
-
-        // 移動
-        // コントローラーとキーボード両方に対応
-        if (Input.GetAxis("L_Stick_H") != 0 || Input.GetAxis("L_Stick_V") != 0)
-        {
-            Move(GetMovement() + new Vector3(
-                Input.GetAxis("L_Stick_H"),
+            GetLiveEntity().SetMovement(GetLiveEntity().GetMovement() + new Vector3(
+                moveInputVec.x,
                 0,
-                Input.GetAxis("L_Stick_V")).normalized
+                moveInputVec.y).normalized
                 * moveSpeed);
-            direction = Mathf.Atan2(
-                Input.GetAxis("L_Stick_H"), Input.GetAxis("L_Stick_V"))
-                / Mathf.Deg2Rad;
-            //着地していたら移動モーションを再生
-            if (IsLanding())
-            {
-                animationName = "walk";
-            }
-
+            GetLiveEntity().SetDirection(Mathf.Atan2(
+                moveInputVec.x, moveInputVec.y)
+                / Mathf.Deg2Rad);
         }
 
-        if (Input.GetAxis("MoveLR_Horizontal") != 0 || Input.GetAxis("MoveDU_Vertical") != 0)
+        //ジャンプの入力でジャンプ
+        bool jumpInput = GetLiveEntity().GetControlMap().GetJumpInput();
+        if (jumpInput && !prevJumpInput)
         {
-            Move(GetMovement() + new Vector3(
-                Input.GetAxis("MoveLR_Horizontal"),
-                0,
-                Input.GetAxis("MoveDU_Vertical")).normalized
-                * moveSpeed);
-            direction = Mathf.Atan2(
-                Input.GetAxis("MoveLR_Horizontal"), Input.GetAxis("MoveDU_Vertical"))
-                / Mathf.Deg2Rad;
-            //着地していたら移動モーションを再生
-            if (IsLanding())
-            {
-                animationName = "walk";
-            }
-
-        }
-
-        if (IsAttacking())
-        {
-            //固有ワザ以外の技を使っている間は攻撃モーションを再生
-            if (!IsAttacking(GetData().GetDefaultAttackMotionName()))
-            {
-                animationName = "attack";
-            }
-        }
-        else if (!IsLanding())
-        {
-            //着地していない、かつ攻撃中でもなければ空中モーションを再生
-            animationName = "midair";
-        }
-
-        //スペースキーでジャンプ
-        // コントローラーならAボタン
-        bool jumpInput = Input.GetKey(KeyCode.Space)
-            || Input.GetKey("joystick button 0");
-        //ジャンプボタンの押し始めなら
-        if (jumpInput && !jumpTrigger)
-        {
-            Move(new Vector3(GetMovement().x, jumpPower, GetMovement().z));
+            GetLiveEntity().SetMovement(new Vector3(
+                GetLiveEntity().GetMovement().x,
+                jumpPower,
+                GetLiveEntity().GetMovement().z));
             SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
-        jumpTrigger = jumpInput;
+        prevJumpInput = jumpInput;
 
         attackReactionFrame = Mathf.Max(0, attackReactionFrame - 1);
 
-        //下一段のキーを押して攻撃
-        // コントローラーならBボタン
-        bool attackInput = Input.GetKey(KeyCode.Z) || Input.GetKey(KeyCode.X)
-            || Input.GetKey(KeyCode.C) || Input.GetKey(KeyCode.V)
-            || Input.GetKey(KeyCode.B) || Input.GetKey(KeyCode.N)
-            || Input.GetKey(KeyCode.M)
-            || Input.GetKey("joystick button 1");
-        //攻撃ボタンの押し始めかつ武器を持っているなら
-        if (attackInput && !attackTrigger
-            && (!IsAttacking() || IsAttacking(GetData().GetDefaultAttackMotionName())))
+        //攻撃の入力で攻撃
+        bool attackInput = GetLiveEntity().GetControlMap().GetWeaponInput();
+        if (attackInput && !attackTrigger)
         {
             attackReactionFrame = maxAttackReactionframe;
-            if (characters.Length > 0)
+            if (weapons.Length > 0)
             {
-                //攻撃モーションを再生
-                SetAttackMotion(characters[currentCharaIndex].SearchAttackMotion(
-                    characters[currentCharaIndex].GetWeaponedAttackMotionName()));
+                SetAttackMotion(
+                    weapons[currentCharaIndex].SearchAttackMotion(
+                    weapons[currentCharaIndex].GetWeaponedAttackMotionName()));
                 currentCharaIndex++;
             }
         }
         attackTrigger = attackInput;
         currentCharaIndex = Mathf.RoundToInt(Mathf.Repeat(currentCharaIndex,
-            characters.Length));
+            weapons.Length));
 
-        //自機を回転
-        transform.Rotate(
-            0, Input.GetAxis("R_Stick_H") * cameraControlSpeed, 0, Space.Self);
-        //カメラを傾ける
-        playerCameraAngle += Input.GetAxis("R_Stick_V") * cameraControlSpeed;
-
-        transform.Rotate(
-           0, Input.GetAxis("Cam_Horizontal") * cameraControlSpeed, 0, Space.Self);
-        //カメラを傾ける
-        playerCameraAngle += Input.GetAxis("Cam_Vertical") * cameraControlSpeed;
-
-        //カメラの仰角値を規定範囲に収める
-        playerCameraAngle = Mathf.Clamp(
-            playerCameraAngle, minCameraAngle, maxCameraAngle);
-        cameraAngle = playerCameraAngle;
-
-    }
-
-    protected override void LiveEntityOnHit(Collider col)
-    {
-        Item item = col.GetComponent<Item>();
-        if (item)
+        //武器使用中のアニメーション
+        if (IsAttacking() && !IsAttacking(GetData().GetDefaultAttackMotionName()))
         {
-            //ここで接触したアイテムを配列に追加
-            //(不正にアイテムを取得するチートを防止するためこのような措置を取っています)
-            Array.Resize(ref touchedItems, touchedItems.Length + 1);
-            touchedItems[touchedItems.Length - 1] = item;
+            GetVisual().animationName = "attack";
         }
+
+        //カメラ用の上下入力でカメラの仰角調整
+        Vector2 camInputVec = GetLiveEntity().GetControlMap().GetCamInputVec();
+        transform.Rotate(
+            0, camInputVec.x * cameraControlSpeed, 0, Space.Self);
+        playerCameraAngle += camInputVec.y * cameraControlSpeed;
+
+        playerCameraAngle = Mathf.Clamp(
+            playerCameraAngle, LiveEntity.MinCameraAngle, LiveEntity.MaxCameraAngle);
+        GetLiveEntity().SetCameraAngle(playerCameraAngle);
+        //カメラ用の左右入力で回転
+        playerRotSpeed = Mathf.Clamp(
+            playerRotSpeed * playerRotSpeedDiffuse + camInputVec.x,
+            -maxPlayerRotSpeed, maxPlayerRotSpeed);
+        GetLiveEntity().transform.Rotate(0, playerRotSpeed, 0, Space.Self);
     }
 
     public void EquipCharacter(CharaData charaData)
     {
-        if (allowedItemEffect)
+        if (GetLiveEntity().GetAllowedItemEffect())
         {
-            //スロットに空きがあるなら
-            if (characters.Length < maxTeamNum)
+            if (weapons.Length < maxTeamNum)
             {
-                //キャラクターの配列の途中に挿入
-                List<CharaData> list = new List<CharaData>(characters);
-                list.Insert(Mathf.Clamp(currentCharaIndex, 0, characters.Length),
+                List<CharaData> list = new List<CharaData>(weapons);
+                list.Insert(Mathf.Clamp(currentCharaIndex, 0, weapons.Length),
                     charaData);
-                characters = list.ToArray();
+                weapons = list.ToArray();
             }
             else
             {
-                //現在のキャラを上書き
-                characters[currentCharaIndex] = charaData;
-            }
-
-            allowedItemEffect = false;
-        }
-    }
-
-    public bool IsTouchedThisItem(Item item)
-    {
-        if (item == null)
-        {
-            return false;
-        }
-        for (int i = 0; i < touchedItems.Length; i++)
-        {
-            if (touchedItems[i] == item)
-            {
-                return true;
+                weapons[currentCharaIndex] = charaData;
             }
         }
-        return false;
     }
 }

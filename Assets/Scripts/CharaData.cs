@@ -6,10 +6,10 @@ using UnityEngine;
 public class CharaData : ScriptableObject
 {
     [System.Serializable]
-    public struct IndexAndTexture
+    public struct IndexAndPropertyReplacer
     {
         public int index;
-        public Texture texture;
+        public KX_netUtil.PropertyReplacer propertyReplacer;
     }
     [System.Serializable]
     public struct IndexAndSprite
@@ -21,7 +21,7 @@ public class CharaData : ScriptableObject
     public struct FacialExpression
     {
         public string name;
-        public IndexAndTexture[] indexAndTextures;
+        public IndexAndPropertyReplacer[] indexAndPropertyReplacers;
         public IndexAndSprite[] indexAndSprites;
     }
     [System.Serializable]
@@ -40,7 +40,9 @@ public class CharaData : ScriptableObject
     public struct RigAnimationKey
     {
         public Vector2 keyFrame;
+        public Vector2 animationRange;
         public int animatorIndex;
+        public string parameterName;
         public int rigAnimationID;
     }
     [System.Serializable]
@@ -50,6 +52,18 @@ public class CharaData : ScriptableObject
         public string facialExpressionName;
     }
     [System.Serializable]
+    public struct SEKey
+    {
+        public float keyFrame;
+        public AudioClip se;
+    }
+    [System.Serializable]
+    public struct UniqueMotionStateKey
+    {
+        public Vector2 keyFrame;
+        public int motionState;
+    }
+    [System.Serializable]
     public struct Animation
     {
         public string name;
@@ -57,12 +71,12 @@ public class CharaData : ScriptableObject
         public TransformAnimationKey[] transformAnimationKeys;
         public RigAnimationKey[] rigAnimationKeys;
         public FacialExpressionKey[] facialExpressionKeys;
-        public AttackMotionData.SEKey[] seKeys;
+        public SEKey[] seKeys;
     }
 
     public const int totalStatusValue = 3000;
-    public const float minLifeRatio = 0.2f;
-    public const float maxLifeRatio = 0.8f;
+    public const float minLifeRatio = 0.1f;
+    public const float maxLifeRatio = 0.9f;
     const float attackPowerRate = 0.4f;
 
     [SerializeField]
@@ -150,14 +164,64 @@ public class CharaData : ScriptableObject
     }
     public AttackMotionData SearchAttackMotion(string name)
     {
-        for (int i = 0; i < attackMotions.Length; i++)
+        if (attackMotions != null)
         {
-            if (name == attackMotions[i].name)
+            for (int i = 0; i < attackMotions.Length; i++)
             {
-                return attackMotions[i];
+                if (attackMotions[i] && name == attackMotions[i].name)
+                {
+                    return attackMotions[i];
+                }
             }
         }
         return new AttackMotionData();
+    }
+
+    public AttackMotionData SearchAttackMotion(
+        AttackMotionData.TriggerInputType triggerInputType)
+    {
+        if (attackMotions != null)
+        {
+            for (int i = 0; i < attackMotions.Length; i++)
+            {
+                if (attackMotions[i] && triggerInputType ==
+                    attackMotions[i].GetData().triggerInputType)
+                {
+                    return attackMotions[i];
+                }
+            }
+        }
+        return new AttackMotionData();
+    }
+    public bool IsHitAttackMotion(string name)
+    {
+        if (attackMotions != null)
+        {
+            for (int i = 0; i < attackMotions.Length; i++)
+            {
+                if (attackMotions[i] && name == attackMotions[i].name)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public bool IsHitAttackMotion(
+        AttackMotionData.TriggerInputType triggerInputType)
+    {
+        if (attackMotions != null)
+        {
+            for (int i = 0; i < attackMotions.Length; i++)
+            {
+                if (attackMotions[i] && triggerInputType ==
+                    attackMotions[i].GetData().triggerInputType)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     [SerializeField]
@@ -178,6 +242,19 @@ public class CharaData : ScriptableObject
     public Sprite GetDefaultSprite(int index)
     {
         return defaultSprites[index];
+    }
+    [SerializeField]
+    KX_netUtil.PropertySetter[] defaultPropertySetters = { };
+    public KX_netUtil.PropertySetter[] GetDefaultPropertySetters()
+    {
+        KX_netUtil.PropertySetter[] ret =
+            new KX_netUtil.PropertySetter[defaultPropertySetters.Length];
+        for (int i = 0; i < ret.Length; i++)
+        {
+            ret[i] = new KX_netUtil.PropertySetter(
+                defaultPropertySetters[i]);
+        }
+        return ret;
     }
     [SerializeField]
     Animation[] animations = { };

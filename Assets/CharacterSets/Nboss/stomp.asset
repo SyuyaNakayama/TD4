@@ -49,6 +49,10 @@ MonoBehaviour:
       hitback: 100
       ghostTime: 0
     scale: 1.5
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas:
   - name: impact
     attackData:
@@ -58,6 +62,10 @@ MonoBehaviour:
       hitback: 100
       ghostTime: 0
     scale: 1
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
     projectileData:
       speed: 0
       lifetime: 10
@@ -68,6 +76,9 @@ MonoBehaviour:
   data:
     name: "\u8E0F\u307F\u4ED8\u3051"
     totalFrame: 100
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.5, y: 0.75}
       dataName: default
@@ -131,6 +142,11 @@ MonoBehaviour:
         z: 0
       easeType: 2
       easePow: 4
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys: []
     shieldKeys:
     - {x: 0, y: 0.75}
@@ -143,4 +159,5 @@ MonoBehaviour:
       se: {fileID: 8300000, guid: a7fcc920e72554cdb9e4980078d2ffd0, type: 3}
     - keyFrame: 0.75
       se: {fileID: 8300000, guid: 1bf3880b1c057492a9a06184e018ecb4, type: 3}
+    uniqueMotionStateKeys: []
     animationKeys: []

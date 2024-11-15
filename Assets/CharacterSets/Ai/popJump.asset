@@ -25,10 +25,16 @@ MonoBehaviour:
       hitback: 15
       ghostTime: 0
     scale: 1.5
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u30D0\u30FC\u30B9\u30C8\u30B8\u30E3\u30F3\u30D7"
     totalFrame: 20
+    triggerInputType: 7
+    attackMotionLockKeys: []
     meleeAttackKeys:
     - keyFrame: {x: 0, y: 0.1}
       dataName: burst
@@ -36,6 +42,11 @@ MonoBehaviour:
       postMove: 0
     shotKeys: []
     moveKeys: []
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys: []
     shieldKeys:
     - {x: 0, y: 1}
@@ -45,6 +56,8 @@ MonoBehaviour:
       se: {fileID: 8300000, guid: 99db59a09ab1c4285b21d46cce9fe90f, type: 3}
     - keyFrame: 0
       se: {fileID: 8300000, guid: 1bf3880b1c057492a9a06184e018ecb4, type: 3}
+    uniqueMotionStateKeys: []
     animationKeys:
     - keyFrame: {x: 0, y: 1}
       animationName: jump
+      useOriginalAnimTime: 0

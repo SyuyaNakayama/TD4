@@ -8,7 +8,7 @@ public class Boss : Enemy
     BossBehaviourData behaviourData;
     int behaviourProgress;
     LiveEntity target;
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
         if (behaviourData && !IsAttacking())
         {

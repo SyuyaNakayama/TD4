@@ -1,71 +1,79 @@
 using System;
 using UnityEngine;
 
-public class Enemy : LiveEntity
+public class Enemy : CharacterCassette
 {
-    [SerializeField]
-    Sensor sensor;
+    float TargetSearchRange = 5;
+
     protected Vector3 targetCursor;
 
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
-        //攻撃動作中でない時に獲物を見つけたら攻撃動作へ
+        //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?中?ｿｽﾅなゑｿｽ?ｿｽ?ｿｽ?ｿｽﾉ獲?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾂゑｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ
         if (!IsAttacking() && GetNearestTarget() != null)
         {
-            //狙う
+            //?ｿｽ_?ｿｽ?ｿｽ
             TargetAimY(GetNearestTarget().transform.position);
-            //攻撃モーションを再生
+            //?ｿｽU?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ[?ｿｽV?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽﾄ撰ｿｽ
             SetAttackMotion(GetData().GetDefaultAttackMotionName());
         }
     }
 
-    //見つけたLiveEntityの中から敵を選別
+    //?ｿｽ?ｿｽ?ｿｽﾂゑｿｽ?ｿｽ?ｿｽLiveEntity?ｿｽﾌ抵ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽG?ｿｽ?ｿｽI?ｿｽ?ｿｽ
     public LiveEntity[] GetTargets()
     {
         LiveEntity[] ret = { };
-        LiveEntity[] detectedLiveEntities = sensor.GetTargets();
-
-        //teamIDが違うものだけ選別
-        for (int i = 0; i < detectedLiveEntities.Length; i++)
+        foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
-            if (detectedLiveEntities[i].GetTeamID() != GetTeamID())
+            if (obj.gameObject.activeInHierarchy
+                && obj.GetTeamID() != GetLiveEntity().GetTeamID())
             {
-                //配列に追加
-                Array.Resize(ref ret, ret.Length + 1);
-                ret[ret.Length - 1] = detectedLiveEntities[i];
+                Vector3 localPos =
+                KX_netUtil.RelativePosition(
+                    GetLiveEntity().transform, obj.transform, Vector3.zero);
+
+                if (Vector3.Magnitude(localPos) <= TargetSearchRange)
+                {
+                    Array.Resize(ref ret, ret.Length + 1);
+                    ret[ret.Length - 1] = obj;
+                }
             }
         }
 
         return ret;
     }
 
-    //見つけたLiveEntityの中から仲間を選別
+    //?ｿｽ?ｿｽ?ｿｽﾂゑｿｽ?ｿｽ?ｿｽLiveEntity?ｿｽﾌ抵ｿｽ?ｿｽ?ｿｽ?ｿｽ迺??ｿｽﾔゑｿｽI?ｿｽ?ｿｽ
     public LiveEntity[] GetFriends()
     {
         LiveEntity[] ret = { };
-        LiveEntity[] detectedLiveEntities = sensor.GetTargets();
-
-        //teamIDが同じものだけ選別
-        for (int i = 0; i < detectedLiveEntities.Length; i++)
+        foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
-            if (detectedLiveEntities[i].GetTeamID() == GetTeamID())
+            if (obj.gameObject.activeInHierarchy
+                && obj.GetTeamID() == GetLiveEntity().GetTeamID())
             {
-                //配列に代入
-                Array.Resize(ref ret, ret.Length + 1);
-                ret[ret.Length - 1] = detectedLiveEntities[i];
+                Vector3 localPos =
+                KX_netUtil.RelativePosition(
+                    GetLiveEntity().transform, obj.transform, Vector3.zero);
+
+                if (Vector3.Magnitude(localPos) <= TargetSearchRange)
+                {
+                    Array.Resize(ref ret, ret.Length + 1);
+                    ret[ret.Length - 1] = obj;
+                }
             }
         }
 
         return ret;
     }
 
-    //最も近い標的を取得
+    //?ｿｽﾅゑｿｽ?ｿｽﾟゑｿｽ?ｿｽW?ｿｽI?ｿｽ?ｿｽ?ｿｽ謫ｾ
     public LiveEntity GetNearestTarget()
     {
         LiveEntity ret = null;
         LiveEntity[] targets = GetTargets();
 
-        //最も近いものをretに入れる
+        //?ｿｽﾅゑｿｽ?ｿｽﾟゑｿｽ?ｿｽ?ｿｽ?ｿｽﾌゑｿｽret?ｿｽﾉ難ｿｽ?ｿｽ?ｿｽ?ｿｽ
         for (int i = 0; i < targets.Length; i++)
         {
             if (ret == null ||
@@ -79,19 +87,14 @@ public class Enemy : LiveEntity
         return ret;
     }
 
-    //標的の方向を向く（Y軸のみ）
+    //?ｿｽW?ｿｽI?ｿｽﾌ包ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽ?ｿｽiY?ｿｽ?ｿｽ?ｿｽﾌみ）
     protected void TargetAimY(Vector3 targetWorldPos, float intensity = 1)
     {
-        //狙う
-        Vector3 targetLocalPos = transform.InverseTransformPoint(
-            targetWorldPos);
-        transform.localRotation = Quaternion.Slerp(
-            transform.localRotation,
-            transform.localRotation *
-            Quaternion.Euler(new Vector3(
-            0,
-            Mathf.Atan2(targetLocalPos.x, targetLocalPos.z) / Mathf.Deg2Rad,
-            0)),
-            intensity);
+        Quaternion prevRot = GetLiveEntity().transform.rotation;
+
+        Vector3 targetLocalPos = GetLiveEntity().transform.InverseTransformPoint(targetWorldPos);
+        GetLiveEntity().transform.Rotate(0, Mathf.Atan2(targetLocalPos.x, targetLocalPos.z) / Mathf.Deg2Rad, 0, Space.Self);
+
+        GetLiveEntity().transform.rotation = Quaternion.Lerp(prevRot, GetLiveEntity().transform.rotation, intensity);
     }
 }

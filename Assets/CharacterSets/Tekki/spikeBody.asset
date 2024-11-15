@@ -25,19 +25,34 @@ MonoBehaviour:
       hitback: 5
       ghostTime: 0
     scale: 2
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u30C8\u30B2\u30C8\u30B2\u30DC\u30C7\u30A3"
     totalFrame: 120
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0, y: 1}
       dataName: spike
       cursorName: center
+      postMove: 0
     shotKeys: []
     moveKeys: []
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
+    uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys:
     - keyFrame: 0
       se: {fileID: 0}
+    uniqueMotionStateKeys: []
     animationKeys: []

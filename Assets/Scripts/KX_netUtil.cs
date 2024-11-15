@@ -39,7 +39,97 @@ public class KX_netUtil : object
         public bool scale;
     }
 
-    //HPã‚²ãƒ¼ã‚¸ãªã©ã®èƒŒæ™¯è‰²ã‚’ç®—å‡º
+    [System.Serializable]
+    public struct TextureSetter
+    {
+        public string propertyName;
+        public Texture2D texture;
+    }
+    [System.Serializable]
+    public struct ColorSetter
+    {
+        public string propertyName;
+        public Color color;
+    }
+    [System.Serializable]
+    public struct IntSetter
+    {
+        public string propertyName;
+        public int value;
+    }
+    [System.Serializable]
+    public struct FloatSetter
+    {
+        public string propertyName;
+        public float value;
+    }
+    [System.Serializable]
+    public struct PropertySetter
+    {
+        public TextureSetter[] textureSetters;
+        public ColorSetter[] colorSetters;
+        public IntSetter[] intSetters;
+        public FloatSetter[] floatSetters;
+
+        public PropertySetter(PropertySetter propertySetter)
+        {
+            textureSetters = KX_netUtil.CopyArray<TextureSetter>(
+                propertySetter.textureSetters);
+            colorSetters = KX_netUtil.CopyArray<ColorSetter>(
+                propertySetter.colorSetters);
+            intSetters = KX_netUtil.CopyArray<IntSetter>(
+                propertySetter.intSetters);
+            floatSetters = KX_netUtil.CopyArray<FloatSetter>(
+                propertySetter.floatSetters);
+        }
+    }
+
+    [System.Serializable]
+    public struct TextureReplacer
+    {
+        public int targetIndex;
+        public Texture2D texture;
+    }
+    [System.Serializable]
+    public struct ColorReplacer
+    {
+        public int targetIndex;
+        public Color color;
+    }
+    [System.Serializable]
+    public struct IntReplacer
+    {
+        public int targetIndex;
+        public int value;
+    }
+    [System.Serializable]
+    public struct FloatReplacer
+    {
+        public int targetIndex;
+        public float value;
+    }
+    [System.Serializable]
+    public struct PropertyReplacer
+    {
+        public TextureReplacer[] textureReplacers;
+        public ColorReplacer[] colorReplacers;
+        public IntReplacer[] intReplacers;
+        public FloatReplacer[] floatReplacers;
+
+        public PropertyReplacer(PropertyReplacer propertyReplacer)
+        {
+            textureReplacers = KX_netUtil.CopyArray<TextureReplacer>(
+                propertyReplacer.textureReplacers);
+            colorReplacers = KX_netUtil.CopyArray<ColorReplacer>(
+                propertyReplacer.colorReplacers);
+            intReplacers = KX_netUtil.CopyArray<IntReplacer>(
+                propertyReplacer.intReplacers);
+            floatReplacers = KX_netUtil.CopyArray<FloatReplacer>(
+                propertyReplacer.floatReplacers);
+        }
+    }
+
+    //HPƒQ[ƒW‚È‚Ç‚Ì”wŒiF‚ğZo
     public static Color GaugeBlankColor(Color gaugeColor, bool forceHighContrastWhenWhite = false, bool forceHighContrastWhenBlack = false)
     {
         float colorMax = gaugeColor.r;
@@ -82,7 +172,7 @@ public class KX_netUtil : object
             return new Color(0.7f, 0.7f, 0.7f, 1);
         }
     }
-    //HPã‚²ãƒ¼ã‚¸ãªã©ã®æ¸›å°‘å¹…ã®è‰²ã‚’ç®—å‡º
+    //HPƒQ[ƒW‚È‚Ç‚ÌŒ¸­•‚ÌF‚ğZo
     public static Color DamageGaugeColor(Color gaugeColor)
     {
         Color ret = new Color(1, 0, 0, 1);
@@ -121,27 +211,92 @@ public class KX_netUtil : object
         }
         return ret;
     }
-    //ã‚ã‚‹ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã‹ã‚‰è¦‹ãŸä»–ã®ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®ç›¸å¯¾åº§æ¨™
+    //‚ ‚éƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚©‚çŒ©‚½‘¼‚Ìƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚Ì‘Š‘ÎÀ•W
     public static Vector3 RelativePosition(Transform observer, Transform target, Vector3 translation)
     {
         return observer.InverseTransformPoint(target.TransformPoint(translation));
     }
-    //ã‚«ãƒ¡ãƒ©ã‹ã‚‰è¦‹ãŸãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™
+    //ƒJƒƒ‰‚©‚çŒ©‚½ƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚ÌƒXƒNƒŠ[ƒ“À•W
     public static Vector3 RenderPosition(Camera cam, Transform target, Vector3 translation)
     {
         return cam.WorldToScreenPoint(target.TransformPoint(translation));
     }
-    //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã‚’æ­£è¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã«
+    //ƒXƒNƒŠ[ƒ“À•W‚ğ³‹KƒXƒNƒŠ[ƒ“À•W‚É
     public static Vector3 NormalizeScreenPoint(Vector3 point)
     {
         return new Vector3((point.x / Screen.width - 0.5f) * 2, (point.y / Screen.height - 0.5f) * 2, point.z);
     }
-    //æ­£è¦ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã‚’ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã«
+    //³‹KƒXƒNƒŠ[ƒ“À•W‚ğƒXƒNƒŠ[ƒ“À•W‚É
     public static Vector3 InverseNormalizeScreenPoint(Vector3 point)
     {
         return new Vector3((point.x / 2 + 0.5f) * Screen.width, (point.y / 2 + 0.5f) * Screen.height, point.z);
     }
-    //äºŒæ¬¡å…ƒåº§æ¨™ä¸Šã®ç‚¹ãŒçŸ©å½¢å†…ã«ã‚ã‚‹ã‹
+    //rectTransformã‚Ìrect‚ğƒXƒNƒŠ[ƒ“À•W‚É•ÏŠ·
+    public static Rect GetScreenRect(RectTransform rtf, Camera camera)
+    {
+        Vector3[] corners = new Vector3[4];
+
+        rtf.GetWorldCorners(corners);
+        if (camera != null)
+        {
+            corners[0] = RectTransformUtility.WorldToScreenPoint(camera, corners[0]);
+            corners[2] = RectTransformUtility.WorldToScreenPoint(camera, corners[2]);
+        }
+
+        Rect ret = new Rect
+        {
+            x = corners[0].x,
+            y = corners[0].y
+        };
+        ret.width = corners[2].x - ret.x;
+        ret.height = corners[2].y - ret.y;
+        return ret;
+    }
+
+    public static Vector3 GetRectCenterPosition(RectTransform rect)
+    {
+        Vector3 ret = rect.transform.position;
+
+        float scaleX = rect.transform.lossyScale.x;
+        float scaleY = rect.transform.lossyScale.y;
+        float x = rect.rect.width / 2f * scaleX;
+        float y = rect.rect.height / 2f * scaleY;
+        Vector3 retPlus = rect.transform.rotation * new Vector3(
+            Mathf.Lerp(x, -x, rect.pivot.x),
+            Mathf.Lerp(y, -y, rect.pivot.y), 0);
+
+        return ret + retPlus;
+    }
+
+    public static Vector3 GetRectRelativePosition(RectTransform rect, Vector2 pos)
+    {
+        Vector3 ret = rect.transform.position;
+
+        float scaleX = rect.transform.lossyScale.x;
+        float scaleY = rect.transform.lossyScale.y;
+        float x = rect.rect.width / 2f * scaleX;
+        float y = rect.rect.height / 2f * scaleY;
+        Vector3 retPlus = rect.transform.rotation * new Vector3(
+            Mathf.Lerp(x, -x, rect.pivot.x + pos.x),
+            Mathf.Lerp(y, -y, rect.pivot.y + pos.y), 0);
+
+        return ret + retPlus;
+    }
+    //rectTransformã‚ÌÀ•W‚ğƒ[ƒ‹ƒhÀ•W‚É•ÏŠ·
+    public static Vector3 RectToWorldPoint(RectTransform rtf, Camera camera)
+    {
+        Vector3 ret = Vector3.zero;
+
+        //UIÀ•W‚©‚çƒXƒNƒŠ[ƒ“À•W‚É•ÏŠ·
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(
+            camera, rtf.position);
+        //ƒXƒNƒŠ[ƒ“À•W¨ƒ[ƒ‹ƒhÀ•W‚É•ÏŠ·
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            rtf, screenPos, camera, out ret);
+
+        return ret;
+    }
+    //2DÀ•Wã‚Ì“_‚ª‹éŒ`“à‚É‚ ‚é‚©
     public static bool IsInRect(Vector2 corner1, Vector2 corner2, Vector2 point)
     {
         if (corner1.x > corner2.x)
@@ -160,18 +315,42 @@ public class KX_netUtil : object
 
         return point.x == Mathf.Clamp(point.x, corner1.x, corner2.x) && point.y == Mathf.Clamp(point.y, corner1.y, corner2.y);
     }
-    //äºŒã¤ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒæ¥è§¦ã—ã¦ã„ã‚‹ã‹ï¼ˆå¤§ã¾ã‹ã«ã—ã‹åˆ¤å®šã§ããªã„ã‹ã‚‰éä¿¡ã—ãªã„ã§ã­ï¼‰
+
+    //w’è‚³‚ê‚½2DÀ•W‚ª‚±‚Ì‹éŒ`‚ÉG‚ê‚Ä‚¢‚é‚©
+    public static bool IsInsideHitBox(RectTransform rectTransform, Camera camera, Vector2 inputPosition2D)
+    {
+        Rect rect =
+            KX_netUtil.GetScreenRect(rectTransform, camera);
+        Vector2 corner1 =
+            new Vector2(rect.xMin, rect.yMin);
+        Vector2 corner2 =
+            new Vector2(rect.xMax, rect.yMax);
+
+        return KX_netUtil.IsInRect(
+            corner1, corner2, inputPosition2D);
+    }
+    //w’è‚³‚ê‚½2DÀ•W‚ª‚±‚Ì‹éŒ`‚©‚çŒ©‚Ä‚Ç‚±‚É‚ ‚é‚©
+    public static Vector2 InverseTransformPointHitBox(RectTransform rectTransform, Camera camera, Vector2 inputPosition2D)
+    {
+        Rect rect =
+            KX_netUtil.GetScreenRect(rectTransform, camera);
+
+        return new Vector2(
+            RangeMap(inputPosition2D.x, rect.xMin, rect.xMax, -0.5f, 0.5f),
+            RangeMap(inputPosition2D.y, rect.yMin, rect.yMax, -0.5f, 0.5f));
+    }
+    //“ñ‚Â‚ÌƒRƒ‰ƒCƒ_[‚ªÚG‚µ‚Ä‚¢‚é‚©i‘å‚Ü‚©‚É‚µ‚©”»’è‚Å‚«‚È‚¢‚©‚ç‰ßM‚µ‚È‚¢‚Å‚Ëj
     public static bool IsHit(Collider col1, Collider col2, float fractionDistance)
     {
         return Vector3.Distance(col1.ClosestPoint(col2.ClosestPoint(col1.gameObject.transform.position)), col2.ClosestPoint(col1.ClosestPoint(col2.ClosestPoint(col1.gameObject.transform.position)))) <= fractionDistance
         || Vector3.Distance(col2.ClosestPoint(col1.ClosestPoint(col2.gameObject.transform.position)), col1.ClosestPoint(col2.ClosestPoint(col1.ClosestPoint(col2.gameObject.transform.position)))) <= fractionDistance;
     }
-    //ãƒ¯ãƒ¼ãƒ«ãƒ‰ç©ºé–“ä¸Šã®ç‚¹ãŒã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã«æ¥è§¦ã—ã¦ã„ã‚‹ã‹
+    //ƒ[ƒ‹ƒh‹óŠÔã‚Ì“_‚ªƒRƒ‰ƒCƒ_[‚Ì’†‚É‚ ‚é‚©
     public static bool IsInsidePosition(Collider col, Vector3 point)
     {
         return col.ClosestPoint(point) == point;
     }
-    //å€¤ãŒç¯„å›²å†…ã«ã‚ã‚‹ã‹
+    //’l‚ª”ÍˆÍ“à‚É‚ ‚é‚©
     public static bool IsIntoRange(float value, float rangeHead, float rangeTail,
         bool notEqualHead, bool notEqualTail)
     {
@@ -182,7 +361,7 @@ public class KX_netUtil : object
         }
         return value == Mathf.Clamp(value, rangeHead, rangeTail);
     }
-    //äºŒã¤ã®æ•°å€¤ç¯„å›²ãŒé‡ãªã£ã¦ã„ã‚‹ã‹
+    //“ñ‚Â‚Ì”’l”ÍˆÍ‚ªd‚È‚Á‚Ä‚¢‚é‚©
     public static bool IsCrossingRange(float range1Head, float range1Tail,
         float range2Head, float range2Tail,
         bool notEqualHead, bool notEqualTail)
@@ -196,7 +375,7 @@ public class KX_netUtil : object
             || IsIntoRange(range2Tail, range1Head, range1Tail,
             notEqualHead, false);
     }
-    //äºŒã¤ã®è§’åº¦ï¼ˆåº¦æ•°æ³•ï¼‰ã®æœ€å°å·®
+    //“ñ‚Â‚ÌŠp“xi“x”–@j‚ÌÅ¬·
     public static float AngleDiff(float degree1, float degree2)
     {
         float angle1 = degree2 - degree1;
@@ -213,23 +392,40 @@ public class KX_netUtil : object
         }
         return angle3;
     }
-    //æ•°å€¤ã‚’0~1ã®ç¯„å›²å†…ã«åã‚ã‚‹
+    //Vector2‚ğ‚»‚Ì‚Ü‚Ü“ü‚ê‚ç‚ê‚éAtan2ŠÖ”
+    public static float Atan2(Vector2 vec)
+    {
+        return Mathf.Atan2(vec.x, vec.y);
+    }
+    //ˆêü‚ğ‚¢‚­‚Â‚©‚Ì”ÍˆÍ‚É•ªŠ„‚µA‚»‚ÌŠp“x‚ª‚Ç‚ÌƒZƒOƒƒ“ƒg‚Ì”ÍˆÍ“à‚É‚ ‚é‚©
+    public static int RadToSegmentIndex(float rad, int divNum)
+    {
+        int ret = Mathf.RoundToInt(rad / (Mathf.PI * 2) * divNum);
+        if (ret < 0)
+        {
+            ret = ret + divNum;
+        }
+        return ret;
+    }
+    //”’l‚ğ0~1‚Ì”ÍˆÍ“à‚Éû‚ß‚é
     public static float Saturate(float value)
     {
         return Mathf.Clamp(value, 0, 1);
     }
-    //æ•°å€¤ã®ç¯„å›²ãƒãƒƒãƒ”ãƒ³ã‚°
-    public static float RangeMap(float value, float inputMin, float inputMax, float outputMin, float outputMax)
+    //”’l‚Ì”ÍˆÍƒ}ƒbƒsƒ“ƒO
+    public static float RangeMap(
+        float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
-        return outputMin + (value - inputMin) * (outputMax - outputMin) / (inputMax - inputMin);
+        return outputMin + (value - inputMin)
+            * (outputMax - outputMin) / (inputMax - inputMin);
     }
-    //è² ã®å€¤ã«ã‚‚å¯¾å¿œã—ãŸç´¯ä¹—é–¢æ•°
+    //•‰‚Ì’l‚É‚à‘Î‰‚µ‚½—İæŠÖ”
     public static float SignedPow(float value, float pow)
     {
         int sign = Mathf.RoundToInt(Mathf.Sign(value));
         return Mathf.Pow(Mathf.Abs(value), pow) * sign;
     }
-    //ä¸‰è§’æ³¢
+    //OŠp”g
     public static float TriWave(float time)
     {
         time /= 2;
@@ -247,8 +443,9 @@ public class KX_netUtil : object
             return (time - Mathf.PI * 4) / (Mathf.PI);
         }
     }
-    //å¤‰å½¢å¯èƒ½ãªä½™å¼¦æ³¢ï¼ˆä½¿ã†æ©Ÿä¼šã¯å°‘ãªã„ã‹ã‚‚ï¼‰
-    public static float StreachedCos(float num, float mul, float seg1Pow = 1, float seg2Pow = 1)
+    //•ÏŒ`‰Â”\‚È—]Œ·”gig‚¤‹@‰ï‚Í­‚È‚¢‚©‚àj
+    public static float StreachedCos(
+        float num, float mul, float seg1Pow = 1, float seg2Pow = 1)
     {
         num = Mathf.Repeat(num, Mathf.PI * 2);
         num *= (0.5f + mul / 2);
@@ -270,7 +467,7 @@ public class KX_netUtil : object
 
         return ret;
     }
-    //ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°
+    //ƒC[ƒWƒ“ƒO
     public static float Ease(float progress, EaseType easeType, float powNum)
     {
         float ret = 0;
@@ -296,6 +493,79 @@ public class KX_netUtil : object
                 break;
         }
 
+        return ret;
+    }
+    //PropertyReplacer‚ğ—p‚¢‚ÄPropertySetter‚ğ•ÒW‚µ‚Ä•Ô‚·
+    public static PropertySetter ReplacePropertySetter(
+        PropertySetter propertySetter, PropertyReplacer propertyReplacer)
+    {
+        PropertySetter ret = propertySetter;
+
+        for (int i = 0; i < propertyReplacer.textureReplacers.Length; i++)
+        {
+            TextureReplacer current = propertyReplacer.textureReplacers[i];
+            Array.Resize(ref ret.textureSetters,
+                Mathf.Max(ret.textureSetters.Length, current.targetIndex));
+            ret.textureSetters[current.targetIndex].texture =
+                current.texture;
+        }
+        for (int i = 0; i < propertyReplacer.colorReplacers.Length; i++)
+        {
+            ColorReplacer current = propertyReplacer.colorReplacers[i];
+            Array.Resize(ref ret.colorSetters,
+                Mathf.Max(ret.colorSetters.Length, current.targetIndex));
+            ret.colorSetters[current.targetIndex].color =
+                current.color;
+        }
+        for (int i = 0; i < propertyReplacer.intReplacers.Length; i++)
+        {
+            IntReplacer current = propertyReplacer.intReplacers[i];
+            Array.Resize(ref ret.intSetters,
+                Mathf.Max(ret.intSetters.Length, current.targetIndex));
+            ret.intSetters[current.targetIndex].value =
+                current.value;
+        }
+        for (int i = 0; i < propertyReplacer.floatReplacers.Length; i++)
+        {
+            FloatReplacer current = propertyReplacer.floatReplacers[i];
+            Array.Resize(ref ret.floatSetters,
+                Mathf.Max(ret.floatSetters.Length, current.targetIndex));
+            ret.floatSetters[current.targetIndex].value =
+                current.value;
+        }
+
+        return ret;
+    }
+    //ƒ}ƒeƒŠƒAƒ‹‚ÌƒvƒƒpƒeƒB‚ğˆêŠ‡‚Å•ÒW
+    public static void ApplyMaterialPropertySetter(
+        Material material, PropertySetter propertySetter)
+    {
+        for (int i = 0; i < propertySetter.textureSetters.Length; i++)
+        {
+            TextureSetter current = propertySetter.textureSetters[i];
+            material.SetTexture(current.propertyName, current.texture);
+        }
+        for (int i = 0; i < propertySetter.colorSetters.Length; i++)
+        {
+            ColorSetter current = propertySetter.colorSetters[i];
+            material.SetColor(current.propertyName, current.color);
+        }
+        for (int i = 0; i < propertySetter.intSetters.Length; i++)
+        {
+            IntSetter current = propertySetter.intSetters[i];
+            material.SetInteger(current.propertyName, current.value);
+        }
+        for (int i = 0; i < propertySetter.floatSetters.Length; i++)
+        {
+            FloatSetter current = propertySetter.floatSetters[i];
+            material.SetFloat(current.propertyName, current.value);
+        }
+    }
+    //”z—ñ‚ğƒRƒs[
+    public static T[] CopyArray<T>(T[] array)
+    {
+        T[] ret = new T[array.Length];
+        Array.Copy(array, ret, array.Length);
         return ret;
     }
 }

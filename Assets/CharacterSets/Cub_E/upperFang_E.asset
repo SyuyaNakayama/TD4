@@ -25,10 +25,17 @@ MonoBehaviour:
       hitback: 30
       ghostTime: 0
     scale: 1.5
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u304B\u307F\u3064\u304D\u30B8\u30E3\u30F3\u30D7"
     totalFrame: 100
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.5, y: 0.8}
       dataName: default
@@ -38,12 +45,26 @@ MonoBehaviour:
     moveKeys:
     - keyFrame: {x: 0, y: 0.5}
       moveVec: {x: 0, y: 4, z: 3}
+      ignoreAxis:
+        x: 0
+        y: 0
+        z: 0
       easeType: 1
       easePow: 4
     - keyFrame: {x: 0.5, y: 0.8}
       moveVec: {x: 0, y: -7, z: 0}
+      ignoreAxis:
+        x: 0
+        y: 0
+        z: 0
       easeType: 2
       easePow: 4
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
+    uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys:
     - {x: 0, y: 0.5}
@@ -52,8 +73,11 @@ MonoBehaviour:
       se: {fileID: 8300000, guid: d2195e32c419e4dd6b3b9abbc4aa7046, type: 3}
     - keyFrame: 0.5
       se: {fileID: 8300000, guid: a7fcc920e72554cdb9e4980078d2ffd0, type: 3}
+    uniqueMotionStateKeys: []
     animationKeys:
     - keyFrame: {x: 0, y: 0.5}
       animationName: preAttack
+      useOriginalAnimTime: 0
     - keyFrame: {x: 0.5, y: 0.8}
       animationName: attack
+      useOriginalAnimTime: 0

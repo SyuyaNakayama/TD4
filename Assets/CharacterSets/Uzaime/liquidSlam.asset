@@ -18,20 +18,37 @@ MonoBehaviour:
   data:
     name: "\u306C\u3061\u3083\u306C\u3061\u3083\u30C0\u30A4\u30D6"
     totalFrame: 40
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys: []
     shotKeys: []
     moveKeys:
     - keyFrame: {x: 0.4, y: 0.8}
       moveVec: {x: 0, y: 0, z: 1}
+      ignoreAxis:
+        x: 0
+        y: 0
+        z: 0
       easeType: 2
       easePow: 2
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
+    uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
+    uniqueMotionStateKeys: []
     animationKeys:
     - keyFrame: {x: 0, y: 0.4}
       animationName: preAttack
+      useOriginalAnimTime: 0
     - keyFrame: {x: 0.4, y: 0.8}
       animationName: attack
+      useOriginalAnimTime: 0
     - keyFrame: {x: 0.8, y: 1}
       animationName: postAttack
+      useOriginalAnimTime: 0

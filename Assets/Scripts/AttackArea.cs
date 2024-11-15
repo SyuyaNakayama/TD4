@@ -22,44 +22,59 @@ public class AttackArea : MonoBehaviour
     {
         return blowVec;
     }
+    [SerializeField]
+    SpriteRenderer visual;
+    Sprite sprite;
     bool isNewborn = true;
-    bool dataLock = false;
+    bool attackAreaDataLock = false;
 
     void FixedUpdate()
     {
         isNewborn = false;
+
+        //è¨­å®šã•ã‚ŒãŸç”»åƒã‚’é©ç”¨
+        if (visual)
+        {
+            visual.sprite = sprite;
+        }
+
         AttackAreaUpdate();
     }
 
-    //Še”h¶ƒNƒ‰ƒX‚ÌŒÅ—LXVˆ—i”h¶ƒNƒ‰ƒX“à‚ÅƒI[ƒo[ƒ‰ƒCƒh‚µ‚Äg‚¤j
+    //å„æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã®å›ºæœ‰æ›´æ–°å‡¦ç†ï¼ˆæ´¾ç”Ÿã‚¯ãƒ©ã‚¹å†…ã§ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦ä½¿ã†ï¼‰
     protected virtual void AttackAreaUpdate()
     {
     }
 
     public void Lock()
     {
-        //¶¬‚³‚ê‚½’¼Œã‚Ì‚İÀs
+        //ç”Ÿæˆã•ã‚ŒãŸç›´å¾Œã®ã¿å®Ÿè¡Œ
         if (isNewborn)
         {
-            dataLock = true;
+            attackAreaDataLock = true;
         }
     }
 
     public void SetAttacker(LiveEntity setAttacker)
     {
-        //ƒMƒ~ƒbƒN‚ÌUŒ‚”»’è‚È‚ÇAƒƒbƒN‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ì‚İÀs
-        if (!dataLock)
+        //ã‚®ãƒŸãƒƒã‚¯ã®æ”»æ’ƒåˆ¤å®šãªã©ã€ãƒ­ãƒƒã‚¯ã•ã‚Œã¦ã„ãªã„å ´åˆã®ã¿å®Ÿè¡Œ
+        if (!attackAreaDataLock)
         {
             attacker = setAttacker;
         }
     }
     public void SetData(AttackMotionData.AttackData setData, Vector3 setBlowVec)
     {
-        //ƒƒbƒN‚³‚ê‚Ä‚¢‚È‚¢–”‚ÍAttacker‚ÌFixedUpdate()“à‚ÅŒÄ‚Î‚ê‚½ê‡‚Ì‚İÀs
-        if (!dataLock || attacker != null && attacker.GetUpdating())
+        //ãƒ­ãƒƒã‚¯ã•ã‚Œã¦ã„ãªã„åˆã¯Attackerã®FixedUpdate()å†…ã§å‘¼ã°ã‚ŒãŸå ´åˆã®ã¿å®Ÿè¡Œ
+        if (!attackAreaDataLock
+            || attacker != null && attacker.GetCassette().GetAllowEditAttackData())
         {
             data = setData;
             blowVec = setBlowVec;
         }
+    }
+    public void SetSprite(Sprite setSprite)
+    {
+        sprite = setSprite;
     }
 }

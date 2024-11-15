@@ -23,7 +23,7 @@ public class LiveEntityHUD : MonoBehaviour
     void FixedUpdate()
     {
         //体力ゲージを更新
-        Color lifeGaugeColor = liveEntity.GetData().GetThemeColor();
+        Color lifeGaugeColor = liveEntity.GetCassetteData().GetThemeColor();
         lifeGaugeColor.a = 1;
         lifeGauge.material.SetColor("_GaugeColor1", lifeGaugeColor);
         lifeGauge.material.SetColor("_GaugeColor2",
@@ -35,10 +35,10 @@ public class LiveEntityHUD : MonoBehaviour
                 lifeGauge.material.GetColor("_BackGroundColor")
             ));
 
-        lifeGauge.material.SetFloat("_FillAmount1", liveEntity.GetHPAmount());
+        lifeGauge.material.SetFloat("_FillAmount1", liveEntity.GetLife());
 
         if (lifeGauge.material.GetFloat("_FillAmount1")
-                         <= lifeGauge.material.GetFloat("_FillAmount2"))
+            <= lifeGauge.material.GetFloat("_FillAmount2"))
         {
             lifeGauge.material.SetFloat("_FillAmount2",
                 lifeGauge.material.GetFloat("_FillAmount2") - 0.005f);
@@ -78,8 +78,8 @@ public class LiveEntityHUD : MonoBehaviour
             batteryGauge.transform.localPosition, targetPos,
             batteryGaugeShiftIntensity);
 
-        //キャラ名表示を更新
-        name.text = liveEntity.GetData().GetCharaName();
+        //キャラクター名表示を更新
+        name.text = liveEntity.GetCassetteData().GetCharaName();
     }
 
     void OnWillRenderObject()

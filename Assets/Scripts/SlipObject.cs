@@ -52,7 +52,7 @@ public class SlipObject : MonoBehaviour
                     hittedLiveEntities[i].speed =
                         Mathf.Max(current.speed,
                         CalculateSpeed(current.liveEntity));
-                    current.liveEntity.Move(
+                    current.liveEntity.SetMovement(
                         current.liveEntity.GetMovement().normalized * current.speed);
                     hittedLiveEntities[i].lifetime = maxTargetLifetime;
                     return;

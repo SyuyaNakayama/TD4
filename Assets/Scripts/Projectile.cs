@@ -13,15 +13,11 @@ public class Projectile : AttackArea
     GeoGroObject ggobj;
     [SerializeField]
     Collider collider;
-    [SerializeField]
-    SpriteRenderer visual;
+
     protected override void AttackAreaUpdate()
     {
         //内部変数が変更されないようにロック
         projectileDataLock = true;
-
-        //設定された画像を適用
-        visual.sprite = projectileData.sprite;
 
         //スケーリングの基準となるオブジェクトを決める
         GameObject scalingTarget = gameObject;
@@ -34,7 +30,7 @@ public class Projectile : AttackArea
         collider.enabled = projectileData.setGround;
 
         //回転角とスケーリングを考慮した方向、スピードで飛んでいく
-        ggobj.Move(moveVec * projectileData.speed / Time.deltaTime);
+        ggobj.SetMovement(moveVec * projectileData.speed / Time.deltaTime);
 
         //寿命が尽きたら消える
         projectileData.lifetime--;

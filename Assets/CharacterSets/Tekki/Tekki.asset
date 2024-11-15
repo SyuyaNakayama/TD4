@@ -41,12 +41,33 @@ MonoBehaviour:
   - position: {x: -0.25, y: -0.35, z: 0}
     eulerAngles: {x: 270, y: 0, z: 0}
     scale: {x: 0.4, y: 0.8, z: 0.25}
-  defaultTextures:
-  - {fileID: 2800000, guid: faf75392b52ae417496a0295bd19b07e, type: 3}
-  - {fileID: 2800000, guid: d469b7dce358d4585a6968fc8c61941b, type: 3}
-  - {fileID: 2800000, guid: 4e40d1954ff4348aba064c344b4c093f, type: 3}
-  - {fileID: 2800000, guid: 4e40d1954ff4348aba064c344b4c093f, type: 3}
+  defaultTextures: []
   defaultSprites: []
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: faf75392b52ae417496a0295bd19b07e, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: d469b7dce358d4585a6968fc8c61941b, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 4e40d1954ff4348aba064c344b4c093f, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 4e40d1954ff4348aba064c344b4c093f, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: walk
     totalFrame: 0
@@ -268,7 +289,92 @@ MonoBehaviour:
     seKeys: []
   - name: defeat
     totalFrame: 10
-    transformAnimationKeys: []
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 0.5}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: -25, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 5, z: 0}
+        eulerAngles: {x: -25, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 1
+      easePow: 4
+    - keyFrame: {x: 0.5, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 5, z: 0}
+        eulerAngles: {x: -25, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: -25, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 0
+        rotation: 1
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 0
+      easePow: 4
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 1800, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      ignoreTransform:
+        position: 1
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 1
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 2
+      startTransform:
+        position: {x: 0.4, y: -0.35, z: 0.4}
+        eulerAngles: {x: 289.99997, y: 225, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0.4, y: -0.35, z: 0.4}
+        eulerAngles: {x: 289.99997, y: 225, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 0
+      easePow: 1
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 3
+      startTransform:
+        position: {x: -0.4, y: -0.35, z: 0.4}
+        eulerAngles: {x: 290, y: 135, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: -0.4, y: -0.35, z: 0.4}
+        eulerAngles: {x: 290, y: 135, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 0
+      easePow: 1
     rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
@@ -276,12 +382,24 @@ MonoBehaviour:
     seKeys: []
   facialExpressions:
   - name: damage
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 1
-      texture: {fileID: 2800000, guid: b4142fbd77ff641ee85e0c7932201110, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: b4142fbd77ff641ee85e0c7932201110, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: defeat
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 1
-      texture: {fileID: 2800000, guid: 2da14516c094c436483d67c0015e8104, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 2da14516c094c436483d67c0015e8104, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []

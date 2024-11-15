@@ -25,21 +25,37 @@ MonoBehaviour:
       hitback: 5
       ghostTime: 0
     scale: 2
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u6012\u308A\u306E\u30AE\u30B6\u3063\u6B6F"
     totalFrame: 10
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.4, y: 0.4}
       dataName: chomp
       cursorName: center
+      postMove: 0
     shotKeys: []
     moveKeys: []
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
+    uniqueActionKeys: []
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys:
     - keyFrame: 0
       se: {fileID: 0}
+    uniqueMotionStateKeys: []
     animationKeys:
     - keyFrame: {x: 0, y: 1}
       animationName: fury
+      useOriginalAnimTime: 0

@@ -17,7 +17,7 @@ public class AttackAreaOutline : MonoBehaviour
         && meshRenderer && meshRenderer.materials.Length > materialIndex)
         {
             Color outlineColor =
-                attackArea.GetAttacker().GetData().GetThemeColor();
+                attackArea.GetAttacker().GetCassetteData().GetThemeColor();
             outlineColor.a = 1;
             meshRenderer.materials[materialIndex].SetColor(
                 "_OutlineColor", outlineColor);

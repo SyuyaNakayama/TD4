@@ -16,11 +16,13 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: 2ae5906cb43344d6a8b86a346d2e562c, type: 3}
   themeColor: {r: 0.6784314, g: 0.7882353, b: 1, a: 1}
   lifeRatio: 0.6
+  heavy: 0
   gravityScale: 1
   dragAxis:
     x: 1
     y: 1
     z: 1
+  scale: 1
   defaultAttackMotionName: liquidSlam
   weaponedAttackMotionName: 
   attackMotions:
@@ -36,6 +38,19 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 5e36de2decf584b508bc675989973426, type: 3}
   - {fileID: 2800000, guid: 3014051ef1d33427d86831478a5960bb, type: 3}
   defaultSprites: []
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 5e36de2decf584b508bc675989973426, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 3014051ef1d33427d86831478a5960bb, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: preAttack
     totalFrame: 0
@@ -74,7 +89,9 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: attack
     totalFrame: 0
     transformAnimationKeys:
@@ -112,7 +129,9 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: postAttack
     totalFrame: 0
     transformAnimationKeys:
@@ -167,15 +186,19 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 2
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: damage
     totalFrame: 8
     transformAnimationKeys: []
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 0.5}
       facialExpressionName: damage
     - keyFrame: {x: 0.5, y: 1}
       facialExpressionName: damage2
+    seKeys: []
   - name: defeat
     totalFrame: 0
     transformAnimationKeys:
@@ -213,6 +236,7 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 4
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 0.125}
       facialExpressionName: defeat
@@ -230,32 +254,81 @@ MonoBehaviour:
       facialExpressionName: defeat
     - keyFrame: {x: 0.875, y: 1}
       facialExpressionName: defeat2
+    seKeys: []
   facialExpressions:
   - name: damage
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 4e67dc40391c64ebaab4d18e77f648ff, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 4e67dc40391c64ebaab4d18e77f648ff, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 0da364788bca34159827416ec576cfae, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 0da364788bca34159827416ec576cfae, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: damage2
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 40658a24b575b43aeae1ef39d5d7971a, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 40658a24b575b43aeae1ef39d5d7971a, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 56b81c4e15e1e41e3ba7f5a9d1743c5a, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 56b81c4e15e1e41e3ba7f5a9d1743c5a, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: defeat
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 9ec27d560a8b947fd987387b9f3ef0b3, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 9ec27d560a8b947fd987387b9f3ef0b3, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 0da364788bca34159827416ec576cfae, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 0da364788bca34159827416ec576cfae, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: defeat2
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 9ec27d560a8b947fd987387b9f3ef0b3, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 9ec27d560a8b947fd987387b9f3ef0b3, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 56b81c4e15e1e41e3ba7f5a9d1743c5a, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 56b81c4e15e1e41e3ba7f5a9d1743c5a, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []

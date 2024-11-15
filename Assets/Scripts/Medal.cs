@@ -27,10 +27,10 @@ public class Medal : MonoBehaviour
 
     public void OnTriggerEnter(Collider col)
     {
-        // ???–b?v???C???[?????????
-        if (col.gameObject.GetComponent<Player>() != null)
+        LiveEntity liveEntity =
+            col.gameObject.GetComponent<LiveEntity>();
+        if (liveEntity && liveEntity.GetUserControl())
         {
-            // ???_?????l??????
             saveMedals.AddMedalCount();
             saveMedals.AcquisitionMedal(medalNum);
             Destroy(gameObject);

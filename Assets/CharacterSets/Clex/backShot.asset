@@ -26,15 +26,20 @@ MonoBehaviour:
       hitback: 5
       ghostTime: 0
     scale: 1
+    billboardData:
+      sprite: {fileID: -2819450648232468865, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
+      yBillboard: 0
+      flatBillboard: 0
     projectileData:
       speed: 0.5
       lifetime: 20
-      yBillBoard: 0
-      flatBillBoard: 0
-      sprite: {fileID: -2819450648232468865, guid: 4bdcf434276544de39847f08b4fa5028, type: 3}
+      setGround: 0
   data:
     name: "\u5F8C\u9000\u5C04\u6483"
     totalFrame: 10
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys: []
     shotKeys:
     - keyFrame: {x: 0, y: 0}
@@ -44,12 +49,23 @@ MonoBehaviour:
     moveKeys:
     - keyFrame: {x: 0, y: 1}
       moveVec: {x: 0, y: 0, z: -4}
+      ignoreAxis:
+        x: 0
+        y: 0
+        z: 0
       easeType: 1
       easePow: 5
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
+    uniqueActionKeys: []
     shieldKeys:
     - {x: 0, y: 1}
     disAllowGroundSetKeys: []
     seKeys:
     - keyFrame: 0
       se: {fileID: 8300000, guid: 3ca76d1ecb6a945e9b21c0845e0cd265, type: 3}
+    uniqueMotionStateKeys: []
     animationKeys: []

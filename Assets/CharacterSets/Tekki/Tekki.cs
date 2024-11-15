@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ƒGƒlƒ~ƒB
+//ï¿½Gï¿½lï¿½~ï¿½B
 public class Tekki : Enemy
 {
     const float walkSpeed = 1;
 
-    protected override void LiveEntityUpdate()
+    protected override void CharaUpdate()
     {
-        Move(new Vector3(GetMovement().x, GetMovement().y, walkSpeed));
+        GetLiveEntity().SetMovement(new Vector3(GetLiveEntity().GetMovement().x, GetLiveEntity().GetMovement().y, walkSpeed));
         if (!IsAttacking())
         {
             SetAttackMotion(GetData().GetDefaultAttackMotionName());

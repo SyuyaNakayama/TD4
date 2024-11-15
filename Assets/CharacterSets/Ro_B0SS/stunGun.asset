@@ -25,10 +25,17 @@ MonoBehaviour:
       hitback: 30
       ghostTime: 0
     scale: 2
+    billboardData:
+      sprite: {fileID: 0}
+      yBillboard: 0
+      flatBillboard: 0
   shotDatas: []
   data:
     name: "\u30B9\u30BF\u30F3\u30AC\u30F3"
     totalFrame: 250
+    triggerInputType: 0
+    attackMotionLockKeys:
+    - {x: 0, y: 1}
     meleeAttackKeys:
     - keyFrame: {x: 0.2, y: 1}
       dataName: stunGun
@@ -44,6 +51,11 @@ MonoBehaviour:
         z: 0
       easeType: 0
       easePow: 1
+    impulseMoveKeys: []
+    cursorSweepKeys: []
+    directionLockKeys: []
+    uniqueMoveSpeedKeys: []
+    uniqueDragKeys: []
     uniqueActionKeys:
     - keyFrame: {x: 0, y: 0.2}
       uniqueActName: hardAim
@@ -52,4 +64,5 @@ MonoBehaviour:
     shieldKeys: []
     disAllowGroundSetKeys: []
     seKeys: []
+    uniqueMotionStateKeys: []
     animationKeys: []

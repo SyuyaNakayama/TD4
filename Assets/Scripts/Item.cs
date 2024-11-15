@@ -26,14 +26,14 @@ public class Item : GeoGroObject
             0);
     }
 
-    public void Activation(Player player)
+    public void Activation(LiveEntity liveEntity)
     {
         //そのプレイヤーがこのアイテムに触れていたかを確認
         //(不正にアイテムを取得するチートを防止するためこのような措置を取っています)
-        if (invincibleFrame <= 0 && player != null
-        && player.IsTouchedThisItem(this))
+        if (invincibleFrame <= 0 && liveEntity != null
+        && liveEntity.IsTouchedThisItem(this))
         {
-            ItemActivation(player);
+            ItemActivation(liveEntity);
             Destroy(gameObject);
             return;
         }
@@ -42,7 +42,7 @@ public class Item : GeoGroObject
     protected virtual void ItemUpdate()
     {
     }
-    protected virtual void ItemActivation(Player player)
+    protected virtual void ItemActivation(LiveEntity liveEntity)
     {
     }
 }
