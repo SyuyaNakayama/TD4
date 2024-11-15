@@ -10,6 +10,8 @@ public class Player : CharacterCassette
     const float cameraControlSpeed = 3;
     const float moveSpeed = 1.5f;
     const float jumpPower = 10.0f;
+    const float maxPlayerRotSpeed = 3;
+    const float playerRotSpeedDiffuse = 0.5f;
 
     bool prevJumpInput;
     bool attackTrigger;
@@ -30,6 +32,7 @@ public class Player : CharacterCassette
         return weapons;
     }
     float playerCameraAngle = LiveEntity.MaxCameraAngle;
+    float playerRotSpeed;
 
     protected override void CharaUpdate()
     {
@@ -88,7 +91,7 @@ public class Player : CharacterCassette
             GetVisual().animationName = "attack";
         }
 
-        //カメラ用の方向入力でカメラ移動
+        //カメラ用の上下入力でカメラの仰角調整
         Vector2 camInputVec = GetLiveEntity().GetControlMap().GetCamInputVec();
         transform.Rotate(
             0, camInputVec.x * cameraControlSpeed, 0, Space.Self);
@@ -97,6 +100,11 @@ public class Player : CharacterCassette
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, LiveEntity.MinCameraAngle, LiveEntity.MaxCameraAngle);
         GetLiveEntity().SetCameraAngle(playerCameraAngle);
+        //カメラ用の左右入力で回転
+        playerRotSpeed = Mathf.Clamp(
+            playerRotSpeed * playerRotSpeedDiffuse + camInputVec.x,
+            -maxPlayerRotSpeed, maxPlayerRotSpeed);
+        GetLiveEntity().transform.Rotate(0, playerRotSpeed, 0, Space.Self);
     }
 
     public void EquipCharacter(CharaData charaData)
