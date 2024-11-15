@@ -16,11 +16,13 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: f55b30d3fc21f43469a15a0922282840, type: 3}
   themeColor: {r: 0.43137258, g: 0.43137258, b: 1, a: 1}
   lifeRatio: 0.5
+  heavy: 0
   gravityScale: 0.5
   dragAxis:
     x: 1
     y: 0
     z: 1
+  scale: 1
   defaultAttackMotionName: wildUpperFang_E
   weaponedAttackMotionName: wildUpperFang
   attackMotions:
@@ -42,6 +44,19 @@ MonoBehaviour:
   defaultSprites:
   - {fileID: 21300000, guid: ef47bdcdf738e4e04a005d8f00a72643, type: 3}
   - {fileID: 21300000, guid: 734f5f09d86564f7a852fe3ee4d53696, type: 3}
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 14fb8f55a5eef46ccbb2a51690ee3030, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: c59087748b80a4200b52e95600a6ac54, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: preAttack
     totalFrame: 0
@@ -114,9 +129,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 1
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: preAttack
+    seKeys: []
   - name: attack
     totalFrame: 0
     transformAnimationKeys:
@@ -154,9 +171,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: attack
+    seKeys: []
   - name: idol
     totalFrame: 90
     transformAnimationKeys:
@@ -228,7 +247,9 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 2
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: damage
     totalFrame: 5
     transformAnimationKeys:
@@ -266,9 +287,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 2
       easePow: 2
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: damage
+    seKeys: []
   - name: defeat
     totalFrame: 5
     transformAnimationKeys:
@@ -289,27 +312,53 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 2
       easePow: 5
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: defeat
+    seKeys: []
   facialExpressions:
   - name: preAttack
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 1
-      texture: {fileID: 2800000, guid: e678ffc66aec04f689810b43590b43ea, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: e678ffc66aec04f689810b43590b43ea, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: attack
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 1
-      texture: {fileID: 2800000, guid: 34c8854da67754b9c96e1617db41bc41, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 34c8854da67754b9c96e1617db41bc41, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: damage
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 1
-      texture: {fileID: 2800000, guid: 34c8854da67754b9c96e1617db41bc41, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 34c8854da67754b9c96e1617db41bc41, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: defeat
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 1
-      texture: {fileID: 2800000, guid: 59267c425a0dd4352aa87639f718e581, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 59267c425a0dd4352aa87639f718e581, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
