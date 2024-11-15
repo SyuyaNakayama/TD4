@@ -234,7 +234,7 @@ public class CharacterCassette : MonoBehaviour
                 0.5f);
             transform.localRotation *= visualRotation;
 
-            bool needDisplay = !liveEntity.IsLive()
+            bool needDisplay = !liveEntity.IsLive() || liveEntity.GetGoaled()
                 || !liveEntity.IsGhostTime() || Time.time % 0.14f < 0.07f;
 
             Renderer mesh = GetComponent<Renderer>();

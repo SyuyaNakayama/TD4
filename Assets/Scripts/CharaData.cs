@@ -75,8 +75,8 @@ public class CharaData : ScriptableObject
     }
 
     public const int totalStatusValue = 3000;
-    public const float minLifeRatio = 0.2f;
-    public const float maxLifeRatio = 0.8f;
+    public const float minLifeRatio = 0.1f;
+    public const float maxLifeRatio = 0.9f;
     const float attackPowerRate = 0.4f;
 
     [SerializeField]

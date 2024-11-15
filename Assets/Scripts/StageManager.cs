@@ -58,7 +58,7 @@ public class StageManager : MonoBehaviour
         //プレイヤーを探す
         foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
-            if (obj)
+            if (obj && obj.GetUserControl())
             {
                 player = obj;
             }
