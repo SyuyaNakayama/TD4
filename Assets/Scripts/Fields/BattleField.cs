@@ -12,11 +12,16 @@ public class BattleField : Field
     }
 
     [System.Serializable]
-    public struct EnemyAndTransform
+    public struct SpawnData
     {
         public string cassetteID;
         public Vector3 enemyPos;
         public Vector3 enemyRot;
+    }
+    [System.Serializable]
+    public struct Wave
+    {
+        public SpawnData[] spawnDatas;
     }
 
     [SerializeField]
@@ -26,9 +31,7 @@ public class BattleField : Field
     [SerializeField]
     string TeamID = "enemy";
     [SerializeField]
-    EnemyAndTransform[] enemies;
-    [SerializeField]
-    int[] waveEnemyNum;
+    Wave[] waves;
 
     bool tempBattling;
     bool battling;
@@ -74,23 +77,15 @@ public class BattleField : Field
         {
             if (guardersNum == 0)
             {
-                int prevWaveEnemyNum = 0;
-                for (int i = 0; i < wave; i++)
+                if (wave < waves.Length)
                 {
-                    prevWaveEnemyNum += waveEnemyNum[i];
-                }
-                if (prevWaveEnemyNum < enemies.Length)
-                {
-                    for (int i = 0; i < waveEnemyNum[wave]; i++)
+                    for (int i = 0; i < waves[wave].spawnDatas.Length; i++)
                     {
-                        if (prevWaveEnemyNum + i < enemies.Length)
-                        {
-                            LiveEntity.Spawn(resourcePalette,
-                                transform.TransformPoint(enemies[prevWaveEnemyNum + i].enemyPos),
-                                transform.rotation * Quaternion.Euler(enemies[prevWaveEnemyNum + i].enemyRot),
-                                false, TeamID,
-                                new string[] { enemies[prevWaveEnemyNum + i].cassetteID }, new int[] { 0 }, 0);
-                        }
+                        LiveEntity.Spawn(resourcePalette,
+                            transform.TransformPoint(waves[wave].spawnDatas[i].enemyPos),
+                            transform.rotation * Quaternion.Euler(waves[wave].spawnDatas[i].enemyRot),
+                            false, TeamID,
+                            new string[] { waves[wave].spawnDatas[i].cassetteID }, new int[] { 0 }, 0);
                     }
                     wave++;
                 }
@@ -99,7 +94,7 @@ public class BattleField : Field
                     battled = true;
                 }
             }
-            annihilated = wave >= waveEnemyNum.Length && livingGuardersNum == 0;
+            annihilated = wave >= waves.Length && livingGuardersNum == 0;
             guardersNum = 0;
             livingGuardersNum = 0;
         }

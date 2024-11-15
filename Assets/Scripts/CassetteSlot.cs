@@ -86,6 +86,23 @@ public class CassetteSlot : MonoBehaviour
         }
     }
 
+    public void Restart()
+    {
+        string[] setInventoryCharaID = { };
+        Restart(setInventoryCharaID);
+    }
+    public void Restart(string[] setInventoryCharaID)
+    {
+        if (restartAble)
+        {
+            if (setInventoryCharaID.Length != 0)
+            {
+                inventoryCharaID = setInventoryCharaID;
+            }
+            restartAble = false;
+        }
+    }
+
     public bool GetEnabled(int cassetteIndex)
     {
         return team[cassetteIndex] >= 0;
