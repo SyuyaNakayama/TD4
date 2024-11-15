@@ -16,11 +16,13 @@ MonoBehaviour:
   iconGraph: {fileID: 21300000, guid: 2ae5906cb43344d6a8b86a346d2e562c, type: 3}
   themeColor: {r: 0.5, g: 0, b: 0.5, a: 1}
   lifeRatio: 0.4
+  heavy: 0
   gravityScale: 0
   dragAxis:
     x: 1
     y: 1
     z: 1
+  scale: 1
   defaultAttackMotionName: biteBeat
   weaponedAttackMotionName: 
   attackMotions:
@@ -34,13 +36,45 @@ MonoBehaviour:
     scale: {x: 1, y: 1, z: 1}
   - position: {x: 0, y: 0, z: 0}
     eulerAngles: {x: 0, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-  defaultTextures: []
-  defaultSprites:
-  - {fileID: 21300000, guid: d30ed377bf959416181a701ae586e060, type: 3}
-  - {fileID: 21300000, guid: 0b9ff6d0d50eb49db8534f7b987e6912, type: 3}
-  - {fileID: 21300000, guid: 15e84d6ff21c54cb6a9baa8d8af86cdc, type: 3}
-  - {fileID: 21300000, guid: 0b9ff6d0d50eb49db8534f7b987e6912, type: 3}
+    scale: {x: -1, y: 1, z: 1}
+  defaultSprites: []
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: d30ed377bf959416181a701ae586e060, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 0b9ff6d0d50eb49db8534f7b987e6912, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 0828e8cda8bdc4442b0f6e5ea363c170, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 15e84d6ff21c54cb6a9baa8d8af86cdc, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 0b9ff6d0d50eb49db8534f7b987e6912, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 8ca7f2b671cd64fb6b1f6dde1007ee05, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: awake
     totalFrame: 0
@@ -58,7 +92,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 1
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 1
       easePow: 3
@@ -75,7 +109,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 1
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 0
       easePow: 3
@@ -92,7 +126,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 1
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 1
       easePow: 3
@@ -109,7 +143,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 1
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 0
       easePow: 3
@@ -147,9 +181,11 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys:
     - keyFrame: {x: 0, y: 1}
       facialExpressionName: awake
+    seKeys: []
   - name: idol
     totalFrame: 60
     transformAnimationKeys:
@@ -221,7 +257,9 @@ MonoBehaviour:
       lerpAsEuler: 0
       easeType: 0
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: damage
     totalFrame: 6
     transformAnimationKeys:
@@ -238,7 +276,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 0
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 2
       easePow: 3
@@ -255,7 +293,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 0
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 2
       easePow: 3
@@ -272,7 +310,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 0
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 2
       easePow: 3
@@ -289,11 +327,13 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 0
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 2
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   - name: defeat
     totalFrame: 6
     transformAnimationKeys:
@@ -327,7 +367,7 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 0
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 2
       easePow: 3
@@ -344,16 +384,30 @@ MonoBehaviour:
       ignoreTransform:
         position: 0
         rotation: 0
-        scale: 0
+        scale: 1
       lerpAsEuler: 0
       easeType: 2
       easePow: 3
+    rigAnimationKeys: []
     facialExpressionKeys: []
+    seKeys: []
   facialExpressions:
   - name: awake
-    indexAndTextures: []
-    indexAndSprites:
+    indexAndPropertyReplacers:
     - index: 1
-      sprite: {fileID: 21300000, guid: ff41409b8386f42bf8dfed88cefc486a, type: 3}
-    - index: 3
-      sprite: {fileID: 21300000, guid: ff41409b8386f42bf8dfed88cefc486a, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: ff41409b8386f42bf8dfed88cefc486a, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
+    - index: 4
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: ff41409b8386f42bf8dfed88cefc486a, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
+    indexAndSprites: []

@@ -30,10 +30,23 @@ MonoBehaviour:
   - position: {x: 0, y: 0, z: 0}
     eulerAngles: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
-  defaultTextures:
-  - {fileID: 2800000, guid: 20b3c3cd969ff46579a8e007568f7572, type: 3}
-  - {fileID: 2800000, guid: 7566413ab74be489c813c82b189e0bd5, type: 3}
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
   defaultSprites: []
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 20b3c3cd969ff46579a8e007568f7572, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 7566413ab74be489c813c82b189e0bd5, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: damage
     totalFrame: 8
@@ -49,7 +62,7 @@ MonoBehaviour:
     totalFrame: 0
     transformAnimationKeys:
     - keyFrame: {x: 0, y: 0.2}
-      bodyPartIndex: 0
+      bodyPartIndex: 1
       startTransform:
         position: {x: 0, y: 0, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
@@ -66,7 +79,7 @@ MonoBehaviour:
       easeType: 1
       easePow: 4
     - keyFrame: {x: 0.2, y: 1}
-      bodyPartIndex: 0
+      bodyPartIndex: 1
       startTransform:
         position: {x: 0, y: 0.1, z: 0}
         eulerAngles: {x: 0, y: 0, z: 0}
@@ -103,30 +116,78 @@ MonoBehaviour:
     seKeys: []
   facialExpressions:
   - name: damage
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 257797eddefa943448fe8bdc68349468, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 257797eddefa943448fe8bdc68349468, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 06706da8297964761aa5f73ddee5d107, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 06706da8297964761aa5f73ddee5d107, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: damage2
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 9c330e9d7f9aa46188b423b4cf4aeb08, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 9c330e9d7f9aa46188b423b4cf4aeb08, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 6082b33099f5e494992a4dd9d32978aa, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 6082b33099f5e494992a4dd9d32978aa, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: defeat
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 85f2cec887a7a4e2e889d2b6e09f2198, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 85f2cec887a7a4e2e889d2b6e09f2198, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 06706da8297964761aa5f73ddee5d107, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 06706da8297964761aa5f73ddee5d107, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
   - name: defeat2
-    indexAndTextures:
+    indexAndPropertyReplacers:
     - index: 0
-      texture: {fileID: 2800000, guid: 85f2cec887a7a4e2e889d2b6e09f2198, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 85f2cec887a7a4e2e889d2b6e09f2198, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     - index: 1
-      texture: {fileID: 2800000, guid: 6082b33099f5e494992a4dd9d32978aa, type: 3}
+      propertyReplacer:
+        textureReplacers:
+        - targetIndex: 0
+          texture: {fileID: 2800000, guid: 6082b33099f5e494992a4dd9d32978aa, type: 3}
+        colorReplacers: []
+        intReplacers: []
+        floatReplacers: []
     indexAndSprites: []
