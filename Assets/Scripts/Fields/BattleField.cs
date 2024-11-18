@@ -60,9 +60,9 @@ public class BattleField : Field
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
         for(int i = 0;i < waves.Length;i++)
         {
+            Gizmos.color = Color.HSVToRGB((float)i / waves.Length * 0.75f, 1, 1);
             for(int j = 0;j < waves[i].spawnDatas.Length;j++)
             {
                 Gizmos.matrix = Matrix4x4.TRS(
