@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class CharaChip : Item
 {
@@ -12,6 +15,16 @@ public class CharaChip : Item
     CharaData data;
 
     bool charaDataLock;
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Handles.Label(
+            transform.position,
+            data.name);
+    }
+#endif
 
     protected override void ItemUpdate()
     {
