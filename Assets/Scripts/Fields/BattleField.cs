@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class BattleField : Field
 {
@@ -54,6 +57,40 @@ public class BattleField : Field
     int guardersNum;
     int livingGuardersNum;
 
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        for(int i = 0;i < waves.Length;i++)
+        {
+            for(int j = 0;j < waves[i].spawnDatas.Length;j++)
+            {
+                Matrix4x4 cache = Gizmos.matrix;
+                Gizmos.matrix = Matrix4x4.TRS(
+                    transform.TransformPoint(waves[i].spawnDatas[j].enemyPos),
+                    transform.rotation * Quaternion.Euler(
+                    waves[i].spawnDatas[j].enemyRot),
+                    Vector3.one);
+
+                Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
+                Gizmos.matrix = cache;
+            }
+        }
+
+        Gizmos.color = Color.white;
+        for(int i = 0;i < waves.Length;i++)
+        {
+            for(int j = 0;j < waves[i].spawnDatas.Length;j++)
+            {
+                Handles.Label(
+                    transform.TransformPoint(waves[i].spawnDatas[j].enemyPos),
+                    waves[i].spawnDatas[j].cassetteID);
+            }
+        }
+    }
+#endif
+
     void Awake()
     {
         waveWait = 10;
@@ -62,6 +99,7 @@ public class BattleField : Field
         battled = false;
         wave = 0;
     }
+
     protected override void UniqueFixedUpdate()
     {
         //全インスタンスを入れる変数を更新

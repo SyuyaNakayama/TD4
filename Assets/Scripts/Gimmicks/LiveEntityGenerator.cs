@@ -22,6 +22,7 @@ public class LiveEntityGenerator : MonoBehaviour
 
     LiveEntity[] liveEntities = { };
     int currentSpawnInterval;
+
     void FixedUpdate()
     {
         //倒されたものはリストから除外
