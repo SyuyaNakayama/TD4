@@ -22,7 +22,9 @@ public class Board : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponent<Player>() != null)
+        LiveEntity liveEntity = other.GetComponent<LiveEntity>();
+        // プレイヤーが接触したらメッセージを表示する
+        if (liveEntity && liveEntity.GetUserControl())
         {
             textComponent.SetActive(true);
         }
