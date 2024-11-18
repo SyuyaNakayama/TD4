@@ -65,7 +65,6 @@ public class BattleField : Field
         {
             for(int j = 0;j < waves[i].spawnDatas.Length;j++)
             {
-                Matrix4x4 cache = Gizmos.matrix;
                 Gizmos.matrix = Matrix4x4.TRS(
                     transform.TransformPoint(waves[i].spawnDatas[j].enemyPos),
                     transform.rotation * Quaternion.Euler(
@@ -74,7 +73,7 @@ public class BattleField : Field
 
                 Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
 
-                Gizmos.matrix = cache;
+                Gizmos.matrix = Matrix4x4.identity;
             }
         }
 

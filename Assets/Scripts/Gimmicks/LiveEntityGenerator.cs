@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class LiveEntityGenerator : MonoBehaviour
 {
@@ -22,6 +25,16 @@ public class LiveEntityGenerator : MonoBehaviour
 
     LiveEntity[] liveEntities = { };
     int currentSpawnInterval;
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Handles.Label(
+            transform.position,
+            characterName);
+    }
+#endif
 
     void FixedUpdate()
     {

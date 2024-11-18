@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 [DisallowMultipleComponent]
 public class CassetteSlot : MonoBehaviour
 {
@@ -38,6 +42,18 @@ public class CassetteSlot : MonoBehaviour
     }
     bool restartAble;
 
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        if(inventoryCharaID != null && inventoryCharaID.Length > 0)
+        {
+            Gizmos.color = Color.white;
+            Handles.Label(
+                transform.position,
+                inventoryCharaID[0]);
+        }
+    }
+#endif
 
     void Awake()
     {
