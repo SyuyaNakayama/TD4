@@ -15,8 +15,12 @@ public class Menu : MonoBehaviour
     }
 
     public bool active;
-    bool prevActive;
-    bool prevIsCurrentMenu;
+    [SerializeField]
+    ControlMapMenu controlMap;
+    public ControlMapMenu GetControlMap()
+    {
+        return controlMap;
+    }
     [SerializeField]
     Canvas canvas;
     [SerializeField]
@@ -43,6 +47,8 @@ public class Menu : MonoBehaviour
     {
         return controlMessage;
     }
+    bool prevActive;
+    bool prevIsCurrentMenu;
 
     void Awake()
     {
@@ -59,6 +65,20 @@ public class Menu : MonoBehaviour
         controlMessage = "";
         //アクティブなら表示する
         canvas.enabled = IsCurrentMenu();
+
+        //中のMenuPieceを自動で探す
+        Array.Resize(ref menuPieces, 0);
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            CMBMenuPiece current =
+                transform.GetChild(i).GetComponent<CMBMenuPiece>();
+
+            if (current)
+            {
+                Array.Resize(ref menuPieces, menuPieces.Length + 1);
+                menuPieces[menuPieces.Length - 1] = current;
+            }
+        }
 
         //押されたボタンに応じてメッセージを変える
         if (IsCurrentMenu())
@@ -80,28 +100,30 @@ public class Menu : MonoBehaviour
                     break;
                 }
             }
-        }
-        prevIsCurrentMenu = IsCurrentMenu();
 
-        //メッセージに応じて次のメニューを表示
-        if (controlMessage != "")
-        {
-            for (int i = 0; i < menuTransitionDatas.Length; i++)
+            if (prevIsCurrentMenu)
             {
-                if (controlMessage == menuTransitionDatas[i].controlMessage)
+                //メッセージに応じて次のメニューを表示　
+                if (controlMessage != "")
                 {
-                    menuTransitionDatas[i].nextMenu.active = true;
-                    break;
+                    for (int i = 0; i < menuTransitionDatas.Length; i++)
+                    {
+                        if (controlMessage == menuTransitionDatas[i].controlMessage)
+                        {
+                            menuTransitionDatas[i].nextMenu.active = true;
+                            break;
+                        }
+                    }
+                }
+
+                //メッセージがcloseMessageと同じなら閉じる
+                if (controlMessage == closeMessage)
+                {
+                    active = false;
                 }
             }
         }
-
-        //メッセージがcloseMessageと同じなら閉じる
-        if (controlMessage == closeMessage)
-        {
-            active = false;
-        }
-
+        prevIsCurrentMenu = IsCurrentMenu();
         prevActive = active;
     }
 
