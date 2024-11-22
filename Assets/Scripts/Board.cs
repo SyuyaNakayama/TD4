@@ -26,7 +26,7 @@ public class Board : MonoBehaviour
         // プレイヤーが接触したらメッセージを表示する
         if (liveEntity && liveEntity.GetUserControl())
         {
-            textComponent.SetActive(true);
+            textComponent.SetActive(true); 
         }
     }
 }
