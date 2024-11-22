@@ -103,7 +103,7 @@ public class Menu : MonoBehaviour
 
             if (prevIsCurrentMenu)
             {
-                //メッセージに応じて次のメニューを表示
+                //メッセージに応じて次のメニューを表示　
                 if (controlMessage != "")
                 {
                     for (int i = 0; i < menuTransitionDatas.Length; i++)
