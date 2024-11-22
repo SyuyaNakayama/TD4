@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: LiberationSans SDF Material
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - OUTLINE_ON
   - UNDERLAY_ON
@@ -19,6 +21,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -127,8 +130,8 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _TextureHeight: 512
-    - _TextureWidth: 512
+    - _TextureHeight: 2048
+    - _TextureWidth: 2048
     - _UVSec: 0
     - _UnderlayDilate: 0
     - _UnderlayOffsetX: 0
@@ -179,6 +182,7 @@ MonoBehaviour:
     m_StyleName: Regular
     m_PointSize: 86
     m_Scale: 1
+    m_UnitsPerEM: 0
     m_LineHeight: 98.8916
     m_AscentLine: 77.853516
     m_CapLine: 59
@@ -205,8 +209,8 @@ MonoBehaviour:
   m_FreeGlyphRects:
   - m_X: 0
     m_Y: 0
-    m_Width: 511
-    m_Height: 511
+    m_Width: 2047
+    m_Height: 2047
   m_fontInfo:
     Name: Liberation Sans
     PointSize: 86
@@ -230,8 +234,8 @@ MonoBehaviour:
     AtlasWidth: 1024
     AtlasHeight: 1024
   atlas: {fileID: 0}
-  m_AtlasWidth: 512
-  m_AtlasHeight: 512
+  m_AtlasWidth: 2048
+  m_AtlasHeight: 2048
   m_AtlasPadding: 9
   m_AtlasRenderMode: 4169
   m_glyphInfoList: []
@@ -248,8 +252,8 @@ MonoBehaviour:
     pointSize: 86
     padding: 9
     packingMode: 4
-    atlasWidth: 512
-    atlasHeight: 512
+    atlasWidth: 2048
+    atlasHeight: 2048
     characterSetSelectionMode: 1
     characterSequence: 32 - 126, 160 - 255, 8192 - 8303, 8364, 8482, 9633
     referencedFontAssetGUID: 8f586378b4e144a9851e7b34d9b748ee
@@ -328,7 +332,8 @@ Texture2D:
   m_MipCount: 1
   m_IsReadable: 1
   m_IsPreProcessed: 0
-  m_IgnoreMasterTextureLimit: 0
+  m_IgnoreMipmapLimit: 0
+  m_MipmapLimitGroupName: 
   m_StreamingMipmaps: 0
   m_StreamingMipmapsPriority: 0
   m_VTOnly: 0
