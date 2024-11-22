@@ -40,10 +40,7 @@ public class LiveEntity : GeoGroObject
         return ret;
     }
 
-    public const float cameraFlipMotionMultiply = 0.01f;
-    public const float maxCameraTiltDiffuse = 0.15f;
     public const float defaultCameraDistance = 10;
-    public const float directionTiltIntensity = 0.5f;
     public const float MinCameraAngle = 0;
     public const float MaxCameraAngle = 90;
     const float goaledCameraAngle = 0;
@@ -55,7 +52,6 @@ public class LiveEntity : GeoGroObject
     const float autoRepairPower = 0.003f;
     const int maxDamageReactionTimeFrame = 10;
     public const int MaxCadaverLifeTimeFrame = 60;
-    public const int FreezeCadaverLifeTimeFrame = 40;
     public const int DeadIndicateCadaverLifeTimeFrame = 43;
     public const int maxGoalAnimationTimeFrame = 120;
     const int maxBattery = 300;
@@ -109,6 +105,13 @@ public class LiveEntity : GeoGroObject
     Menu menu;
     [SerializeField]
     Menu quitMenu;
+    [SerializeField]
+    CMBSlider nutralCameraTiltSlider;
+    [SerializeField]
+    CMBSlider cameraFlipMotionMultiplySlider;
+    [SerializeField]
+    CMBSlider cameraTiltSpeedSlider;
+
 
     bool prevMenuInput;
 
@@ -125,8 +128,8 @@ public class LiveEntity : GeoGroObject
     Quaternion cameraTiltRot;
     float cameraTiltDiffuse;
 
-    protected float cameraAngle = MaxCameraAngle;
-    float easedCameraAngle = MaxCameraAngle;
+    protected float cameraAngle;
+    float easedCameraAngle;
     protected float cameraDistance = defaultCameraDistance;
     float easedCameraDistance = defaultCameraDistance;
 
@@ -222,6 +225,9 @@ public class LiveEntity : GeoGroObject
 
         gameManager = GameObject.Find("/GameManager");
         saveMedals = gameManager.GetComponent<MedalCounter>();
+
+        cameraAngle = nutralCameraTiltSlider.GetScaledOutputValue();
+        easedCameraAngle = nutralCameraTiltSlider.GetScaledOutputValue();
     }
 
     protected override void GGOUpdate()
@@ -551,7 +557,7 @@ public class LiveEntity : GeoGroObject
             }
         }
     }
-    //??øΩ?øΩÃóÕÇÔøΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÁÇµ??øΩ?øΩA??øΩ?øΩ??øΩ?øΩ??øΩ?øΩG??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ‘ÇÔøΩt??øΩ?øΩ^
+    //É_ÉÅÅ[ÉWèàóù
     void Damage(float damage, int setGhostTimeFrame)
     {
         life -= Mathf.Max(0, damage / GetCassetteData().GetLife());
@@ -583,7 +589,7 @@ public class LiveEntity : GeoGroObject
         damageEffect.transform.localScale = new Vector3(1, 1, 1);
         damageEffect.GetComponent<ParticleSystem>().startColor = GetCassetteData().GetThemeColor();
     }
-    //??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩŒÇÔøΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ
+    //ÉqÉbÉgÉoÉbÉN
     void HitBack(Vector3 hitBackVec, int setHitBackTimeFrame)
     {
         movement = Quaternion.Inverse(transform.rotation)
@@ -611,7 +617,7 @@ public class LiveEntity : GeoGroObject
     {
         return hitbackTimeFrame > 0;
     }
-    //??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩƒÇÔøΩ??øΩ?øΩÈÇ©
+    //ê∂Ç´ÇƒÇ¢ÇÈÇ©
     public bool IsLive()
     {
         return life > 0;
@@ -624,7 +630,7 @@ public class LiveEntity : GeoGroObject
     {
         return !IsLive() && cadaverLifeTimeFrame <= 0;
     }
-    //??øΩ?øΩZ??øΩ?øΩ…ÇÔøΩÈñ≥??øΩ?øΩG??øΩ?øΩ??øΩ?øΩ‘ÇÔøΩ
+    //ãZÇ…ÇÊÇÈñ≥ìGèÛë‘Ç©
     public bool IsShield()
     {
         return shieldable && shield;
@@ -633,12 +639,12 @@ public class LiveEntity : GeoGroObject
     {
         return ghostTimeFrame > 0;
     }
-    //??øΩ?øΩ_??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ[??øΩ?øΩW??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩt??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ‘ÇÔøΩ
+    //É_ÉÅÅ[ÉWÇéÛÇØÇÈèÛë‘Ç©
     public bool IsDamageTakeable()
     {
         return !IsShield() && !IsGhostTime();
     }
-    //??øΩ?øΩs??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ≈ÇÔøΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ‘ÇÔøΩ
+    //ëÄçÏÇ≈Ç´ÇÈèÛë‘Ç©
     public bool IsActable()
     {
         return hitbackTimeFrame <= 0;
@@ -718,15 +724,16 @@ public class LiveEntity : GeoGroObject
 
     void UpdateView()
     {
+        float cameraTiltSpeed = cameraTiltSpeedSlider.GetScaledOutputValue();
         //??øΩ?øΩJ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÃã¬äp??øΩ?øΩl??øΩ?øΩ??øΩ?øΩ??øΩ?øΩK??øΩ?øΩ??øΩ?øΩÕàÕÇ…éÔøΩ??øΩ?øΩﬂÇÔøΩ
         cameraAngle = Mathf.Clamp(
             cameraAngle, MinCameraAngle, MaxCameraAngle);
         //??øΩ?øΩJ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÃã¬äp??øΩ?øΩl??øΩ?øΩ??øΩ?øΩ??øΩ?øΩC??øΩ?øΩ[??øΩ?øΩW??øΩ?øΩ??øΩ?øΩ??øΩ?øΩO
         easedCameraAngle = Mathf.Lerp(
-            easedCameraAngle, cameraAngle, maxCameraTiltDiffuse);
+            easedCameraAngle, cameraAngle, cameraTiltSpeed);
         //??øΩ?øΩJ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÃãÔøΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩC??øΩ?øΩ[??øΩ?øΩW??øΩ?øΩ??øΩ?øΩ??øΩ?øΩO
         easedCameraDistance = Mathf.Lerp(
-            easedCameraDistance, cameraDistance, maxCameraTiltDiffuse);
+            easedCameraDistance, cameraDistance, cameraTiltSpeed);
         //??øΩ?øΩO??øΩ?øΩt??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ[??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÃâÔøΩ]??øΩ?øΩÃçÔøΩ??øΩ?øΩ…âÔøΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩƒÉJ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÃåX??øΩ?øΩ??øΩ?øΩ??øΩ?øΩp??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩﬂÇÔøΩ
         cameraTiltRot =
             cameraTiltRot * (prevRot * Quaternion.Inverse(transform.rotation));
@@ -736,8 +743,9 @@ public class LiveEntity : GeoGroObject
             Quaternion.Angle(cameraTiltRot, Quaternion.identity)) / 180;
 
         cameraTiltDiffuse = Mathf.Clamp(
-            cameraTiltDiffuse + cameraTiltAmount * cameraFlipMotionMultiply,
-            0, cameraTiltAmount * maxCameraTiltDiffuse);
+            cameraTiltDiffuse + cameraTiltAmount
+            * cameraFlipMotionMultiplySlider.GetScaledOutputValue(),
+            0, cameraTiltAmount * cameraTiltSpeed);
 
         //??øΩ?øΩJ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÃåX??øΩ?øΩ??øΩ?øΩ??øΩ?øΩp??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ
         cameraTiltRot = Quaternion.Slerp(
@@ -757,7 +765,7 @@ public class LiveEntity : GeoGroObject
         prevRot = transform.rotation;
     }
 
-    //??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩLiveEntity??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ âÔøΩ??øΩ?øΩ??øΩ?øΩ¬ÇÁÇ∑
+    //Ç±ÇÃLiveEntityÇ©ÇÁå¯â âπÇñ¬ÇÁÇ∑
     public void PlayAsSE(AudioClip clip)
     {
         GetComponent<AudioSource>().PlayOneShot(clip);

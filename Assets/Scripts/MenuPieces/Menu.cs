@@ -32,16 +32,15 @@ public class Menu : MonoBehaviour
     [SerializeField]
     Image window;
     [SerializeField]
-    CMBMenuPiece[] menuPieces;
-    public CMBMenuPiece[] GetMemuPieces()
-    {
-        return KX_netUtil.CopyArray<CMBMenuPiece>(menuPieces);
-    }
-    [SerializeField]
     MenuTransitionData[] menuTransitionDatas;
     [SerializeField]
     string closeMessage;
 
+    CMBMenuPiece[] menuPieces = { };
+    public CMBMenuPiece[] GetMemuPieces()
+    {
+        return KX_netUtil.CopyArray<CMBMenuPiece>(menuPieces);
+    }
     string controlMessage;
     public string GetControlMessage()
     {
