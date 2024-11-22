@@ -56,7 +56,7 @@ public class ControlMapMenu : ControlMap
         }
         prevCurrentMenu = currentMenu;
 
-        if(currentMenu)
+        if (currentMenu)
         {
             if (IsUserControl())
             {
@@ -261,11 +261,6 @@ public class ControlMapMenu : ControlMap
                 Vector3 screenToWorldPointPosition =
                     GetCamera().ScreenToWorldPoint(inputPosition3D);
             }
-
-            menuCursor.transform.position =
-                GetCamera().ScreenToWorldPoint(cursorPos);
-            menuCursor2.transform.position =
-                GetCamera().ScreenToWorldPoint(cursorPos2);
         }
 
         //メニュー操作時のみカーソルを表示
