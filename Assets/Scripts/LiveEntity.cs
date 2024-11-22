@@ -99,6 +99,18 @@ public class LiveEntity : GeoGroObject
     {
         return userControl;
     }
+    [SerializeField]
+    CassetteSlot slot;
+    public CassetteSlot GetSlot()
+    {
+        return slot;
+    }
+    [SerializeField]
+    Menu menu;
+    [SerializeField]
+    Menu quitMenu;
+
+    bool prevMenuInput;
 
     float direction;
     public float GetDirection()
@@ -183,12 +195,6 @@ public class LiveEntity : GeoGroObject
         return isAllowCassetteUpdate;
     }
     GameObject cassetteObj;
-    [SerializeField]
-    CassetteSlot slot;
-    public CassetteSlot GetSlot()
-    {
-        return slot;
-    }
     int tempCassetteIndex;
     int cassetteIndex = -1;
     public int GetCassetteIndex()
@@ -308,7 +314,11 @@ public class LiveEntity : GeoGroObject
 
             if (userControl)
             {
-                if (GetControlMap().GetMenuInput())
+                if (controlMap.GetMenuInput() && !prevMenuInput)
+                {
+                    menu.active = !menu.active;
+                }
+                if (quitMenu.GetControlMessage() == "yes")
                 {
                     Quit();
                 }
@@ -409,6 +419,9 @@ public class LiveEntity : GeoGroObject
             Mathf.Clamp(repairCoolTimeFrame, 0, maxRepairCoolTimeFrame));
 
         life = Mathf.Clamp(life, 0, 1);
+
+        //トリガー入力用の変数を更新
+        prevMenuInput = controlMap.GetMenuInput();
 
         updating = false;
     }
