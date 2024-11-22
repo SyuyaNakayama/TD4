@@ -22,6 +22,10 @@ public class CMBMenuPiece : MonoBehaviour
     ControlMapMenu controlMap;
     public ControlMapMenu GetControlMap()
     {
+        if (menu && menu.GetControlMap())
+        {
+            return menu.GetControlMap();
+        }
         return controlMap;
     }
     [SerializeField]
@@ -79,6 +83,12 @@ public class CMBMenuPiece : MonoBehaviour
         output = false;
         if (!menu || menu.active)
         {
+            if (transform.parent
+                && transform.parent.GetComponent<Menu>())
+            {
+                menu = transform.parent.GetComponent<Menu>();
+            }
+
             image.material = new Material(material);
             image.material.SetColor("_AddColor", GetColor());
 
