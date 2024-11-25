@@ -40,7 +40,6 @@ public class LiveEntity : GeoGroObject
         return ret;
     }
 
-    public const float defaultCameraDistance = 10;
     public const float MinCameraAngle = 0;
     public const float MaxCameraAngle = 90;
     const float goaledCameraAngle = 0;
@@ -111,6 +110,8 @@ public class LiveEntity : GeoGroObject
     CMBSlider cameraFlipMotionMultiplySlider;
     [SerializeField]
     CMBSlider cameraTiltSpeedSlider;
+    [SerializeField]
+    CMBSlider cameraDistanceSlider;
 
 
     bool prevMenuInput;
@@ -128,10 +129,14 @@ public class LiveEntity : GeoGroObject
     Quaternion cameraTiltRot;
     float cameraTiltDiffuse;
 
-    protected float cameraAngle;
+    float cameraAngle;
+    public float GetCameraAngle()
+    {
+        return cameraAngle;
+    }
     float easedCameraAngle;
-    protected float cameraDistance = defaultCameraDistance;
-    float easedCameraDistance = defaultCameraDistance;
+    float cameraDistance;
+    float easedCameraDistance;
 
     float life = 1;//écÇËëÃóÕÇÃäÑçá
     public float GetLife()
@@ -228,6 +233,8 @@ public class LiveEntity : GeoGroObject
 
         cameraAngle = nutralCameraTiltSlider.GetScaledOutputValue();
         easedCameraAngle = nutralCameraTiltSlider.GetScaledOutputValue();
+        cameraDistance = cameraDistanceSlider.GetScaledOutputValue();
+        easedCameraDistance = cameraDistance;
     }
 
     protected override void GGOUpdate()
@@ -761,7 +768,7 @@ public class LiveEntity : GeoGroObject
             view.transform.localRotation * new Vector3(0, 0, -1)
             * easedCameraDistance;
         //??øΩ?øΩJ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩÃãÔøΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩ??øΩ?øΩf??øΩ?øΩt??øΩ?øΩH??øΩ?øΩ??øΩ?øΩ??øΩ?øΩg??øΩ?øΩl??øΩ?øΩ??øΩ?øΩ
-        cameraDistance = defaultCameraDistance;
+        cameraDistance = cameraDistanceSlider.GetScaledOutputValue();
         prevRot = transform.rotation;
     }
 

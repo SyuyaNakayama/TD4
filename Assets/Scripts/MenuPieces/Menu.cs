@@ -51,6 +51,20 @@ public class Menu : MonoBehaviour
 
     void Awake()
     {
+        //’†‚ÌMenuPiece‚ðŽ©“®‚Å’T‚·
+        Array.Resize(ref menuPieces, 0);
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            CMBMenuPiece current =
+                transform.GetChild(i).GetComponent<CMBMenuPiece>();
+
+            if (current)
+            {
+                Array.Resize(ref menuPieces, menuPieces.Length + 1);
+                menuPieces[menuPieces.Length - 1] = current;
+            }
+        }
+
         Load();
     }
 

@@ -31,7 +31,6 @@ public class Player : CharacterCassette
     {
         return weapons;
     }
-    float playerCameraAngle = LiveEntity.MaxCameraAngle;
     float playerRotSpeed;
 
     protected override void CharaUpdate()
@@ -95,7 +94,8 @@ public class Player : CharacterCassette
         Vector2 camInputVec = GetLiveEntity().GetControlMap().GetCamInputVec();
         transform.Rotate(
             0, camInputVec.x * cameraControlSpeed, 0, Space.Self);
-        playerCameraAngle += camInputVec.y * cameraControlSpeed;
+        float playerCameraAngle =
+            GetLiveEntity().GetCameraAngle() + camInputVec.y * cameraControlSpeed;
 
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, LiveEntity.MinCameraAngle, LiveEntity.MaxCameraAngle);
