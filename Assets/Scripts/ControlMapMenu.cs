@@ -87,6 +87,22 @@ public class ControlMapMenu : ControlMap
                     isMouseInput = false;
                 }
 
+                //配列の外に出ないようにする
+                menuPieceIndex =
+                    menuPieceIndex % currentMenu.GetMemuPieces().Length;
+                //参照を省略
+                CMBMenuPiece currentMenuPiece =
+                    currentMenu.GetMemuPieces()[menuPieceIndex];
+                //カーソルを項目の位置に合わせる
+                menuCursor.transform.position =
+                        KX_netUtil.GetRectRelativePosition(
+                        currentMenuPiece.GetRectTransform(),
+                        new Vector2(0.5f, -0.5f));
+                menuCursor2.transform.position =
+                    KX_netUtil.GetRectRelativePosition(
+                    currentMenuPiece.GetRectTransform(),
+                    new Vector2(-0.5f, 0.5f));
+
                 if (isMouseInput)
                 {
                     //マウス操作
@@ -168,28 +184,12 @@ public class ControlMapMenu : ControlMap
                         }
                     }
 
-                    //配列の外に出ないようにする
-                    menuPieceIndex =
-                        menuPieceIndex % currentMenu.GetMemuPieces().Length;
-                    //参照を省略
-                    CMBMenuPiece currentMenuPiece =
-                        currentMenu.GetMemuPieces()[menuPieceIndex];
                     //inputPositionを項目の位置に合わせる
                     inputPosition =
                         GetCamera().WorldToScreenPoint(KX_netUtil.GetRectCenterPosition(
                         currentMenuPiece.GetRectTransform()));
 
                     bool holdInput = input;
-
-                    //カーソルを項目の位置に合わせる
-                    menuCursor.transform.position =
-                            KX_netUtil.GetRectRelativePosition(
-                            currentMenuPiece.GetRectTransform(),
-                            new Vector2(0.5f, -0.5f));
-                    menuCursor2.transform.position =
-                        KX_netUtil.GetRectRelativePosition(
-                        currentMenuPiece.GetRectTransform(),
-                        new Vector2(-0.5f, 0.5f));
 
                     //参照を省略
                     CMBSlider currentSlider =
@@ -243,14 +243,6 @@ public class ControlMapMenu : ControlMap
                         menuPieceControlling = false;
                     }
                     prevHoldInput = holdInput;
-
-                    cursorPos = GetCamera().WorldToScreenPoint(
-                        menuCursor.transform.position);
-                    cursorPos.z = GetVisualDepth();
-
-                    cursorPos2 = GetCamera().WorldToScreenPoint(
-                        menuCursor2.transform.position);
-                    cursorPos2.z = GetVisualDepth();
                 }
             }
 
@@ -265,6 +257,15 @@ public class ControlMapMenu : ControlMap
 
         //メニュー操作時のみカーソルを表示
         menuCursor.enabled = menuCursor2.enabled = currentMenu;
+
+        cursorPos = GetCamera().WorldToScreenPoint(
+            menuCursor.transform.position);
+        cursorPos.z = GetVisualDepth();
+
+        cursorPos2 = GetCamera().WorldToScreenPoint(
+            menuCursor2.transform.position);
+        cursorPos2.z = GetVisualDepth();
+
         menuCursor.transform.position =
             GetCamera().ScreenToWorldPoint(cursorPos);
         menuCursor2.transform.position =
