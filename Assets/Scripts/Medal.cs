@@ -22,7 +22,6 @@ public class Medal : MonoBehaviour
         {
             //Destroy(gameObject);
         }
-        transform.Rotate(new Vector3(90, 0, 0) * Time.deltaTime);
     }
 
     public void OnTriggerEnter(Collider col)
