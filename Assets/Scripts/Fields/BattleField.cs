@@ -20,6 +20,7 @@ public class BattleField : Field
         public string cassetteID;
         public Vector3 enemyPos;
         public Vector3 enemyRot;
+        public int teamIDIndex;
     }
     [System.Serializable]
     public struct Wave
@@ -32,7 +33,7 @@ public class BattleField : Field
     [SerializeField]
     bool visible;
     [SerializeField]
-    string TeamID = "enemy";
+    string[] TeamIDList = { "enemy" };
     [SerializeField]
     Wave[] waves;
 
@@ -121,7 +122,7 @@ public class BattleField : Field
                         LiveEntity.Spawn(resourcePalette,
                             transform.TransformPoint(waves[wave].spawnDatas[i].enemyPos),
                             transform.rotation * Quaternion.Euler(waves[wave].spawnDatas[i].enemyRot),
-                            false, TeamID,
+                            false, TeamIDList[waves[wave].spawnDatas[i].teamIDIndex],
                             new string[] { waves[wave].spawnDatas[i].cassetteID }, new int[] { 0 }, 0);
                     }
                     wave++;
@@ -148,12 +149,19 @@ public class BattleField : Field
             {
                 tempBattling = true;
             }
-            else if (tempLiveEntity.GetTeamID() == TeamID)
+            else
             {
-                guardersNum++;
-                if (tempLiveEntity.IsLive())
+                for (int i = 0; i < TeamIDList.Length; i++)
                 {
-                    livingGuardersNum++;
+                    if (tempLiveEntity.GetTeamID() == TeamIDList[i])
+                    {
+                        guardersNum++;
+                        if (tempLiveEntity.IsLive())
+                        {
+                            livingGuardersNum++;
+                        }
+                        break;
+                    }
                 }
             }
         }
