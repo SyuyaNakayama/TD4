@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Medal : MonoBehaviour
 {
+    [SerializeField]
+    GameObject particle;
     private MedalCounter saveMedals;
     //???????
     public int medalNum;
@@ -32,6 +34,11 @@ public class Medal : MonoBehaviour
         {
             saveMedals.AddMedalCount();
             saveMedals.AcquisitionMedal(medalNum);
+
+            GameObject tempParticle =
+                Instantiate(particle, transform.position, transform.rotation);
+            tempParticle.transform.localScale = transform.lossyScale;
+
             Destroy(gameObject);
         }
     }
