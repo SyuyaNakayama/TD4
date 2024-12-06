@@ -26,6 +26,7 @@ Shader "Unlit/DoubleGauge"
         Cull Off
 		Lighting Off
         ZTest Always
+        ZWrite Off
 		Blend One OneMinusSrcAlpha
 
         Pass
