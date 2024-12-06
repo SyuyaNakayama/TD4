@@ -42,15 +42,13 @@ Shader "Unlit/Character"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float4 color    : COLOR;
                 float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
-                float4 color    : COLOR;
                 float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
             };
 
             sampler2D _MainTex;
@@ -64,13 +62,12 @@ Shader "Unlit/Character"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.color = v.color;
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 texcol = tex2D(_MainTex, i.uv) * i.color;
+                fixed4 texcol = tex2D(_MainTex, i.uv);
                 clip(1 - texcol.a - _ZWriteAlpha);
                 fixed4 col = texcol * (1 - _AddColor.w) + (_AddColor) * _AddColor.w;
                 col.a = texcol.a * _MainAlpha;
@@ -102,15 +99,13 @@ Shader "Unlit/Character"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float4 color    : COLOR;
                 float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
-                float4 color    : COLOR;
                 float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
             };
 
             sampler2D _MainTex;
@@ -124,13 +119,12 @@ Shader "Unlit/Character"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.color = v.color;
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 texcol = tex2D(_MainTex, i.uv) * i.color;
+                fixed4 texcol = tex2D(_MainTex, i.uv);
                 clip(texcol.a - _ZWriteAlpha);
                 fixed4 col = texcol * (1 - _AddColor.w) + (_AddColor) * _AddColor.w;
                 col.a = texcol.a * _MainAlpha;
@@ -161,15 +155,13 @@ Shader "Unlit/Character"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float4 color    : COLOR;
                 float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
-                float4 color    : COLOR;
                 float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
             };
 
             sampler2D _Overlay;
@@ -182,7 +174,6 @@ Shader "Unlit/Character"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _Overlay);
-                o.color = v.color;
                 return o;
             }
 
@@ -190,7 +181,7 @@ Shader "Unlit/Character"
             {
                 fixed4 texcol = tex2D(_Overlay, i.uv);
 
-                fixed4 col = texcol * i.color * (1 - _AddColor.w) + (_AddColor) * _AddColor.w;
+                fixed4 col = texcol * (1 - _AddColor.w) + (_AddColor) * _AddColor.w;
                 col.a = texcol.a * _MainAlpha;
                 return col;
             }
@@ -225,8 +216,8 @@ Shader "Unlit/Character"
 
             struct v2f
             {
-                float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
             };
 
             v2f vert (appdata v)
