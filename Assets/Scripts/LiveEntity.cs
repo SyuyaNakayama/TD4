@@ -444,7 +444,7 @@ public class LiveEntity : GeoGroObject
         OnHit(col.collider);
     }
 
-    void OnTriggerStay(Collider col)
+    protected override void GGOOnTriggerStay(Collider col)
     {
         if (col.gameObject.GetComponent<Goal>() != null && userControl)
         {

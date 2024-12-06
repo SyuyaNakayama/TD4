@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//複数の惑星オブジェクトを一つの惑星とみなす機能
+//�����̘f���I�u�W�F�N�g����̘f���Ƃ݂Ȃ��@�\
 public class MargedGround : MonoBehaviour
 {
     [System.Serializable]
@@ -29,7 +29,7 @@ public class MargedGround : MonoBehaviour
 
     void FixedUpdate()
     {
-        //全インスタンスを入れる変数を更新
+        //�S�C���X�^���X������ϐ����X�V
         List<MargedGround> allInstancesList =
             new List<MargedGround>(allInstances);
         allInstancesList.RemoveAll(where => !where || where == this);
