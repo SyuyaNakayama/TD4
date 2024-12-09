@@ -48,6 +48,10 @@ public class Menu : MonoBehaviour
     }
     bool prevActive;
     bool prevIsCurrentMenu;
+    public bool GetPrevIsCurrentMenu()
+    {
+        return prevIsCurrentMenu;
+    }
 
     void Awake()
     {

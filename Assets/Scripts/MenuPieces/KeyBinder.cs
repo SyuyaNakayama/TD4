@@ -11,9 +11,17 @@ public class KeyBinder : Menu
     KeyCode[] selectedKeys = { };
     KeyCode[] pressingKeys = { };
     KeyCode[] prevPressingKeys = { };
+    bool done;
 
     protected override void MenuUpdate()
     {
+        //開いた瞬間リセット
+        if (!GetPrevIsCurrentMenu())
+        {
+            Array.Resize(ref selectedKeys, 0);
+            done = false;
+        }
+
         //前フレームで押していたキーを記録
         prevPressingKeys = KX_netUtil.CopyArray<KeyCode>(pressingKeys);
         //現在押しているキーの配列をリセット
@@ -57,8 +65,8 @@ public class KeyBinder : Menu
                         //既に設定したキーなら
                         if (isSettedKey)
                         {
-                            //設定画面を閉じる
-                            active = false;
+                            //設定画面を閉じる準備
+                            done = true;
                         }
                         else
                         {
@@ -69,6 +77,11 @@ public class KeyBinder : Menu
                     }
                 }
             }
+        }
+        else if (done)
+        {
+            //設定画面を閉じる
+            active = false;
         }
     }
 }
