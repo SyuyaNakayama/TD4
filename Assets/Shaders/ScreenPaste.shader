@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unlit/ScreenPaste"
 {
     Properties
@@ -54,6 +52,7 @@ Shader "Unlit/ScreenPaste"
             v2f vert(appdata v, float4 pos : POSITION ,out float4 wpos : SV_POSITION ,  float2 uv : TEXCOORD0) {
                 v2f o;
                 o.uv = uv;
+
                 wpos = UnityObjectToClipPos(pos);
 
                 COMPUTE_EYEDEPTH(o.depth);

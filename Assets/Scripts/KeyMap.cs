@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,6 @@ using UnityEngine;
 public class KeyMap : ScriptableObject
 {
     [System.Serializable]
-    //TODO:é…åˆ—ã‚’ä½¿ã£ã¦ã„ã‚‹ã®ã§å¤–éƒ¨ã‹ã‚‰æ›¸ãæ›ãˆã‚‰ã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹
     public struct KeyMapCell
     {
         public string name;
@@ -33,10 +33,12 @@ public class KeyMap : ScriptableObject
 
     public bool GetKey(string name)
     {
+        //“¯‚¶–¼‘O‚Ì‚à‚Ì‚ğ’T‚·
         for (int i = 0; i < keyMapCells.Length; i++)
         {
             if (keyMapCells[i].name == name)
             {
+                //ˆê‚Â‚Å‚à‰Ÿ‚³‚ê‚Ä‚¢‚½‚çtrue‚ğ•Ô‚·
                 for (int j = 0; j < keyMapCells[i].keys.Length; j++)
                 {
                     if (Input.GetKey(keyMapCells[i].keys[j]))
@@ -47,6 +49,23 @@ public class KeyMap : ScriptableObject
             }
         }
         return false;
+    }
+
+    public void SetKeyMap(string name, KeyCode[] keys)
+    {
+        //“¯‚¶–¼‘O‚Ì‚à‚Ì‚ª‚ ‚Á‚½‚çã‘‚«
+        for (int i = 0; i < keyMapCells.Length; i++)
+        {
+            if (keyMapCells[i].name == name)
+            {
+                keyMapCells[i].keys = KX_netUtil.CopyArray<KeyCode>(keys);
+                return;
+            }
+        }
+        //–³‚¯‚ê‚ÎV‹Kì¬
+        Array.Resize(ref keyMapCells, keyMapCells.Length + 1);
+        keyMapCells[keyMapCells.Length - 1].name = name;
+        keyMapCells[keyMapCells.Length - 1].keys = keys;
     }
 
     public Vector2 GetVectorInput(string name)

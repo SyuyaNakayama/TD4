@@ -105,6 +105,8 @@ public class Menu : MonoBehaviour
                 Save();
             }
 
+            MenuUpdate();
+
             for (int i = 0; i < menuPieces.Length; i++)
             {
                 if (menuPieces[i].GetOutput())
@@ -151,6 +153,10 @@ public class Menu : MonoBehaviour
             }
         }
         return active && prevActive;
+    }
+
+    protected virtual void MenuUpdate()
+    {
     }
 
     void Save()

@@ -251,6 +251,7 @@ public class LiveEntity : GeoGroObject
         //操作しているキャラクターのカメラとオーディオリスナーをオンにする
         view.enabled =
         view.GetComponent<AudioListener>().enabled = userControl;
+        view.forceIntoRenderTexture = true;
 
         List<Item> touchedItemList = new List<Item>(touchedItems);
         touchedItemList.Remove(null);
