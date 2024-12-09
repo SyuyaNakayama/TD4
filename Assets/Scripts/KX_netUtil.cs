@@ -568,4 +568,11 @@ public class KX_netUtil : object
         Array.Copy(array, ret, array.Length);
         return ret;
     }
+    //配列から要素を検索してインデックスを返す
+
+    //インデックスが配列の中を指しているか
+    public static bool IsValidIndex<T>(int index, T[] array)
+    {
+        return index >= 0 && index < array.Length;
+    }
 }

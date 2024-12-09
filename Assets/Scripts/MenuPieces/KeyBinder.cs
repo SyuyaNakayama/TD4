@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class KeyBinder : Menu
 {
     [SerializeField]
     string keyMapCellName;
+    [SerializeField]
+    TMP_Text bindKeysName;
 
     KeyCode[] selectedKeys = { };
     KeyCode[] pressingKeys = { };
@@ -82,6 +85,12 @@ public class KeyBinder : Menu
         {
             //İ’è‰æ–Ê‚ğ•Â‚¶‚é
             active = false;
+        }
+
+        bindKeysName.text = "";
+        for (int i = 0; i < selectedKeys.Length; i++)
+        {
+            bindKeysName.text += selectedKeys[i].ToString() + "  ";
         }
     }
 }
