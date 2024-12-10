@@ -68,7 +68,7 @@ Shader "Custom/OverlayShader"
 			fixed4 frag(v2f IN) : SV_Target
 			{
 				fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
-				c.rgb += _AddColor.rgb;
+				c.rgb += _AddColor.rgb * _AddColor.a;
 				c.rgb *= c.a;
 				return c;
 			}

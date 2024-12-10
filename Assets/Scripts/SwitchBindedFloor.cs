@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class SwitchBindedFloor : MonoBehaviour
 {
-    const float transformFlipIntensity = 0.4f;
-
     [SerializeField]
     Switch bindSwitch;
     [SerializeField]
@@ -21,6 +19,9 @@ public class SwitchBindedFloor : MonoBehaviour
     Vector3 positiveLocalEulerAngles;
     [SerializeField]
     Vector3 positiveLocalScale;
+    [Range(0.1f, 1), SerializeField]
+    float transformFlipIntensity = 0.4f;
+
 
     // Update is called once per frame
     void FixedUpdate()
