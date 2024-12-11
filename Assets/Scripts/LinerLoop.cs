@@ -33,7 +33,7 @@ public class LinerLoop : MonoBehaviour
             Handles.Label(transform.TransformPoint(vertices[i]), i.ToString());
         }
 
-        Vector3[] worldVertices = CopyArray<Vector3>(vertices);
+        Vector3[] worldVertices = KX_netUtil.CopyArray<Vector3>(vertices);
         for(int i = 0;i < worldVertices.Length;i++)
         {
             worldVertices[i] = transform.TransformPoint(worldVertices[i]);
