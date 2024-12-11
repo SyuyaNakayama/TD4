@@ -41,11 +41,11 @@ public class LiveEntityObserver : Switch
 
         if (active)
         {
-            GetComponent<SpriteRenderer>().sprite = trueImg;
+            GetVisual().sprite = trueImg;
         }
         else
         {
-            GetComponent<SpriteRenderer>().sprite = falseImg;
+            GetVisual().sprite = falseImg;
         }
 
     }

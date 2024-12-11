@@ -18,18 +18,18 @@ public class TimerSwitch : Switch
     {
         if (pushCoolTimeFrame > 0)
         {
-            GetComponent<SpriteRenderer>().sprite = pushed;
+            GetVisual().sprite = GetPushed();
         }
         else if (active)
         {
-            GetComponent<SpriteRenderer>().sprite =
+            GetVisual().sprite =
                 countDown[Mathf.Clamp(
                     Mathf.RoundToInt((1 - timeAmount) * countDown.Length - 0.5f)
                     , 0, countDown.Length - 1)];
         }
         else
         {
-            GetComponent<SpriteRenderer>().sprite = off;
+            GetVisual().sprite = off;
         }
         pushCoolTimeFrame = Mathf.Clamp(pushCoolTimeFrame - 1, 0, maxPushCoolTimeFrame);
 

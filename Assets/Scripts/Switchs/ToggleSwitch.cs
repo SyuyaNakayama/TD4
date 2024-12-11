@@ -13,15 +13,15 @@ public class ToggleSwitch : Switch
     {
         if (pushCoolTimeFrame > 0)
         {
-            GetComponent<SpriteRenderer>().sprite = pushed;
+            GetVisual().sprite = GetPushed();
         }
         else if (active)
         {
-            GetComponent<SpriteRenderer>().sprite = on;
+            GetVisual().sprite = on;
         }
         else
         {
-            GetComponent<SpriteRenderer>().sprite = off;
+            GetVisual().sprite = off;
         }
         pushCoolTimeFrame = Mathf.Clamp(pushCoolTimeFrame - 1, 0, maxPushCoolTimeFrame);
     }

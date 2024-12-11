@@ -36,7 +36,7 @@ public class LogicPiece : Switch
     {
         if (pushCoolTimeFrame > 0)
         {
-            button.sprite = pushed;
+            button.sprite = GetPushed();
         }
         else
         {
@@ -71,11 +71,11 @@ public class LogicPiece : Switch
 
         if (active)
         {
-            GetComponent<SpriteRenderer>().sprite = on;
+            GetVisual().sprite = on;
         }
         else
         {
-            GetComponent<SpriteRenderer>().sprite = off;
+            GetVisual().sprite = off;
         }
         pushCoolTimeFrame = Mathf.Clamp(pushCoolTimeFrame - 1, 0, maxPushCoolTimeFrame);
 
