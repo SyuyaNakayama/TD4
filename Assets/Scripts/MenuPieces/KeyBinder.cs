@@ -7,15 +7,20 @@ using TMPro;
 public class KeyBinder : Menu
 {
     [SerializeField]
-    string keyMapCellName;
-    [SerializeField]
     TMP_Text bindKeysName;
-
+    [SerializeField]
+    string keyMapCellName;
+    public string GetKeyMapCellName()
+    {
+        return keyMapCellName;
+    }
+    [SerializeField]
     KeyCode[] bindKeys = { };
     public KeyCode[] GetBindKeys()
     {
         return KX_netUtil.CopyArray<KeyCode>(bindKeys);
     }
+
     KeyCode[] pressingKeys = { };
     KeyCode[] prevPressingKeys = { };
     bool done;

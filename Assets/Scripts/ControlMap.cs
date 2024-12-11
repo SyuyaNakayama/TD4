@@ -73,7 +73,12 @@ public class ControlMap : MonoBehaviour
     }
     void Save()
     {
-
+        for (int i = 0; i < keyBinders.Length; i++)
+        {
+            keyMap.SetKeyMap(
+                keyBinders[i].GetKeyMapCellName(),
+                keyBinders[i].GetBindKeys());
+        }
     }
 
     protected virtual void ControlMapUpdate()
