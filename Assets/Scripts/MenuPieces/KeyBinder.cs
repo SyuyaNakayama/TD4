@@ -11,7 +11,11 @@ public class KeyBinder : Menu
     [SerializeField]
     TMP_Text bindKeysName;
 
-    KeyCode[] selectedKeys = { };
+    KeyCode[] bindKeys = { };
+    public KeyCode[] GetBindKeys()
+    {
+        return KX_netUtil.CopyArray<KeyCode>(bindKeys);
+    }
     KeyCode[] pressingKeys = { };
     KeyCode[] prevPressingKeys = { };
     bool done;
@@ -21,7 +25,7 @@ public class KeyBinder : Menu
         //開いた瞬間リセット
         if (!GetPrevIsCurrentMenu())
         {
-            Array.Resize(ref selectedKeys, 0);
+            Array.Resize(ref bindKeys, 0);
             done = false;
         }
 
@@ -56,17 +60,17 @@ public class KeyBinder : Menu
                     if (isKeyDown)
                     {
                         //既に設定したキーか調べる
-                        bool isSettedKey = false;
-                        for (int i = 0; i < selectedKeys.Length; i++)
+                        bool isBindedKey = false;
+                        for (int i = 0; i < bindKeys.Length; i++)
                         {
-                            if (selectedKeys[i] == code)
+                            if (bindKeys[i] == code)
                             {
-                                isSettedKey = true;
+                                isBindedKey = true;
                                 break;
                             }
                         }
                         //既に設定したキーなら
-                        if (isSettedKey)
+                        if (isBindedKey)
                         {
                             //設定画面を閉じる準備
                             done = true;
@@ -74,8 +78,8 @@ public class KeyBinder : Menu
                         else
                         {
                             //設定するキーの配列に追加
-                            Array.Resize(ref selectedKeys, selectedKeys.Length + 1);
-                            selectedKeys[selectedKeys.Length - 1] = code;
+                            Array.Resize(ref bindKeys, bindKeys.Length + 1);
+                            bindKeys[bindKeys.Length - 1] = code;
                         }
                     }
                 }
@@ -88,9 +92,9 @@ public class KeyBinder : Menu
         }
 
         bindKeysName.text = "";
-        for (int i = 0; i < selectedKeys.Length; i++)
+        for (int i = 0; i < bindKeys.Length; i++)
         {
-            bindKeysName.text += selectedKeys[i].ToString() + "  ";
+            bindKeysName.text += bindKeys[i].ToString() + "  ";
         }
     }
 }

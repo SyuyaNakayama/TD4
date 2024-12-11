@@ -45,7 +45,7 @@ public class LinerLoop : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3[] outPutVertices = CopyArray<Vector3>(vertices);
+        Vector3[] outPutVertices = KX_netUtil.CopyArray<Vector3>(vertices);
         Array.Resize(ref outPutVertices, outPutVertices.Length + 1);
         outPutVertices[outPutVertices.Length - 1] = outPutVertices[0];
 
@@ -84,12 +84,5 @@ public class LinerLoop : MonoBehaviour
             }
         }
         return indices[indices.Length - 1];
-    }
-
-    public static T[] CopyArray<T>(T[] array)
-    {
-        T[] ret = new T[array.Length];
-        Array.Copy(array, ret, array.Length);
-        return ret;
     }
 }

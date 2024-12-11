@@ -15,9 +15,7 @@ public class MargedGround : MonoBehaviour
     static MargedGround[] allInstances = { };
     public static MargedGround[] GetAllInstances()
     {
-        MargedGround[] ret = new MargedGround[allInstances.Length];
-        Array.Copy(allInstances, ret, allInstances.Length);
-        return ret;
+        return KX_netUtil.CopyArray<MargedGround>(allInstances);
     }
 
     [SerializeField]

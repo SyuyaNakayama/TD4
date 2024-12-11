@@ -8,9 +8,7 @@ public class Medal : MonoBehaviour
     static Medal[] allInstances = { };
     public static Medal[] GetAllInstances()
     {
-        Medal[] ret = new Medal[allInstances.Length];
-        Array.Copy(allInstances, ret, allInstances.Length);
-        return ret;
+        return KX_netUtil.CopyArray<Medal>(allInstances);
     }
 
     [SerializeField]

@@ -35,9 +35,7 @@ public class LiveEntity : GeoGroObject
     static LiveEntity[] allInstances = { };
     public static LiveEntity[] GetAllInstances()
     {
-        LiveEntity[] ret = new LiveEntity[allInstances.Length];
-        Array.Copy(allInstances, ret, allInstances.Length);
-        return ret;
+        return KX_netUtil.CopyArray<LiveEntity>(allInstances);
     }
 
     public const float MinCameraAngle = 0;

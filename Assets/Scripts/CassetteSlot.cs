@@ -26,9 +26,7 @@ public class CassetteSlot : MonoBehaviour
     string[] inventoryCharaID = { };
     public string[] GetInventoryCharaID()
     {
-        string[] ret = new string[inventoryCharaID.Length];
-        Array.Copy(inventoryCharaID, ret, inventoryCharaID.Length);
-        return ret;
+        return KX_netUtil.CopyArray<string>(inventoryCharaID);
     }
     [SerializeField]
     IDAndElabled[] instantCharaID = { };
@@ -36,9 +34,7 @@ public class CassetteSlot : MonoBehaviour
     int[] team = { };
     public int[] GetTeam()
     {
-        int[] ret = new int[team.Length];
-        Array.Copy(team, ret, team.Length);
-        return ret;
+        return KX_netUtil.CopyArray<int>(team);
     }
     bool restartAble;
 

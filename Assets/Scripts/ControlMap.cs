@@ -19,6 +19,8 @@ public class ControlMap : MonoBehaviour
         return camera;
     }
     [SerializeField]
+    KeyBinder[] keyBinders = { };
+    [SerializeField]
     KeyMap keyMap;
     protected KeyMap GetKeyMap()
     {
@@ -35,9 +37,13 @@ public class ControlMap : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (keyMap == null)
+        if (IsUserControl())
         {
-            Load();
+            if (keyMap == null)
+            {
+                Load();
+            }
+            Save();
         }
 
         ControlMapUpdate();
@@ -64,6 +70,10 @@ public class ControlMap : MonoBehaviour
             string json = File.ReadAllText(path);
             KeyMap data = JsonUtility.FromJson<KeyMap>(json);
         }
+    }
+    void Save()
+    {
+
     }
 
     protected virtual void ControlMapUpdate()
