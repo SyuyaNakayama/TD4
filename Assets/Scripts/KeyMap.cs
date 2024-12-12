@@ -49,6 +49,20 @@ public class KeyMap : ScriptableObject
         return false;
     }
 
+    public KeyCode[] GetKeyMap(string name)
+    {
+        //同じ名前のものがあったらその中身を複製して返す
+        for (int i = 0; i < keyMapCells.Length; i++)
+        {
+            if (keyMapCells[i].name == name)
+            {
+                return KX_netUtil.CopyArray<KeyCode>(keyMapCells[i].keys);
+            }
+        }
+        //無ければ空の配列を返す
+        return new KeyCode[] { };
+    }
+
     public void SetKeyMap(string name, KeyCode[] keys)
     {
         //同じ名前のものがあったら上書き

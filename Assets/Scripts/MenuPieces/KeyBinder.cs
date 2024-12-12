@@ -7,6 +7,8 @@ using TMPro;
 public class KeyBinder : Menu
 {
     [SerializeField]
+    ControlMapManager manager;
+    [SerializeField]
     TMP_Text bindKeysName;
     [SerializeField]
     string keyMapCellName;
@@ -92,7 +94,8 @@ public class KeyBinder : Menu
         }
         else if (done)
         {
-            //設定画面を閉じる
+            //キーバインドを適用し、設定画面を閉じる
+            manager.ApplyKeyBind();
             active = false;
         }
 

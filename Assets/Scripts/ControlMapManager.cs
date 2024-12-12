@@ -51,13 +51,6 @@ public class ControlMapManager : MonoBehaviour
     }
     void Save()
     {
-        for (int i = 0; i < keyBinders.Length; i++)
-        {
-            keyMap.SetKeyMap(
-                keyBinders[i].GetKeyMapCellName(),
-                keyBinders[i].GetBindKeys());
-        }
-
         string json = JsonUtility.ToJson(keyMap, true);
         File.WriteAllText(Application.persistentDataPath
             + "/" + keyMapDataName + ".json", json);
@@ -67,5 +60,15 @@ public class ControlMapManager : MonoBehaviour
     {
         return (liveEntity && liveEntity.GetUserControl())
             || (!liveEntity && userControl);
+    }
+
+    public void ApplyKeyBind()
+    {
+        for (int i = 0; i < keyBinders.Length; i++)
+        {
+            keyMap.SetKeyMap(
+                keyBinders[i].GetKeyMapCellName(),
+                keyBinders[i].GetBindKeys());
+        }
     }
 }
