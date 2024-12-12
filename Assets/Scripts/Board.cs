@@ -8,13 +8,11 @@ public class Board : MonoBehaviour
     // 表示テキスト
     public GameObject textComponent;
 
-    // Start is called before the first frame update
     void Start()
     {
         textComponent.SetActive(false);
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         textComponent.SetActive(false);
@@ -26,7 +24,7 @@ public class Board : MonoBehaviour
         // プレイヤーが接触したらメッセージを表示する
         if (liveEntity && liveEntity.GetUserControl())
         {
-            textComponent.SetActive(true); 
+            textComponent.SetActive(true);
         }
     }
 }

@@ -23,7 +23,6 @@ public class SwitchBindedFloor : MonoBehaviour
     float transformFlipIntensity = 0.4f;
 
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         Rigidbody rigidbody = GetComponent<Rigidbody>();

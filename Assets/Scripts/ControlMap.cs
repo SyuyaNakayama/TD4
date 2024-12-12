@@ -19,15 +19,11 @@ public class ControlMap : MonoBehaviour
         return camera;
     }
     [SerializeField]
-    KeyBinder[] keyBinders = { };
-    [SerializeField]
-    KeyMap keyMap;
-    protected KeyMap GetKeyMap()
+    ControlMapManager manager;
+    public ControlMapManager GetManager()
     {
-        return keyMap;
+        return manager;
     }
-    [SerializeField]
-    bool userControl;
 
     protected Vector2 inputPosition;
     public Vector2 GetInputPosition()
@@ -37,15 +33,6 @@ public class ControlMap : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (IsUserControl())
-        {
-            if (keyMap == null)
-            {
-                Load();
-            }
-            Save();
-        }
-
         ControlMapUpdate();
     }
 
@@ -56,29 +43,7 @@ public class ControlMap : MonoBehaviour
 
     public bool IsUserControl()
     {
-        return (liveEntity && liveEntity.GetUserControl())
-            || (!liveEntity && userControl);
-    }
-
-    void Load()
-    {
-        keyMap = new KeyMap();
-
-        string path = Application.persistentDataPath + "/keyMapData.json";
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path);
-            KeyMap data = JsonUtility.FromJson<KeyMap>(json);
-        }
-    }
-    void Save()
-    {
-        for (int i = 0; i < keyBinders.Length; i++)
-        {
-            keyMap.SetKeyMap(
-                keyBinders[i].GetKeyMapCellName(),
-                keyBinders[i].GetBindKeys());
-        }
+        return GetManager().IsUserControl();
     }
 
     protected virtual void ControlMapUpdate()

@@ -34,24 +34,26 @@ public class ControlMapPlayPart : ControlMap
     {
         if (IsUserControl())
         {
-            jumpInput = GetKeyMap().GetKey("jump");
-            weaponInput = GetKeyMap().GetKey("weapon");
-            menuInput = GetKeyMap().GetKey("menu");
+            KeyMap keyMap = GetManager().GetKeyMap();
 
-            moveInputVec = GetKeyMap().GetVectorInput("moveStick")
-                + GetKeyMap().GetVectorInput("moveStick2");
-            camInputVec = GetKeyMap().GetVectorInput("camStick")
-                + GetKeyMap().GetVectorInput("camStick2");
+            jumpInput = keyMap.GetKey("jump");
+            weaponInput = keyMap.GetKey("weapon");
+            menuInput = keyMap.GetKey("menu");
 
-            bool upInput = GetKeyMap().GetKey("up");
-            bool downInput = GetKeyMap().GetKey("down");
-            bool rightInput = GetKeyMap().GetKey("right");
-            bool leftInput = GetKeyMap().GetKey("left");
+            moveInputVec = keyMap.GetVectorInput("moveStick")
+                + keyMap.GetVectorInput("moveStick2");
+            camInputVec = keyMap.GetVectorInput("camStick")
+                + keyMap.GetVectorInput("camStick2");
 
-            bool camUpInput = GetKeyMap().GetKey("camUp");
-            bool camDownInput = GetKeyMap().GetKey("camDown");
-            bool camRightInput = GetKeyMap().GetKey("camRight");
-            bool camLeftInput = GetKeyMap().GetKey("camLeft");
+            bool upInput = keyMap.GetKey("up");
+            bool downInput = keyMap.GetKey("down");
+            bool rightInput = keyMap.GetKey("right");
+            bool leftInput = keyMap.GetKey("left");
+
+            bool camUpInput = keyMap.GetKey("camUp");
+            bool camDownInput = keyMap.GetKey("camDown");
+            bool camRightInput = keyMap.GetKey("camRight");
+            bool camLeftInput = keyMap.GetKey("camLeft");
 
             moveInputVec +=
                 DPadToVector2(upInput, downInput, rightInput, leftInput);

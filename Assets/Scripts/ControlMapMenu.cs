@@ -60,13 +60,15 @@ public class ControlMapMenu : ControlMap
         {
             if (IsUserControl())
             {
-                Vector2 stickInput = GetKeyMap().GetVectorInput("direction");
-                bool selectButton = GetKeyMap().GetKey("select");
-                bool backButton = GetKeyMap().GetKey("back");
-                bool upInputButton = GetKeyMap().GetKey("up") || stickInput.y > 0;
-                bool downInputButton = GetKeyMap().GetKey("down") || stickInput.y < 0;
-                bool leftInputButton = GetKeyMap().GetKey("left") || stickInput.x < 0;
-                bool rightInputButton = GetKeyMap().GetKey("right") || stickInput.x > 0;
+                KeyMap keyMap = GetManager().GetKeyMap();
+
+                Vector2 stickInput = keyMap.GetVectorInput("direction");
+                bool selectButton = keyMap.GetKey("select");
+                bool backButton = keyMap.GetKey("back");
+                bool upInputButton = keyMap.GetKey("up") || stickInput.y > 0;
+                bool downInputButton = keyMap.GetKey("down") || stickInput.y < 0;
+                bool leftInputButton = keyMap.GetKey("left") || stickInput.x < 0;
+                bool rightInputButton = keyMap.GetKey("right") || stickInput.x > 0;
                 bool moveInputButton =
                     upInputButton || downInputButton
                     || leftInputButton || rightInputButton;

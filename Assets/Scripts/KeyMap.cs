@@ -24,10 +24,8 @@ public class KeyMap : ScriptableObject
 
     [SerializeField]
     string name;
-
     [SerializeField]
     KeyMapCell[] keyMapCells = { };
-
     [SerializeField]
     VectorInputMapCell[] vectorInputMapCells = { };
 
