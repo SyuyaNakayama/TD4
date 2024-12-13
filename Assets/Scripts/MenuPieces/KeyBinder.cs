@@ -99,6 +99,7 @@ public class KeyBinder : Menu
             active = false;
         }
 
+        //“ü—Í‚µ‚½ƒL[‚ğ•\¦
         bindKeysName.text = "";
         for (int i = 0; i < bindKeys.Length; i++)
         {
