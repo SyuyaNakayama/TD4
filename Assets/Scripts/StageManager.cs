@@ -28,9 +28,13 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     Material groundMaterial;
     [SerializeField]
+    Material unLandableMaterial;
+    [SerializeField]
     string texPropertyName;
     [SerializeField]
     Texture groundTex;
+    [SerializeField]
+    Texture unLandableObjectTex;
     public Sprite GetBackGround()
     {
         return backGround;
@@ -54,6 +58,8 @@ public class StageManager : MonoBehaviour
 
         //床のテクスチャを貼り替える
         groundMaterial.SetTexture(texPropertyName, groundTex);
+        //UnLandableObjectのテクスチャを貼り替える
+        unLandableMaterial.SetTexture(texPropertyName, unLandableObjectTex);
 
         //プレイヤーを探す
         foreach (LiveEntity obj in LiveEntity.GetAllInstances())

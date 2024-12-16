@@ -150,6 +150,14 @@ PrefabInstance:
       propertyPath: groundClusters.Array.data[0].colliders.Array.data[1]
       value: 
       objectReference: {fileID: 358918096}
+    - target: {fileID: 6240778023789666285, guid: f1ad41d75285a87428f449f6309f2523, type: 3}
+      propertyPath: UnlandableObjectTex
+      value: 
+      objectReference: {fileID: 2800000, guid: 5b9f9c400147748b0919fdfcfb7ad9ea, type: 3}
+    - target: {fileID: 6240778023789666285, guid: f1ad41d75285a87428f449f6309f2523, type: 3}
+      propertyPath: unLandableObjectTex
+      value: 
+      objectReference: {fileID: 2800000, guid: 5b9f9c400147748b0919fdfcfb7ad9ea, type: 3}
     - target: {fileID: 7463803384642214858, guid: f1ad41d75285a87428f449f6309f2523, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -234,19 +242,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4112819941738449978, guid: 358a6ebe198a14be0b834926ac06aa89, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.86149305
+      value: 0.010552057
       objectReference: {fileID: 0}
     - target: {fileID: 4112819941738449978, guid: 358a6ebe198a14be0b834926ac06aa89, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0746235
+      value: 0.0023435121
       objectReference: {fileID: 0}
     - target: {fileID: 4112819941738449978, guid: 358a6ebe198a14be0b834926ac06aa89, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.50038326
+      value: 0.98889387
       objectReference: {fileID: 0}
     - target: {fileID: 4112819941738449978, guid: 358a6ebe198a14be0b834926ac06aa89, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.043332987
+      value: -0.14822988
       objectReference: {fileID: 0}
     - target: {fileID: 4112819941738449978, guid: 358a6ebe198a14be0b834926ac06aa89, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1686,6 +1694,7 @@ MonoBehaviour:
   positiveLocalPosition: {x: 20, y: 20, z: 0}
   positiveLocalEulerAngles: {x: 0, y: 0, z: 0}
   positiveLocalScale: {x: 20, y: 20, z: 20}
+  transformFlipIntensity: 0.4
 --- !u!54 &632604927
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2043,6 +2052,7 @@ MonoBehaviour:
   positiveLocalPosition: {x: 0, y: 0, z: 0}
   positiveLocalEulerAngles: {x: 0, y: 0, z: 0}
   positiveLocalScale: {x: 1, y: 1, z: 1}
+  transformFlipIntensity: 0.4
 --- !u!54 &1024197027
 Rigidbody:
   m_ObjectHideFlags: 0
