@@ -31,6 +31,8 @@ public class StageManager : MonoBehaviour
     string texPropertyName;
     [SerializeField]
     Texture groundTex;
+    [SerializeField]
+    Texture unLandableObjectTex;
     public Sprite GetBackGround()
     {
         return backGround;
