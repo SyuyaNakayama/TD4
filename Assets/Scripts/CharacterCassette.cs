@@ -103,104 +103,112 @@ public class CharacterCassette : MonoBehaviour
             //プレイ中なら
             if (!liveEntity.GetGoaled())
             {
-                Vector2 moveInputVec = GetLiveEntity().GetControlMap().GetMoveInputVec();
-
-                if (visual)
+                //メニューを開いている場合
+                if (liveEntity.IsMenuPhase())
                 {
-                    //状態に応じた共通アニメーション
-                    if (!liveEntity.IsLive())
-                    {
-                        if (liveEntity.GetCadaverLifeTimeFrame() > 0)
-                        {
-                            visual.animationName = "defeat";
-                            visual.animationProgress = Mathf.Clamp(
-                                KX_netUtil.RangeMap(
-                                liveEntity.GetCadaverLifeTimeFrame(),
-                                LiveEntity.DeadIndicateCadaverLifeTimeFrame, 0, 0, 1),
-                                0, 1);
-                        }
-                        else
-                        {
-                            visual.animationName = "dead";
-                        }
-                    }
-                    else if (liveEntity.IsHitBacking())
-                    {
-                        visual.animationName = "damage";
-                    }
-                    else if (!liveEntity.IsLanding() && data.GetGravityScale() > 0)
-                    {
-                        visual.animationName = "midair";
-                        visual.animationProgress = KX_netUtil.RangeMap(Mathf.Clamp(liveEntity.GetMovement().y, -3, 3), 3, -3, 0, 1);
-                    }
-                    else if (moveInputVec.x != 0 || moveInputVec.y != 0)
-                    {
-                        visual.animationName = "walk";
-                    }
-                    else if (liveEntity.IsPeril())
-                    {
-                        visual.animationName = "peril";
-                    }
-                    else
-                    {
-                        visual.animationName = "idol";
-                    }
-                }
-
-                if (!liveEntity.IsHitBacking())
-                {
-                    if (liveEntity.IsLive())
-                    {
-                        SetAttackMotion(
-                            AttackMotionData.TriggerInputType.nutral);
-
-                        if (moveInputVec.x != 0 || moveInputVec.y != 0)
-                        {
-                            SetAttackMotion(
-                                AttackMotionData.TriggerInputType.move);
-                        }
-
-                        if (IsAttackInput())
-                        {
-                            SetAttackMotion(
-                                AttackMotionData.TriggerInputType.tap);
-                        }
-                        CharaUpdate();
-                    }
-
-                    attackMotionLock = false;
-                    UpdateAttackMotion();
-
-                    Vector3 holdMovement = liveEntity.GetMovement();
-
-                    if (moveLock.x)
-                    {
-                        liveEntity.SetMovement(new Vector3(
-                            holdMovement.x,
-                            liveEntity.GetMovement().y,
-                            liveEntity.GetMovement().z));
-                    }
-                    if (moveLock.y)
-                    {
-                        liveEntity.SetMovement(new Vector3(
-                            liveEntity.GetMovement().x,
-                            holdMovement.y,
-                            liveEntity.GetMovement().z));
-                    }
-                    if (moveLock.z)
-                    {
-                        liveEntity.SetMovement(new Vector3(
-                            liveEntity.GetMovement().x,
-                            liveEntity.GetMovement().y,
-                            holdMovement.z));
-                    }
-
-                    directionLock = false;
+                    liveEntity.SetMovement(Vector3.zero);
                 }
                 else
                 {
-                    attackMotionData = null;
-                    attackTimeFrame = 0;
+                    Vector2 moveInputVec = GetLiveEntity().GetControlMap().GetMoveInputVec();
+
+                    if (visual)
+                    {
+                        //状態に応じた共通アニメーション
+                        if (!liveEntity.IsLive())
+                        {
+                            if (liveEntity.GetCadaverLifeTimeFrame() > 0)
+                            {
+                                visual.animationName = "defeat";
+                                visual.animationProgress = Mathf.Clamp(
+                                    KX_netUtil.RangeMap(
+                                    liveEntity.GetCadaverLifeTimeFrame(),
+                                    LiveEntity.DeadIndicateCadaverLifeTimeFrame, 0, 0, 1),
+                                    0, 1);
+                            }
+                            else
+                            {
+                                visual.animationName = "dead";
+                            }
+                        }
+                        else if (liveEntity.IsHitBacking())
+                        {
+                            visual.animationName = "damage";
+                        }
+                        else if (!liveEntity.IsLanding() && data.GetGravityScale() > 0)
+                        {
+                            visual.animationName = "midair";
+                            visual.animationProgress = KX_netUtil.RangeMap(Mathf.Clamp(liveEntity.GetMovement().y, -3, 3), 3, -3, 0, 1);
+                        }
+                        else if (moveInputVec.x != 0 || moveInputVec.y != 0)
+                        {
+                            visual.animationName = "walk";
+                        }
+                        else if (liveEntity.IsPeril())
+                        {
+                            visual.animationName = "peril";
+                        }
+                        else
+                        {
+                            visual.animationName = "idol";
+                        }
+                    }
+
+                    if (!liveEntity.IsHitBacking())
+                    {
+                        if (liveEntity.IsLive())
+                        {
+                            SetAttackMotion(
+                                AttackMotionData.TriggerInputType.nutral);
+
+                            if (moveInputVec.x != 0 || moveInputVec.y != 0)
+                            {
+                                SetAttackMotion(
+                                    AttackMotionData.TriggerInputType.move);
+                            }
+
+                            if (IsAttackInput())
+                            {
+                                SetAttackMotion(
+                                    AttackMotionData.TriggerInputType.tap);
+                            }
+                            CharaUpdate();
+                        }
+
+                        attackMotionLock = false;
+                        UpdateAttackMotion();
+
+                        Vector3 holdMovement = liveEntity.GetMovement();
+
+                        if (moveLock.x)
+                        {
+                            liveEntity.SetMovement(new Vector3(
+                                holdMovement.x,
+                                liveEntity.GetMovement().y,
+                                liveEntity.GetMovement().z));
+                        }
+                        if (moveLock.y)
+                        {
+                            liveEntity.SetMovement(new Vector3(
+                                liveEntity.GetMovement().x,
+                                holdMovement.y,
+                                liveEntity.GetMovement().z));
+                        }
+                        if (moveLock.z)
+                        {
+                            liveEntity.SetMovement(new Vector3(
+                                liveEntity.GetMovement().x,
+                                liveEntity.GetMovement().y,
+                                holdMovement.z));
+                        }
+
+                        directionLock = false;
+                    }
+                    else
+                    {
+                        attackMotionData = null;
+                        attackTimeFrame = 0;
+                    }
                 }
             }
             else if (visual)
