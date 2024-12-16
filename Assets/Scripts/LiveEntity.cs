@@ -338,6 +338,7 @@ public class LiveEntity : GeoGroObject
         }
         else
         {
+            menu.active = false;
             cameraAngle = goaledCameraAngle;
             cameraDistance = goaledCameraDistance;
             if (userControl)
@@ -655,20 +656,15 @@ public class LiveEntity : GeoGroObject
     {
         return hitbackTimeFrame <= 0;
     }
+    //メニューを開いているか
+    public bool IsMenuPhase()
+    {
+        return menu.active;
+    }
+    //倒され、撃破アニメーションが終わったか
     public bool IsDestructed()
     {
         return !IsLive() && cadaverLifeTimeFrame <= 0;
-    }
-    public bool IsUniqueActing(string uniqueActName)
-    {
-        for (int i = 0; i < uniqueActDatas.Length; i++)
-        {
-            if (uniqueActDatas[i] == uniqueActName)
-            {
-                return true;
-            }
-        }
-        return false;
     }
     public float GetBatteryAmount()
     {
