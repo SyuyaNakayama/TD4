@@ -62,7 +62,8 @@ public class ControlMapMenu : ControlMap
             {
                 KeyMap keyMap = GetManager().GetKeyMap();
 
-                Vector2 stickInput = keyMap.GetVectorInput("direction");
+                Vector2 stickInput = keyMap.GetVectorInput("moveStick")
+                    + keyMap.GetVectorInput("moveStick2");
                 bool selectButton = keyMap.GetKey("select");
                 bool backButton = keyMap.GetKey("back");
                 bool upInputButton = keyMap.GetKey("up") || stickInput.y > 0;
