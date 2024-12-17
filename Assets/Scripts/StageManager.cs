@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -26,15 +27,15 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     Sprite backGround;
     [SerializeField]
-    Material groundMaterial;
+    Material[] groundMaterial;
     [SerializeField]
-    Material unLandableMaterial;
+    Material[] unLandableMaterial;
     [SerializeField]
     string texPropertyName;
     [SerializeField]
-    Texture groundTex;
+    Texture[] groundTex;
     [SerializeField]
-    Texture unLandableObjectTex;
+    Texture[] unLandableObjectTex;
     public Sprite GetBackGround()
     {
         return backGround;
@@ -57,10 +58,17 @@ public class StageManager : MonoBehaviour
         current = this;
 
         //床のテクスチャを貼り替える
-        groundMaterial.SetTexture(texPropertyName, groundTex);
+        for (int i = 0; i < groundMaterial.Length; i++)
+        {
+            int texIndex = Math.Clamp(i, 0, groundTex.Length - 1);
+            groundMaterial[i].SetTexture(texPropertyName, groundTex[texIndex]);
+        }
         //UnLandableObjectのテクスチャを貼り替える
-        unLandableMaterial.SetTexture(texPropertyName, unLandableObjectTex);
-
+        for (int i = 0; i < unLandableMaterial.Length; i++)
+        {
+            int texIndex = Math.Clamp(i, 0, unLandableObjectTex.Length - 1);
+            unLandableMaterial[i].SetTexture(texPropertyName, unLandableObjectTex[texIndex]);
+        }
         //プレイヤーを探す
         foreach (LiveEntity obj in LiveEntity.GetAllInstances())
         {
