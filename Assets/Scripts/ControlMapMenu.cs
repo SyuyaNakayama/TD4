@@ -78,7 +78,7 @@ public class ControlMapMenu : ControlMap
                 prevKeyInputVec = keyInputVec;
 
                 //クリックしたらマウス操作に切り替え
-                if (Input.GetKey(KeyCode.Mouse0))
+                if (KX_netUtil.GetIMMouseButton("leftButton"))
                 {
                     isMouseInput = true;
                 }
@@ -109,7 +109,7 @@ public class ControlMapMenu : ControlMap
                 if (isMouseInput)
                 {
                     //マウス操作
-                    input = Input.GetKey(KeyCode.Mouse0);
+                    input = KX_netUtil.GetIMMouseButton("leftButton");
                     if (input)
                     {
                         inputPosition = Input.mousePosition;

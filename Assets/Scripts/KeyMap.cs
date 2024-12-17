@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "CreateKeyMap")]
 public class KeyMap : ScriptableObject
@@ -10,7 +11,7 @@ public class KeyMap : ScriptableObject
     public struct KeyMapCell
     {
         public string name;
-        public KeyCode[] keys;
+        public Key[] keys;
     }
     [System.Serializable]
     public struct VectorInputMapCell
@@ -44,7 +45,7 @@ public class KeyMap : ScriptableObject
                 //一つでも押されていたらtrueを返す
                 for (int j = 0; j < keyMapCells[i].keys.Length; j++)
                 {
-                    if (Input.GetKey(keyMapCells[i].keys[j]))
+                    if (KX_netUtil.GetIMKey(keyMapCells[i].keys[j]))
                     {
                         return true;
                     }
@@ -54,28 +55,28 @@ public class KeyMap : ScriptableObject
         return false;
     }
 
-    public KeyCode[] GetKeyMap(string name)
+    public Key[] GetKeyMap(string name)
     {
         //同じ名前のものがあったらその中身を複製して返す
         for (int i = 0; i < keyMapCells.Length; i++)
         {
             if (keyMapCells[i].name == name)
             {
-                return KX_netUtil.CopyArray<KeyCode>(keyMapCells[i].keys);
+                return KX_netUtil.CopyArray<Key>(keyMapCells[i].keys);
             }
         }
         //無ければ空の配列を返す
-        return new KeyCode[] { };
+        return new Key[] { };
     }
 
-    public void SetKeyMap(string name, KeyCode[] keys)
+    public void SetKeyMap(string name, Key[] keys)
     {
         //同じ名前のものがあったら上書き
         for (int i = 0; i < keyMapCells.Length; i++)
         {
             if (keyMapCells[i].name == name)
             {
-                keyMapCells[i].keys = KX_netUtil.CopyArray<KeyCode>(keys);
+                keyMapCells[i].keys = KX_netUtil.CopyArray<Key>(keys);
                 return;
             }
         }
@@ -83,21 +84,21 @@ public class KeyMap : ScriptableObject
         Array.Resize(ref keyMapCells, keyMapCells.Length + 1);
         keyMapCells[keyMapCells.Length - 1].name = name;
         keyMapCells[keyMapCells.Length - 1].keys =
-            KX_netUtil.CopyArray<KeyCode>(keys);
+            KX_netUtil.CopyArray<Key>(keys);
     }
 
     public Vector2 GetVectorInput(string name)
     {
         for (int i = 0; i < vectorInputMapCells.Length; i++)
         {
-            if (vectorInputMapCells[i].name == name)
+            /*if (vectorInputMapCells[i].name == name)
             {
                 Vector2 ret = new Vector2(
                     Input.GetAxis(vectorInputMapCells[i].axisBindData.axisNameX),
                     Input.GetAxis(vectorInputMapCells[i].axisBindData.axisNameY)
                 );
                 return ret;
-            }
+            }*/
         }
         return Vector2.zero;
     }

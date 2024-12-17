@@ -22,14 +22,14 @@ public class OperationInstructions : MonoBehaviour
     {
         //接続されているコントローラの数を調べる
         int controllerNum = 0;
-        string[] controllers = Input.GetJoystickNames();
+        /*string[] controllers = Input.GetJoystickNames();
         for (int i = 0; i < controllers.Length; i++)
         {
             if (controllers[i] != "")
             {
                 controllerNum++;
             }
-        }
+        }*/
 
         //一台も接続されてなければキーボード専用のテキストに切り替える
         if (controllerNum <= 0)

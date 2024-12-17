@@ -10,7 +10,7 @@ public class CMBButton : CMBMenuPiece
         if (GetControlMap().IsReleased() &&
             KX_netUtil.IsInsideHitBox(
                 GetRectTransform(),
-                GetControlMap().GetLiveEntity().GetView(),
+                GetControlMap().GetManager().GetLiveEntity().GetView(),
                 GetControlMap().GetInputPosition()))
         {
             output = true;

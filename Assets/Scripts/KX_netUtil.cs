@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class KX_netUtil : object
 {
@@ -568,11 +569,26 @@ public class KX_netUtil : object
         Array.Copy(array, ret, array.Length);
         return ret;
     }
-    //配列から要素を検索してインデックスを返す
-
     //インデックスが配列の中を指しているか
     public static bool IsValidIndex<T>(int index, T[] array)
     {
         return index >= 0 && index < array.Length;
+    }
+    //InputSystemからInputManagerのGetKeyのようにキーを引数で指定して入力を取得する
+    public static bool GetIMKey(Key key)
+    {
+        return key != 0 && key != (Key)111
+            && Keyboard.current[key].IsPressed();
+    }
+    //InputSystemからいずれかのキーが押されたかを取得
+    public static bool IMAnyKey()
+    {
+        return Keyboard.current.anyKey.IsPressed();
+    }
+    //InputSystemから
+    //InputSystemからInputManagerのGetKeyのようにキーを引数で指定して入力を取得する
+    public static bool GetIMMouseButton(string buttonName)
+    {
+        return Mouse.current[buttonName].IsPressed();
     }
 }

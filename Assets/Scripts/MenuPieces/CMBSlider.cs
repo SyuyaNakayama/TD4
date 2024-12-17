@@ -28,14 +28,14 @@ public class CMBSlider : CMBMenuPiece
         if (GetControlMap().GetInput() &&
             KX_netUtil.IsInsideHitBox(
                 barTransform,
-                GetControlMap().GetLiveEntity().GetView(),
+                GetControlMap().GetManager().GetLiveEntity().GetView(),
                 GetControlMap().GetInputPosition()))
         {
             output = true;
             amount = KX_netUtil.RangeMap(Mathf.Clamp(
                 KX_netUtil.InverseTransformPointHitBox(
                 barTransform,
-                GetControlMap().GetLiveEntity().GetView(),
+                GetControlMap().GetManager().GetLiveEntity().GetView(),
                 GetControlMap().GetInputPosition()).x,
                 -0.5f, 0.5f), -0.5f, 0.5f, 0, 1);
         }

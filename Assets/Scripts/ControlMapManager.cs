@@ -7,6 +7,10 @@ public class ControlMapManager : MonoBehaviour
 {
     [SerializeField]
     LiveEntity liveEntity;
+    public LiveEntity GetLiveEntity()
+    {
+        return liveEntity;
+    }
     [SerializeField]
     string keyMapDataName;
     [SerializeField]

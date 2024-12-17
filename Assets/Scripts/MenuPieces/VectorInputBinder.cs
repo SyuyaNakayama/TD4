@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class VectorInputBinder : Menu
@@ -17,13 +18,13 @@ public class VectorInputBinder : Menu
         return vecCellName;
     }
 
-    KeyCode[] bindKeys = { };
-    public KeyCode[] GetBindKeys()
+    Key[] bindKeys = { };
+    public Key[] GetBindKeys()
     {
-        return KX_netUtil.CopyArray<KeyCode>(bindKeys);
+        return KX_netUtil.CopyArray<Key>(bindKeys);
     }
-    KeyCode[] pressingKeys = { };
-    KeyCode[] prevPressingKeys = { };
+    Key[] pressingKeys = { };
+    Key[] prevPressingKeys = { };
     bool done;
 
     protected override void MenuUpdate()
@@ -36,17 +37,17 @@ public class VectorInputBinder : Menu
         }
 
         //前フレームで押していたキーを記録
-        prevPressingKeys = KX_netUtil.CopyArray<KeyCode>(pressingKeys);
+        prevPressingKeys = KX_netUtil.CopyArray<Key>(pressingKeys);
         //現在押しているキーの配列をリセット
         Array.Resize(ref pressingKeys, 0);
 
         //何かキーが押されたら
-        if (Input.anyKey)
+        if (KX_netUtil.IMAnyKey())
         {
             //どのキーが押されたのか調べる
-            foreach (KeyCode code in Enum.GetValues(typeof(KeyCode)))
+            foreach (Key code in Enum.GetValues(typeof(Key)))
             {
-                if (Input.GetKey(code))
+                if (KX_netUtil.GetIMKey(code))
                 {
                     //現在押しているキーの配列に追加
                     Array.Resize(ref pressingKeys, pressingKeys.Length + 1);

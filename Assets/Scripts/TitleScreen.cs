@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TitleScreen : MonoBehaviour
 {
+    [SerializeField]
+    ControlMapPlayPart controlMapPlayPart;
     [SerializeField]
     GameObject logo;
     Vector3 logoDefaultpos;
@@ -34,12 +37,7 @@ public class TitleScreen : MonoBehaviour
             Mathf.Cos(Time.time * startControlShadowSpeed), 0)
             * startControlShadowRadius;
 
-        bool screenTap = Input.GetKey(KeyCode.Space)
-        || Input.GetKey(KeyCode.Joystick1Button0) || Input.GetKey(KeyCode.Joystick1Button1)
-        || Input.GetKey(KeyCode.Joystick1Button2) || Input.GetKey(KeyCode.Joystick1Button3)
-        || Input.GetKey(KeyCode.Mouse0);
-
-        if (screenTap)
+        if (controlMapPlayPart.GetJumpInput())
         {
             SceneTransition.ChangeScene(nextSceneName);
         }

@@ -7,12 +7,6 @@ public class ControlMap : MonoBehaviour
     const int visualDepthMultiply = 6;
 
     [SerializeField]
-    LiveEntity liveEntity;
-    public LiveEntity GetLiveEntity()
-    {
-        return liveEntity;
-    }
-    [SerializeField]
     Camera camera;
     public Camera GetCamera()
     {
@@ -38,7 +32,7 @@ public class ControlMap : MonoBehaviour
 
     public float GetVisualDepth()
     {
-        return liveEntity.transform.localScale.z * visualDepthMultiply;
+        return transform.lossyScale.z * visualDepthMultiply;
     }
 
     public bool IsUserControl()
