@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class KeyBinder : Menu
+public class VectorInputBinder : Menu
 {
     [SerializeField]
     ControlMapManager manager;
     [SerializeField]
-    TMP_Text bindKeysName;
+    TMP_Text bindVecName;
     [SerializeField]
-    string keyMapCellName;
-    public string GetKeyMapCellName()
+    string vecCellName;
+    public string GetVecCellName()
     {
-        return keyMapCellName;
+        return vecCellName;
     }
 
     KeyCode[] bindKeys = { };
@@ -99,10 +99,10 @@ public class KeyBinder : Menu
         }
 
         //ì¸óÕÇµÇΩÉLÅ[Çï\é¶
-        bindKeysName.text = "";
+        bindVecName.text = "";
         for (int i = 0; i < bindKeys.Length; i++)
         {
-            bindKeysName.text += bindKeys[i].ToString() + "  ";
+            bindVecName.text += bindKeys[i].ToString() + "  ";
         }
     }
 }

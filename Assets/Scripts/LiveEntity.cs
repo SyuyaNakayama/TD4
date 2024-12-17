@@ -317,6 +317,14 @@ public class LiveEntity : GeoGroObject
         }
         isAllowCassetteUpdate = false;
 
+        //すぐにタイトル画面に戻るコマンド
+        if (controlMap.GetJumpInput()
+            && controlMap.GetWeaponInput()
+            && controlMap.GetMenuInput())
+        {
+            SceneTransition.ChangeScene("title");
+        }
+
         if (IsLive() && !GetGoaled())
         {
             cadaverLifeTimeFrame = MaxCadaverLifeTimeFrame;

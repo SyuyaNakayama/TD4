@@ -42,22 +42,14 @@ MonoBehaviour:
     keys: 7a000000780000006300000076000000620000006e0000006d0000004b0100004f010000
   vectorInputMapCells:
   - name: moveStick
-    axisNameX: L_Stick_H
-    inverseX: 0
-    axisNameY: L_Stick_V
-    inverseY: 0
-  - name: moveStick2
-    axisNameX: MoveLR_Horizontal
-    inverseX: 0
-    axisNameY: MoveDU_Vertical
-    inverseY: 0
+    axisBindData:
+      axisNameX: Move_Horizontal
+      inverseX: 0
+      axisNameY: Move_Vertical
+      inverseY: 0
   - name: camStick
-    axisNameX: R_Stick_H
-    inverseX: 0
-    axisNameY: R_Stick_V
-    inverseY: 0
-  - name: camStick2
-    axisNameX: Cam_Horizontal
-    inverseX: 0
-    axisNameY: Cam_Vertical
-    inverseY: 0
+    axisBindData:
+      axisNameX: Cam_Horizontal
+      inverseX: 0
+      axisNameY: Cam_Vertical
+      inverseY: 0

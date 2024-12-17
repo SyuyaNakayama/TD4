@@ -16,6 +16,11 @@ public class KeyMap : ScriptableObject
     public struct VectorInputMapCell
     {
         public string name;
+        public AxisBindData axisBindData;
+    }
+    [System.Serializable]
+    public struct AxisBindData
+    {
         public string axisNameX;
         public bool inverseX;
         public string axisNameY;
@@ -77,7 +82,8 @@ public class KeyMap : ScriptableObject
         //ñ≥ÇØÇÍÇŒêVãKçÏê¨
         Array.Resize(ref keyMapCells, keyMapCells.Length + 1);
         keyMapCells[keyMapCells.Length - 1].name = name;
-        keyMapCells[keyMapCells.Length - 1].keys = keys;
+        keyMapCells[keyMapCells.Length - 1].keys =
+            KX_netUtil.CopyArray<KeyCode>(keys);
     }
 
     public Vector2 GetVectorInput(string name)
@@ -87,12 +93,44 @@ public class KeyMap : ScriptableObject
             if (vectorInputMapCells[i].name == name)
             {
                 Vector2 ret = new Vector2(
-                    Input.GetAxis(vectorInputMapCells[i].axisNameX),
-                    Input.GetAxis(vectorInputMapCells[i].axisNameY)
+                    Input.GetAxis(vectorInputMapCells[i].axisBindData.axisNameX),
+                    Input.GetAxis(vectorInputMapCells[i].axisBindData.axisNameY)
                 );
                 return ret;
             }
         }
         return Vector2.zero;
+    }
+
+    public AxisBindData GetVectorInputMap(string name)
+    {
+        //ìØÇ∂ñºëOÇÃÇ‡ÇÃÇ™Ç†Ç¡ÇΩÇÁÇªÇÍÇï‘Ç∑
+        for (int i = 0; i < vectorInputMapCells.Length; i++)
+        {
+            if (vectorInputMapCells[i].name == name)
+            {
+                return vectorInputMapCells[i].axisBindData;
+            }
+        }
+        //ñ≥ÇØÇÍÇŒãÛÇÃóvëfÇï‘Ç∑
+        return new AxisBindData();
+    }
+
+    public void SetVectorInputMap(string name, AxisBindData axisBindData)
+    {
+        //ìØÇ∂ñºëOÇÃÇ‡ÇÃÇ™Ç†Ç¡ÇΩÇÁè„èëÇ´
+        for (int i = 0; i < vectorInputMapCells.Length; i++)
+        {
+            if (vectorInputMapCells[i].name == name)
+            {
+                vectorInputMapCells[i].axisBindData = axisBindData;
+                return;
+            }
+        }
+        //ñ≥ÇØÇÍÇŒêVãKçÏê¨
+        Array.Resize(ref vectorInputMapCells, vectorInputMapCells.Length + 1);
+        vectorInputMapCells[vectorInputMapCells.Length - 1].name = name;
+        vectorInputMapCells[vectorInputMapCells.Length - 1].axisBindData =
+            axisBindData;
     }
 }
