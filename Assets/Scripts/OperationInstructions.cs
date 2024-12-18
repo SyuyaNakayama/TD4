@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class OperationInstructions : MonoBehaviour
@@ -21,15 +22,9 @@ public class OperationInstructions : MonoBehaviour
     void Update()
     {
         //接続されているコントローラの数を調べる
-        int controllerNum = 0;
-        /*string[] controllers = Input.GetJoystickNames();
-        for (int i = 0; i < controllers.Length; i++)
-        {
-            if (controllers[i] != "")
-            {
-                controllerNum++;
-            }
-        }*/
+        int controllerNum =
+            Gamepad.all.ToArray().Length
+            + Joystick.all.ToArray().Length;
 
         //一台も接続されてなければキーボード専用のテキストに切り替える
         if (controllerNum <= 0)

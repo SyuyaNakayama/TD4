@@ -112,7 +112,7 @@ public class ControlMapMenu : ControlMap
                     input = KX_netUtil.GetIMMouseButton("leftButton");
                     if (input)
                     {
-                        inputPosition = Input.mousePosition;
+                        inputPosition = KX_netUtil.GetIMMousePosition();
                     }
                 }
                 else

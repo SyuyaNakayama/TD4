@@ -574,7 +574,7 @@ public class KX_netUtil : object
     {
         return index >= 0 && index < array.Length;
     }
-    //InputSystemからInputManagerのGetKeyのようにキーを引数で指定して入力を取得する
+    //InputSystemからキーを引数で指定して入力を取得する
     public static bool GetIMKey(Key key)
     {
         return key != 0 && key != (Key)111
@@ -585,10 +585,34 @@ public class KX_netUtil : object
     {
         return Keyboard.current.anyKey.IsPressed();
     }
-    //InputSystemから
-    //InputSystemからInputManagerのGetKeyのようにキーを引数で指定して入力を取得する
+    //InputSystemからマウスボタンを引数で指定して入力を取得する
     public static bool GetIMMouseButton(string buttonName)
     {
         return Mouse.current[buttonName].IsPressed();
     }
+    //InputSystemからマウスの座標を取得
+    public static Vector2 GetIMMousePosition()
+    {
+        return Mouse.current.position.ReadValue();
+    }
+    //InputSystemからボタンを引数で指定して入力を取得する
+    public static bool GetIMJoyButton(int joyStickIndex, string buttonName)
+    {
+        return Joystick.all[joyStickIndex][buttonName].IsPressed();
+    }
+    //InputSystemからいずれかのボタンが押されたかを取得
+    /*public static bool IMAnyJoyButton(int joyStickIndex)
+    {
+        return Joystick.all[joyStickIndex].anyButton.IsPressed();
+    }*/
+    //InputSystemからボタンを引数で指定して入力を取得する
+    public static bool GetIMPadButton(int gamePadIndex, string buttonName)
+    {
+        return Joystick.all[gamePadIndex][buttonName].IsPressed();
+    }
+    //InputSystemからいずれかのボタンが押されたかを取得
+    /*public static bool IMAnyPadButton(int gamePadIndex)
+    {
+        return Joystick.all[gamePadIndex].anyButton.IsPressed();
+    }*/
 }
