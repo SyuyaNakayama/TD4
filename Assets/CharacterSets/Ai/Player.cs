@@ -105,6 +105,8 @@ public class Player : CharacterCassette
             playerRotSpeed * playerRotSpeedDiffuse + camInputVec.x,
             -maxPlayerRotSpeed, maxPlayerRotSpeed);
         GetLiveEntity().transform.Rotate(0, playerRotSpeed, 0, Space.Self);
+        GetLiveEntity().SetDirection(
+            GetLiveEntity().GetDirection() - playerRotSpeed);
     }
 
     public void EquipCharacter(CharaData charaData)
