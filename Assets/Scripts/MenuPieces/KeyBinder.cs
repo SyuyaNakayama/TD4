@@ -41,8 +41,6 @@ public class KeyBinder : Menu
         //現在押しているキーの配列をリセット
         Array.Resize(ref pressingKeys, 0);
 
-        Debug.Log(Gamepad.all.ToArray().Length);
-
         //何かボタンが押されたら
         if (Gamepad.all.ToArray().Length > 0
             && KX_netUtil.IMAnyPadButton(0))

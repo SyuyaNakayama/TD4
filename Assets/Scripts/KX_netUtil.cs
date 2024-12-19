@@ -32,6 +32,14 @@ public class KX_netUtil : object
         start,
         select,
     }
+    [System.Serializable]
+    public enum XInputAxis
+    {
+        stickLX,
+        stickLY,
+        stickRX,
+        stickRY,
+    }
 
     [System.Serializable]
     public struct EaseData
@@ -675,16 +683,41 @@ public class KX_netUtil : object
             || gamepad.startButton.IsPressed() || gamepad.selectButton.IsPressed()
             || dpadValue.magnitude > 0;
     }
-    //InputSystemからボタンを引数で指定して入力を取得する
-    /*public static bool GetIMButton(int controllerIndex, string buttonName)
+    //InputSystemからいずれかのアナログ軸入力を行なったかを取得
+    public static bool IMAnyPadAxis(int gamepadIndex)
     {
-        return GetIMJoyButton(controllerIndex, buttonName)
-            || GetIMPadButton(controllerIndex, buttonName);
+        Gamepad gamepad = Gamepad.all[gamepadIndex];
+
+        Vector2 leftStickValue = gamepad.leftStick.ReadValue();
+        Vector2 rightStickValue = gamepad.rightStick.ReadValue();
+        //他にいい方法が見つかるまでこのやり方にする
+        return leftStickValue.magnitude > 0
+            || rightStickValue.magnitude > 0;
     }
-    //InputSystemからいずれかのボタンが押されたかを取得
-    public static bool IMAnyButton(int controllerIndex)
+    //InputSystemから軸を引数で指定して入力を取得する
+    public static float GetIMPadAxis(int gamepadIndex, XInputAxis axis)
     {
-        return IMAnyJoyButton(controllerIndex)
-            || IMAnyPadButton(controllerIndex);
-    }*/
+        float ret = 0;
+        Gamepad gamepad = Gamepad.all[gamepadIndex];
+
+        Vector2 leftStickValue = gamepad.leftStick.ReadValue();
+        Vector2 rightStickValue = gamepad.rightStick.ReadValue();
+        //他にいい方法が見つかるまでこのやり方にする
+        switch (axis)
+        {
+            case XInputAxis.stickLX:
+                ret = leftStickValue.x;
+                break;
+            case XInputAxis.stickLY:
+                ret = leftStickValue.y;
+                break;
+            case XInputAxis.stickRX:
+                ret = rightStickValue.x;
+                break;
+            case XInputAxis.stickRY:
+                ret = rightStickValue.y;
+                break;
+        }
+        return ret;
+    }
 }

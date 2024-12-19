@@ -16,6 +16,8 @@ public class ControlMapManager : MonoBehaviour
     [SerializeField]
     KeyBinder[] keyBinders = { };
     [SerializeField]
+    VectorInputBinder[] vectorInputBinders = { };
+    [SerializeField]
     KeyMap defaultKeyMap;
     [SerializeField]
     bool userControl;
@@ -70,9 +72,23 @@ public class ControlMapManager : MonoBehaviour
     {
         for (int i = 0; i < keyBinders.Length; i++)
         {
-            keyMap.SetKeyMap(
-                keyBinders[i].GetKeyMapCellName(),
-                keyBinders[i].GetBindKeys());
+            if (keyBinders[i].IsCurrentMenu())
+            {
+                keyMap.SetKeyMap(
+                    keyBinders[i].GetKeyMapCellName(),
+                    keyBinders[i].GetBindKeys());
+            }
+        }
+    }
+
+    public void ApplyVecBind()
+    {
+        for (int i = 0; i < vectorInputBinders.Length; i++)
+        {
+            if (vectorInputBinders[i].IsCurrentMenu())
+            {
+
+            }
         }
     }
 }

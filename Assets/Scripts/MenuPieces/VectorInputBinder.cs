@@ -18,92 +18,86 @@ public class VectorInputBinder : Menu
         return vecCellName;
     }
 
-    Key[] bindKeys = { };
-    public Key[] GetBindKeys()
+    KX_netUtil.XInputAxis bindAxisX;
+    public KX_netUtil.XInputAxis GetBindAxisX()
     {
-        return KX_netUtil.CopyArray<Key>(bindKeys);
+        return bindAxisX;
     }
-    Key[] pressingKeys = { };
-    Key[] prevPressingKeys = { };
-    bool done;
+    KX_netUtil.XInputAxis bindAxisY;
+    public KX_netUtil.XInputAxis GetBindAxisY()
+    {
+        return bindAxisY;
+    }
+    int bindPhase;
+    bool quit;
 
     protected override void MenuUpdate()
     {
         //開いた瞬間リセット
         if (!GetPrevIsCurrentMenu())
         {
-            Array.Resize(ref bindKeys, 0);
-            done = false;
+            bindPhase = 0;
+            quit = false;
         }
 
-        //前フレームで押していたキーを記録
-        prevPressingKeys = KX_netUtil.CopyArray<Key>(pressingKeys);
-        //現在押しているキーの配列をリセット
-        Array.Resize(ref pressingKeys, 0);
-
-        //何かキーが押されたら
-        if (KX_netUtil.IMAnyKey())
+        //軸入力が行われたら
+        if (Gamepad.all.ToArray().Length > 0
+            && KX_netUtil.IMAnyPadAxis(0))
         {
-            //どのキーが押されたのか調べる
-            foreach (Key code in Enum.GetValues(typeof(Key)))
+            //どの軸が入力されたのか調べる
+            foreach (KX_netUtil.XInputAxis axis in Enum.GetValues(typeof(KX_netUtil.XInputAxis)))
             {
-                if (KX_netUtil.GetIMKey(code))
+                if (Mathf.Abs(KX_netUtil.GetIMPadAxis(0, axis)) >= 0.5f)
                 {
-                    //現在押しているキーの配列に追加
-                    Array.Resize(ref pressingKeys, pressingKeys.Length + 1);
-                    pressingKeys[pressingKeys.Length - 1] = code;
-
-                    //そのキーの押し始めか調べる
-                    bool isKeyDown = true;
-                    for (int i = 0; i < prevPressingKeys.Length; i++)
+                    switch (bindPhase)
                     {
-                        if (prevPressingKeys[i] == code)
-                        {
-                            isKeyDown = false;
+                        default:
+                            bindAxisX = axis;
+                            bindPhase = 1;
                             break;
-                        }
-                    }
-                    //そのキーの押し始めなら
-                    if (isKeyDown)
-                    {
-                        //既に設定したキーか調べる
-                        bool isBindedKey = false;
-                        for (int i = 0; i < bindKeys.Length; i++)
-                        {
-                            if (bindKeys[i] == code)
+                        case 1:
+                            if (axis != bindAxisX)
                             {
-                                isBindedKey = true;
-                                break;
+                                bindAxisY = axis;
+                                bindPhase = 2;
                             }
-                        }
-                        //既に設定したキーなら
-                        if (isBindedKey)
-                        {
-                            //設定画面を閉じる準備
-                            done = true;
-                        }
-                        else
-                        {
-                            //設定するキーの配列に追加
-                            Array.Resize(ref bindKeys, bindKeys.Length + 1);
-                            bindKeys[bindKeys.Length - 1] = code;
-                        }
+                            break;
+                        case 2:
+                            break;
                     }
                 }
             }
         }
-        else if (done)
+
+        //キーかボタンが押されたら
+        if (KX_netUtil.IMAnyKey()
+            || (Gamepad.all.ToArray().Length > 0
+            && KX_netUtil.IMAnyPadButton(0)))
         {
-            //キーバインドを適用し、設定画面を閉じる
-            manager.ApplyKeyBind();
+            quit = true;
+        }
+        else if (quit)
+        {
+            //2つの軸のバインドが終わっていれば
+            if (bindPhase == 2)
+            {
+                //バインドを適用し、設定画面を閉じる
+                manager.ApplyVecBind();
+            }
             active = false;
         }
 
-        //入力したキーを表示
+        //入力した軸を表示
         bindVecName.text = "";
-        for (int i = 0; i < bindKeys.Length; i++)
+        switch (bindPhase)
         {
-            bindVecName.text += bindKeys[i].ToString() + "  ";
+            case 1:
+                bindVecName.text += "X : " + bindAxisX.ToString();
+                break;
+            case 2:
+                bindVecName.text += "X : " + bindAxisX.ToString()
+                    + "\nY : " + bindAxisY.ToString();
+                break;
         }
     }
 }

@@ -46,6 +46,8 @@ Shader "Unlit/Outline"
         //モデルの形に合わせてステンシル
         Pass
         {
+            Cull Back
+
             Stencil
             {
                 Ref 1
@@ -83,7 +85,7 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.a - 0.7);
+                clip(c.a - 0.5);
                 return fixed4(0,0,0,0);
             }
             ENDCG
@@ -132,7 +134,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip((1-c.r)*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return fixed4(0,0,0,0);
             }
             ENDCG
@@ -181,7 +184,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
@@ -230,7 +234,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
@@ -279,7 +284,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
@@ -328,7 +334,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
@@ -377,7 +384,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
@@ -426,7 +434,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
@@ -475,7 +484,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
@@ -524,7 +534,8 @@ Shader "Unlit/Outline"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
-                clip(c.r*c.a - 0.7);
+                clip(c.r - 0.5);
+                clip(c.a - 0.5);
                 return _OutlineColor;
             }
             ENDCG
