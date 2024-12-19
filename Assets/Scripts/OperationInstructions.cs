@@ -15,9 +15,9 @@ public class OperationInstructions : MonoBehaviour
     [TextArea(1, 16), SerializeField]
     string keyBoardAttackButtonText;
     [TextArea(1, 16), SerializeField]
-    string gamePadControlText;
+    string gamepadControlText;
     [TextArea(1, 16), SerializeField]
-    string gamePadAttackButtonText;
+    string gamepadAttackButtonText;
 
     void Update()
     {
@@ -35,8 +35,8 @@ public class OperationInstructions : MonoBehaviour
         else
         {
             //接続されていればコントローラ専用テキストに切り替える
-            button.SetText(gamePadControlText);
-            buttonAttack.SetText(gamePadAttackButtonText);
+            button.SetText(gamepadControlText);
+            buttonAttack.SetText(gamepadAttackButtonText);
         }
     }
 }

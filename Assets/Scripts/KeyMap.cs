@@ -12,6 +12,8 @@ public class KeyMap : ScriptableObject
     {
         public string name;
         public Key[] keys;
+        public string[] buttons;
+
     }
     [System.Serializable]
     public struct VectorInputMapCell
@@ -36,6 +38,26 @@ public class KeyMap : ScriptableObject
     VectorInputMapCell[] vectorInputMapCells = { };
 
     public bool GetKey(string name)
+    {
+        //“¯‚¶–¼‘O‚Ì‚à‚Ì‚ð’T‚·
+        for (int i = 0; i < keyMapCells.Length; i++)
+        {
+            if (keyMapCells[i].name == name)
+            {
+                //ˆê‚Â‚Å‚à‰Ÿ‚³‚ê‚Ä‚¢‚½‚çtrue‚ð•Ô‚·
+                for (int j = 0; j < keyMapCells[i].keys.Length; j++)
+                {
+                    if (KX_netUtil.GetIMKey(keyMapCells[i].keys[j]))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    //TODO:ì‚è‚©‚¯‚È‚Ì‚ÅŠ®¬‚³‚¹‚é
+    public bool GetButton(int playerIndex, string name)
     {
         //“¯‚¶–¼‘O‚Ì‚à‚Ì‚ð’T‚·
         for (int i = 0; i < keyMapCells.Length; i++)
