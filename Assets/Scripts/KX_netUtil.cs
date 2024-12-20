@@ -604,33 +604,33 @@ public class KX_netUtil : object
         return index >= 0 && index < array.Length;
     }
     //InputSystemからキーを引数で指定して入力を取得する
-    public static bool GetIMKey(Key key)
+    public static bool GetISKey(Key key)
     {
         return key != 0 && key != (Key)111
             && Keyboard.current[key].IsPressed();
     }
     //InputSystemからいずれかのキーが押されたかを取得
-    public static bool IMAnyKey()
+    public static bool ISAnyKey()
     {
         return Keyboard.current.anyKey.IsPressed();
     }
     //InputSystemからマウスボタンを引数で指定して入力を取得する
-    public static bool GetIMMouseButton(string buttonName)
+    public static bool GetISMouseButton(string buttonName)
     {
         return Mouse.current[buttonName].IsPressed();
     }
     //InputSystemからマウスの座標を取得
-    public static Vector2 GetIMMousePosition()
+    public static Vector2 GetISMousePosition()
     {
         return Mouse.current.position.ReadValue();
     }
     //InputSystemからボタンを引数で指定して入力を取得する
-    public static bool GetIMJoyButton(int joyStickIndex, string buttonName)
+    public static bool GetISJoyButton(int joyStickIndex, string buttonName)
     {
         return Joystick.all[joyStickIndex][buttonName].IsPressed();
     }
     //InputSystemからいずれかのボタンが押されたかを取得
-    public static bool IMAnyJoyButton(int joyStickIndex)
+    public static bool ISAnyJoyButton(int joyStickIndex)
     {
         Joystick joystick = Joystick.all[joyStickIndex];
         // 操作されたボタンなどの情報を取得
@@ -640,51 +640,59 @@ public class KX_netUtil : object
             || dpadValue.magnitude > 0;
     }
     //InputSystemからボタンを引数で指定して入力を取得する
-    public static bool GetIMPadButton(int gamepadIndex, XInputButton button)
+    public static bool GetISPadButton(int gamepadIndex, XInputButton button)
     {
-        Gamepad gamepad = Gamepad.all[gamepadIndex];
+        if (IsValidIndex<Gamepad>(gamepadIndex, Gamepad.all.ToArray()))
+        {
+            Gamepad gamepad = Gamepad.all[gamepadIndex];
 
-        Vector2 dpadValue = gamepad.dpad.ReadValue();
-        float leftTriggerValue = gamepad.leftTrigger.ReadValue();
-        float rightTriggerValue = gamepad.rightTrigger.ReadValue();
-        //他にいい方法が見つかるまでこのやり方にする
-        return (button == XInputButton.a && gamepad.aButton.IsPressed())
-            || (button == XInputButton.b && gamepad.bButton.IsPressed())
-            || (button == XInputButton.x && gamepad.xButton.IsPressed())
-            || (button == XInputButton.y && gamepad.yButton.IsPressed())
-            || (button == XInputButton.l && gamepad.leftShoulder.IsPressed())
-            || (button == XInputButton.r && gamepad.rightShoulder.IsPressed())
-            || (button == XInputButton.stickL && gamepad.leftStickButton.IsPressed())
-            || (button == XInputButton.stickR && gamepad.rightStickButton.IsPressed())
-            || (button == XInputButton.triggerL && leftTriggerValue > 0)
-            || (button == XInputButton.triggerR && rightTriggerValue > 0)
-            || (button == XInputButton.start && gamepad.startButton.IsPressed())
-            || (button == XInputButton.select && gamepad.selectButton.IsPressed())
-            || (button == XInputButton.dpadUp && dpadValue.y > 0)
-            || (button == XInputButton.dpadDown && dpadValue.y < 0)
-            || (button == XInputButton.dpadRight && dpadValue.x > 0)
-            || (button == XInputButton.dpadLeft && dpadValue.x < 0);
+            Vector2 dpadValue = gamepad.dpad.ReadValue();
+            float leftTriggerValue = gamepad.leftTrigger.ReadValue();
+            float rightTriggerValue = gamepad.rightTrigger.ReadValue();
+            //他にいい方法が見つかるまでこのやり方にする
+            return (button == XInputButton.a && gamepad.aButton.IsPressed())
+                || (button == XInputButton.b && gamepad.bButton.IsPressed())
+                || (button == XInputButton.x && gamepad.xButton.IsPressed())
+                || (button == XInputButton.y && gamepad.yButton.IsPressed())
+                || (button == XInputButton.l && gamepad.leftShoulder.IsPressed())
+                || (button == XInputButton.r && gamepad.rightShoulder.IsPressed())
+                || (button == XInputButton.stickL && gamepad.leftStickButton.IsPressed())
+                || (button == XInputButton.stickR && gamepad.rightStickButton.IsPressed())
+                || (button == XInputButton.triggerL && leftTriggerValue > 0)
+                || (button == XInputButton.triggerR && rightTriggerValue > 0)
+                || (button == XInputButton.start && gamepad.startButton.IsPressed())
+                || (button == XInputButton.select && gamepad.selectButton.IsPressed())
+                || (button == XInputButton.dpadUp && dpadValue.y > 0)
+                || (button == XInputButton.dpadDown && dpadValue.y < 0)
+                || (button == XInputButton.dpadRight && dpadValue.x > 0)
+                || (button == XInputButton.dpadLeft && dpadValue.x < 0);
+        }
+        return false;
     }
     //InputSystemからいずれかのボタンが押されたかを取得
-    public static bool IMAnyPadButton(int gamepadIndex)
+    public static bool ISAnyPadButton(int gamepadIndex)
     {
-        Gamepad gamepad = Gamepad.all[gamepadIndex];
+        if (IsValidIndex<Gamepad>(gamepadIndex, Gamepad.all.ToArray()))
+        {
+            Gamepad gamepad = Gamepad.all[gamepadIndex];
 
-        Vector2 dpadValue = gamepad.dpad.ReadValue();
-        float leftTriggerValue = gamepad.leftTrigger.ReadValue();
-        float rightTriggerValue = gamepad.rightTrigger.ReadValue();
-        //他にいい方法が見つかるまでこのやり方にする
-        return gamepad.aButton.IsPressed() || gamepad.bButton.IsPressed()
-            || gamepad.xButton.IsPressed() || gamepad.yButton.IsPressed()
-            || gamepad.leftShoulder.IsPressed() || gamepad.rightShoulder.IsPressed()
-            || gamepad.leftStickButton.IsPressed()
-            || gamepad.rightStickButton.IsPressed()
-            || leftTriggerValue > 0 || rightTriggerValue > 0
-            || gamepad.startButton.IsPressed() || gamepad.selectButton.IsPressed()
-            || dpadValue.magnitude > 0;
+            Vector2 dpadValue = gamepad.dpad.ReadValue();
+            float leftTriggerValue = gamepad.leftTrigger.ReadValue();
+            float rightTriggerValue = gamepad.rightTrigger.ReadValue();
+            //他にいい方法が見つかるまでこのやり方にする
+            return gamepad.aButton.IsPressed() || gamepad.bButton.IsPressed()
+                || gamepad.xButton.IsPressed() || gamepad.yButton.IsPressed()
+                || gamepad.leftShoulder.IsPressed() || gamepad.rightShoulder.IsPressed()
+                || gamepad.leftStickButton.IsPressed()
+                || gamepad.rightStickButton.IsPressed()
+                || leftTriggerValue > 0 || rightTriggerValue > 0
+                || gamepad.startButton.IsPressed() || gamepad.selectButton.IsPressed()
+                || dpadValue.magnitude > 0;
+        }
+        return false;
     }
     //InputSystemからいずれかのアナログ軸入力を行なったかを取得
-    public static bool IMAnyPadAxis(int gamepadIndex)
+    public static bool ISAnyPadAxis(int gamepadIndex)
     {
         Gamepad gamepad = Gamepad.all[gamepadIndex];
 
@@ -695,28 +703,31 @@ public class KX_netUtil : object
             || rightStickValue.magnitude > 0;
     }
     //InputSystemから軸を引数で指定して入力を取得する
-    public static float GetIMPadAxis(int gamepadIndex, XInputAxis axis)
+    public static float GetISPadAxis(int gamepadIndex, XInputAxis axis)
     {
         float ret = 0;
-        Gamepad gamepad = Gamepad.all[gamepadIndex];
-
-        Vector2 leftStickValue = gamepad.leftStick.ReadValue();
-        Vector2 rightStickValue = gamepad.rightStick.ReadValue();
-        //他にいい方法が見つかるまでこのやり方にする
-        switch (axis)
+        if (IsValidIndex<Gamepad>(gamepadIndex, Gamepad.all.ToArray()))
         {
-            case XInputAxis.stickLX:
-                ret = leftStickValue.x;
-                break;
-            case XInputAxis.stickLY:
-                ret = leftStickValue.y;
-                break;
-            case XInputAxis.stickRX:
-                ret = rightStickValue.x;
-                break;
-            case XInputAxis.stickRY:
-                ret = rightStickValue.y;
-                break;
+            Gamepad gamepad = Gamepad.all[gamepadIndex];
+
+            Vector2 leftStickValue = gamepad.leftStick.ReadValue();
+            Vector2 rightStickValue = gamepad.rightStick.ReadValue();
+            //他にいい方法が見つかるまでこのやり方にする
+            switch (axis)
+            {
+                case XInputAxis.stickLX:
+                    ret = leftStickValue.x;
+                    break;
+                case XInputAxis.stickLY:
+                    ret = leftStickValue.y;
+                    break;
+                case XInputAxis.stickRX:
+                    ret = rightStickValue.x;
+                    break;
+                case XInputAxis.stickRY:
+                    ret = rightStickValue.y;
+                    break;
+            }
         }
         return ret;
     }

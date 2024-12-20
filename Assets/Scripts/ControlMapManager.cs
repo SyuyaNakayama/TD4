@@ -2,9 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ControlMapManager : MonoBehaviour
 {
+    [System.Serializable]
+    public struct PlayerInputDevice
+    {
+        public bool keyboard;
+        public bool mouse;
+        public int[] gamepads;
+
+        public PlayerInputDevice(bool setKeyboard,
+            bool setMouse, int[] setGamepads)
+        {
+            keyboard = setKeyboard;
+            mouse = setMouse;
+            gamepads = KX_netUtil.CopyArray<int>(setGamepads);
+        }
+    }
+
+    [SerializeField]
+    static PlayerInputDevice[] players = {
+        new PlayerInputDevice(true, true, new int[] { 0 }) };
+    public static PlayerInputDevice[] GetPlayers()
+    {
+        PlayerInputDevice[] ret =
+            KX_netUtil.CopyArray<PlayerInputDevice>(players);
+        for (int i = 0; i < ret.Length; i++)
+        {
+            ret[i].gamepads =
+                KX_netUtil.CopyArray<int>(players[i].gamepads);
+        }
+        return ret;
+    }
+
     [SerializeField]
     LiveEntity liveEntity;
     public LiveEntity GetLiveEntity()
@@ -18,9 +50,13 @@ public class ControlMapManager : MonoBehaviour
     [SerializeField]
     VectorInputBinder[] vectorInputBinders = { };
     [SerializeField]
+    CMBButton resetButton;
+    [SerializeField]
     KeyMap defaultKeyMap;
     [SerializeField]
     bool userControl;
+    [SerializeField]
+    int playerIndex;
 
     KeyMap keyMap;
     public KeyMap GetKeyMap()
@@ -41,6 +77,10 @@ public class ControlMapManager : MonoBehaviour
     {
         if (IsUserControl())
         {
+            if (resetButton && resetButton.GetOutput())
+            {
+                keyMap = Instantiate(defaultKeyMap);
+            }
             Save();
         }
     }
@@ -67,6 +107,10 @@ public class ControlMapManager : MonoBehaviour
         return (liveEntity && liveEntity.GetUserControl())
             || (!liveEntity && userControl);
     }
+    public int GetPlayerIndex()
+    {
+        return playerIndex;
+    }
 
     public void ApplyKeyBind()
     {
@@ -87,7 +131,9 @@ public class ControlMapManager : MonoBehaviour
         {
             if (vectorInputBinders[i].IsCurrentMenu())
             {
-
+                keyMap.SetVectorInputMap(
+                    vectorInputBinders[i].GetVecCellName(),
+                    vectorInputBinders[i].GetAxisBindData());
             }
         }
     }

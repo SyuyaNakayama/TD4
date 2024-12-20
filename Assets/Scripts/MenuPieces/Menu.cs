@@ -52,6 +52,7 @@ public class Menu : MonoBehaviour
     {
         return prevIsCurrentMenu;
     }
+    bool prevBackInput;
 
     void Awake()
     {
@@ -161,6 +162,11 @@ public class Menu : MonoBehaviour
 
     protected virtual void MenuUpdate()
     {
+        if (!controlMap.GetBackInput() && prevBackInput)
+        {
+            active = false;
+        }
+        prevBackInput = controlMap.GetBackInput();
     }
 
     void Save()

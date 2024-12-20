@@ -24,6 +24,11 @@ public class ControlMapMenu : ControlMap
     {
         return prevInput;
     }
+    bool backInput;
+    public bool GetBackInput()
+    {
+        return backInput;
+    }
     int selectIndex;
     public int GetSelectIndex()
     {
@@ -61,15 +66,16 @@ public class ControlMapMenu : ControlMap
             if (IsUserControl())
             {
                 KeyMap keyMap = GetManager().GetKeyMap();
+                int playerIndex = GetManager().GetPlayerIndex();
 
-                Vector2 stickInput = keyMap.GetVectorInput("moveStick")
-                    + keyMap.GetVectorInput("moveStick2");
-                bool selectButton = keyMap.GetKey("select");
-                bool backButton = keyMap.GetKey("back");
-                bool upInputButton = keyMap.GetKey("up") || stickInput.y > 0;
-                bool downInputButton = keyMap.GetKey("down") || stickInput.y < 0;
-                bool leftInputButton = keyMap.GetKey("left") || stickInput.x < 0;
-                bool rightInputButton = keyMap.GetKey("right") || stickInput.x > 0;
+                Vector2 stickInput = keyMap.GetVectorInput(playerIndex, "moveStick")
+                    + keyMap.GetVectorInput(playerIndex, "moveStick2");
+                bool selectButton = keyMap.GetKey(playerIndex, "select");
+                backInput = keyMap.GetKey(playerIndex, "back");
+                bool upInputButton = keyMap.GetKey(playerIndex, "up") || stickInput.y > 0;
+                bool downInputButton = keyMap.GetKey(playerIndex, "down") || stickInput.y < 0;
+                bool leftInputButton = keyMap.GetKey(playerIndex, "left") || stickInput.x < 0;
+                bool rightInputButton = keyMap.GetKey(playerIndex, "right") || stickInput.x > 0;
                 bool moveInputButton =
                     upInputButton || downInputButton
                     || leftInputButton || rightInputButton;
@@ -78,13 +84,13 @@ public class ControlMapMenu : ControlMap
                 prevKeyInputVec = keyInputVec;
 
                 //クリックしたらマウス操作に切り替え
-                if (KX_netUtil.GetIMMouseButton("leftButton"))
+                if (KX_netUtil.GetISMouseButton("leftButton"))
                 {
                     isMouseInput = true;
                 }
                 //何かボタンを押したらボタン操作に切り替え
                 if (selectButton
-                    || backButton
+                    || backInput
                     || moveInputButton)
                 {
                     isMouseInput = false;
@@ -109,10 +115,10 @@ public class ControlMapMenu : ControlMap
                 if (isMouseInput)
                 {
                     //マウス操作
-                    input = KX_netUtil.GetIMMouseButton("leftButton");
+                    input = KX_netUtil.GetISMouseButton("leftButton");
                     if (input)
                     {
-                        inputPosition = KX_netUtil.GetIMMousePosition();
+                        inputPosition = KX_netUtil.GetISMousePosition();
                     }
                 }
                 else

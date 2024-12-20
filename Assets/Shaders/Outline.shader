@@ -135,6 +135,7 @@ Shader "Unlit/Outline"
             {
                 fixed4 c = tex2D(_OutlineMap, i.uv);
                 clip(c.r - 0.5);
+                clip(c.b - 0.5);
                 clip(c.a - 0.5);
                 return fixed4(0,0,0,0);
             }

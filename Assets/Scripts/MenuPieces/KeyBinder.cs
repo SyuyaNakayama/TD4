@@ -10,6 +10,14 @@ public class KeyBinder : Menu
     [SerializeField]
     ControlMapManager manager;
     [SerializeField]
+    TMP_Text messageX;
+    [SerializeField]
+    TMP_Text messageY;
+    [SerializeField]
+    TMP_Text messageDone;
+    [SerializeField]
+    TMP_Text messageErr;
+    [SerializeField]
     TMP_Text bindKeysName;
     [SerializeField]
     string keyMapCellName;
@@ -43,12 +51,12 @@ public class KeyBinder : Menu
 
         //何かボタンが押されたら
         if (Gamepad.all.ToArray().Length > 0
-            && KX_netUtil.IMAnyPadButton(0))
+            && KX_netUtil.ISAnyPadButton(0))
         {
             //どのボタンが押されたのか調べる
             foreach (KX_netUtil.XInputButton button in Enum.GetValues(typeof(KX_netUtil.XInputButton)))
             {
-                if (KX_netUtil.GetIMPadButton(0, button))
+                if (KX_netUtil.GetISPadButton(0, button))
                 {
                     Debug.Log(button.ToString());
                 }
@@ -56,12 +64,12 @@ public class KeyBinder : Menu
         }
 
         //何かキーが押されたら
-        if (KX_netUtil.IMAnyKey())
+        if (KX_netUtil.ISAnyKey())
         {
             //どのキーが押されたのか調べる
             foreach (Key code in Enum.GetValues(typeof(Key)))
             {
-                if (KX_netUtil.GetIMKey(code))
+                if (KX_netUtil.GetISKey(code))
                 {
                     //現在押しているキーの配列に追加
                     Array.Resize(ref pressingKeys, pressingKeys.Length + 1);

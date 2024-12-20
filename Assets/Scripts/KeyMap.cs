@@ -12,7 +12,7 @@ public class KeyMap : ScriptableObject
     {
         public string name;
         public Key[] keys;
-        public string[] buttons;
+        public KX_netUtil.XInputButton[] buttons;
 
     }
     [System.Serializable]
@@ -24,9 +24,9 @@ public class KeyMap : ScriptableObject
     [System.Serializable]
     public struct AxisBindData
     {
-        public string axisNameX;
+        public KX_netUtil.XInputAxis axisX;
         public bool inverseX;
-        public string axisNameY;
+        public KX_netUtil.XInputAxis axisY;
         public bool inverseY;
     }
 
@@ -37,39 +37,40 @@ public class KeyMap : ScriptableObject
     [SerializeField]
     VectorInputMapCell[] vectorInputMapCells = { };
 
-    public bool GetKey(string name)
+    public bool GetKey(int playerIndex, string name)
     {
+        ControlMapManager.PlayerInputDevice player =
+            ControlMapManager.GetPlayers()[playerIndex];
+
         //同じ名前のものを探す
         for (int i = 0; i < keyMapCells.Length; i++)
         {
+            //キーボード
             if (keyMapCells[i].name == name)
             {
                 //一つでも押されていたらtrueを返す
                 for (int j = 0; j < keyMapCells[i].keys.Length; j++)
                 {
-                    if (KX_netUtil.GetIMKey(keyMapCells[i].keys[j]))
+                    if (KX_netUtil.GetISKey(keyMapCells[i].keys[j]))
                     {
                         return true;
                     }
                 }
             }
-        }
-        return false;
-    }
-    //TODO:作りかけなので完成させる
-    public bool GetButton(int playerIndex, string name)
-    {
-        //同じ名前のものを探す
-        for (int i = 0; i < keyMapCells.Length; i++)
-        {
+            //ゲームパッド
             if (keyMapCells[i].name == name)
             {
                 //一つでも押されていたらtrueを返す
-                for (int j = 0; j < keyMapCells[i].keys.Length; j++)
+                for (int j = 0; j < keyMapCells[i].buttons.Length; j++)
                 {
-                    if (KX_netUtil.GetIMKey(keyMapCells[i].keys[j]))
+                    //割り当てられているすべてのコントローラーで試す
+                    for (int k = 0; k < player.gamepads.Length; k++)
                     {
-                        return true;
+                        if (KX_netUtil.GetISPadButton(
+                        player.gamepads[k], keyMapCells[i].buttons[j]))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -109,20 +110,42 @@ public class KeyMap : ScriptableObject
             KX_netUtil.CopyArray<Key>(keys);
     }
 
-    public Vector2 GetVectorInput(string name)
+    public Vector2 GetVectorInput(int playerIndex, string name)
     {
+        Vector2 ret = Vector2.zero;
+        ControlMapManager.PlayerInputDevice player =
+            ControlMapManager.GetPlayers()[playerIndex];
+        //同じ名前のものを探す
         for (int i = 0; i < vectorInputMapCells.Length; i++)
         {
-            /*if (vectorInputMapCells[i].name == name)
+            if (vectorInputMapCells[i].name == name)
             {
-                Vector2 ret = new Vector2(
-                    Input.GetAxis(vectorInputMapCells[i].axisBindData.axisNameX),
-                    Input.GetAxis(vectorInputMapCells[i].axisBindData.axisNameY)
-                );
-                return ret;
-            }*/
+                //割り当てられているすべてのコントローラーの入力を合算
+                for (int k = 0; k < player.gamepads.Length; k++)
+                {
+                    AxisBindData currentData =
+                        vectorInputMapCells[i].axisBindData;
+
+                    Vector2 addVec = new Vector2(
+                    KX_netUtil.GetISPadAxis(
+                    player.gamepads[k], currentData.axisX),
+                    KX_netUtil.GetISPadAxis(
+                    player.gamepads[k], currentData.axisY));
+
+                    if (currentData.inverseX)
+                    {
+                        addVec.x *= -1;
+                    }
+                    if (currentData.inverseY)
+                    {
+                        addVec.y *= -1;
+                    }
+
+                    ret += addVec;
+                }
+            }
         }
-        return Vector2.zero;
+        return ret;
     }
 
     public AxisBindData GetVectorInputMap(string name)

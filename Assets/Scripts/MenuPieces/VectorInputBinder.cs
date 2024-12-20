@@ -18,15 +18,10 @@ public class VectorInputBinder : Menu
         return vecCellName;
     }
 
-    KX_netUtil.XInputAxis bindAxisX;
-    public KX_netUtil.XInputAxis GetBindAxisX()
+    KeyMap.AxisBindData axisBindData;
+    public KeyMap.AxisBindData GetAxisBindData()
     {
-        return bindAxisX;
-    }
-    KX_netUtil.XInputAxis bindAxisY;
-    public KX_netUtil.XInputAxis GetBindAxisY()
-    {
-        return bindAxisY;
+        return axisBindData;
     }
     int bindPhase;
     bool quit;
@@ -42,23 +37,28 @@ public class VectorInputBinder : Menu
 
         //軸入力が行われたら
         if (Gamepad.all.ToArray().Length > 0
-            && KX_netUtil.IMAnyPadAxis(0))
+            && KX_netUtil.ISAnyPadAxis(0))
         {
             //どの軸が入力されたのか調べる
             foreach (KX_netUtil.XInputAxis axis in Enum.GetValues(typeof(KX_netUtil.XInputAxis)))
             {
-                if (Mathf.Abs(KX_netUtil.GetIMPadAxis(0, axis)) >= 0.5f)
+                if (Mathf.Abs(KX_netUtil.GetISPadAxis(0, axis)) >= 0.5f)
                 {
+                    bool inverse =
+                        KX_netUtil.GetISPadAxis(0, axis) < 0;
+
                     switch (bindPhase)
                     {
                         default:
-                            bindAxisX = axis;
+                            axisBindData.axisX = axis;
+                            axisBindData.inverseX = inverse;
                             bindPhase = 1;
                             break;
                         case 1:
-                            if (axis != bindAxisX)
+                            if (axis != axisBindData.axisX)
                             {
-                                bindAxisY = axis;
+                                axisBindData.axisY = axis;
+                                axisBindData.inverseY = inverse;
                                 bindPhase = 2;
                             }
                             break;
@@ -70,9 +70,9 @@ public class VectorInputBinder : Menu
         }
 
         //キーかボタンが押されたら
-        if (KX_netUtil.IMAnyKey()
+        if (KX_netUtil.ISAnyKey()
             || (Gamepad.all.ToArray().Length > 0
-            && KX_netUtil.IMAnyPadButton(0)))
+            && KX_netUtil.ISAnyPadButton(0)))
         {
             quit = true;
         }
@@ -89,15 +89,31 @@ public class VectorInputBinder : Menu
 
         //入力した軸を表示
         bindVecName.text = "";
-        switch (bindPhase)
+        if (bindPhase >= 1)
         {
-            case 1:
-                bindVecName.text += "X : " + bindAxisX.ToString();
-                break;
-            case 2:
-                bindVecName.text += "X : " + bindAxisX.ToString()
-                    + "\nY : " + bindAxisY.ToString();
-                break;
+            bindVecName.text += "X : ";
+            if (axisBindData.inverseX)
+            {
+                bindVecName.text += "-";
+            }
+            else
+            {
+                bindVecName.text += "+";
+            }
+            bindVecName.text += axisBindData.axisX.ToString() + "\n";
+        }
+        if (bindPhase >= 2)
+        {
+            bindVecName.text += "Y : ";
+            if (axisBindData.inverseY)
+            {
+                bindVecName.text += "-";
+            }
+            else
+            {
+                bindVecName.text += "+";
+            }
+            bindVecName.text += axisBindData.axisY.ToString();
         }
     }
 }

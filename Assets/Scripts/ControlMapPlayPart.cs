@@ -36,25 +36,26 @@ public class ControlMapPlayPart : ControlMap
         if (IsUserControl())
         {
             KeyMap keyMap = GetManager().GetKeyMap();
+            int playerIndex = GetManager().GetPlayerIndex();
 
-            jumpInput = keyMap.GetKey("jump");
-            weaponInput = keyMap.GetKey("weapon");
-            menuInput = keyMap.GetKey("menu");
+            jumpInput = keyMap.GetKey(playerIndex, "jump");
+            weaponInput = keyMap.GetKey(playerIndex, "weapon");
+            menuInput = keyMap.GetKey(playerIndex, "menu");
 
-            moveInputVec = keyMap.GetVectorInput("moveStick")
-                + keyMap.GetVectorInput("moveStick2");
-            camInputVec = keyMap.GetVectorInput("camStick")
-                + keyMap.GetVectorInput("camStick2");
+            moveInputVec = keyMap.GetVectorInput(playerIndex, "moveStick")
+                + keyMap.GetVectorInput(playerIndex, "moveStick2");
+            camInputVec = keyMap.GetVectorInput(playerIndex, "camStick")
+                + keyMap.GetVectorInput(playerIndex, "camStick2");
 
-            bool upInput = keyMap.GetKey("up");
-            bool downInput = keyMap.GetKey("down");
-            bool rightInput = keyMap.GetKey("right");
-            bool leftInput = keyMap.GetKey("left");
+            bool upInput = keyMap.GetKey(playerIndex, "up");
+            bool downInput = keyMap.GetKey(playerIndex, "down");
+            bool rightInput = keyMap.GetKey(playerIndex, "right");
+            bool leftInput = keyMap.GetKey(playerIndex, "left");
 
-            bool camUpInput = keyMap.GetKey("camUp");
-            bool camDownInput = keyMap.GetKey("camDown");
-            bool camRightInput = keyMap.GetKey("camRight");
-            bool camLeftInput = keyMap.GetKey("camLeft");
+            bool camUpInput = keyMap.GetKey(playerIndex, "camUp");
+            bool camDownInput = keyMap.GetKey(playerIndex, "camDown");
+            bool camRightInput = keyMap.GetKey(playerIndex, "camRight");
+            bool camLeftInput = keyMap.GetKey(playerIndex, "camLeft");
 
             moveInputVec +=
                 DPadToVector2(upInput, downInput, rightInput, leftInput);
