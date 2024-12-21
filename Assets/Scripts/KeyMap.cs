@@ -110,6 +110,25 @@ public class KeyMap : ScriptableObject
             KX_netUtil.CopyArray<Key>(keys);
     }
 
+    public void SetKeyMap(string name, KX_netUtil.XInputButton[] buttons)
+    {
+        //“¯‚¶–¼‘O‚Ì‚à‚Ì‚ª‚ ‚Á‚½‚çã‘‚«
+        for (int i = 0; i < keyMapCells.Length; i++)
+        {
+            if (keyMapCells[i].name == name)
+            {
+                keyMapCells[i].buttons = KX_netUtil.CopyArray
+                    <KX_netUtil.XInputButton>(buttons);
+                return;
+            }
+        }
+        //–³‚¯‚ê‚ÎV‹Kì¬
+        Array.Resize(ref keyMapCells, keyMapCells.Length + 1);
+        keyMapCells[keyMapCells.Length - 1].name = name;
+        keyMapCells[keyMapCells.Length - 1].buttons =
+            KX_netUtil.CopyArray<KX_netUtil.XInputButton>(buttons);
+    }
+
     public Vector2 GetVectorInput(int playerIndex, string name)
     {
         Vector2 ret = Vector2.zero;

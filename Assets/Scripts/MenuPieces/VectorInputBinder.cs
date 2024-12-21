@@ -10,6 +10,14 @@ public class VectorInputBinder : Menu
     [SerializeField]
     ControlMapManager manager;
     [SerializeField]
+    TMP_Text messageX;
+    [SerializeField]
+    TMP_Text messageY;
+    [SerializeField]
+    TMP_Text messageDone;
+    [SerializeField]
+    TMP_Text messageErr;
+    [SerializeField]
     TMP_Text bindVecName;
     [SerializeField]
     string vecCellName;
@@ -114,6 +122,30 @@ public class VectorInputBinder : Menu
                 bindVecName.text += "+";
             }
             bindVecName.text += axisBindData.axisY.ToString();
+        }
+
+        messageX.enabled = messageY.enabled =
+            messageDone.enabled = messageErr.enabled =
+            false;
+        //状態に応じてメッセージ切り替え
+        if (KX_netUtil.IsValidIndex(0, Gamepad.all.ToArray()))
+        {
+            switch (bindPhase)
+            {
+                default:
+                    messageX.enabled = true;
+                    break;
+                case 1:
+                    messageY.enabled = true;
+                    break;
+                case 2:
+                    messageDone.enabled = true;
+                    break;
+            }
+        }
+        else
+        {
+            messageErr.enabled = true;
         }
     }
 }

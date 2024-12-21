@@ -10,14 +10,6 @@ public class KeyBinder : Menu
     [SerializeField]
     ControlMapManager manager;
     [SerializeField]
-    TMP_Text messageX;
-    [SerializeField]
-    TMP_Text messageY;
-    [SerializeField]
-    TMP_Text messageDone;
-    [SerializeField]
-    TMP_Text messageErr;
-    [SerializeField]
     TMP_Text bindKeysName;
     [SerializeField]
     string keyMapCellName;
@@ -33,6 +25,13 @@ public class KeyBinder : Menu
     }
     Key[] pressingKeys = { };
     Key[] prevPressingKeys = { };
+    KX_netUtil.XInputButton[] bindButtons = { };
+    public KX_netUtil.XInputButton[] GetBindButtons()
+    {
+        return KX_netUtil.CopyArray<KX_netUtil.XInputButton>(bindButtons);
+    }
+    KX_netUtil.XInputButton[] pressingButtons = { };
+    KX_netUtil.XInputButton[] prevPressingButtons = { };
     bool done;
 
     protected override void MenuUpdate()
@@ -41,13 +40,16 @@ public class KeyBinder : Menu
         if (!GetPrevIsCurrentMenu())
         {
             Array.Resize(ref bindKeys, 0);
+            Array.Resize(ref bindButtons, 0);
             done = false;
         }
 
-        //前フレームで押していたキーを記録
+        //前フレームで押していたキーとボタンを記録
         prevPressingKeys = KX_netUtil.CopyArray<Key>(pressingKeys);
-        //現在押しているキーの配列をリセット
+        prevPressingButtons = KX_netUtil.CopyArray<KX_netUtil.XInputButton>(pressingButtons);
+        //現在押しているキーとボタンの配列をリセット
         Array.Resize(ref pressingKeys, 0);
+        Array.Resize(ref pressingButtons, 0);
 
         //何かボタンが押されたら
         if (Gamepad.all.ToArray().Length > 0
@@ -58,7 +60,46 @@ public class KeyBinder : Menu
             {
                 if (KX_netUtil.GetISPadButton(0, button))
                 {
-                    Debug.Log(button.ToString());
+                    //現在押しているキーの配列に追加
+                    Array.Resize(ref pressingButtons, pressingButtons.Length + 1);
+                    pressingButtons[pressingButtons.Length - 1] = button;
+
+                    //そのキーの押し始めか調べる
+                    bool isButtonDown = true;
+                    for (int i = 0; i < prevPressingButtons.Length; i++)
+                    {
+                        if (prevPressingButtons[i] == button)
+                        {
+                            isButtonDown = false;
+                            break;
+                        }
+                    }
+                    //そのキーの押し始めなら
+                    if (isButtonDown)
+                    {
+                        //既に設定したキーか調べる
+                        bool isBindedButton = false;
+                        for (int i = 0; i < bindButtons.Length; i++)
+                        {
+                            if (bindButtons[i] == button)
+                            {
+                                isBindedButton = true;
+                                break;
+                            }
+                        }
+                        //既に設定したキーなら
+                        if (isBindedButton)
+                        {
+                            //設定画面を閉じる準備
+                            done = true;
+                        }
+                        else
+                        {
+                            //設定するキーの配列に追加
+                            Array.Resize(ref bindButtons, bindButtons.Length + 1);
+                            bindButtons[bindButtons.Length - 1] = button;
+                        }
+                    }
                 }
             }
         }
@@ -114,7 +155,11 @@ public class KeyBinder : Menu
                 }
             }
         }
-        else if (done)
+
+        if (!KX_netUtil.ISAnyKey()
+            && (Gamepad.all.ToArray().Length > 0
+            && !KX_netUtil.ISAnyPadButton(0))
+            && done)
         {
             //キーバインドを適用し、設定画面を閉じる
             manager.ApplyKeyBind();
@@ -123,9 +168,24 @@ public class KeyBinder : Menu
 
         //入力したキーを表示
         bindKeysName.text = "";
-        for (int i = 0; i < bindKeys.Length; i++)
+
+        if (bindKeys.Length > 0)
         {
-            bindKeysName.text += bindKeys[i].ToString() + "  ";
+            bindKeysName.text += "[Keyboard]\n";
+            for (int i = 0; i < bindKeys.Length; i++)
+            {
+                bindKeysName.text += bindKeys[i].ToString() + "  ";
+            }
+            bindKeysName.text += "\n";
+        }
+
+        if (bindButtons.Length > 0)
+        {
+            bindKeysName.text += "[Gamepad]\n";
+            for (int i = 0; i < bindButtons.Length; i++)
+            {
+                bindKeysName.text += bindButtons[i].ToString() + "  ";
+            }
         }
     }
 }

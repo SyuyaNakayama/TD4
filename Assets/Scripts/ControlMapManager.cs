@@ -118,9 +118,18 @@ public class ControlMapManager : MonoBehaviour
         {
             if (keyBinders[i].IsCurrentMenu())
             {
-                keyMap.SetKeyMap(
-                    keyBinders[i].GetKeyMapCellName(),
-                    keyBinders[i].GetBindKeys());
+                if (keyBinders[i].GetBindKeys().Length > 0)
+                {
+                    keyMap.SetKeyMap(
+                        keyBinders[i].GetKeyMapCellName(),
+                        keyBinders[i].GetBindKeys());
+                }
+                if (keyBinders[i].GetBindButtons().Length > 0)
+                {
+                    keyMap.SetKeyMap(
+                        keyBinders[i].GetKeyMapCellName(),
+                        keyBinders[i].GetBindButtons());
+                }
             }
         }
     }
