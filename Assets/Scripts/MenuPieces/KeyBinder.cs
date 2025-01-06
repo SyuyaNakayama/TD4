@@ -36,6 +36,8 @@ public class KeyBinder : Menu
 
     protected override void MenuUpdate()
     {
+        Debug.Log(Gamepad.all.Count + " " + Joystick.all.Count);
+
         //開いた瞬間リセット
         if (!GetPrevIsCurrentMenu())
         {
