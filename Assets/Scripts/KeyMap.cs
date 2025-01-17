@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu(menuName = "CreateKeyMap")]
 public class KeyMap : ScriptableObject
 {
-    [System.Serializable]
+    [Serializable]
     public struct KeyMapCell
     {
         public string name;
@@ -15,13 +15,13 @@ public class KeyMap : ScriptableObject
         public KX_netUtil.XInputButton[] buttons;
 
     }
-    [System.Serializable]
+    [Serializable]
     public struct VectorInputMapCell
     {
         public string name;
         public AxisBindData axisBindData;
     }
-    [System.Serializable]
+    [Serializable]
     public struct AxisBindData
     {
         public KX_netUtil.XInputAxis axisX;
@@ -78,18 +78,31 @@ public class KeyMap : ScriptableObject
         return false;
     }
 
-    public Key[] GetKeyMap(string name)
+    public Key[] GetKeys(string name)
     {
         //同じ名前のものがあったらその中身を複製して返す
         for (int i = 0; i < keyMapCells.Length; i++)
         {
             if (keyMapCells[i].name == name)
             {
-                return KX_netUtil.CopyArray<Key>(keyMapCells[i].keys);
+                return KX_netUtil.CopyArray(keyMapCells[i].keys);
             }
         }
         //無ければ空の配列を返す
         return new Key[] { };
+    }
+    public KX_netUtil.XInputButton[] GetButtons(string name)
+    {
+        //同じ名前のものがあったらその中身を複製して返す
+        for (int i = 0; i < keyMapCells.Length; i++)
+        {
+            if (keyMapCells[i].name == name)
+            {
+                return KX_netUtil.CopyArray(keyMapCells[i].buttons);
+            }
+        }
+        //無ければ空の配列を返す
+        return new KX_netUtil.XInputButton[] { };
     }
 
     public void SetKeyMap(string name, Key[] keys)
@@ -99,7 +112,7 @@ public class KeyMap : ScriptableObject
         {
             if (keyMapCells[i].name == name)
             {
-                keyMapCells[i].keys = KX_netUtil.CopyArray<Key>(keys);
+                keyMapCells[i].keys = KX_netUtil.CopyArray(keys);
                 return;
             }
         }
@@ -107,7 +120,7 @@ public class KeyMap : ScriptableObject
         Array.Resize(ref keyMapCells, keyMapCells.Length + 1);
         keyMapCells[keyMapCells.Length - 1].name = name;
         keyMapCells[keyMapCells.Length - 1].keys =
-            KX_netUtil.CopyArray<Key>(keys);
+            KX_netUtil.CopyArray(keys);
     }
 
     public void SetKeyMap(string name, KX_netUtil.XInputButton[] buttons)
@@ -117,8 +130,7 @@ public class KeyMap : ScriptableObject
         {
             if (keyMapCells[i].name == name)
             {
-                keyMapCells[i].buttons = KX_netUtil.CopyArray
-                    <KX_netUtil.XInputButton>(buttons);
+                keyMapCells[i].buttons = KX_netUtil.CopyArray(buttons);
                 return;
             }
         }
@@ -126,7 +138,7 @@ public class KeyMap : ScriptableObject
         Array.Resize(ref keyMapCells, keyMapCells.Length + 1);
         keyMapCells[keyMapCells.Length - 1].name = name;
         keyMapCells[keyMapCells.Length - 1].buttons =
-            KX_netUtil.CopyArray<KX_netUtil.XInputButton>(buttons);
+            KX_netUtil.CopyArray(buttons);
     }
 
     public Vector2 GetVectorInput(int playerIndex, string name)

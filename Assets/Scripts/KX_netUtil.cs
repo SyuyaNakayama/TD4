@@ -1,24 +1,23 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class KX_netUtil : object
 {
-    [System.Serializable]
+    [Serializable]
     public enum EaseType
     {
         easeIn,
         easeOut,
         easeInOut
     }
-    [System.Serializable]
+    [Serializable]
     public enum XInputButton
     {
-        a,
-        b,
-        x,
-        y,
+        north,
+        south,
+        west,
+        east,
         l,
         r,
         triggerL,
@@ -32,7 +31,7 @@ public class KX_netUtil : object
         start,
         select,
     }
-    [System.Serializable]
+    [Serializable]
     public enum XInputAxis
     {
         stickLX,
@@ -41,27 +40,27 @@ public class KX_netUtil : object
         stickRY,
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct EaseData
     {
         public EaseType type;
         public float pow;
     }
-    [System.Serializable]
+    [Serializable]
     public struct TransformData
     {
         public Vector3 position;
         public Vector3 eulerAngles;
         public Vector3 scale;
     }
-    [System.Serializable]
+    [Serializable]
     public struct AxisSwitch
     {
         public bool x;
         public bool y;
         public bool z;
     }
-    [System.Serializable]
+    [Serializable]
     public struct TransformSwitch
     {
         public bool position;
@@ -69,31 +68,31 @@ public class KX_netUtil : object
         public bool scale;
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct TextureSetter
     {
         public string propertyName;
         public Texture2D texture;
     }
-    [System.Serializable]
+    [Serializable]
     public struct ColorSetter
     {
         public string propertyName;
         public Color color;
     }
-    [System.Serializable]
+    [Serializable]
     public struct IntSetter
     {
         public string propertyName;
         public int value;
     }
-    [System.Serializable]
+    [Serializable]
     public struct FloatSetter
     {
         public string propertyName;
         public float value;
     }
-    [System.Serializable]
+    [Serializable]
     public struct PropertySetter
     {
         public TextureSetter[] textureSetters;
@@ -103,42 +102,42 @@ public class KX_netUtil : object
 
         public PropertySetter(PropertySetter propertySetter)
         {
-            textureSetters = KX_netUtil.CopyArray<TextureSetter>(
+            textureSetters = CopyArray(
                 propertySetter.textureSetters);
-            colorSetters = KX_netUtil.CopyArray<ColorSetter>(
+            colorSetters = CopyArray(
                 propertySetter.colorSetters);
-            intSetters = KX_netUtil.CopyArray<IntSetter>(
+            intSetters = CopyArray(
                 propertySetter.intSetters);
-            floatSetters = KX_netUtil.CopyArray<FloatSetter>(
+            floatSetters = CopyArray(
                 propertySetter.floatSetters);
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct TextureReplacer
     {
         public int targetIndex;
         public Texture2D texture;
     }
-    [System.Serializable]
+    [Serializable]
     public struct ColorReplacer
     {
         public int targetIndex;
         public Color color;
     }
-    [System.Serializable]
+    [Serializable]
     public struct IntReplacer
     {
         public int targetIndex;
         public int value;
     }
-    [System.Serializable]
+    [Serializable]
     public struct FloatReplacer
     {
         public int targetIndex;
         public float value;
     }
-    [System.Serializable]
+    [Serializable]
     public struct PropertyReplacer
     {
         public TextureReplacer[] textureReplacers;
@@ -148,13 +147,13 @@ public class KX_netUtil : object
 
         public PropertyReplacer(PropertyReplacer propertyReplacer)
         {
-            textureReplacers = KX_netUtil.CopyArray<TextureReplacer>(
+            textureReplacers = CopyArray(
                 propertyReplacer.textureReplacers);
-            colorReplacers = KX_netUtil.CopyArray<ColorReplacer>(
+            colorReplacers = CopyArray(
                 propertyReplacer.colorReplacers);
-            intReplacers = KX_netUtil.CopyArray<IntReplacer>(
+            intReplacers = CopyArray(
                 propertyReplacer.intReplacers);
-            floatReplacers = KX_netUtil.CopyArray<FloatReplacer>(
+            floatReplacers = CopyArray(
                 propertyReplacer.floatReplacers);
         }
     }
@@ -350,20 +349,20 @@ public class KX_netUtil : object
     public static bool IsInsideHitBox(RectTransform rectTransform, Camera camera, Vector2 inputPosition2D)
     {
         Rect rect =
-            KX_netUtil.GetScreenRect(rectTransform, camera);
+            GetScreenRect(rectTransform, camera);
         Vector2 corner1 =
             new Vector2(rect.xMin, rect.yMin);
         Vector2 corner2 =
             new Vector2(rect.xMax, rect.yMax);
 
-        return KX_netUtil.IsInRect(
+        return IsInRect(
             corner1, corner2, inputPosition2D);
     }
     //指定された2D座標がこの矩形から見てどこにあるか
     public static Vector2 InverseTransformPointHitBox(RectTransform rectTransform, Camera camera, Vector2 inputPosition2D)
     {
         Rect rect =
-            KX_netUtil.GetScreenRect(rectTransform, camera);
+            GetScreenRect(rectTransform, camera);
 
         return new Vector2(
             RangeMap(inputPosition2D.x, rect.xMin, rect.xMax, -0.5f, 0.5f),
@@ -650,10 +649,10 @@ public class KX_netUtil : object
             float leftTriggerValue = gamepad.leftTrigger.ReadValue();
             float rightTriggerValue = gamepad.rightTrigger.ReadValue();
             //他にいい方法が見つかるまでこのやり方にする
-            return (button == XInputButton.a && gamepad.aButton.IsPressed())
-                || (button == XInputButton.b && gamepad.bButton.IsPressed())
-                || (button == XInputButton.x && gamepad.xButton.IsPressed())
-                || (button == XInputButton.y && gamepad.yButton.IsPressed())
+            return (button == XInputButton.north && gamepad.buttonNorth.IsPressed())
+                || (button == XInputButton.south && gamepad.buttonSouth.IsPressed())
+                || (button == XInputButton.west && gamepad.buttonWest.IsPressed())
+                || (button == XInputButton.east && gamepad.buttonEast.IsPressed())
                 || (button == XInputButton.l && gamepad.leftShoulder.IsPressed())
                 || (button == XInputButton.r && gamepad.rightShoulder.IsPressed())
                 || (button == XInputButton.stickL && gamepad.leftStickButton.IsPressed())
@@ -680,8 +679,8 @@ public class KX_netUtil : object
             float leftTriggerValue = gamepad.leftTrigger.ReadValue();
             float rightTriggerValue = gamepad.rightTrigger.ReadValue();
             //他にいい方法が見つかるまでこのやり方にする
-            return gamepad.aButton.IsPressed() || gamepad.bButton.IsPressed()
-                || gamepad.xButton.IsPressed() || gamepad.yButton.IsPressed()
+            return gamepad.buttonNorth.IsPressed() || gamepad.buttonSouth.IsPressed()
+                || gamepad.buttonWest.IsPressed() || gamepad.buttonEast.IsPressed()
                 || gamepad.leftShoulder.IsPressed() || gamepad.rightShoulder.IsPressed()
                 || gamepad.leftStickButton.IsPressed()
                 || gamepad.rightStickButton.IsPressed()
