@@ -98,18 +98,19 @@ public class ControlMapManager : MonoBehaviour
 
     void Awake()
     {
+        //TODO:FixedUpdateに移す
+        keyMap = Instantiate(defaultKeyMap);
+
+        controlIconAtlas =
+            KX_netUtil.CopyArray(defaultControlIconAtlas);
+        for (int i = 0; i < controlIconAtlas.Length; i++)
+        {
+            controlIconAtlas[i].controlIconAtlas =
+                Instantiate(defaultControlIconAtlas[i].controlIconAtlas);
+        }
+
         if (IsUserControl())
         {
-            keyMap = Instantiate(defaultKeyMap);
-
-            controlIconAtlas =
-                KX_netUtil.CopyArray(defaultControlIconAtlas);
-            for (int i = 0; i < controlIconAtlas.Length; i++)
-            {
-                controlIconAtlas[i].controlIconAtlas =
-                    Instantiate(defaultControlIconAtlas[i].controlIconAtlas);
-            }
-
             Load();
         }
     }
