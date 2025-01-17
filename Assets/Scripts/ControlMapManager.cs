@@ -72,9 +72,9 @@ public class ControlMapManager : MonoBehaviour
     [SerializeField]
     KeyMap defaultKeyMap;
     [SerializeField]
-    TaggedControlIcons[] controlIcons;
+    TaggedControlIcons[] controlIcons = { };
     [SerializeField]
-    TaggedControlIconAtlas[] defaultControlIconAtlas;
+    TaggedControlIconAtlas[] defaultControlIconAtlas = { };
     [SerializeField]
     bool userControl;
     [SerializeField]
@@ -89,7 +89,7 @@ public class ControlMapManager : MonoBehaviour
         }
         return null;
     }
-    TaggedControlIconAtlas[] controlIconAtlas;
+    TaggedControlIconAtlas[] controlIconAtlas = { };
     InputDevice latestInputDevice;
     public InputDevice GetLatestInputDevice()
     {
@@ -98,7 +98,6 @@ public class ControlMapManager : MonoBehaviour
 
     void Awake()
     {
-        //TODO:FixedUpdateに移す
         keyMap = Instantiate(defaultKeyMap);
 
         controlIconAtlas =
@@ -117,6 +116,21 @@ public class ControlMapManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!keyMap)
+        {
+            keyMap = Instantiate(defaultKeyMap);
+        }
+        if (controlIconAtlas == null)
+        {
+            controlIconAtlas =
+                KX_netUtil.CopyArray(defaultControlIconAtlas);
+            for (int i = 0; i < controlIconAtlas.Length; i++)
+            {
+                controlIconAtlas[i].controlIconAtlas =
+                    Instantiate(defaultControlIconAtlas[i].controlIconAtlas);
+            }
+        }
+
         if (IsUserControl())
         {
             //入力されたデバイスに応じて変化
