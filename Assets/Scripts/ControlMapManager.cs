@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ControlMapManager : MonoBehaviour
 {
@@ -76,6 +77,9 @@ public class ControlMapManager : MonoBehaviour
     [SerializeField]
     TaggedControlIconAtlas[] defaultControlIconAtlas = { };
     [SerializeField]
+    InputDevice[] allowedInputDevices =
+        { InputDevice.keyboard,InputDevice.mouse,InputDevice.gamepad};
+    [SerializeField]
     bool userControl;
     [SerializeField]
     int playerIndex;
@@ -134,15 +138,18 @@ public class ControlMapManager : MonoBehaviour
         if (IsUserControl())
         {
             //入力されたデバイスに応じて変化
-            if (KX_netUtil.ISAnyKey())
+            if (KX_netUtil.ISAnyKey()
+                && Array.IndexOf(allowedInputDevices, InputDevice.keyboard) >= 0)
             {
                 latestInputDevice = InputDevice.keyboard;
             }
-            if (KX_netUtil.GetISMouseButton("leftButton"))
+            if (KX_netUtil.GetISMouseButton("leftButton")
+                && Array.IndexOf(allowedInputDevices, InputDevice.mouse) >= 0)
             {
                 latestInputDevice = InputDevice.mouse;
             }
-            if (KX_netUtil.ISAnyPadButton(GetPlayers()[playerIndex].gamepads[0]))
+            if (KX_netUtil.ISAnyPadButton(GetPlayers()[playerIndex].gamepads[0])
+                && Array.IndexOf(allowedInputDevices, InputDevice.gamepad) >= 0)
             {
                 latestInputDevice = InputDevice.gamepad;
             }
