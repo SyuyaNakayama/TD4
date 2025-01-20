@@ -58,6 +58,12 @@ public class TutorialPanel : MonoBehaviour
     ButtonGuide buttonGuide;
     [SerializeField]
     DirectionInputGuide directionInputGuide;
+    [SerializeField]
+    Vector3 textPos;
+    [SerializeField]
+    Vector3 iconPos;
+    [SerializeField]
+    bool isLeftExtend;
 
     int frame;
     float progress;
@@ -98,6 +104,7 @@ public class TutorialPanel : MonoBehaviour
 
     void FixedUpdate()
     {
+        text.transform.localPosition = textPos;
         text.text = data.displayName;
         //フレームを一つ進める
         frame = Mathf.RoundToInt(Mathf.Repeat(frame + 1, data.totalFrame));
@@ -249,31 +256,51 @@ public class TutorialPanel : MonoBehaviour
         Array.Resize(ref keyGuides, KeyGuideLength);
         Array.Resize(ref buttonGuides, ButtonGuideLength);
 
-        //ControlGuideを並べる
+        Transform[] guideTransforms = { };
+        Array.Resize(ref guideTransforms,
+            touchGuides.Length + directionInputGuides.Length
+            + keyGuides.Length + buttonGuides.Length);
+        //transformを抽出
         int guideIndex = 0;
         for (int i = 0; i < touchGuides.Length; i++)
         {
-            touchGuides[i].transform.localPosition =
-                new Vector3(guideIndex, 0, 0) * controlGuideDistance;
+            guideTransforms[guideIndex] = touchGuides[i].transform;
             guideIndex++;
         }
         for (int i = 0; i < directionInputGuides.Length; i++)
         {
-            directionInputGuides[i].transform.localPosition =
-                new Vector3(guideIndex, 0, 0) * controlGuideDistance;
+            guideTransforms[guideIndex] = directionInputGuides[i].transform;
             guideIndex++;
         }
         for (int i = 0; i < keyGuides.Length; i++)
         {
-            keyGuides[i].transform.localPosition =
-                new Vector3(guideIndex, 0, 0) * controlGuideDistance;
+            guideTransforms[guideIndex] = keyGuides[i].transform;
             guideIndex++;
         }
         for (int i = 0; i < buttonGuides.Length; i++)
         {
-            buttonGuides[i].transform.localPosition =
-                new Vector3(guideIndex, 0, 0) * controlGuideDistance;
+            guideTransforms[guideIndex] = buttonGuides[i].transform;
             guideIndex++;
+        }
+        //ControlGuideを並べる
+        guideIndex = 0;
+        if (isLeftExtend)
+        {
+            for (int i = guideTransforms.Length - 1; i >= 0; i++)
+            {
+                guideTransforms[i].localPosition =
+                    iconPos + new Vector3(-guideIndex, 0, 0) * controlGuideDistance;
+                guideIndex++;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < guideTransforms.Length; i++)
+            {
+                guideTransforms[i].localPosition =
+                    iconPos + new Vector3(guideIndex, 0, 0) * controlGuideDistance;
+                guideIndex++;
+            }
         }
     }
 
