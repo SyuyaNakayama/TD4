@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 [DisallowMultipleComponent]
 public class CharacterCassette : MonoBehaviour
 {
     public const float defaultMoveSpeed = 0.2f;
-    const float prepareReviveLife = -0.05f;
 
     struct MeleeAttackAndCursorName
     {
@@ -34,6 +32,12 @@ public class CharacterCassette : MonoBehaviour
     {
         return visual;
     }
+
+    LiveEntity liveEntity;
+    public LiveEntity GetLiveEntity()
+    {
+        return liveEntity;
+    }
     AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
@@ -53,21 +57,15 @@ public class CharacterCassette : MonoBehaviour
     {
         return allowEditAttackData;
     }
-    protected string facialExpressionName;
-    AttackArea attackArea;
-    Projectile projectile;
-    LiveEntity liveEntity;
-    public LiveEntity GetLiveEntity()
-    {
-        return liveEntity;
-    }
+    //TODO:生成したものをここに格納し、必要に応じて一括で消せるようにする
+    GameObject[] units = { };
+    bool needReplaceAnimation;
+    string replaceAnimationName;
+    float replaceAnimationProgress;
     float moveSpeed;
     KX_netUtil.AxisSwitch moveLock;
-    bool directionSwitchX = true;
-    bool directionSwitchY = true;
     bool directionLock;
     Quaternion visualRotation;
-    protected float flipMotionAmount;
     Vector3 damageShakePos;
     int chatPos;
 
@@ -77,10 +75,6 @@ public class CharacterCassette : MonoBehaviour
 
         if (liveEntity && liveEntity.GetIsAllowCassetteUpdate())
         {
-            ResourcePalette resourcePalette = liveEntity.GetResourcePalette();
-            attackArea = resourcePalette.GetAttackArea();
-            projectile = resourcePalette.GetProjectile();
-
             transform.localScale = new Vector3(1, 1, 1);
 
             //prevAttackProgressを更新
@@ -151,6 +145,13 @@ public class CharacterCassette : MonoBehaviour
                         else
                         {
                             visual.animationName = "idol";
+                        }
+
+                        if (needReplaceAnimation)
+                        {
+                            visual.animationName = replaceAnimationName;
+                            visual.animationProgress = replaceAnimationProgress;
+                            needReplaceAnimation = false;
                         }
                     }
 
@@ -466,7 +467,6 @@ public class CharacterCassette : MonoBehaviour
             //移動
             if (attackMotionData.GetData().moveKeys != null)
             {
-                Vector3 savedMovement = liveEntity.GetMovement();
                 Vector3 replaceVector = Vector3.zero;
                 KX_netUtil.AxisSwitch ignoreAxis =
                     new KX_netUtil.AxisSwitch();
@@ -528,7 +528,6 @@ public class CharacterCassette : MonoBehaviour
             //慣性が残る等速移動
             if (attackMotionData.GetData().impulseMoveKeys != null)
             {
-                Vector3 savedMovement = liveEntity.GetMovement();
                 Vector3 replaceVector = Vector3.zero;
                 KX_netUtil.AxisSwitch ignoreAxis =
                     new KX_netUtil.AxisSwitch();
@@ -667,7 +666,7 @@ public class CharacterCassette : MonoBehaviour
             }
 
             //アニメーション
-            if (attackMotionData.GetData().animationKeys != null && visual)
+            if (attackMotionData.GetData().animationKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
                     animationKeys.Length; i++)
@@ -676,14 +675,15 @@ public class CharacterCassette : MonoBehaviour
                         attackMotionData.GetData().animationKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        visual.animationName = current.animationName;
+                        replaceAnimationName = current.animationName;
                         if (!current.useOriginalAnimTime)
                         {
-                            visual.animationProgress =
+                            replaceAnimationProgress =
                                 KX_netUtil.RangeMap(GetAttackProgress(),
                                 current.keyFrame.x, current.keyFrame.y,
                                 0, 1);
                         }
+                        needReplaceAnimation = true;
                     }
                 }
             }

@@ -96,7 +96,7 @@ public class PlayerUI : MonoBehaviour
             for (int i = 0; i < Player.maxTeamNum; i++)
             {
                 int currentIndex = Mathf.RoundToInt(
-                    Mathf.Repeat(i - player.GetCurrentCharaIndex(),
+                    Mathf.Repeat(i - player.GetCurrentWeaponIndex(),
                     Mathf.Max(player.GetWeapons().Length, 1)));
 
                 Image currentIcon = charaImages[i];

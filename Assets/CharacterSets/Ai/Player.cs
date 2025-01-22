@@ -1,7 +1,5 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
-using UnityEditor;
 
 public class Player : CharacterCassette
 {
@@ -13,6 +11,13 @@ public class Player : CharacterCassette
     const float maxPlayerRotSpeed = 3;
     const float playerRotSpeedDiffuse = 0.5f;
 
+    [SerializeField]
+    CharaData[] weapons;
+    public CharaData[] GetWeapons()
+    {
+        return weapons;
+    }
+
     bool prevJumpInput;
     bool attackTrigger;
     int attackReactionFrame;
@@ -20,17 +25,13 @@ public class Player : CharacterCassette
     {
         return attackReactionFrame;
     }
-    int currentCharaIndex;
-    public int GetCurrentCharaIndex()
+    int currentWeaponIndex;
+    public int GetCurrentWeaponIndex()
     {
-        return currentCharaIndex;
+        return currentWeaponIndex;
     }
-    [SerializeField]
-    CharaData[] weapons;
-    public CharaData[] GetWeapons()
-    {
-        return weapons;
-    }
+    CharaData latestUsedWeapon;
+    AnimationObject currentWeaponVisual;
     float playerRotSpeed;
 
     protected override void CharaUpdate()
@@ -67,27 +68,59 @@ public class Player : CharacterCassette
 
         attackReactionFrame = Mathf.Max(0, attackReactionFrame - 1);
 
+        bool usingWeapon =
+            IsAttacking() && !IsAttacking(GetData().GetDefaultAttackMotionName());
         //攻撃の入力で攻撃
         bool attackInput = GetLiveEntity().GetControlMap().GetWeaponInput();
-        if (attackInput && !attackTrigger)
+        if (attackInput && !attackTrigger && !usingWeapon)
         {
             attackReactionFrame = maxAttackReactionframe;
             if (weapons.Length > 0)
             {
+                latestUsedWeapon = weapons[currentWeaponIndex];
                 SetAttackMotion(
-                    weapons[currentCharaIndex].SearchAttackMotion(
-                    weapons[currentCharaIndex].GetWeaponedAttackMotionName()));
-                currentCharaIndex++;
+                    latestUsedWeapon.SearchAttackMotion(
+                    latestUsedWeapon.GetWeaponedAttackMotionName()));
+                currentWeaponIndex++;
             }
         }
         attackTrigger = attackInput;
-        currentCharaIndex = Mathf.RoundToInt(Mathf.Repeat(currentCharaIndex,
+        currentWeaponIndex = Mathf.RoundToInt(Mathf.Repeat(currentWeaponIndex,
             weapons.Length));
 
         //武器使用中のアニメーション
-        if (IsAttacking() && !IsAttacking(GetData().GetDefaultAttackMotionName()))
+        if (usingWeapon)
         {
+            //適切な武器オブジェクトが無ければ生成
+            if (!currentWeaponVisual)
+            {
+                GameObject weaponObj = Instantiate(
+                    GetLiveEntity().GetLib().FindCharacterCassette(
+                    latestUsedWeapon.name).GetVisual().gameObject,
+                    transform.position, transform.rotation, transform);
+                currentWeaponVisual = weaponObj.GetComponent<AnimationObject>();
+            }
+
+            //攻撃アニメーションを武器に適用
+            currentWeaponVisual.animationName = GetVisual().animationName;
+            currentWeaponVisual.animationProgress = GetVisual().animationProgress;
+            //自身は固有アニメーション
             GetVisual().animationName = "attack";
+        }
+        else
+        {
+            currentWeaponVisual = null;
+        }
+        //使用していない武器オブジェクトを探して消す
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            AnimationObject currentAO =
+                transform.GetChild(i).GetComponent<AnimationObject>();
+            if (currentAO && currentAO != GetVisual()
+                && currentAO != currentWeaponVisual)
+            {
+                Destroy(currentAO.gameObject);
+            }
         }
 
         //カメラ用の上下入力でカメラの仰角調整
@@ -105,7 +138,7 @@ public class Player : CharacterCassette
             playerRotSpeed * playerRotSpeedDiffuse + camInputVec.x,
             -maxPlayerRotSpeed, maxPlayerRotSpeed);
         GetLiveEntity().transform.Rotate(0, playerRotSpeed, 0, Space.Self);
-        //時期は逆回転し、回転を相殺
+        //自機は逆回転し、回転を相殺
         GetLiveEntity().SetDirection(
             GetLiveEntity().GetDirection() - playerRotSpeed);
     }
@@ -117,13 +150,13 @@ public class Player : CharacterCassette
             if (weapons.Length < maxTeamNum)
             {
                 List<CharaData> list = new List<CharaData>(weapons);
-                list.Insert(Mathf.Clamp(currentCharaIndex, 0, weapons.Length),
+                list.Insert(Mathf.Clamp(currentWeaponIndex, 0, weapons.Length),
                     charaData);
                 weapons = list.ToArray();
             }
             else
             {
-                weapons[currentCharaIndex] = charaData;
+                weapons[currentWeaponIndex] = charaData;
             }
         }
     }
