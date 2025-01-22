@@ -106,6 +106,8 @@ public class Player : CharacterCassette
             currentWeaponVisual.animationProgress = GetVisual().animationProgress;
             //自身は固有アニメーション
             GetVisual().animationName = "attack";
+
+            AddUnits(currentWeaponVisual.gameObject);
         }
         else
         {

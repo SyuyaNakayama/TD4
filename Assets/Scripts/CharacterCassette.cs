@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -76,6 +77,13 @@ public class CharacterCassette : MonoBehaviour
         if (liveEntity && liveEntity.GetIsAllowCassetteUpdate())
         {
             transform.localScale = new Vector3(1, 1, 1);
+
+            //unitsから不要な要素を除去
+            List<GameObject> unitsList =
+                new List<GameObject>(units);
+            unitsList.RemoveAll(where => !where);
+            unitsList = unitsList.Distinct().ToList();
+            units = unitsList.ToArray();
 
             //prevAttackProgressを更新
             prevAttackProgress = GetAttackProgress();
@@ -175,6 +183,10 @@ public class CharacterCassette : MonoBehaviour
                             }
                             CharaUpdate();
                         }
+                        else
+                        {
+                            DestroyUnits();
+                        }
 
                         attackMotionLock = false;
                         UpdateAttackMotion();
@@ -209,24 +221,30 @@ public class CharacterCassette : MonoBehaviour
                     {
                         attackMotionData = null;
                         attackTimeFrame = 0;
+                        DestroyUnits();
                     }
                 }
             }
-            else if (visual)
+            else
             {
-                if (liveEntity.GetGoalAnimationTimeFrame() > 0)
+                DestroyUnits();
+
+                if (visual)
                 {
-                    visual.animationName = "goal";
-                    visual.animationProgress =
-                        KX_netUtil.RangeMap(
-                        Mathf.Clamp(liveEntity.GetGoalAnimationTimeFrame(),
-                        0, LiveEntity.maxGoalAnimationTimeFrame),
-                        LiveEntity.maxGoalAnimationTimeFrame, 0,
-                        0, 1);
-                }
-                else
-                {
-                    visual.animationName = "result";
+                    if (liveEntity.GetGoalAnimationTimeFrame() > 0)
+                    {
+                        visual.animationName = "goal";
+                        visual.animationProgress =
+                            KX_netUtil.RangeMap(
+                            Mathf.Clamp(liveEntity.GetGoalAnimationTimeFrame(),
+                            0, LiveEntity.maxGoalAnimationTimeFrame),
+                            LiveEntity.maxGoalAnimationTimeFrame, 0,
+                            0, 1);
+                    }
+                    else
+                    {
+                        visual.animationName = "result";
+                    }
                 }
             }
 
@@ -814,23 +832,6 @@ public class CharacterCassette : MonoBehaviour
         shotDatas = shotDataList.ToArray();
     }
 
-    void HorizonMove(int direc)
-    {
-        if (direc != 0)
-        {
-            direc = direc / Mathf.Abs(direc);
-        }
-        liveEntity.SetMovement(liveEntity.GetMovement() + new Vector3(moveSpeed * direc, 0, 0));
-    }
-    void AngleMoveXY(float angle, int force = 1)
-    {
-        liveEntity.SetMovement(liveEntity.GetMovement() + new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0) * moveSpeed * force);
-    }
-    void AngleMoveXZ(float angle, int force = 1)
-    {
-        liveEntity.SetMovement(liveEntity.GetMovement() + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * moveSpeed * force);
-    }
-
     //近接および範囲攻撃
     void MeleeAttack(AttackMotionData.MeleeAttackData attackData,
         AttackMotionData.Cursor cursor)
@@ -848,6 +849,25 @@ public class CharacterCassette : MonoBehaviour
         shotDatas[shotDatas.Length - 1].cursor = cursor;
         shotDatas[shotDatas.Length - 1].postMove = postMove;
         shotDatas[shotDatas.Length - 1].used = false;
+    }
+
+    //unitsに要素を追加
+    protected void AddUnits(GameObject gameObject)
+    {
+        if (Array.IndexOf(units, gameObject) < 0)
+        {
+            Array.Resize(ref units, units.Length + 1);
+            units[units.Length - 1] = gameObject;
+        }
+    }
+
+    //unitsの中にあるオブジェクトを全て消去
+    void DestroyUnits()
+    {
+        for (int i = 0; i < units.Length; i++)
+        {
+            Destroy(units[i]);
+        }
     }
 
     //通常攻撃の入力を行っているか
