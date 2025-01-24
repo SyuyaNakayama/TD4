@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class AudioMappingTransform : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     struct TransformLerpData
     {
         public Vector2 keyFrame;
@@ -17,16 +16,16 @@ public class AudioMappingTransform : MonoBehaviour
     [SerializeField]
     AudioSource audioSource;
     [SerializeField]
-    TransformLerpData[] transformLerpDatas = {};
+    TransformLerpData[] transformLerpDatas = { };
 
     void FixedUpdate()
     {
         float progress = audioSource.time;
-        for(int i = 0;i < transformLerpDatas.Length;i++)
+        for (int i = 0; i < transformLerpDatas.Length; i++)
         {
             TransformLerpData current = transformLerpDatas[i];
 
-            float clampedProgress = 
+            float clampedProgress =
                 KX_netUtil.Ease(KX_netUtil.RangeMap(progress,
                 current.keyFrame.x, current.keyFrame.y, 0, 1),
                 current.easeData.type, current.easeData.pow);

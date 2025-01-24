@@ -6,7 +6,7 @@ using UnityEngine;
 //複数の惑星オブジェクトを一つの惑星とみなす機能
 public class MargedGround : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     public struct GroundCluster
     {
         public Collider[] colliders;

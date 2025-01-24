@@ -11,7 +11,7 @@ using UnityEditor;
 [DisallowMultipleComponent]
 public class CassetteSlot : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     struct IDAndElabled
     {
         public string id;
@@ -41,7 +41,7 @@ public class CassetteSlot : MonoBehaviour
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        if(inventoryCharaID != null && inventoryCharaID.Length > 0)
+        if (inventoryCharaID != null && inventoryCharaID.Length > 0)
         {
             Gizmos.color = Color.white;
             Handles.Label(

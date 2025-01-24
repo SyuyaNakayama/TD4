@@ -1,30 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "CreateCharaData")]
 public class CharaData : ScriptableObject
 {
-    [System.Serializable]
+    [Serializable]
     public struct IndexAndPropertyReplacer
     {
         public int index;
         public KX_netUtil.PropertyReplacer propertyReplacer;
     }
-    [System.Serializable]
+    [Serializable]
     public struct IndexAndSprite
     {
         public int index;
         public Sprite sprite;
     }
-    [System.Serializable]
+    [Serializable]
     public struct FacialExpression
     {
         public string name;
         public IndexAndPropertyReplacer[] indexAndPropertyReplacers;
         public IndexAndSprite[] indexAndSprites;
     }
-    [System.Serializable]
+    [Serializable]
     public struct TransformAnimationKey
     {
         public Vector2 keyFrame;
@@ -36,7 +35,7 @@ public class CharaData : ScriptableObject
         public KX_netUtil.EaseType easeType;
         public float easePow;
     }
-    [System.Serializable]
+    [Serializable]
     public struct RigAnimationKey
     {
         public Vector2 keyFrame;
@@ -45,25 +44,25 @@ public class CharaData : ScriptableObject
         public string parameterName;
         public int rigAnimationID;
     }
-    [System.Serializable]
+    [Serializable]
     public struct FacialExpressionKey
     {
         public Vector2 keyFrame;
         public string facialExpressionName;
     }
-    [System.Serializable]
+    [Serializable]
     public struct SEKey
     {
         public float keyFrame;
         public AudioClip se;
     }
-    [System.Serializable]
+    [Serializable]
     public struct UniqueMotionStateKey
     {
         public Vector2 keyFrame;
         public int motionState;
     }
-    [System.Serializable]
+    [Serializable]
     public struct Animation
     {
         public string name;

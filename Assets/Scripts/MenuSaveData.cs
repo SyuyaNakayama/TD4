@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
 public class MenuSaveData : object
 {
-    [System.Serializable]
+    [Serializable]
     public struct NameAndValue
     {
         public string name;

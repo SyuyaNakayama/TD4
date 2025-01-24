@@ -8,7 +8,7 @@ using UnityEditor;
 
 public class LinerLoop : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     public struct TransAndOffset
     {
         public Transform transform;
@@ -28,13 +28,13 @@ public class LinerLoop : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        for(int i = 0;i < vertices.Length;i++)
+        for (int i = 0; i < vertices.Length; i++)
         {
             Handles.Label(transform.TransformPoint(vertices[i]), i.ToString());
         }
 
         Vector3[] worldVertices = KX_netUtil.CopyArray<Vector3>(vertices);
-        for(int i = 0;i < worldVertices.Length;i++)
+        for (int i = 0; i < worldVertices.Length; i++)
         {
             worldVertices[i] = transform.TransformPoint(worldVertices[i]);
         }

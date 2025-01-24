@@ -1,17 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 //キャラクターのアニメーションデータを書き出して実行するオブジェクト
 public class AnimationObject : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     public struct TextureSendData
     {
         public Renderer meshRenderer;
         public int index;
     }
-    [System.Serializable]
+    [Serializable]
     public struct SpriteSendData
     {
         public SpriteRenderer spriteRenderer;

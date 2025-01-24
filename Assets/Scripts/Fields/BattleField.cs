@@ -14,7 +14,7 @@ public class BattleField : Field
         return KX_netUtil.CopyArray<BattleField>(allInstances);
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct SpawnData
     {
         public string cassetteID;
@@ -22,7 +22,7 @@ public class BattleField : Field
         public Vector3 enemyRot;
         public int teamIDIndex;
     }
-    [System.Serializable]
+    [Serializable]
     public struct Wave
     {
         public SpawnData[] spawnDatas;
@@ -61,10 +61,10 @@ public class BattleField : Field
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
-        for(int i = 0;i < waves.Length;i++)
+        for (int i = 0; i < waves.Length; i++)
         {
             Gizmos.color = Color.HSVToRGB((float)i / waves.Length * 0.75f, 1, 1);
-            for(int j = 0;j < waves[i].spawnDatas.Length;j++)
+            for (int j = 0; j < waves[i].spawnDatas.Length; j++)
             {
                 Gizmos.matrix = Matrix4x4.TRS(
                     transform.TransformPoint(waves[i].spawnDatas[j].enemyPos),
@@ -79,9 +79,9 @@ public class BattleField : Field
         }
 
         Gizmos.color = Color.white;
-        for(int i = 0;i < waves.Length;i++)
+        for (int i = 0; i < waves.Length; i++)
         {
-            for(int j = 0;j < waves[i].spawnDatas.Length;j++)
+            for (int j = 0; j < waves[i].spawnDatas.Length; j++)
             {
                 Handles.Label(
                     transform.TransformPoint(waves[i].spawnDatas[j].enemyPos),
