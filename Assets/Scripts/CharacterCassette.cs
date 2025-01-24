@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEditor;
 
 [DisallowMultipleComponent]
 public class CharacterCassette : MonoBehaviour
 {
     public const float defaultMoveSpeed = 0.2f;
-    const float prepareReviveLife = -0.05f;
 
     struct MeleeAttackAndCursorName
     {
@@ -34,6 +33,12 @@ public class CharacterCassette : MonoBehaviour
     {
         return visual;
     }
+
+    LiveEntity liveEntity;
+    public LiveEntity GetLiveEntity()
+    {
+        return liveEntity;
+    }
     AttackMotionData attackMotionData;
     int attackTimeFrame;
     float attackProgress;
@@ -53,21 +58,15 @@ public class CharacterCassette : MonoBehaviour
     {
         return allowEditAttackData;
     }
-    protected string facialExpressionName;
-    AttackArea attackArea;
-    Projectile projectile;
-    LiveEntity liveEntity;
-    public LiveEntity GetLiveEntity()
-    {
-        return liveEntity;
-    }
+    //TODO:生成したものをここに格納し、必要に応じて一括で消せるようにする
+    GameObject[] units = { };
+    bool needReplaceAnimation;
+    string replaceAnimationName;
+    float replaceAnimationProgress;
     float moveSpeed;
     KX_netUtil.AxisSwitch moveLock;
-    bool directionSwitchX = true;
-    bool directionSwitchY = true;
     bool directionLock;
     Quaternion visualRotation;
-    protected float flipMotionAmount;
     Vector3 damageShakePos;
     int chatPos;
 
@@ -77,11 +76,14 @@ public class CharacterCassette : MonoBehaviour
 
         if (liveEntity && liveEntity.GetIsAllowCassetteUpdate())
         {
-            ResourcePalette resourcePalette = liveEntity.GetResourcePalette();
-            attackArea = resourcePalette.GetAttackArea();
-            projectile = resourcePalette.GetProjectile();
-
             transform.localScale = new Vector3(1, 1, 1);
+
+            //unitsから不要な要素を除去
+            List<GameObject> unitsList =
+                new List<GameObject>(units);
+            unitsList.RemoveAll(where => !where);
+            unitsList = unitsList.Distinct().ToList();
+            units = unitsList.ToArray();
 
             //prevAttackProgressを更新
             prevAttackProgress = GetAttackProgress();
@@ -152,6 +154,13 @@ public class CharacterCassette : MonoBehaviour
                         {
                             visual.animationName = "idol";
                         }
+
+                        if (needReplaceAnimation)
+                        {
+                            visual.animationName = replaceAnimationName;
+                            visual.animationProgress = replaceAnimationProgress;
+                            needReplaceAnimation = false;
+                        }
                     }
 
                     if (!liveEntity.IsHitBacking())
@@ -173,6 +182,10 @@ public class CharacterCassette : MonoBehaviour
                                     AttackMotionData.TriggerInputType.tap);
                             }
                             CharaUpdate();
+                        }
+                        else
+                        {
+                            DestroyUnits();
                         }
 
                         attackMotionLock = false;
@@ -208,24 +221,30 @@ public class CharacterCassette : MonoBehaviour
                     {
                         attackMotionData = null;
                         attackTimeFrame = 0;
+                        DestroyUnits();
                     }
                 }
             }
-            else if (visual)
+            else
             {
-                if (liveEntity.GetGoalAnimationTimeFrame() > 0)
+                DestroyUnits();
+
+                if (visual)
                 {
-                    visual.animationName = "goal";
-                    visual.animationProgress =
-                        KX_netUtil.RangeMap(
-                        Mathf.Clamp(liveEntity.GetGoalAnimationTimeFrame(),
-                        0, LiveEntity.maxGoalAnimationTimeFrame),
-                        LiveEntity.maxGoalAnimationTimeFrame, 0,
-                        0, 1);
-                }
-                else
-                {
-                    visual.animationName = "result";
+                    if (liveEntity.GetGoalAnimationTimeFrame() > 0)
+                    {
+                        visual.animationName = "goal";
+                        visual.animationProgress =
+                            KX_netUtil.RangeMap(
+                            Mathf.Clamp(liveEntity.GetGoalAnimationTimeFrame(),
+                            0, LiveEntity.maxGoalAnimationTimeFrame),
+                            LiveEntity.maxGoalAnimationTimeFrame, 0,
+                            0, 1);
+                    }
+                    else
+                    {
+                        visual.animationName = "result";
+                    }
                 }
             }
 
@@ -466,7 +485,6 @@ public class CharacterCassette : MonoBehaviour
             //移動
             if (attackMotionData.GetData().moveKeys != null)
             {
-                Vector3 savedMovement = liveEntity.GetMovement();
                 Vector3 replaceVector = Vector3.zero;
                 KX_netUtil.AxisSwitch ignoreAxis =
                     new KX_netUtil.AxisSwitch();
@@ -528,7 +546,6 @@ public class CharacterCassette : MonoBehaviour
             //慣性が残る等速移動
             if (attackMotionData.GetData().impulseMoveKeys != null)
             {
-                Vector3 savedMovement = liveEntity.GetMovement();
                 Vector3 replaceVector = Vector3.zero;
                 KX_netUtil.AxisSwitch ignoreAxis =
                     new KX_netUtil.AxisSwitch();
@@ -667,7 +684,7 @@ public class CharacterCassette : MonoBehaviour
             }
 
             //アニメーション
-            if (attackMotionData.GetData().animationKeys != null && visual)
+            if (attackMotionData.GetData().animationKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
                     animationKeys.Length; i++)
@@ -676,14 +693,15 @@ public class CharacterCassette : MonoBehaviour
                         attackMotionData.GetData().animationKeys[i];
                     if (IsHitKeyPoint(current.keyFrame))
                     {
-                        visual.animationName = current.animationName;
+                        replaceAnimationName = current.animationName;
                         if (!current.useOriginalAnimTime)
                         {
-                            visual.animationProgress =
+                            replaceAnimationProgress =
                                 KX_netUtil.RangeMap(GetAttackProgress(),
                                 current.keyFrame.x, current.keyFrame.y,
                                 0, 1);
                         }
+                        needReplaceAnimation = true;
                     }
                 }
             }
@@ -814,23 +832,6 @@ public class CharacterCassette : MonoBehaviour
         shotDatas = shotDataList.ToArray();
     }
 
-    void HorizonMove(int direc)
-    {
-        if (direc != 0)
-        {
-            direc = direc / Mathf.Abs(direc);
-        }
-        liveEntity.SetMovement(liveEntity.GetMovement() + new Vector3(moveSpeed * direc, 0, 0));
-    }
-    void AngleMoveXY(float angle, int force = 1)
-    {
-        liveEntity.SetMovement(liveEntity.GetMovement() + new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0) * moveSpeed * force);
-    }
-    void AngleMoveXZ(float angle, int force = 1)
-    {
-        liveEntity.SetMovement(liveEntity.GetMovement() + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * moveSpeed * force);
-    }
-
     //近接および範囲攻撃
     void MeleeAttack(AttackMotionData.MeleeAttackData attackData,
         AttackMotionData.Cursor cursor)
@@ -848,6 +849,25 @@ public class CharacterCassette : MonoBehaviour
         shotDatas[shotDatas.Length - 1].cursor = cursor;
         shotDatas[shotDatas.Length - 1].postMove = postMove;
         shotDatas[shotDatas.Length - 1].used = false;
+    }
+
+    //unitsに要素を追加
+    protected void AddUnits(GameObject gameObject)
+    {
+        if (Array.IndexOf(units, gameObject) < 0)
+        {
+            Array.Resize(ref units, units.Length + 1);
+            units[units.Length - 1] = gameObject;
+        }
+    }
+
+    //unitsの中にあるオブジェクトを全て消去
+    void DestroyUnits()
+    {
+        for (int i = 0; i < units.Length; i++)
+        {
+            Destroy(units[i]);
+        }
     }
 
     //通常攻撃の入力を行っているか

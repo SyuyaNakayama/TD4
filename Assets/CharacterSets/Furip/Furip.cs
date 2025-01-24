@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½bï¿½v
+//?¿½t?¿½?¿½?¿½[?¿½?¿½?¿½b?¿½v
 public class Furip : Enemy
 {
     const float moveSpeed = 1;
@@ -10,22 +10,20 @@ public class Furip : Enemy
 
     protected override void CharaUpdate()
     {
-        //ï¿½Ì—Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½éŽž
+        //?¿½Ì—Í‚ï¿½?¿½?¿½?¿½?¿½?¿½Ä‚ï¿½?¿½éŽ?
         if (GetLiveEntity().GetLife() < 1)
         {
-            //ï¿½{ï¿½ï¿½ï¿½
-            facialExpressionName = "fury";
-            //ï¿½ß‚ï¿½ï¿½É“Gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‹ï¿½
+            //?¿½ß‚ï¿½?¿½É“G?¿½?¿½?¿½?¿½?¿½?¿½?¿½?¿½Ú‹ï¿½
             if (GetNearestTarget() != null)
             {
-                //ï¿½_ï¿½ï¿½
+                //?¿½_?¿½?¿½
                 TargetAimY(GetNearestTarget().transform.position, flipIntensity);
                 targetCursor = transform.InverseTransformPoint(
                 GetNearestTarget().transform.position).normalized;
-                //ï¿½Oï¿½i
+                //?¿½O?¿½i
                 GetLiveEntity().SetMovement(GetLiveEntity().GetMovement() + new Vector3(0, targetCursor.y, targetCursor.z) * moveSpeed);
             }
-            //ï¿½ï¿½ÉUï¿½ï¿½
+            //?¿½?¿½ÉU?¿½?¿½
             if (!IsAttacking())
             {
                 SetAttackMotion(GetData().GetDefaultAttackMotionName());

@@ -1,12 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ControlMapManager : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
+    public enum InputDevice
+    {
+        keyboard,
+        mouse,
+        gamepad,
+    }
+    [Serializable]
+    public struct TaggedControlIcons
+    {
+        public InputDevice tag;
+        public ControlIcons controlIcons;
+    }
+    [Serializable]
+    public struct TaggedControlIconAtlas
+    {
+        public InputDevice tag;
+        public ControlIconAtlas controlIconAtlas;
+    }
+
+    [Serializable]
     public struct PlayerInputDevice
     {
         public bool keyboard;
@@ -18,7 +36,7 @@ public class ControlMapManager : MonoBehaviour
         {
             keyboard = setKeyboard;
             mouse = setMouse;
-            gamepads = KX_netUtil.CopyArray<int>(setGamepads);
+            gamepads = KX_netUtil.CopyArray(setGamepads);
         }
     }
 
@@ -28,11 +46,11 @@ public class ControlMapManager : MonoBehaviour
     public static PlayerInputDevice[] GetPlayers()
     {
         PlayerInputDevice[] ret =
-            KX_netUtil.CopyArray<PlayerInputDevice>(players);
+            KX_netUtil.CopyArray(players);
         for (int i = 0; i < ret.Length; i++)
         {
             ret[i].gamepads =
-                KX_netUtil.CopyArray<int>(players[i].gamepads);
+                KX_netUtil.CopyArray(players[i].gamepads);
         }
         return ret;
     }
@@ -54,6 +72,13 @@ public class ControlMapManager : MonoBehaviour
     [SerializeField]
     KeyMap defaultKeyMap;
     [SerializeField]
+    TaggedControlIcons[] controlIcons = { };
+    [SerializeField]
+    TaggedControlIconAtlas[] defaultControlIconAtlas = { };
+    [SerializeField]
+    InputDevice[] allowedInputDevices =
+        { InputDevice.keyboard,InputDevice.mouse,InputDevice.gamepad};
+    [SerializeField]
     bool userControl;
     [SerializeField]
     int playerIndex;
@@ -61,22 +86,74 @@ public class ControlMapManager : MonoBehaviour
     KeyMap keyMap;
     public KeyMap GetKeyMap()
     {
-        return Instantiate(keyMap);
+        if (keyMap)
+        {
+            return Instantiate(keyMap);
+        }
+        return null;
+    }
+    TaggedControlIconAtlas[] controlIconAtlas = { };
+    InputDevice latestInputDevice;
+    public InputDevice GetLatestInputDevice()
+    {
+        return latestInputDevice;
     }
 
     void Awake()
     {
+        keyMap = Instantiate(defaultKeyMap);
+
+        controlIconAtlas =
+            KX_netUtil.CopyArray(defaultControlIconAtlas);
+        for (int i = 0; i < controlIconAtlas.Length; i++)
+        {
+            controlIconAtlas[i].controlIconAtlas =
+                Instantiate(defaultControlIconAtlas[i].controlIconAtlas);
+        }
+
         if (IsUserControl())
         {
-            keyMap = Instantiate(defaultKeyMap);
             Load();
         }
     }
 
     void FixedUpdate()
     {
+        if (!keyMap)
+        {
+            keyMap = Instantiate(defaultKeyMap);
+        }
+        if (controlIconAtlas == null)
+        {
+            controlIconAtlas =
+                KX_netUtil.CopyArray(defaultControlIconAtlas);
+            for (int i = 0; i < controlIconAtlas.Length; i++)
+            {
+                controlIconAtlas[i].controlIconAtlas =
+                    Instantiate(defaultControlIconAtlas[i].controlIconAtlas);
+            }
+        }
+
         if (IsUserControl())
         {
+            //入力されたデバイスに応じて変化
+            if (KX_netUtil.ISAnyKey()
+                && Array.IndexOf(allowedInputDevices, InputDevice.keyboard) >= 0)
+            {
+                latestInputDevice = InputDevice.keyboard;
+            }
+            if (KX_netUtil.GetISMouseButton("leftButton")
+                && Array.IndexOf(allowedInputDevices, InputDevice.mouse) >= 0)
+            {
+                latestInputDevice = InputDevice.mouse;
+            }
+            if (KX_netUtil.ISAnyPadButton(GetPlayers()[playerIndex].gamepads[0])
+                && Array.IndexOf(allowedInputDevices, InputDevice.gamepad) >= 0)
+            {
+                latestInputDevice = InputDevice.gamepad;
+            }
+
+            //リセットボタンが押されたらキーバインドをリセットする
             if (resetButton && resetButton.GetOutput())
             {
                 keyMap = Instantiate(defaultKeyMap);
@@ -110,6 +187,34 @@ public class ControlMapManager : MonoBehaviour
     public int GetPlayerIndex()
     {
         return playerIndex;
+    }
+
+    public TaggedControlIcons SearchControlIcons(InputDevice tag)
+    {
+        //同じタグのものがあったらそれを返す
+        for (int i = 0; i < controlIcons.Length; i++)
+        {
+            if (controlIcons[i].tag == tag)
+            {
+                return controlIcons[i];
+            }
+        }
+        //無ければ空の要素を返す
+        return new TaggedControlIcons();
+    }
+
+    public TaggedControlIconAtlas SearchControlIconAtlas(InputDevice tag)
+    {
+        //同じタグのものがあったらそれを返す
+        for (int i = 0; i < controlIconAtlas.Length; i++)
+        {
+            if (controlIconAtlas[i].tag == tag)
+            {
+                return controlIconAtlas[i];
+            }
+        }
+        //無ければ空の要素を返す
+        return new TaggedControlIconAtlas();
     }
 
     public void ApplyKeyBind()

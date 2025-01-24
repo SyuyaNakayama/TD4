@@ -308,7 +308,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3288290714761945415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d794891496b334e158b585ae34777b09, type: 3}
+  m_Script: {fileID: 11500000, guid: 15e62e15910904113836fe1370a7e182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   liveEntity: {fileID: 186817498763900202}
@@ -320,7 +320,18 @@ MonoBehaviour:
   - {fileID: 1296820297756003752}
   resetButton: {fileID: 7073834460019817981}
   defaultKeyMap: {fileID: 11400000, guid: 659d03a18dbb444d189f44b9eac82b2f, type: 2}
-  userControl: 1
+  controlIcons:
+  - tag: 0
+    controlIcons: {fileID: 11400000, guid: 0bbc6f0db2a1b495f9caba1708b79f0f, type: 2}
+  - tag: 2
+    controlIcons: {fileID: 11400000, guid: 026066ac583c84b7b81e2196acb9e1c9, type: 2}
+  defaultControlIconAtlas:
+  - tag: 0
+    controlIconAtlas: {fileID: 11400000, guid: 4d4c552d7ee4349b5b4e778b05f5d138, type: 2}
+  - tag: 2
+    controlIconAtlas: {fileID: 11400000, guid: d91c22e1a176041b3ab76d31cc9c8b07, type: 2}
+  allowedInputDevices: 0000000002000000
+  userControl: 0
   playerIndex: 0
 --- !u!1 &3288290715276073535
 GameObject:
@@ -1059,6 +1070,14 @@ PrefabInstance:
       propertyPath: controlMap
       value: 
       objectReference: {fileID: 5206909938440654839}
+    - target: {fileID: 328527837643018722, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
+      propertyPath: controlMapManager
+      value: 
+      objectReference: {fileID: 2703565349117620509}
+    - target: {fileID: 371285261019941347, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
+      propertyPath: controlMapManager
+      value: 
+      objectReference: {fileID: 2703565349117620509}
     - target: {fileID: 401652622573057427, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1083,6 +1102,10 @@ PrefabInstance:
       propertyPath: controlMap
       value: 
       objectReference: {fileID: 5206909938440654839}
+    - target: {fileID: 1409484660115387232, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
+      propertyPath: controlMapManager
+      value: 
+      objectReference: {fileID: 2703565349117620509}
     - target: {fileID: 1536353578288072280, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
       propertyPath: controlMap
       value: 
@@ -1123,6 +1146,14 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 3288290714761945413}
+    - target: {fileID: 3435096743560763959, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
+      propertyPath: controlMapManager
+      value: 
+      objectReference: {fileID: 2703565349117620509}
+    - target: {fileID: 3435096743560763960, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
+      propertyPath: m_Name
+      value: Tutorial_Weapon
+      objectReference: {fileID: 0}
     - target: {fileID: 3689602615859307156, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
       propertyPath: controlMap
       value: 
@@ -1235,6 +1266,10 @@ PrefabInstance:
       propertyPath: controlMap
       value: 
       objectReference: {fileID: 5206909938440654839}
+    - target: {fileID: 8344271830079498285, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
+      propertyPath: controlMapManager
+      value: 
+      objectReference: {fileID: 2703565349117620509}
     - target: {fileID: 8513334672755468200, guid: 4faa511638489534eb0f8605f237ae17, type: 3}
       propertyPath: m_Name
       value: PlayPartCanvas
