@@ -139,7 +139,12 @@ public class Player : CharacterCassette
         playerRotSpeed = Mathf.Clamp(
             playerRotSpeed * playerRotSpeedDiffuse + camInputVec.x,
             -maxPlayerRotSpeed, maxPlayerRotSpeed);
+        //‰ñ“]‘O‚ÌQuaternion‚ğ•Û‘¶
+        Quaternion prevRot = GetLiveEntity().transform.rotation;
         GetLiveEntity().transform.Rotate(0, playerRotSpeed, 0, Space.Self);
+        //‚±‚Ì‰ñ“]‚ÍƒJƒƒ‰‚Ìƒ\ƒtƒg‰ñ“]‚É“K—p‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+        GetLiveEntity().AddTiltOffset(Quaternion.Inverse(prevRot
+            * Quaternion.Inverse(GetLiveEntity().transform.rotation)));
         //©‹@‚Í‹t‰ñ“]‚µA‰ñ“]‚ğ‘ŠE
         GetLiveEntity().SetDirection(
             GetLiveEntity().GetDirection() - playerRotSpeed);

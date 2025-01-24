@@ -58,7 +58,6 @@ public class CharacterCassette : MonoBehaviour
     {
         return allowEditAttackData;
     }
-    //TODO:¶¬‚µ‚½‚à‚Ì‚ğ‚±‚±‚ÉŠi”[‚µA•K—v‚É‰‚¶‚ÄˆêŠ‡‚ÅÁ‚¹‚é‚æ‚¤‚É‚·‚é
     GameObject[] units = { };
     bool needReplaceAnimation;
     string replaceAnimationName;
