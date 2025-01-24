@@ -130,11 +130,11 @@ public class Player : CharacterCassette
         transform.Rotate(
             0, camInputVec.x * cameraControlSpeed, 0, Space.Self);
         float playerCameraAngle =
-            GetLiveEntity().GetCameraAngle() + camInputVec.y * cameraControlSpeed;
+            GetLiveEntity().GetPlayPartCameraAngle() + camInputVec.y * cameraControlSpeed;
 
         playerCameraAngle = Mathf.Clamp(
             playerCameraAngle, LiveEntity.MinCameraAngle, LiveEntity.MaxCameraAngle);
-        GetLiveEntity().SetCameraAngle(playerCameraAngle);
+        GetLiveEntity().SetPlayPartCameraAngle(playerCameraAngle);
         //ƒJƒƒ‰—p‚Ì¶‰E“ü—Í‚Å‰ñ“]
         playerRotSpeed = Mathf.Clamp(
             playerRotSpeed * playerRotSpeedDiffuse + camInputVec.x,

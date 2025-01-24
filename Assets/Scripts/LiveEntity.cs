@@ -128,9 +128,10 @@ public class LiveEntity : GeoGroObject
     float cameraTiltDiffuse;
 
     float cameraAngle;
-    public float GetCameraAngle()
+    float playPartCameraAngle;
+    public float GetPlayPartCameraAngle()
     {
-        return cameraAngle;
+        return playPartCameraAngle;
     }
     float easedCameraAngle;
     float cameraDistance;
@@ -229,7 +230,7 @@ public class LiveEntity : GeoGroObject
         gameManager = GameObject.Find("/GameManager");
         saveMedals = gameManager.GetComponent<MedalCounter>();
 
-        cameraAngle = nutralCameraTiltSlider.GetScaledOutputValue();
+        playPartCameraAngle = nutralCameraTiltSlider.GetScaledOutputValue();
         easedCameraAngle = nutralCameraTiltSlider.GetScaledOutputValue();
         cameraDistance = cameraDistanceSlider.GetScaledOutputValue();
         easedCameraDistance = cameraDistance;
@@ -331,6 +332,8 @@ public class LiveEntity : GeoGroObject
             goalAnimationTimeFrame = maxGoalAnimationTimeFrame;
 
             LiveEntityUpdate();
+
+            cameraAngle = playPartCameraAngle;
 
             if (userControl)
             {
@@ -788,11 +791,11 @@ public class LiveEntity : GeoGroObject
             direction = setDirection;
         }
     }
-    public void SetCameraAngle(float setCameraAngle)
+    public void SetPlayPartCameraAngle(float setCameraAngle)
     {
         if (updating)
         {
-            cameraAngle = setCameraAngle;
+            playPartCameraAngle = setCameraAngle;
         }
     }
 
