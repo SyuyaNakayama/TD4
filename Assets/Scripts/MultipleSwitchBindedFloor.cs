@@ -9,6 +9,8 @@ public class MultipleSwitchBindedFloor : MonoBehaviour
     [SerializeField]
     Switch[] bindSwitches;
     [SerializeField]
+    LiveEntityObserver[] LiveEntityObservers;
+    [SerializeField]
     KX_netUtil.TransformData negativeLocalTransform;
     [SerializeField]
     KX_netUtil.TransformData[] positiveLocalTransforms;
@@ -28,6 +30,10 @@ public class MultipleSwitchBindedFloor : MonoBehaviour
         foreach (var bindSwitch in bindSwitches)
         {
             if (bindSwitch.GetActive()) { switchActives++; }
+        }
+        foreach (var bindSwitch in LiveEntityObservers)
+        {
+            if (!bindSwitch.GetActive()) { switchActives++; }
         }
 
         if (switchActives > 0)
