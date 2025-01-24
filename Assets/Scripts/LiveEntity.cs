@@ -17,14 +17,14 @@ public class LiveEntity : GeoGroObject
         public bool used;
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct TextureSendData
     {
         public Renderer meshRenderer;
         public int index;
         public string propertyName;
     }
-    [System.Serializable]
+    [Serializable]
     public struct SpriteSendData
     {
         public SpriteRenderer spriteRenderer;

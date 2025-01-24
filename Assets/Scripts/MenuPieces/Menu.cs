@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     struct MenuTransitionData
     {
         public string controlMessage;

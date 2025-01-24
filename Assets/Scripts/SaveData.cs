@@ -5,39 +5,39 @@ using System;
 [Serializable]
 public class SaveData : object
 {
-	[System.Serializable]
+	[Serializable]
 	public struct NameAndInt
 	{
 		public string name;
 		public int value;
 	}
-	[System.Serializable]
+	[Serializable]
 	public struct NameAndIntArray
 	{
 		public string name;
 		public int[] values;
 	}
 
-	[System.Serializable]
+	[Serializable]
 	public struct NameAndFloat
 	{
 		public string name;
 		public float value;
 	}
-	[System.Serializable]
+	[Serializable]
 	public struct NameAndFloatArray
 	{
 		public string name;
 		public float[] values;
 	}
 
-	[System.Serializable]
+	[Serializable]
 	public struct NameAndString
 	{
 		public string name;
 		public string value;
 	}
-	[System.Serializable]
+	[Serializable]
 	public struct NameAndStringArray
 	{
 		public string name;

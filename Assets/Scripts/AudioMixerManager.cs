@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
 public class AudioMixerManager : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     struct ChannelAndSlider
     {
         public string channel;

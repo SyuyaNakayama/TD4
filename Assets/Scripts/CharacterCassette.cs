@@ -395,7 +395,7 @@ public class CharacterCassette : MonoBehaviour
             if (attackMotionData.GetData().cursorSweepKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
-                        cursorSweepKeys.Length; i++)
+                    cursorSweepKeys.Length; i++)
                 {
                     AttackMotionData.CursorSweepKey current =
                         attackMotionData.GetData().cursorSweepKeys[i];
@@ -434,7 +434,7 @@ public class CharacterCassette : MonoBehaviour
             if (attackMotionData.GetData().attackMotionLockKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
-                        attackMotionLockKeys.Length; i++)
+                    attackMotionLockKeys.Length; i++)
                 {
                     Vector2 current =
                         attackMotionData.GetData().attackMotionLockKeys[i];
@@ -449,7 +449,7 @@ public class CharacterCassette : MonoBehaviour
             if (attackMotionData.GetData().meleeAttackKeys != null)
             {
                 for (int i = 0; i < attackMotionData.GetData().
-                        meleeAttackKeys.Length; i++)
+                    meleeAttackKeys.Length; i++)
                 {
                     AttackMotionData.AttackKey current =
                         attackMotionData.GetData().meleeAttackKeys[i];
@@ -478,6 +478,23 @@ public class CharacterCassette : MonoBehaviour
                         Shot(shotData,
                             cursors[attackMotionData.SearchCursorIndex(current.cursorName)],
                             current.postMove);
+                    }
+                }
+            }
+
+            //–¡•û¢Š«
+            if (attackMotionData.GetData().summonKeys != null)
+            {
+                for (int i = 0; i < attackMotionData.GetData().
+                    summonKeys.Length; i++)
+                {
+                    AttackMotionData.SummonKey current =
+                        attackMotionData.GetData().summonKeys[i];
+                    if (IsHitKeyPoint(current.keyFrame))
+                    {
+                        Summon(transform.TransformPoint(current.localPosition),
+                            transform.rotation * Quaternion.Euler(current.localEulerAngles),
+                            current.inventoryCharaID, current.teamMember, current.cassetteIndex);
                     }
                 }
             }
@@ -849,6 +866,15 @@ public class CharacterCassette : MonoBehaviour
         shotDatas[shotDatas.Length - 1].cursor = cursor;
         shotDatas[shotDatas.Length - 1].postMove = postMove;
         shotDatas[shotDatas.Length - 1].used = false;
+    }
+    //–¡•û¢Š«
+    void Summon(Vector3 setLocalPosition, Quaternion setLocalRotation,
+        string[] inventoryCharaID, int[] teamMember, int cassetteIndex)
+    {
+        LiveEntity.Spawn(liveEntity.GetResourcePalette(),
+            setLocalPosition, setLocalRotation, false,
+            liveEntity.GetTeamID(),
+            inventoryCharaID, teamMember, cassetteIndex);
     }
 
     //units‚É—v‘f‚ð’Ç‰Á

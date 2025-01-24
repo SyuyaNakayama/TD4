@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,14 +19,14 @@ public class AttackMotionData : ScriptableObject
         nutral,
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct Cursor
     {
         public string name;
         public Vector3 pos;
         public Vector3 direction;
     }
-    [System.Serializable]
+    [Serializable]
     public struct CursorSweepData
     {
         public string cursorName;
@@ -34,7 +35,7 @@ public class AttackMotionData : ScriptableObject
         public KX_netUtil.EaseType easeType;
         public float easePow;
     }
-    [System.Serializable]
+    [Serializable]
     public struct AttackData
     {
         public float power;
@@ -43,14 +44,14 @@ public class AttackMotionData : ScriptableObject
         public int hitback;
         public int ghostTime;
     }
-    [System.Serializable]
+    [Serializable]
     public struct ProjectileData
     {
         public float speed;
         public int lifetime;
         public bool setGround;
     }
-    [System.Serializable]
+    [Serializable]
     public struct BillboardData
     {
         public Sprite sprite;
@@ -58,7 +59,7 @@ public class AttackMotionData : ScriptableObject
         public bool flatBillboard;
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct MeleeAttackData
     {
         public string name;
@@ -66,7 +67,7 @@ public class AttackMotionData : ScriptableObject
         public float scale;
         public BillboardData billboardData;
     }
-    [System.Serializable]
+    [Serializable]
     public struct ShotData
     {
         public string name;
@@ -75,7 +76,7 @@ public class AttackMotionData : ScriptableObject
         public BillboardData billboardData;
         public ProjectileData projectileData;
     }
-    [System.Serializable]
+    [Serializable]
     public struct AttackKey
     {
         public Vector2 keyFrame;
@@ -83,7 +84,17 @@ public class AttackMotionData : ScriptableObject
         public string cursorName;
         public bool postMove;
     }
-    [System.Serializable]
+    [Serializable]
+    public struct SummonKey
+    {
+        public float keyFrame;
+        public Vector3 localPosition;
+        public Vector3 localEulerAngles;
+        public string[] inventoryCharaID;
+        public int[] teamMember;
+        public int cassetteIndex;
+    }
+    [Serializable]
     public struct MoveKey
     {
         public Vector2 keyFrame;
@@ -92,45 +103,45 @@ public class AttackMotionData : ScriptableObject
         public KX_netUtil.EaseType easeType;
         public float easePow;
     }
-    [System.Serializable]
+    [Serializable]
     public struct ImpulseMoveKey
     {
         public Vector2 keyFrame;
         public Vector3 moveVec;
         public KX_netUtil.AxisSwitch ignoreAxis;
     }
-    [System.Serializable]
+    [Serializable]
     public struct CursorSweepKey
     {
         public Vector2 keyFrame;
         public CursorSweepData cursorSweepData;
     }
-    [System.Serializable]
+    [Serializable]
     public struct UniqueMoveSpeedKey
     {
         public Vector2 keyFrame;
         public float moveSpeed;
     }
-    [System.Serializable]
+    [Serializable]
     public struct UniqueDragKey
     {
         public Vector2 keyFrame;
         public float drag;
     }
-    [System.Serializable]
+    [Serializable]
     public struct UniqueActionKey
     {
         public Vector2 keyFrame;
         public string uniqueActName;
     }
-    [System.Serializable]
+    [Serializable]
     public struct AnimationKey
     {
         public Vector2 keyFrame;
         public string animationName;
         public bool useOriginalAnimTime;
     }
-    [System.Serializable]
+    [Serializable]
     public struct Data
     {
         public string name;
@@ -139,6 +150,7 @@ public class AttackMotionData : ScriptableObject
         public Vector2[] attackMotionLockKeys;
         public AttackKey[] meleeAttackKeys;
         public AttackKey[] shotKeys;
+        public SummonKey[] summonKeys;
         public MoveKey[] moveKeys;
         public ImpulseMoveKey[] impulseMoveKeys;
         public CursorSweepKey[] cursorSweepKeys;
