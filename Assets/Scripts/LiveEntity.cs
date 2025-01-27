@@ -99,6 +99,8 @@ public class LiveEntity : GeoGroObject
         return slot;
     }
     [SerializeField]
+    GameObject UIParent;
+    [SerializeField]
     Menu menu;
     [SerializeField]
     Menu quitMenu;
@@ -335,6 +337,7 @@ public class LiveEntity : GeoGroObject
 
             cameraAngle = playPartCameraAngle;
 
+            UIParent.SetActive(userControl);
             if (userControl)
             {
                 if (controlMap.GetMenuInput() && !prevMenuInput)
@@ -345,6 +348,10 @@ public class LiveEntity : GeoGroObject
                 {
                     Quit();
                 }
+            }
+            else
+            {
+                menu.active = false;
             }
         }
         else
