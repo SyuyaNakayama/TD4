@@ -8,7 +8,7 @@ public class Starling : Boss
     const float targetingIntensityHard = 0.2f;
     private Vector3 farTargetSight { get { return new Vector3(0, -1.2f, 1.9f); } }
     private Vector3 nearTargetSight { get { return new Vector3(0, -0.7f, 0.9f); } }
-    private Vector3 upTargetSight { get { return new Vector3(0, -1.5f, 0); } }
+    private Vector3 upTargetSight { get { return new Vector3(0, -2, 0); } }
 
 
     protected override void BossUpdate()
