@@ -184,6 +184,7 @@ public class CharacterCassette : MonoBehaviour
                         }
                         else
                         {
+                            StopAttackMotion();
                             DestroyUnits();
                         }
 
@@ -218,7 +219,7 @@ public class CharacterCassette : MonoBehaviour
                     }
                     else
                     {
-                        attackMotionData = null;
+                        StopAttackMotion();
                         attackTimeFrame = 0;
                         DestroyUnits();
                     }
@@ -340,6 +341,7 @@ public class CharacterCassette : MonoBehaviour
     protected void StopAttackMotion()
     {
         attackMotionData = null;
+        attackTimeFrame = 0;
         attackProgress = 1;
     }
 
