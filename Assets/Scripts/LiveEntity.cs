@@ -583,7 +583,7 @@ public class LiveEntity : GeoGroObject
     //É_ÉÅÅ[ÉWèàóù
     void Damage(float damage, int setGhostTimeFrame)
     {
-        life -= Mathf.Max(0, damage / GetCassetteData().GetLife());
+        life -= Mathf.Max(0, damage / GetMaxLife());
         ghostTimeFrame = setGhostTimeFrame;
         repairCoolTimeFrame = maxRepairCoolTimeFrame;
         damageReactionTimeFrame = maxDamageReactionTimeFrame;
@@ -685,6 +685,20 @@ public class LiveEntity : GeoGroObject
     public float GetBatteryAmount()
     {
         return (float)battery / maxBattery;
+    }
+
+    public float GetMaxLife()
+    {
+        return GetCassetteData().GetLife() * GetTier();
+    }
+
+    public float GetTier()
+    {
+        if (GetUserControl())
+        {
+            return 1;
+        }
+        return GetCassetteData().GetTier();
     }
 
     void Init(Quaternion setRotation, bool setUserControl, string setTeamID, string[] inventoryCharaID, int[] setTeamMember, int setCassetteIndex, float setLife = 1)

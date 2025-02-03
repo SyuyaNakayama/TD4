@@ -1,4 +1,4 @@
-public class L_P_Gigant : Boss
+public class SacaBANbaspis : Boss
 {
     const float flipIntensitySoft = 0.01f;
     const float flipIntensityHard = 0.1f;
