@@ -8,7 +8,7 @@ public class GeoGroObject : AlhaPhysicsObject
     [SerializeField]
     protected bool dataLock = true;
     [SerializeField]
-    Collider currentGround;
+    protected Collider currentGround;
     public Collider GetCurrentGround()
     {
         return currentGround;

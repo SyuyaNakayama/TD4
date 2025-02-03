@@ -831,12 +831,14 @@ public class LiveEntity : GeoGroObject
     public static LiveEntity Spawn(ResourcePalette palette,
         Vector3 setPosition, Quaternion setRotation, bool setUserControl,
         string setTeamID,
-        string[] inventoryCharaID, int[] setTeamMember, int cassetteIndex)
+        string[] inventoryCharaID, int[] setTeamMember, int cassetteIndex,
+        Collider ground)
     {
         LiveEntity liveEntity = Instantiate(palette.GetLiveEntity().gameObject,
             setPosition, setRotation).GetComponent<LiveEntity>();
         liveEntity.Init(setRotation, setUserControl, setTeamID,
             inventoryCharaID, setTeamMember, cassetteIndex);
+        liveEntity.currentGround = ground;
         return liveEntity;
     }
 }

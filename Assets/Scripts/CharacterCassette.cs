@@ -876,7 +876,8 @@ public class CharacterCassette : MonoBehaviour
             LiveEntity.Spawn(liveEntity.GetResourcePalette(),
             setLocalPosition, setLocalRotation, false,
             liveEntity.GetTeamID(),
-            inventoryCharaID, teamMember, cassetteIndex).gameObject;
+            inventoryCharaID, teamMember, cassetteIndex,
+            GetLiveEntity().GetCurrentGround()).gameObject;
         AddUnits(unit);
     }
 

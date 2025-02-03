@@ -6,8 +6,8 @@ public class Starling : Boss
     const float flipIntensityHard = 0.5f;
     const float targetingIntensitySoft = 0.05f;
     const float targetingIntensityHard = 0.2f;
-    private Vector3 farTargetSight { get { return new Vector3(0, -1.2f, 1.9f); } }
-    private Vector3 nearTargetSight { get { return new Vector3(0, -0.7f, 0.9f); } }
+    private Vector3 farTargetSight { get { return new Vector3(0, -2, 2); } }
+    private Vector3 nearTargetSight { get { return new Vector3(0, -1, 1); } }
     private Vector3 upTargetSight { get { return new Vector3(0, -2, 0); } }
 
 
