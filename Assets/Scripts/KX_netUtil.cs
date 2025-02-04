@@ -395,6 +395,17 @@ public class KX_netUtil : object
         float range2Head, float range2Tail,
         bool notEqualHead, bool notEqualTail)
     {
+        if (range1Head == range1Tail)
+        {
+            return IsIntoRange(range1Head, range2Head, range2Tail,
+                notEqualHead, notEqualTail);
+        }
+        if (range2Head == range2Tail)
+        {
+            return IsIntoRange(range2Head, range1Head, range1Tail,
+                notEqualHead, notEqualTail);
+        }
+
         return IsIntoRange(range1Head, range2Head, range2Tail,
             false, notEqualTail)
             || IsIntoRange(range1Tail, range2Head, range2Tail,

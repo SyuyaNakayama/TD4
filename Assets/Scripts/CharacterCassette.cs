@@ -84,17 +84,6 @@ public class CharacterCassette : MonoBehaviour
             unitsList = unitsList.Distinct().ToList();
             units = unitsList.ToArray();
 
-            //prevAttackProgressを更新
-            prevAttackProgress = GetAttackProgress();
-            //攻撃モーションの進行度を増加
-            attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
-            attackProgress = Mathf.Clamp(attackProgress, 0, 1);
-
-            if (attackProgress >= 1 && prevAttackProgress >= 1)
-            {
-                StopAttackMotion();
-            }
-
             liveEntity.gameObject.transform.localScale = new Vector3(data.GetScale(), data.GetScale(), data.GetScale());
 
             moveLock.x = false;
@@ -329,11 +318,11 @@ public class CharacterCassette : MonoBehaviour
     //攻撃モーションに移行
     protected void SetAttackMotion(AttackMotionData attackMotion)
     {
-        Debug.Log(attackMotionLock);
         if (!attackMotionLock)
         {
             attackMotionData = attackMotion;
             attackTimeFrame = GetMaxAttackTimeFrame();
+            prevAttackProgress = 0;
             attackProgress = 0;
         }
     }
@@ -342,7 +331,7 @@ public class CharacterCassette : MonoBehaviour
     protected void StopAttackMotion()
     {
         attackMotionData = null;
-        attackTimeFrame = 0;
+        attackTimeFrame = 1;
         attackProgress = 1;
         attackMotionLock = false;
     }
@@ -350,7 +339,8 @@ public class CharacterCassette : MonoBehaviour
     //攻撃モーション中か
     protected bool IsAttacking()
     {
-        return attackMotionData != null;
+        return attackMotionData != null
+            && (attackTimeFrame < 1 || prevAttackProgress < 1);
     }
     //攻撃モーション中かつ指定の攻撃アクションを行っているか
     protected bool IsAttacking(string name)
@@ -360,17 +350,32 @@ public class CharacterCassette : MonoBehaviour
     //attackProgressが指定のキーポイントを通過したか
     protected bool IsHitKeyPoint(float keyPoint)
     {
+        if (prevAttackProgress == 0)
+        {
+            return KX_netUtil.IsIntoRange(
+            keyPoint, prevAttackProgress, GetAttackProgress(),
+            false, false);
+        }
+
         return KX_netUtil.IsIntoRange(
             keyPoint, prevAttackProgress, GetAttackProgress(),
-            false, true);
+            true, false);
     }
     //attackProgressが指定の範囲内、もしくはその範囲を1フレーム内で通過したか
     protected bool IsHitKeyPoint(Vector2 keyPoint)
     {
-        return KX_netUtil.IsCrossingRange(
+        if (prevAttackProgress == 0)
+        {
+            return KX_netUtil.IsCrossingRange(
             prevAttackProgress, GetAttackProgress(),
             keyPoint.x, keyPoint.y,
             false, false);
+        }
+
+        return KX_netUtil.IsCrossingRange(
+            prevAttackProgress, GetAttackProgress(),
+            keyPoint.x, keyPoint.y,
+            true, false);
     }
     int GetMaxAttackTimeFrame()
     {
@@ -384,6 +389,17 @@ public class CharacterCassette : MonoBehaviour
 
         //固有動作ポイントをリセット
         Array.Resize(ref uniqueActDatas, 0);
+
+        //prevAttackProgressを更新
+        prevAttackProgress = GetAttackProgress();
+        //攻撃モーションの進行度を増加
+        attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
+        attackProgress = Mathf.Clamp(attackProgress, 0, 1);
+        //最後まで再生したら攻撃モーションを解除
+        if (attackProgress >= 1 && prevAttackProgress >= 1)
+        {
+            StopAttackMotion();
+        }
 
         if (IsAttacking())
         {
