@@ -92,7 +92,7 @@ public class CharacterCassette : MonoBehaviour
 
             if (attackProgress >= 1 && prevAttackProgress >= 1)
             {
-                attackMotionData = null;
+                StopAttackMotion();
             }
 
             liveEntity.gameObject.transform.localScale = new Vector3(data.GetScale(), data.GetScale(), data.GetScale());
@@ -329,6 +329,7 @@ public class CharacterCassette : MonoBehaviour
     //攻撃モーションに移行
     protected void SetAttackMotion(AttackMotionData attackMotion)
     {
+        Debug.Log(attackMotionLock);
         if (!attackMotionLock)
         {
             attackMotionData = attackMotion;
@@ -343,13 +344,13 @@ public class CharacterCassette : MonoBehaviour
         attackMotionData = null;
         attackTimeFrame = 0;
         attackProgress = 1;
+        attackMotionLock = false;
     }
 
     //攻撃モーション中か
     protected bool IsAttacking()
     {
-        return attackMotionData != null
-            && (attackTimeFrame < 1 || prevAttackProgress < 1);
+        return attackMotionData != null;
     }
     //攻撃モーション中かつ指定の攻撃アクションを行っているか
     protected bool IsAttacking(string name)
