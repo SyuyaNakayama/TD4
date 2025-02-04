@@ -13,6 +13,7 @@ public class Boss : Enemy
             behaviourProgress =
                 Mathf.RoundToInt(Mathf.Repeat(
                 behaviourProgress, behaviourData.GetAttackChart().Length));
+            Debug.Log(behaviourProgress);
             SetAttackMotion(behaviourData.GetAttackChart()[behaviourProgress]);
             behaviourProgress++;
         }
