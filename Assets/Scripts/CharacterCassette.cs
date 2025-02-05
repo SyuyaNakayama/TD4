@@ -777,7 +777,7 @@ public class CharacterCassette : MonoBehaviour
             current.SetAttacker(liveEntity);
             current.SetData(currentData.data.attackData,
                 currentData.cursor.direction);
-            current.SetSprite(currentData.data.billboardData.sprite);
+            current.SetBillboardData(currentData.data.billboardData);
             current.Lock();
 
             allowEditAttackData = false;
@@ -845,7 +845,7 @@ public class CharacterCassette : MonoBehaviour
                         currentData.cursor.direction);
                     current.SetProjectileData(currentData.data.projectileData,
                         currentData.cursor.direction);
-                    current.SetSprite(currentData.data.billboardData.sprite);
+                    current.SetBillboardData(currentData.data.billboardData);
 
                     current.Lock();
 

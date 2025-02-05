@@ -84,7 +84,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2611885154353610472}
+  m_Father: {fileID: 7763932816412539520}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8136039704396726538
 SpriteRenderer:
@@ -191,7 +191,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4470746253682502413}
+  - {fileID: 7763932816412539520}
   - {fileID: 8911765898996216615}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -228,6 +228,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a3a449c557c4791a3168c736e09660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visual: {fileID: 8136039704396726538}
+  visualBillboard: {fileID: 5739203427934296806}
+  visualRig: {fileID: 7763932816412539520}
   data:
     power: 0
     vectorBlow: 0
@@ -235,10 +238,13 @@ MonoBehaviour:
     hitback: 0
     ghostTime: 0
   blowVec: {x: 0, y: 0, z: 0}
-  visual: {fileID: 8136039704396726538}
+  billboardData:
+    sprite: {fileID: 0}
+    yBillboard: 0
+    flatBillboard: 0
   moveVec: {x: 0, y: 0, z: 0}
   ggobj: {fileID: 6992411041803304385}
-  collider: {fileID: 506478558006460694}
+  solidCollider: {fileID: 506478558006460694}
 --- !u!114 &6969904708402510799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,3 +360,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &5081155448779468423
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7763932816412539520}
+  m_Layer: 0
+  m_Name: BillboardRig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7763932816412539520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5081155448779468423}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4470746253682502413}
+  m_Father: {fileID: 2611885154353610472}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class TitleScreen : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class TitleScreen : MonoBehaviour
     Vector3 logoDefaultpos;
     [SerializeField]
     GameObject startControlShadow;
+    [SerializeField]
+    TMP_Text versionText;
     [SerializeField]
     string nextSceneName;
     [SerializeField]
@@ -26,6 +29,8 @@ public class TitleScreen : MonoBehaviour
     }
     void FixedUpdate()
     {
+        versionText.text = "ver " + Application.version;
+
         logo.transform.localPosition =
             logoDefaultpos + new Vector3(0,
             Mathf.Sin(Time.time * logoWaveSpeed) * logoWaveAmount, 0);
@@ -34,7 +39,8 @@ public class TitleScreen : MonoBehaviour
             Mathf.Cos(Time.time * startControlShadowSpeed), 0)
             * startControlShadowRadius;
 
-        if (controlMapPlayPart.GetJumpInput())
+        if (controlMapPlayPart.GetJumpInput()
+            || controlMapPlayPart.GetWeaponInput())
         {
             SceneTransition.ChangeScene(nextSceneName);
         }

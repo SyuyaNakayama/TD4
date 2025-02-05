@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ControlMapMenu : ControlMap
@@ -149,7 +147,6 @@ public class ControlMapMenu : ControlMap
                         Vector3 outputKeyInputVec =
                             keyInputVec - prevKeyInputVec;
 
-                        int holdMenuPieceIndex = menuPieceIndex;
                         if (keyInputVec != Vector3.zero
                             && outputKeyInputVec != Vector3.zero)
                         {
