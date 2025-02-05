@@ -232,6 +232,13 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
+    int maxUnits = 20;
+    public int GetMaxUnits()
+    {
+        return maxUnits;
+    }
+
+    [SerializeField]
     KX_netUtil.TransformData[] defaultBodyPartsTransform = { };
     public KX_netUtil.TransformData GetDefaultBodyPartsTransform(int index)
     {

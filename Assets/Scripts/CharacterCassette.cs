@@ -889,13 +889,16 @@ public class CharacterCassette : MonoBehaviour
     void Summon(Vector3 setLocalPosition, Quaternion setLocalRotation,
         string[] inventoryCharaID, int[] teamMember, int cassetteIndex)
     {
-        GameObject unit =
-            LiveEntity.Spawn(liveEntity.GetResourcePalette(),
-            setLocalPosition, setLocalRotation, false,
-            liveEntity.GetTeamID(),
-            inventoryCharaID, teamMember, cassetteIndex,
-            GetLiveEntity().GetCurrentGround()).gameObject;
-        AddUnits(unit);
+        if (units.Length < data.GetMaxUnits())
+        {
+            GameObject unit =
+                LiveEntity.Spawn(liveEntity.GetResourcePalette(),
+                setLocalPosition, setLocalRotation, false,
+                liveEntity.GetTeamID(),
+                inventoryCharaID, teamMember, cassetteIndex,
+                GetLiveEntity().GetCurrentGround()).gameObject;
+            AddUnits(unit);
+        }
     }
 
     //units‚É—v‘f‚ð’Ç‰Á
