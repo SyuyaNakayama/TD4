@@ -35,7 +35,7 @@ MonoBehaviour:
   defaultBodyPartsTransform:
   - position: {x: 0, y: 0, z: 0}
     eulerAngles: {x: 45, y: 0, z: 0}
-    scale: {x: 1, y: 1, z: 1}
+    scale: {x: 0.5, y: 0.5, z: 0.5}
   defaultSprites: []
   defaultPropertySetters:
   - textureSetters:
@@ -176,7 +176,9 @@ MonoBehaviour:
       easePow: 2
     rigAnimationKeys: []
     facialExpressionKeys: []
-    seKeys: []
+    seKeys:
+    - keyFrame: 0
+      se: {fileID: 8300000, guid: 52ca72875ca714810adeb20645ee444d, type: 3}
   - name: slide
     totalFrame: 0
     transformAnimationKeys:
@@ -197,6 +199,31 @@ MonoBehaviour:
       lerpAsEuler: 1
       easeType: 1
       easePow: 4
+    rigAnimationKeys: []
+    facialExpressionKeys: []
+    seKeys:
+    - keyFrame: 0
+      se: {fileID: 8300000, guid: d2195e32c419e4dd6b3b9abbc4aa7046, type: 3}
+  - name: defeat
+    totalFrame: 0
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 45, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: -0.25, z: 0}
+        eulerAngles: {x: 0, y: 45, z: 90}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 0
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 0
+      easeType: 1
+      easePow: 1.5
     rigAnimationKeys: []
     facialExpressionKeys: []
     seKeys: []

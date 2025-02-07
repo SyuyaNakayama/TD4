@@ -217,7 +217,8 @@ public class GeoGroObject : AlhaPhysicsObject
 
     bool IsLandableGround(Collider col)
     {
-        return !col.GetComponent<UnLandableObject>()
+        return col.enabled && col.gameObject.activeInHierarchy
+            && !col.GetComponent<UnLandableObject>()
             && !col.isTrigger;
     }
 }
