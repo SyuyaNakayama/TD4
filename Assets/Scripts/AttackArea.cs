@@ -1,14 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 public class AttackArea : MonoBehaviour
 {
-    LiveEntity attacker;
-    public LiveEntity GetAttacker()
+    [SerializeField]
+    SpriteRenderer visual;
+    [SerializeField]
+    BillBoard visualBillboard;
+    [SerializeField]
+    Transform visualRig;
+    protected Transform GetVisurlRig()
     {
-        return attacker;
+        return visualRig;
     }
     [SerializeField]
     AttackMotionData.AttackData data;
@@ -23,8 +26,17 @@ public class AttackArea : MonoBehaviour
         return blowVec;
     }
     [SerializeField]
-    SpriteRenderer visual;
-    Sprite sprite;
+    AttackMotionData.BillboardData billboardData;
+    public AttackMotionData.BillboardData GetBillboardData()
+    {
+        return billboardData;
+    }
+
+    LiveEntity attacker;
+    public LiveEntity GetAttacker()
+    {
+        return attacker;
+    }
     bool isNewborn = true;
     bool attackAreaDataLock = false;
 
@@ -35,7 +47,12 @@ public class AttackArea : MonoBehaviour
         //設定された画像を適用
         if (visual)
         {
-            visual.sprite = sprite;
+            visual.sprite = billboardData.sprite;
+        }
+        if (visualBillboard)
+        {
+            visualBillboard.yBill =
+                visualBillboard.xBill = billboardData.yBillboard;
         }
 
         AttackAreaUpdate();
@@ -73,8 +90,8 @@ public class AttackArea : MonoBehaviour
             blowVec = setBlowVec;
         }
     }
-    public void SetSprite(Sprite setSprite)
+    public void SetBillboardData(AttackMotionData.BillboardData setBillboardData)
     {
-        sprite = setSprite;
+        billboardData = setBillboardData;
     }
 }

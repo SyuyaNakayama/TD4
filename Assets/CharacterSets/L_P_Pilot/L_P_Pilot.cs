@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class L_P_Pilot : Boss
 {
-    const float flipIntensitySoft = 0.01f;
     const float flipIntensityHard = 0.5f;
     const float targetingIntensitySoft = 0.05f;
     const float targetingIntensityHard = 0.2f;

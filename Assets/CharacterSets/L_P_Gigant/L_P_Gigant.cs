@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class L_P_Gigant : Boss
 {
     const float flipIntensitySoft = 0.01f;

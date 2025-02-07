@@ -123,7 +123,8 @@ public class BattleField : Field
                             transform.TransformPoint(waves[wave].spawnDatas[i].enemyPos),
                             transform.rotation * Quaternion.Euler(waves[wave].spawnDatas[i].enemyRot),
                             false, TeamIDList[waves[wave].spawnDatas[i].teamIDIndex],
-                            new string[] { waves[wave].spawnDatas[i].cassetteID }, new int[] { 0 }, 0);
+                            new string[] { waves[wave].spawnDatas[i].cassetteID }, new int[] { 0 }, 0,
+                            null);
                     }
                     wave++;
                 }

@@ -61,7 +61,7 @@ public class LiveEntityGenerator : MonoBehaviour
                 liveEntities[liveEntities.Length - 1] =
                     LiveEntity.Spawn(resourcePalette,
                     transform.position, transform.rotation, false, teamID,
-                    new string[] { characterName }, new int[] { 0 }, 0);
+                    new string[] { characterName }, new int[] { 0 }, 0, null);
                 currentSpawnInterval = spawnInterval;
             }
         }

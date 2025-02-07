@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67ca733bd02d54568a249a233a6aa03d, type: 3}
+  m_Name: PumpkinUFO
+  m_EditorClassIdentifier: 
+  charaName: 
+  iconGraph: {fileID: 0}
+  themeColor: {r: 1, g: 0.5, b: 0, a: 1}
+  tier: 1
+  lifeRatio: 0.5
+  heavy: 1
+  gravityScale: 0
+  dragAxis:
+    x: 1
+    y: 1
+    z: 1
+  scale: 7
+  defaultAttackMotionName: seedSpray
+  weaponedAttackMotionName: 
+  attackMotions:
+  - {fileID: 11400000, guid: f380f3980158a4084880f6ff90697847, type: 2}
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  defaultSprites: []
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 6820079362ead4e46a37259ce3582bd4, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
+  animations:
+  - name: defeat
+    totalFrame: 60
+    transformAnimationKeys:
+    - keyFrame: {x: 0, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: -1080}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 1
+        rotation: 0
+        scale: 1
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 3
+    - keyFrame: {x: 0.5, y: 1}
+      bodyPartIndex: 0
+      startTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      endTransform:
+        position: {x: 0, y: 0, z: 0}
+        eulerAngles: {x: 0, y: 0, z: 0}
+        scale: {x: 0, y: 0, z: 0}
+      ignoreTransform:
+        position: 1
+        rotation: 1
+        scale: 0
+      lerpAsEuler: 1
+      easeType: 0
+      easePow: 2
+    rigAnimationKeys: []
+    facialExpressionKeys: []
+    seKeys: []
+  facialExpressions: []

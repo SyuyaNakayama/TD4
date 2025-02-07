@@ -84,17 +84,6 @@ public class CharacterCassette : MonoBehaviour
             unitsList = unitsList.Distinct().ToList();
             units = unitsList.ToArray();
 
-            //prevAttackProgressを更新
-            prevAttackProgress = GetAttackProgress();
-            //攻撃モーションの進行度を増加
-            attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
-            attackProgress = Mathf.Clamp(attackProgress, 0, 1);
-
-            if (attackProgress >= 1 && prevAttackProgress >= 1)
-            {
-                attackMotionData = null;
-            }
-
             liveEntity.gameObject.transform.localScale = new Vector3(data.GetScale(), data.GetScale(), data.GetScale());
 
             moveLock.x = false;
@@ -184,6 +173,7 @@ public class CharacterCassette : MonoBehaviour
                         }
                         else
                         {
+                            StopAttackMotion();
                             DestroyUnits();
                         }
 
@@ -218,7 +208,7 @@ public class CharacterCassette : MonoBehaviour
                     }
                     else
                     {
-                        attackMotionData = null;
+                        StopAttackMotion();
                         attackTimeFrame = 0;
                         DestroyUnits();
                     }
@@ -332,6 +322,7 @@ public class CharacterCassette : MonoBehaviour
         {
             attackMotionData = attackMotion;
             attackTimeFrame = GetMaxAttackTimeFrame();
+            prevAttackProgress = 0;
             attackProgress = 0;
         }
     }
@@ -340,7 +331,9 @@ public class CharacterCassette : MonoBehaviour
     protected void StopAttackMotion()
     {
         attackMotionData = null;
+        attackTimeFrame = 1;
         attackProgress = 1;
+        attackMotionLock = false;
     }
 
     //攻撃モーション中か
@@ -357,17 +350,32 @@ public class CharacterCassette : MonoBehaviour
     //attackProgressが指定のキーポイントを通過したか
     protected bool IsHitKeyPoint(float keyPoint)
     {
+        if (prevAttackProgress == 0)
+        {
+            return KX_netUtil.IsIntoRange(
+            keyPoint, prevAttackProgress, GetAttackProgress(),
+            false, false);
+        }
+
         return KX_netUtil.IsIntoRange(
             keyPoint, prevAttackProgress, GetAttackProgress(),
-            false, true);
+            true, false);
     }
     //attackProgressが指定の範囲内、もしくはその範囲を1フレーム内で通過したか
     protected bool IsHitKeyPoint(Vector2 keyPoint)
     {
-        return KX_netUtil.IsCrossingRange(
+        if (prevAttackProgress == 0)
+        {
+            return KX_netUtil.IsCrossingRange(
             prevAttackProgress, GetAttackProgress(),
             keyPoint.x, keyPoint.y,
             false, false);
+        }
+
+        return KX_netUtil.IsCrossingRange(
+            prevAttackProgress, GetAttackProgress(),
+            keyPoint.x, keyPoint.y,
+            true, false);
     }
     int GetMaxAttackTimeFrame()
     {
@@ -381,6 +389,17 @@ public class CharacterCassette : MonoBehaviour
 
         //固有動作ポイントをリセット
         Array.Resize(ref uniqueActDatas, 0);
+
+        //prevAttackProgressを更新
+        prevAttackProgress = GetAttackProgress();
+        //攻撃モーションの進行度を増加
+        attackProgress += 1 / Mathf.Max((float)attackTimeFrame, 1);
+        attackProgress = Mathf.Clamp(attackProgress, 0, 1);
+        //最後まで再生したら攻撃モーションを解除
+        if (attackProgress >= 1 && prevAttackProgress >= 1)
+        {
+            StopAttackMotion();
+        }
 
         if (IsAttacking())
         {
@@ -758,7 +777,7 @@ public class CharacterCassette : MonoBehaviour
             current.SetAttacker(liveEntity);
             current.SetData(currentData.data.attackData,
                 currentData.cursor.direction);
-            current.SetSprite(currentData.data.billboardData.sprite);
+            current.SetBillboardData(currentData.data.billboardData);
             current.Lock();
 
             allowEditAttackData = false;
@@ -826,7 +845,7 @@ public class CharacterCassette : MonoBehaviour
                         currentData.cursor.direction);
                     current.SetProjectileData(currentData.data.projectileData,
                         currentData.cursor.direction);
-                    current.SetSprite(currentData.data.billboardData.sprite);
+                    current.SetBillboardData(currentData.data.billboardData);
 
                     current.Lock();
 
@@ -870,10 +889,16 @@ public class CharacterCassette : MonoBehaviour
     void Summon(Vector3 setLocalPosition, Quaternion setLocalRotation,
         string[] inventoryCharaID, int[] teamMember, int cassetteIndex)
     {
-        LiveEntity.Spawn(liveEntity.GetResourcePalette(),
-            setLocalPosition, setLocalRotation, false,
-            liveEntity.GetTeamID(),
-            inventoryCharaID, teamMember, cassetteIndex);
+        if (units.Length < data.GetMaxUnits())
+        {
+            GameObject unit =
+                LiveEntity.Spawn(liveEntity.GetResourcePalette(),
+                setLocalPosition, setLocalRotation, false,
+                liveEntity.GetTeamID(),
+                inventoryCharaID, teamMember, cassetteIndex,
+                GetLiveEntity().GetCurrentGround()).gameObject;
+            AddUnits(unit);
+        }
     }
 
     //unitsに要素を追加

@@ -100,6 +100,14 @@ public class CharaData : ScriptableObject
     }
 
     [SerializeField]
+    [Range(0.1f, 10)]
+    float tier = 1;
+    public float GetTier()
+    {
+        return tier;
+    }
+
+    [SerializeField]
     [Range(minLifeRatio, maxLifeRatio)]
     float lifeRatio = 0.5f;
     public float GetLife()
@@ -221,6 +229,13 @@ public class CharaData : ScriptableObject
             }
         }
         return false;
+    }
+
+    [SerializeField]
+    int maxUnits = 20;
+    public int GetMaxUnits()
+    {
+        return maxUnits;
     }
 
     [SerializeField]
