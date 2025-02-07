@@ -33,7 +33,7 @@ public class GeoGroObject : AlhaPhysicsObject
             {
                 float currentGroundDistance = Vector3.Magnitude(
                 touchedGrounds[i].ClosestPoint(transform.position) - transform.position);
-                if ((!detected || currentGroundDistance < nearestGroundDistance))
+                if (!detected || currentGroundDistance < nearestGroundDistance)
                 {
                     tempGround = touchedGrounds[i];
                     nearestGroundDistance = currentGroundDistance;
