@@ -30,9 +30,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4c90f5f5d2e6e496694be9686e7aec54, type: 2}
   - {fileID: 11400000, guid: 984d44a37b05e49eebf941dad19aadab, type: 2}
   - {fileID: 11400000, guid: 7bd6b95dea85c479badaac41b4028399, type: 2}
-  defaultBodyPartsTransform: []
+  maxUnits: 20
+  defaultBodyPartsTransform:
+  - position: {x: 0, y: 0, z: 0}
+    eulerAngles: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
   defaultSprites: []
-  defaultPropertySetters: []
+  defaultPropertySetters:
+  - textureSetters:
+    - propertyName: _MainTex
+      texture: {fileID: 2800000, guid: 001de7f52c4bc4c1a8c8df916129c240, type: 3}
+    colorSetters: []
+    intSetters: []
+    floatSetters: []
   animations:
   - name: shot
     totalFrame: 0
