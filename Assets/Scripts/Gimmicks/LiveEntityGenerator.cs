@@ -24,6 +24,8 @@ public class LiveEntityGenerator : MonoBehaviour
     int spawnInterval;
     [SerializeField]
     Switch powerSwitch;
+    [SerializeField]
+    bool reverse;
 
     LiveEntity[] liveEntities = { };
     int currentSpawnInterval;
@@ -47,7 +49,12 @@ public class LiveEntityGenerator : MonoBehaviour
         liveEntities = liveEntitiesList.ToArray();
 
         // パワースイッチがオフの時は動作しない
-        if (powerSwitch && !powerSwitch.GetActive()) { return; }
+        if (powerSwitch) 
+        {
+            bool notActive = !powerSwitch.GetActive();
+            if (reverse) { notActive = !notActive; }
+            if (notActive) { return; }
+        }
 
         //最大数に達していなければ
         if (liveEntities.Length < maxLiveEntityNum)
