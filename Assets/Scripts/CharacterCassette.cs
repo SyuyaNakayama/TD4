@@ -134,10 +134,6 @@ public class CharacterCassette : MonoBehaviour
                         {
                             visual.animationName = "walk";
                         }
-                        else if (liveEntity.IsPeril())
-                        {
-                            visual.animationName = "peril";
-                        }
                         else
                         {
                             visual.animationName = "idol";
