@@ -19,9 +19,6 @@ MonoBehaviour:
   - name: arm
     pos: {x: 0, y: 0.5, z: 1}
     direction: {x: 0, y: 0, z: 1}
-  - name: fist
-    pos: {x: 0, y: 0.5, z: 1.5}
-    direction: {x: 0, y: 0, z: 1}
   meleeAttackDatas:
   - name: body
     attackData:
@@ -50,7 +47,7 @@ MonoBehaviour:
   shotDatas: []
   data:
     name: "\u30D1\u30F3\u30C1"
-    totalFrame: 60
+    totalFrame: 90
     triggerInputType: 0
     attackMotionLockKeys:
     - {x: 0, y: 1}
@@ -63,11 +60,8 @@ MonoBehaviour:
       dataName: punch
       cursorName: arm
       postMove: 0
-    - keyFrame: {x: 0.5, y: 0.6}
-      dataName: punch
-      cursorName: fist
-      postMove: 0
     shotKeys: []
+    summonKeys: []
     moveKeys:
     - keyFrame: {x: 0.5, y: 0.7}
       moveVec: {x: 0, y: 0, z: 2}
